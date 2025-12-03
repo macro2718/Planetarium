@@ -41,6 +41,7 @@
         }
 
         #canvas-overlay,
+        #bokeh-layer,
         #vignette {
             position: fixed;
             inset: 0;
@@ -56,6 +57,33 @@
             filter: blur(12px) saturate(130%);
             opacity: 0.8;
             animation: drift 24s ease-in-out infinite alternate;
+        }
+
+        #bokeh-layer {
+            position: fixed;
+            inset: -8%;
+            pointer-events: none;
+            background:
+                radial-gradient(900px 900px at 18% 28%, rgba(120, 170, 255, 0.14), transparent 60%),
+                radial-gradient(720px 720px at 82% 22%, rgba(250, 180, 240, 0.13), transparent 58%),
+                radial-gradient(760px 760px at 68% 72%, rgba(100, 220, 200, 0.08), transparent 62%),
+                radial-gradient(420px 420px at 42% 80%, rgba(255, 255, 255, 0.08), transparent 68%);
+            mix-blend-mode: screen;
+            filter: blur(12px) saturate(115%);
+            opacity: 0.82;
+            animation: bokehDrift 28s ease-in-out infinite alternate;
+        }
+
+        #bokeh-layer::after {
+            content: '';
+            position: absolute;
+            inset: -12%;
+            background:
+                repeating-linear-gradient(120deg, rgba(255, 255, 255, 0.06) 0 2px, transparent 2px 140px),
+                repeating-linear-gradient(300deg, rgba(160, 210, 255, 0.08) 0 1px, transparent 1px 180px);
+            mix-blend-mode: screen;
+            opacity: 0.18;
+            animation: linesDrift 34s linear infinite;
         }
 
         #vignette {
@@ -116,6 +144,16 @@
         @keyframes drift {
             from { transform: translate3d(0, 0, 0) scale(1); }
             to { transform: translate3d(0, -18px, 0) scale(1.02); }
+        }
+
+        @keyframes bokehDrift {
+            from { transform: translate3d(-2%, -1%, 0) scale(1); }
+            to { transform: translate3d(2%, 3%, 0) scale(1.03); }
+        }
+
+        @keyframes linesDrift {
+            from { transform: translate3d(0, 0, 0) rotate(0deg); }
+            to { transform: translate3d(-6%, -4%, 0) rotate(1.5deg); }
         }
 
         #controls {
@@ -285,6 +323,7 @@
     
     <div id="canvas-container"></div>
     <div id="canvas-overlay"></div>
+    <div id="bokeh-layer"></div>
     <div id="vignette"></div>
     
     <div id="title">P L A N E T A R I U M</div>
