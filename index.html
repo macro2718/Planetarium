@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planetarium - 星空への旅</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass: rgba(12, 18, 42, 0.55);
+            --glass-border: rgba(136, 173, 255, 0.35);
+            --text-main: rgba(255, 255, 255, 0.85);
+            --accent: #9fe0ff;
+            --accent-2: #f0b9ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background: radial-gradient(circle at 15% 20%, rgba(35, 65, 140, 0.3), transparent 35%),
+                        radial-gradient(circle at 85% 10%, rgba(120, 50, 150, 0.28), transparent 35%),
+                        linear-gradient(135deg, #050814, #04030c 50%, #010101);
+            color: var(--text-main);
+            font-family: 'Zen Kaku Gothic New', 'Space Grotesk', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+            letter-spacing: 0.3px;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #canvas-overlay,
+        #vignette {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        #canvas-overlay {
+            background:
+                radial-gradient(120% 80% at 10% 20%, rgba(72, 120, 255, 0.18), transparent 55%),
+                radial-gradient(120% 90% at 85% 10%, rgba(255, 125, 200, 0.16), transparent 60%),
+                radial-gradient(100% 80% at 50% 100%, rgba(70, 200, 180, 0.16), transparent 55%);
+            mix-blend-mode: screen;
+            filter: blur(12px) saturate(130%);
+            opacity: 0.8;
+            animation: drift 24s ease-in-out infinite alternate;
+        }
+
+        #vignette {
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.7) 100%);
+            mix-blend-mode: multiply;
+        }
+
+        #info-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: var(--text-main);
+            font-size: 13px;
+            pointer-events: none;
+            text-shadow: 0 0 14px rgba(120, 180, 255, 0.4);
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: rgba(10, 16, 38, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        #title {
+            position: fixed;
+            top: 26px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: transparent;
+            font-size: 24px;
+            letter-spacing: 12px;
+            pointer-events: none;
+            text-shadow: 0 10px 40px rgba(100, 150, 255, 0.7);
+            animation: fadeIn 3s ease-out;
+            font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
+            font-weight: 700;
+            background: linear-gradient(120deg, #b7e8ff 0%, #f4d5ff 40%, #9dd0ff 80%);
+            -webkit-background-clip: text;
+        }
+
+        #subtitle {
+            position: fixed;
+            top: 64px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: rgba(255, 255, 255, 0.65);
+            text-transform: uppercase;
+            pointer-events: none;
+            text-shadow: 0 0 18px rgba(140, 200, 255, 0.5);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes drift {
+            from { transform: translate3d(0, 0, 0) scale(1); }
+            to { transform: translate3d(0, -18px, 0) scale(1.02); }
+        }
+
+        #controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 12px 40px rgba(0, 8, 30, 0.5);
+            backdrop-filter: blur(12px);
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(140, 180, 255, 0.14));
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: rgba(255, 255, 255, 0.86);
+            padding: 10px 18px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-align: left;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .control-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(160, 200, 255, 0.2));
+            border-color: rgba(140, 190, 255, 0.8);
+            box-shadow: 0 12px 30px rgba(100, 150, 255, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .control-btn.active {
+            background: linear-gradient(135deg, rgba(120, 175, 255, 0.5), rgba(240, 175, 255, 0.35));
+            border-color: rgba(140, 190, 255, 0.9);
+            box-shadow: 0 0 25px rgba(120, 180, 255, 0.5), 0 10px 30px rgba(0, 0, 0, 0.4);
+            color: #ffffff;
+        }
+
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 30%, rgba(120, 140, 255, 0.12), rgba(0, 0, 0, 0.85));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease;
+            backdrop-filter: blur(6px);
+        }
+
+        #loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-text {
+            color: rgba(255, 255, 255, 0.72);
+            font-size: 15px;
+            letter-spacing: 6px;
+            animation: pulse 2s infinite;
+            text-transform: uppercase;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        #star-info {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, rgba(12, 16, 35, 0.85), rgba(16, 28, 60, 0.75));
+            border: 1px solid rgba(136, 173, 255, 0.45);
+            border-radius: 18px;
+            padding: 26px 36px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 0 40px rgba(100, 150, 255, 0.28);
+            max-width: 360px;
+            z-index: 100;
+        }
+
+        #star-info.visible {
+            opacity: 1;
+        }
+
+        #star-info h3 {
+            margin-bottom: 15px;
+            color: #88bbff;
+            font-size: 18px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(100, 150, 255, 0.8);
+        }
+
+        #star-info p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        #star-info .star-type {
+            color: #ffcc77;
+        }
+
+        #star-info .star-detail {
+            margin: 4px 0;
+            opacity: 0.8;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        #time-display {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            text-align: right;
+            pointer-events: none;
+            text-shadow: 0 0 14px rgba(100, 150, 255, 0.35);
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(10, 16, 36, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        #time-display #current-time {
+            display: block;
+            font-size: 24px;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 5px;
+        }
+
+        #time-display #celestial-info {
+            display: block;
+            font-size: 11px;
+            opacity: 0.7;
+        }
+
+        @keyframes aurora {
+            0%, 100% { transform: translateX(-50%) scaleY(1); }
+            50% { transform: translateX(-50%) scaleY(1.2); }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <span class="loading-text">星空を準備中...</span>
+    </div>
+    
+    <div id="canvas-container"></div>
+    <div id="canvas-overlay"></div>
+    <div id="vignette"></div>
+    
+    <div id="title">P L A N E T A R I U M</div>
+    <div id="subtitle">Aurora Voyage</div>
+    
+    <div id="controls">
+        <button class="control-btn active" id="btn-stars">恒星</button>
+        <button class="control-btn active" id="btn-milkyway">天の川</button>
+        <button class="control-btn active" id="btn-constellations">星座</button>
+        <button class="control-btn active" id="btn-shooting">流れ星</button>
+        <button class="control-btn active" id="btn-moon">月</button>
+        <button class="control-btn active" id="btn-aurora">オーロラ</button>
+        <button class="control-btn" id="btn-auto">自動回転</button>
+        <button class="control-btn" id="btn-music">🎵 BGM</button>
+    </div>
+    
+    <div id="star-info">
+        <div id="star-info-content"></div>
+    </div>
+    
+    <div id="time-display">
+        <span id="current-time"></span>
+        <span id="celestial-info"></span>
+    </div>
+    
+    <div id="info-panel">
+        <p>マウスドラッグで視点移動 | ホイールでズーム | 星をクリックで情報表示</p>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script type="module" src="planetarium.js"></script>
+</body>
+</html>
