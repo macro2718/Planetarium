@@ -1,23 +1,50 @@
 import * as THREE from 'three';
+import { equatorialToHorizontalVector } from '../utils/astronomy.js';
+
+const GALACTIC_NORTH_POLE = { ra: 192.85948, dec: 27.12825 }; // IAU 2009 (J2000)
+const GALACTIC_CENTER = { ra: 266.4051, dec: -28.936175 };
 
 export function createMilkyWaySystem(ctx) {
     ctx.milkyWayMaterials = [];
     ctx.milkyWayGroup = new THREE.Group();
-    const orientation = new THREE.Euler(
-        THREE.MathUtils.degToRad(58),
-        THREE.MathUtils.degToRad(38),
-        THREE.MathUtils.degToRad(12),
-        'XYZ'
-    );
-    const bandNormal = new THREE.Vector3(0, 1, 0).applyEuler(orientation).normalize();
-    const bandAxis = new THREE.Vector3(1, 0, 0).applyEuler(orientation).normalize();
-    createMilkyWayBandDome(ctx, bandNormal, bandAxis);
-    createMilkyWayClusters(ctx, bandNormal, bandAxis);
-    createMilkyWayMist(ctx, bandNormal, bandAxis);
+
+    const baseBasis = getBaseMilkyWayBasis();
+    const baseMatrix = new THREE.Matrix4().makeBasis(baseBasis.axis, baseBasis.tangent, baseBasis.normal);
+    const baseMatrixInverse = baseMatrix.clone().invert();
+    const targetMatrix = new THREE.Matrix4();
+    const rotationMatrix = new THREE.Matrix4();
+    const rotationQuat = new THREE.Quaternion();
+    let lastLst = null;
+    let lastLat = ctx.observer?.lat;
+
+    createMilkyWayBandDome(ctx, baseBasis.normal, baseBasis.axis);
+    createMilkyWayClusters(ctx, baseBasis.normal, baseBasis.axis);
+    createMilkyWayMist(ctx, baseBasis.normal, baseBasis.axis);
     ctx.scene.add(ctx.milkyWayGroup);
+
+    const applyGalacticOrientation = () => {
+        const galacticBasis = calculateGalacticBasis(ctx);
+        if (!galacticBasis) return;
+
+        targetMatrix.makeBasis(galacticBasis.axis, galacticBasis.tangent, galacticBasis.normal);
+        rotationMatrix.multiplyMatrices(targetMatrix, baseMatrixInverse);
+        rotationQuat.setFromRotationMatrix(rotationMatrix);
+        ctx.milkyWayGroup.setRotationFromQuaternion(rotationQuat);
+        updateBandUniforms(ctx, galacticBasis);
+    };
+
+    applyGalacticOrientation();
+
     return {
         group: ctx.milkyWayGroup,
         update(time) {
+            const lst = ctx.localSiderealTime;
+            const lat = ctx.observer?.lat;
+            if (lastLst !== lst || lastLat !== lat) {
+                lastLst = lst;
+                lastLat = lat;
+                applyGalacticOrientation();
+            }
             ctx.milkyWayMaterials.forEach(material => {
                 if (material.uniforms?.time) {
                     material.uniforms.time.value = time;
@@ -322,4 +349,63 @@ function createMilkyWayMist(ctx, bandNormal, bandAxis) {
         ctx.milkyWayGroup.add(patch);
         created++;
     }
+}
+
+function getBaseMilkyWayBasis() {
+    const orientation = new THREE.Euler(
+        THREE.MathUtils.degToRad(58),
+        THREE.MathUtils.degToRad(38),
+        THREE.MathUtils.degToRad(12),
+        'XYZ'
+    );
+    const normal = new THREE.Vector3(0, 1, 0).applyEuler(orientation).normalize();
+    const axis = new THREE.Vector3(1, 0, 0).applyEuler(orientation).normalize();
+    const tangent = new THREE.Vector3().crossVectors(normal, axis).normalize();
+    return { normal, axis, tangent };
+}
+
+function calculateGalacticBasis(ctx) {
+    if (!ctx?.observer) return null;
+    const normalResult = equatorialToHorizontalVector(
+        GALACTIC_NORTH_POLE.ra,
+        GALACTIC_NORTH_POLE.dec,
+        ctx.localSiderealTime ?? 0,
+        ctx.observer.lat
+    );
+    const centerResult = equatorialToHorizontalVector(
+        GALACTIC_CENTER.ra,
+        GALACTIC_CENTER.dec,
+        ctx.localSiderealTime ?? 0,
+        ctx.observer.lat
+    );
+    const normal = normalResult?.vector;
+    const centerDir = centerResult?.vector;
+    if (!normal || !centerDir) return null;
+
+    let axis = centerDir.clone().sub(normal.clone().multiplyScalar(centerDir.dot(normal)));
+    if (axis.lengthSq() < 1e-8) {
+        axis = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), normal);
+        if (axis.lengthSq() < 1e-8) {
+            axis = new THREE.Vector3(1, 0, 0);
+        }
+    }
+    axis.normalize();
+    const tangent = new THREE.Vector3().crossVectors(normal, axis).normalize();
+    return { normal, axis, tangent };
+}
+
+function updateBandUniforms(ctx, basis) {
+    ctx.milkyWayMaterials.forEach(material => {
+        const uniforms = material.uniforms;
+        if (!uniforms) return;
+        if (uniforms.bandNormal?.value) {
+            uniforms.bandNormal.value.copy(basis.normal);
+        }
+        if (uniforms.bandAxis?.value) {
+            uniforms.bandAxis.value.copy(basis.axis);
+        }
+        if (uniforms.bandTangent?.value) {
+            uniforms.bandTangent.value.copy(basis.tangent);
+        }
+    });
 }
