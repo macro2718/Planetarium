@@ -28,7 +28,6 @@ class Planetarium {
         this.controls = null;
         this.minCameraHeight = -4;
         this.settings = {
-            showStars: true,
             showMilkyWay: true,
             showConstellations: true,
             showShootingStars: true,
@@ -53,11 +52,17 @@ class Planetarium {
         this.starCatalog = this.catalog.getStars();
         this.starCatalogMap = this.catalog.getStarMap();
         this.observer = { lat: 35.6895, lon: 139.6917 };
-        this.localSiderealTime = calculateLocalSiderealTime(new Date(), this.observer.lon);
+        this.timeMode = 'realtime';
+        this.timeScale = 240; // simulation seconds per real second (custom mode)
+        this.simulationStartDate = new Date();
+        const nowSeconds = performance.now() * 0.001;
+        this.simulationStartPerf = nowSeconds;
+        this.simulatedDate = new Date(this.simulationStartDate);
+        this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, this.observer.lon);
         this.infoTimeout = null;
         this.currentMoonState = null;
         this.updaters = [];
-        this.lastTime = performance.now() * 0.001;
+        this.lastTime = nowSeconds;
         this.animate = this.animate.bind(this);
         this.init();
     }
@@ -72,6 +77,7 @@ class Planetarium {
         this.registerUpdater(createStarFieldSystem(this));
         this.registerUpdater(createMilkyWaySystem(this));
         this.constellationSystem = createConstellationSystem(this);
+        this.registerUpdater(this.constellationSystem);
         createNebulaSystem(this);
         this.moonSystem = createMoonSystem(this);
         this.registerUpdater(this.moonSystem);
@@ -131,6 +137,51 @@ class Planetarium {
         this.controls.autoRotate = false;
         this.controls.autoRotateSpeed = 0.1;
         this.controls.maxPolarAngle = Math.PI - 0.001;
+    }
+
+    updateSimulationTime(nowSeconds) {
+        if (this.timeMode === 'realtime') {
+            this.simulatedDate = new Date();
+        } else {
+            const elapsed = nowSeconds - this.simulationStartPerf;
+            const simulatedMs = this.simulationStartDate.getTime() + elapsed * 1000 * this.timeScale;
+            this.simulatedDate = new Date(simulatedMs);
+        }
+        this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, this.observer.lon);
+    }
+
+    getSimulatedDate() {
+        return this.simulatedDate ?? new Date();
+    }
+
+    setTimeMode(mode, options = {}) {
+        if (mode === 'realtime') {
+            this.timeMode = 'realtime';
+            this.simulationStartDate = new Date();
+            this.simulationStartPerf = this.getCurrentPerfSeconds();
+            this.simulatedDate = new Date(this.simulationStartDate);
+        } else if (mode === 'custom') {
+            this.timeMode = 'custom';
+            if (typeof options.timeScale === 'number' && !Number.isNaN(options.timeScale)) {
+                this.timeScale = options.timeScale;
+            }
+            const providedDate = options.date instanceof Date
+                ? options.date
+                : (options.date ? new Date(options.date) : null);
+            const hasValidDate = providedDate && !Number.isNaN(providedDate.getTime());
+            const baseDate = hasValidDate ? providedDate : this.getSimulatedDate();
+            this.simulationStartDate = new Date(baseDate);
+            this.simulationStartPerf = this.getCurrentPerfSeconds();
+            this.simulatedDate = new Date(baseDate);
+        } else {
+            console.warn('Unknown time mode:', mode);
+            return;
+        }
+        this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, this.observer.lon);
+    }
+
+    getCurrentPerfSeconds() {
+        return performance.now() * 0.001;
     }
 
     enforceCameraAboveWater() {
@@ -225,6 +276,7 @@ class Planetarium {
     animate() {
         requestAnimationFrame(this.animate);
         const now = performance.now() * 0.001;
+        this.updateSimulationTime(now);
         const delta = now - this.lastTime;
         this.lastTime = now;
         this.controls?.update();

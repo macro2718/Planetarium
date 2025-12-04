@@ -4,19 +4,16 @@ export function createConstellationSystem(ctx) {
     ctx.constellationsGroup = new THREE.Group();
     ctx.constellationLines = [];
     const radius = 5000;
-    const starPositionCache = new Map();
+    const starEntries = new Map();
+    const lineEntries = [];
+    let lastLst = null;
+
     const ensureStar = (starId) => {
-        if (starPositionCache.has(starId)) {
-            return starPositionCache.get(starId);
+        if (starEntries.has(starId)) {
+            return starEntries.get(starId);
         }
         const data = ctx.catalog.getStar(starId);
         if (!data) return null;
-        const position = convertRADecToVector(ctx, data.ra, data.dec, radius);
-        if (!position || position.y <= 0) {
-            starPositionCache.set(starId, null);
-            return null;
-        }
-        starPositionCache.set(starId, position);
         const size = getStarSizeFromMagnitude(data.magnitude);
         const starGeometry = new THREE.SphereGeometry(size, 16, 16);
         const starMaterial = new THREE.MeshBasicMaterial({
@@ -25,7 +22,6 @@ export function createConstellationSystem(ctx) {
             opacity: 0.95
         });
         const star = new THREE.Mesh(starGeometry, starMaterial);
-        star.position.copy(position);
         star.userData = {
             id: data.id,
             name: data.name,
@@ -38,7 +34,9 @@ export function createConstellationSystem(ctx) {
             temperature: data.temperature,
             colorHint: data.colorHint,
             info: data.info,
-            fromCatalog: true
+            fromCatalog: true,
+            ra: data.ra,
+            dec: data.dec
         };
         ctx.constellationsGroup.add(star);
         ctx.clickableObjects.push(star);
@@ -51,9 +49,18 @@ export function createConstellationSystem(ctx) {
             blending: THREE.AdditiveBlending
         });
         const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-        glow.position.copy(position);
         ctx.constellationsGroup.add(glow);
-        return position;
+        const entry = {
+            id: data.id,
+            star,
+            glow,
+            data,
+            position: new THREE.Vector3(),
+            aboveHorizon: false
+        };
+        starEntries.set(data.id, entry);
+        updateStarEntry(ctx, entry, radius);
+        return entry;
     };
     ctx.catalog.getFeaturedStars().forEach(star => {
         ensureStar(star.id);
@@ -62,13 +69,12 @@ export function createConstellationSystem(ctx) {
     constellations.forEach(constellation => {
         constellation.starIds.forEach(starId => ensureStar(starId));
         constellation.lines.forEach(([startId, endId]) => {
-            const startPos = ensureStar(startId);
-            const endPos = ensureStar(endId);
-            if (!startPos || !endPos) return;
-            const lineGeometry = new THREE.BufferGeometry().setFromPoints([
-                startPos,
-                endPos
-            ]);
+            const startEntry = ensureStar(startId);
+            const endEntry = ensureStar(endId);
+            if (!startEntry || !endEntry) return;
+            const lineGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(6);
+            lineGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
             const lineMaterial = new THREE.LineBasicMaterial({
                 color: constellation.color || 0x4488ff,
                 transparent: true,
@@ -76,23 +82,36 @@ export function createConstellationSystem(ctx) {
                 blending: THREE.AdditiveBlending
             });
             const line = new THREE.Line(lineGeometry, lineMaterial);
+            line.userData = { horizonVisible: true };
             ctx.constellationsGroup.add(line);
             ctx.constellationLines.push(line);
+            const entry = { line, startId, endId };
+            lineEntries.push(entry);
+            updateLineEntry(entry, starEntries);
         });
     });
     ctx.scene.add(ctx.constellationsGroup);
     updateConstellationLinesVisibility(ctx, ctx.settings.showConstellations);
+    lastLst = ctx.localSiderealTime;
     return {
         group: ctx.constellationsGroup,
         updateVisibility(visible) {
             updateConstellationLinesVisibility(ctx, visible);
+        },
+        update() {
+            if (lastLst === ctx.localSiderealTime) return;
+            lastLst = ctx.localSiderealTime;
+            starEntries.forEach(entry => updateStarEntry(ctx, entry, radius));
+            lineEntries.forEach(entry => updateLineEntry(entry, starEntries));
+            updateConstellationLinesVisibility(ctx, ctx.settings.showConstellations);
         }
     };
 }
 
 function updateConstellationLinesVisibility(ctx, visible) {
     ctx.constellationLines.forEach(line => {
-        line.visible = visible;
+        const horizonVisible = line.userData?.horizonVisible ?? true;
+        line.visible = visible && horizonVisible;
     });
 }
 
@@ -124,4 +143,35 @@ function convertRADecToVector(ctx, raDeg, decDeg, radius) {
     const x = -projectedRadius * Math.sin(az);
     const z = projectedRadius * Math.cos(az);
     return new THREE.Vector3(x, y, z);
+}
+
+function updateStarEntry(ctx, entry, radius) {
+    const position = convertRADecToVector(ctx, entry.data.ra, entry.data.dec, radius);
+    if (!position) {
+        entry.aboveHorizon = false;
+        entry.star.visible = false;
+        entry.glow.visible = false;
+        entry.position.setScalar(0);
+        return;
+    }
+    entry.aboveHorizon = true;
+    entry.position.copy(position);
+    entry.star.position.copy(entry.position);
+    entry.glow.position.copy(entry.position);
+    entry.star.visible = true;
+    entry.glow.visible = true;
+}
+
+function updateLineEntry(entry, starEntries) {
+    const start = starEntries.get(entry.startId);
+    const end = starEntries.get(entry.endId);
+    if (!start || !end || !start.aboveHorizon || !end.aboveHorizon) {
+        entry.line.userData.horizonVisible = false;
+        return;
+    }
+    const attr = entry.line.geometry.getAttribute('position');
+    attr.setXYZ(0, start.position.x, start.position.y, start.position.z);
+    attr.setXYZ(1, end.position.x, end.position.y, end.position.z);
+    attr.needsUpdate = true;
+    entry.line.userData.horizonVisible = true;
 }

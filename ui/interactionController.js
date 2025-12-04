@@ -4,6 +4,7 @@ export function attachUIInteractions(ctx) {
     setupResizeHandler(ctx);
     setupClickHandler(ctx);
     setupControlButtons(ctx);
+    setupTimeControls(ctx);
     return {
         showStarInfo: (data) => showStarInfo(ctx, data),
         hideStarInfo: () => hideStarInfo(ctx)
@@ -57,9 +58,6 @@ function setupControlButtons(ctx) {
             apply(next);
         });
     };
-    toggleButton('btn-stars', 'showStars', (visible) => {
-        if (ctx.starsGroup) ctx.starsGroup.visible = visible;
-    });
     toggleButton('btn-milkyway', 'showMilkyWay', (visible) => {
         if (ctx.milkyWayGroup) ctx.milkyWayGroup.visible = visible;
     });
@@ -113,6 +111,85 @@ function setupControlButtons(ctx) {
             ctx.cardinalDirectionSystem.setVisible(visible);
         }
     });
+}
+
+function setupTimeControls(ctx) {
+    const realtimeBtn = document.getElementById('time-mode-realtime');
+    const customBtn = document.getElementById('time-mode-custom');
+    const dateInput = document.getElementById('custom-datetime');
+    const speedInput = document.getElementById('custom-speed');
+    const applyBtn = document.getElementById('apply-custom-time');
+    const speedDisplay = document.getElementById('custom-speed-display');
+
+    if (!realtimeBtn && !customBtn && !dateInput && !speedInput) {
+        return;
+    }
+
+    const updateButtonState = () => {
+        if (ctx.timeMode === 'realtime') {
+            realtimeBtn?.classList.add('active');
+            customBtn?.classList.remove('active');
+        } else {
+            customBtn?.classList.add('active');
+            realtimeBtn?.classList.remove('active');
+        }
+    };
+
+    const updateSpeedDisplay = () => {
+        if (!speedDisplay || !speedInput) return;
+        const value = parseFloat(speedInput.value);
+        if (Number.isFinite(value)) {
+            speedDisplay.textContent = `×${value}`;
+        } else {
+            speedDisplay.textContent = '×1';
+        }
+    };
+
+    const syncInputsFromCtx = (forceDate = false) => {
+        if (dateInput && (forceDate || ctx.timeMode === 'realtime')) {
+            const current = typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date();
+            dateInput.value = formatDatetimeLocal(current);
+        }
+        if (speedInput && Number.isFinite(ctx.timeScale)) {
+            speedInput.value = ctx.timeScale;
+        }
+        updateSpeedDisplay();
+    };
+
+    const readInputDate = () => {
+        if (!dateInput || !dateInput.value) return null;
+        const parsed = new Date(dateInput.value);
+        if (Number.isNaN(parsed.getTime())) return null;
+        return parsed;
+    };
+
+    const applyCustomSettings = () => {
+        const targetDate = readInputDate() ?? (typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date());
+        const rawScale = speedInput ? parseFloat(speedInput.value) : ctx.timeScale;
+        const nextScale = Number.isFinite(rawScale) ? rawScale : (Number.isFinite(ctx.timeScale) ? ctx.timeScale : 1);
+        ctx.setTimeMode?.('custom', { date: targetDate, timeScale: nextScale });
+        syncInputsFromCtx(true);
+        updateButtonState();
+    };
+
+    realtimeBtn?.addEventListener('click', () => {
+        ctx.setTimeMode?.('realtime');
+        syncInputsFromCtx(true);
+        updateButtonState();
+    });
+
+    customBtn?.addEventListener('click', () => {
+        applyCustomSettings();
+    });
+
+    applyBtn?.addEventListener('click', () => {
+        applyCustomSettings();
+    });
+
+    speedInput?.addEventListener('input', updateSpeedDisplay);
+
+    syncInputsFromCtx(true);
+    updateButtonState();
 }
 
 function isObjectWorldVisible(object) {
@@ -203,4 +280,14 @@ function hideStarInfo(ctx) {
     const infoPanel = document.getElementById('star-info');
     if (!infoPanel) return;
     infoPanel.classList.remove('visible');
+}
+
+function formatDatetimeLocal(date) {
+    const pad = (value) => String(value).padStart(2, '0');
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1);
+    const day = pad(date.getDate());
+    const hour = pad(date.getHours());
+    const minute = pad(date.getMinutes());
+    return `${year}-${month}-${day}T${hour}:${minute}`;
 }

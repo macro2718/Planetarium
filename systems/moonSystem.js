@@ -132,6 +132,7 @@ export function createMoonSystem(ctx) {
     ctx.clickableObjects.push(moon);
 
     const moonState = { current: null };
+    const getCurrentDate = () => (typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date());
 
     const updateState = (state) => {
         if (!state) return;
@@ -141,6 +142,7 @@ export function createMoonSystem(ctx) {
         ctx.moonUniforms.phaseAngle.value = state.phaseAngle;
         ctx.moonUniforms.illumination.value = state.illumination;
         ctx.moonUniforms.sunDirection.value.copy(state.sunDirection);
+        ctx.moonGroup.visible = state.altDeg > 0;
         if (ctx.moonCore) {
             const illuminationPct = Math.round(state.illumination * 100);
             ctx.moonCore.userData.magnitude = `月齢 ${state.moonAge.toFixed(1)}日`;
@@ -148,21 +150,42 @@ export function createMoonSystem(ctx) {
         }
     };
 
-    moonState.current = calculateMoonState(new Date());
+    const ensureStateUpToDate = () => {
+        const date = getCurrentDate();
+        const timestamp = date.getTime();
+        if (moonState.current && moonState.current.timestamp === timestamp) {
+            return moonState.current;
+        }
+        const state = calculateMoonState(ctx, date);
+        state.timestamp = timestamp;
+        moonState.current = state;
+        updateState(state);
+        return state;
+    };
+
+    const initialDate = getCurrentDate();
+    moonState.current = calculateMoonState(ctx, initialDate);
+    moonState.current.timestamp = initialDate.getTime();
     updateState(moonState.current);
 
     return {
         group: ctx.moonGroup,
-        calculateState(date = new Date()) {
-            moonState.current = calculateMoonState(date);
-            return moonState.current;
+        calculateState(date = null) {
+            const targetDate = date ?? getCurrentDate();
+            const state = calculateMoonState(ctx, targetDate);
+            state.timestamp = targetDate.getTime();
+            moonState.current = state;
+            return state;
         },
         updateVisuals(state) {
             moonState.current = state;
             updateState(state);
         },
         getCurrentState() {
-            return moonState.current;
+            return ensureStateUpToDate();
+        },
+        syncWithContextTime() {
+            return ensureStateUpToDate();
         },
         update(time) {
             if (ctx.moonUniforms) {
@@ -171,6 +194,7 @@ export function createMoonSystem(ctx) {
             if (ctx.moonCore) {
                 ctx.moonCore.rotation.y = time * 0.02;
             }
+            ensureStateUpToDate();
         }
     };
 }
@@ -193,7 +217,7 @@ function getMoonPhaseLabel(phase) {
     return { name: '新月', emoji: '🌑' };
 }
 
-function calculateMoonState(date = new Date()) {
+function calculateMoonState(ctx, date = new Date()) {
     const lunarCycle = 29.530588;
     const reference = new Date('2024-01-11T11:57:00Z');
     const diffDays = (date - reference) / (1000 * 60 * 60 * 24);
@@ -202,21 +226,61 @@ function calculateMoonState(date = new Date()) {
     const phaseAngle = phase * Math.PI * 2;
     const illumination = 0.5 * (1 - Math.cos(phaseAngle));
     const label = getMoonPhaseLabel(phase);
+
+    const daysSinceJ2000 = (date - new Date('2000-01-01T12:00:00Z')) / (1000 * 60 * 60 * 24);
+    const L = normalizeDegrees(218.3164477 + 13.17639648 * daysSinceJ2000); // Mean longitude
+    const D = normalizeDegrees(297.8501921 + 12.19074912 * daysSinceJ2000); // Mean elongation
+    const M_sun = normalizeDegrees(357.5291092 + 0.98560028 * daysSinceJ2000); // Sun mean anomaly
+    const M_moon = normalizeDegrees(134.9633964 + 13.06499295 * daysSinceJ2000); // Moon mean anomaly
+    const F = normalizeDegrees(93.2720950 + 13.22935024 * daysSinceJ2000); // Latitude argument
+
+    let lon = L
+        + 6.289 * Math.sin(THREE.MathUtils.degToRad(M_moon))
+        + 1.274 * Math.sin(THREE.MathUtils.degToRad(2 * D - M_moon))
+        + 0.658 * Math.sin(THREE.MathUtils.degToRad(2 * D))
+        + 0.214 * Math.sin(THREE.MathUtils.degToRad(2 * M_moon))
+        - 0.186 * Math.sin(THREE.MathUtils.degToRad(M_sun))
+        - 0.059 * Math.sin(THREE.MathUtils.degToRad(2 * D - 2 * M_moon))
+        - 0.057 * Math.sin(THREE.MathUtils.degToRad(2 * D - M_sun - M_moon))
+        + 0.053 * Math.sin(THREE.MathUtils.degToRad(2 * D + M_moon))
+        + 0.046 * Math.sin(THREE.MathUtils.degToRad(2 * D - M_sun))
+        + 0.041 * Math.sin(THREE.MathUtils.degToRad(M_sun - M_moon));
+
+    let lat = 5.128 * Math.sin(THREE.MathUtils.degToRad(F))
+        + 0.280 * Math.sin(THREE.MathUtils.degToRad(M_moon + F))
+        + 0.277 * Math.sin(THREE.MathUtils.degToRad(M_moon - F))
+        + 0.173 * Math.sin(THREE.MathUtils.degToRad(2 * D - F));
+
+    lon = normalizeDegrees(lon);
+    const obliquity = 23.439291 - 0.0000137 * daysSinceJ2000;
+    const lonRad = THREE.MathUtils.degToRad(lon);
+    const latRad = THREE.MathUtils.degToRad(lat);
+    const obRad = THREE.MathUtils.degToRad(obliquity);
+
+    const sinLon = Math.sin(lonRad);
+    const cosLon = Math.cos(lonRad);
+    const sinLat = Math.sin(latRad);
+    const cosLat = Math.cos(latRad);
+
+    const x = cosLon * cosLat;
+    const y = sinLon * cosLat;
+    const z = sinLat;
+
+    const xEq = x;
+    const yEq = y * Math.cos(obRad) - z * Math.sin(obRad);
+    const zEq = y * Math.sin(obRad) + z * Math.cos(obRad);
+
+    let raRad = Math.atan2(yEq, xEq);
+    if (raRad < 0) raRad += Math.PI * 2;
+    const decRad = Math.asin(zEq);
+    const raDeg = THREE.MathUtils.radToDeg(raRad);
+    const decDeg = THREE.MathUtils.radToDeg(decRad);
+
     const moonDistance = 2600;
-    const baseAltitude = THREE.MathUtils.degToRad(28);
-    const seasonal = THREE.MathUtils.degToRad(10) * Math.sin((date.getMonth() / 12) * Math.PI * 2 + date.getDate() * 0.2);
-    const altitude = baseAltitude + THREE.MathUtils.degToRad(12) * Math.sin(phaseAngle + seasonal) + THREE.MathUtils.degToRad(5);
-    const azimuth = THREE.MathUtils.degToRad(110) + phaseAngle * 0.85;
-    const y = Math.max(150, moonDistance * Math.sin(altitude));
-    const projected = moonDistance * Math.cos(altitude);
-    // 天文学的規約: 北から東へ時計回り（上から見ると反時計回り）
-    // Three.jsの座標系に合わせてXを反転
-    const x = -projected * Math.sin(azimuth);
-    const z = projected * Math.cos(azimuth);
-    const position = new THREE.Vector3(x, y, z);
+    const { position, altDeg, azDeg } = convertEquatorialToHorizontal(ctx, raDeg, decDeg, moonDistance);
     const viewDir = position.clone().normalize();
-    const earthDir = viewDir.clone().negate();
-    const sunDirection = new THREE.Vector3().copy(viewDir).lerp(earthDir, illumination).normalize();
+    const sunDirection = new THREE.Vector3().copy(viewDir).lerp(viewDir.clone().negate(), illumination).normalize();
+
     return {
         phase,
         phaseAngle,
@@ -226,7 +290,36 @@ function calculateMoonState(date = new Date()) {
         phaseName: label.name,
         position,
         sunDirection,
-        altDeg: THREE.MathUtils.radToDeg(altitude),
-        azDeg: THREE.MathUtils.radToDeg(azimuth)
+        altDeg,
+        azDeg,
+        raDeg,
+        decDeg
     };
+}
+
+function convertEquatorialToHorizontal(ctx, raDeg, decDeg, radius) {
+    const lst = ctx.localSiderealTime ?? 0;
+    const hourAngle = THREE.MathUtils.degToRad(normalizeDegrees(lst - raDeg));
+    const dec = THREE.MathUtils.degToRad(decDeg);
+    const lat = THREE.MathUtils.degToRad(ctx.observer?.lat ?? 0);
+    const sinAlt = Math.sin(dec) * Math.sin(lat) + Math.cos(dec) * Math.cos(lat) * Math.cos(hourAngle);
+    const altitude = Math.asin(sinAlt);
+    const cosAz = (Math.sin(dec) - Math.sin(altitude) * Math.sin(lat)) / (Math.cos(altitude) * Math.cos(lat));
+    let az = Math.acos(THREE.MathUtils.clamp(cosAz, -1, 1));
+    if (Math.sin(hourAngle) > 0) {
+        az = Math.PI * 2 - az;
+    }
+    const y = radius * Math.sin(altitude);
+    const projectedRadius = radius * Math.cos(altitude);
+    const x = -projectedRadius * Math.sin(az);
+    const z = projectedRadius * Math.cos(az);
+    return {
+        position: new THREE.Vector3(x, y, z),
+        altDeg: THREE.MathUtils.radToDeg(altitude),
+        azDeg: THREE.MathUtils.radToDeg(az)
+    };
+}
+
+function normalizeDegrees(value) {
+    return ((value % 360) + 360) % 360;
 }

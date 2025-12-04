@@ -220,6 +220,67 @@
             color: #ffffff;
         }
 
+        .control-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 12px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .section-title {
+            font-size: 11px;
+            letter-spacing: 2px;
+            opacity: 0.75;
+        }
+
+        .dual-button-group {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .control-btn.small {
+            padding: 8px 12px;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .control-label {
+            font-size: 11px;
+            letter-spacing: 1px;
+            opacity: 0.75;
+        }
+
+        .control-label span {
+            font-size: 10px;
+            opacity: 0.7;
+            margin-left: 6px;
+        }
+
+        .control-input {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(5, 10, 25, 0.6);
+            color: var(--text-main);
+            font-size: 12px;
+            outline: none;
+        }
+
+        .control-input:focus {
+            border-color: var(--accent);
+        }
+
+        .control-hint {
+            font-size: 10px;
+            opacity: 0.55;
+            line-height: 1.4;
+        }
+
         #loading {
             position: fixed;
             top: 0;
@@ -317,6 +378,22 @@
             backdrop-filter: blur(10px);
         }
 
+        #time-display #time-mode-indicator {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            opacity: 0.6;
+            margin-bottom: 4px;
+        }
+
+        #time-display #current-date {
+            display: block;
+            font-size: 13px;
+            opacity: 0.75;
+            margin-bottom: 2px;
+        }
+
         #time-display #current-time {
             display: block;
             font-size: 24px;
@@ -351,7 +428,19 @@
     <div id="subtitle">Aurora Voyage</div>
     
     <div id="controls">
-        <button class="control-btn active" id="btn-stars">恒星</button>
+        <div class="control-section" id="time-control-section">
+            <div class="section-title">TIME MODE</div>
+            <div class="dual-button-group">
+                <button class="control-btn small active" id="time-mode-realtime">リアルタイム</button>
+                <button class="control-btn small" id="time-mode-custom">カスタム</button>
+            </div>
+            <label class="control-label" for="custom-datetime">日時</label>
+            <input class="control-input" type="datetime-local" id="custom-datetime">
+            <label class="control-label" for="custom-speed">時間倍率 <span id="custom-speed-display">×240</span></label>
+            <input class="control-input" type="number" id="custom-speed" step="1" value="240">
+            <button class="control-btn small" id="apply-custom-time">設定を適用</button>
+            <p class="control-hint">倍率0で停止。負の値で時間を逆行させることもできます。</p>
+        </div>
         <button class="control-btn active" id="btn-milkyway">天の川</button>
         <button class="control-btn active" id="btn-constellations">星座</button>
         <button class="control-btn active" id="btn-shooting">流れ星</button>
@@ -368,6 +457,8 @@
     </div>
     
     <div id="time-display">
+        <span id="time-mode-indicator">リアルタイム</span>
+        <span id="current-date"></span>
         <span id="current-time"></span>
         <span id="celestial-info"></span>
     </div>
