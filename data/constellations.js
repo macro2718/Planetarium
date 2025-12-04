@@ -16,20 +16,6 @@ export const BASE_CONSTELLATION_DATA = [
         ]
     },
     {
-        id: 'ursaMajor',
-        name: '北斗七星',
-        description: 'おおぐま座のひしゃく型の星並び。',
-        starIds: ['dubhe', 'merak', 'phecda', 'megrez', 'alioth', 'mizar', 'alkaid'],
-        lines: [
-            ['dubhe', 'merak'],
-            ['merak', 'phecda'],
-            ['phecda', 'megrez'],
-            ['megrez', 'alioth'],
-            ['alioth', 'mizar'],
-            ['mizar', 'alkaid']
-        ]
-    },
-    {
         id: 'cassiopeia',
         name: 'カシオペア座',
         description: 'W字が特徴の北天星座。',
@@ -65,6 +51,22 @@ export const BASE_CONSTELLATION_DATA = [
             ['zetaUMi', 'pherkad'],     // ひしゃくの底へ
             ['zetaUMi', 'kochab'],      // ひしゃくの底へ（分岐）
             ['pherkad', 'kochab']       // ひしゃくの底を閉じる
+        ]
+    },
+    {
+        id: 'ursaMajor',
+        name: 'おおぐま座',
+        description: '北天に大きな熊の姿を描く星座で、北斗七星はその背から尻尾を成す部分。',
+        starIds: ['dubhe', 'merak', 'phecda', 'megrez', 'alioth', 'mizar', 'alkaid'],
+        lines: [
+            ['dubhe', 'merak'],         // 背中から腰
+            ['merak', 'phecda'],        // 胴体の底
+            ['phecda', 'megrez'],       // 背中を上る
+            ['megrez', 'alioth'],       // 背から尾へ
+            ['alioth', 'mizar'],        // 尾を延ばす
+            ['mizar', 'alkaid'],        // 尾の先端
+            ['phecda', 'alioth'],       // 胴体を斜めに結ぶ
+            ['dubhe', 'megrez']         // 肩から背を補強
         ]
     },
     {
@@ -191,6 +193,120 @@ export const BASE_CONSTELLATION_DATA = [
             ['wezen', 'adhara'],
             ['adhara', 'furud'],
             ['furud', 'aludra']
+        ]
+    },
+    {
+        id: 'pegasus',
+        name: 'ペガスス座',
+        description: '秋の夜空に大きな四角形「ペガススの大四辺形」を形作る天馬の星座。',
+        starIds: ['markab', 'scheat', 'algenib', 'alpheratz'],
+        lines: [
+            ['markab', 'scheat'],
+            ['scheat', 'alpheratz'],
+            ['alpheratz', 'algenib'],
+            ['algenib', 'markab']
+        ]
+    },
+    {
+        id: 'andromeda',
+        name: 'アンドロメダ座',
+        description: 'ペガススの大四辺形から鎖のように星が連なる星座。アンドロメダ銀河の位置の目印にもなる。',
+        starIds: ['alpheratz', 'mirach', 'almach'],
+        lines: [
+            ['alpheratz', 'mirach'],
+            ['mirach', 'almach']
+        ]
+    },
+    {
+        id: 'sagittarius',
+        name: 'いて座',
+        description: '夏の南の空に「ティーポット」の姿で現れ、天の川の中心方向を示す黄道星座。',
+        starIds: ['kausAustralis', 'nunki'],
+        lines: [
+            ['kausAustralis', 'nunki']
+        ]
+    },
+    {
+        id: 'piscisAustrinus',
+        name: 'みなみのうお座',
+        description: '秋の南の空で孤独に輝く一等星フォーマルハウトを擁する星座。',
+        starIds: ['fomalhaut'],
+        lines: []
+    },
+    {
+        id: 'aries',
+        name: 'おひつじ座',
+        description: '春の星座。2つの明るい星が羊の頭を形づくる。',
+        starIds: ['hamal', 'sheratan'],
+        lines: [
+            ['hamal', 'sheratan']       // ハマル〜シェラタン（羊の頭）
+        ]
+    },
+    {
+        id: 'gemini',
+        name: 'ふたご座',
+        description: '冬の夜空に並んで輝く双子の星座。',
+        starIds: ['castor', 'pollux', 'wasat'],
+        lines: [
+            ['castor', 'pollux'],       // 双子の頭
+            ['castor', 'wasat'],        // カストル側の胴体
+            ['pollux', 'wasat']         // ポルックス側の胴体
+        ]
+    },
+    {
+        id: 'cancer',
+        name: 'かに座',
+        description: '暗い星が多いが、かにの爪と甲羅がかすかに描かれる星座。',
+        starIds: ['acubens', 'asellusBorealis', 'asellusAustralis'],
+        lines: [
+            ['acubens', 'asellusBorealis'],   // 右の爪〜甲羅
+            ['acubens', 'asellusAustralis'],  // 右の爪〜甲羅
+            ['asellusBorealis', 'asellusAustralis'] // 甲羅まわり
+        ]
+    },
+    {
+        id: 'libra',
+        name: 'てんびん座',
+        description: 'さそり座の西に位置する、天秤の皿を表す星座。',
+        starIds: ['zubenelgenubi', 'zubeneschamali'],
+        lines: [
+            ['zubenelgenubi', 'zubeneschamali']   // 2つの皿
+        ]
+    },
+    {
+        id: 'sagittarius',
+        name: 'いて座',
+        description: '夏の南の空の「ティーポット」の一部として知られる射手の星座。',
+        starIds: ['kausAustralis', 'nunki'],
+        lines: [
+            ['kausAustralis', 'nunki']   // ティーポットの縁の一部
+        ]
+    },
+    {
+        id: 'capricornus',
+        name: 'やぎ座',
+        description: '細長い三角形で描かれる海山羊の星座。',
+        starIds: ['algedi', 'dabih'],
+        lines: [
+            ['algedi', 'dabih']          // 角〜胴体方向
+        ]
+    },
+    {
+        id: 'aquarius',
+        name: 'みずがめ座',
+        description: '水瓶から水が流れ出すような形に星が並ぶ。',
+        starIds: ['sadalsuud', 'sadalmelik', 'sadachbia'],
+        lines: [
+            ['sadalsuud', 'sadalmelik'], // 水瓶の口
+            ['sadalmelik', 'sadachbia']  // 水の流れの方向
+        ]
+    },
+    {
+        id: 'pisces',
+        name: 'うお座',
+        description: '二匹の魚を結ぶひもが大きなV字を描く星座。ここでは代表星を1つだけ登録。',
+        starIds: ['alrescha'],
+        lines: [
         ]
     }
 ];
