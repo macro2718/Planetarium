@@ -209,7 +209,9 @@ function calculateMoonState(date = new Date()) {
     const azimuth = THREE.MathUtils.degToRad(110) + phaseAngle * 0.85;
     const y = Math.max(150, moonDistance * Math.sin(altitude));
     const projected = moonDistance * Math.cos(altitude);
-    const x = projected * Math.sin(azimuth);
+    // 天文学的規約: 北から東へ時計回り（上から見ると反時計回り）
+    // Three.jsの座標系に合わせてXを反転
+    const x = -projected * Math.sin(azimuth);
     const z = projected * Math.cos(azimuth);
     const position = new THREE.Vector3(x, y, z);
     const viewDir = position.clone().normalize();

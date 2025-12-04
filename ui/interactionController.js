@@ -99,6 +99,20 @@ function setupControlButtons(ctx) {
             }
         });
     }
+    
+    // 時圏表示ボタン
+    toggleButton('btn-hour-circles', 'showHourCircles', (visible) => {
+        if (ctx.hourCircleSystem) {
+            ctx.hourCircleSystem.setVisible(visible);
+        }
+    });
+    
+    // 方位表示ボタン
+    toggleButton('btn-cardinal-directions', 'showCardinalDirections', (visible) => {
+        if (ctx.cardinalDirectionSystem) {
+            ctx.cardinalDirectionSystem.setVisible(visible);
+        }
+    });
 }
 
 function isObjectWorldVisible(object) {

@@ -119,7 +119,9 @@ function convertRADecToVector(ctx, raDeg, decDeg, radius) {
     }
     const y = radius * Math.sin(alt);
     const projectedRadius = radius * Math.cos(alt);
-    const x = projectedRadius * Math.sin(az);
+    // 天文学的規約: 北から東へ時計回り（上から見ると反時計回り）
+    // Three.jsの座標系に合わせてXを反転
+    const x = -projectedRadius * Math.sin(az);
     const z = projectedRadius * Math.cos(az);
     return new THREE.Vector3(x, y, z);
 }

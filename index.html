@@ -169,6 +169,27 @@
             border: 1px solid var(--glass-border);
             box-shadow: 0 12px 40px rgba(0, 8, 30, 0.5);
             backdrop-filter: blur(12px);
+            max-height: calc(80vh - 40px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(136, 173, 255, 0.4) transparent;
+        }
+
+        #controls::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #controls::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #controls::-webkit-scrollbar-thumb {
+            background: rgba(136, 173, 255, 0.4);
+            border-radius: 3px;
+        }
+
+        #controls::-webkit-scrollbar-thumb:hover {
+            background: rgba(136, 173, 255, 0.6);
         }
 
         .control-btn {
@@ -336,6 +357,8 @@
         <button class="control-btn active" id="btn-shooting">流れ星</button>
         <button class="control-btn active" id="btn-moon">月</button>
         <button class="control-btn active" id="btn-aurora">オーロラ</button>
+        <button class="control-btn" id="btn-hour-circles">時圏</button>
+        <button class="control-btn" id="btn-cardinal-directions">方位</button>
         <button class="control-btn" id="btn-auto">自動回転</button>
         <button class="control-btn" id="btn-music">🎵 BGM</button>
     </div>

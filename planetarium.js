@@ -11,6 +11,8 @@ import { createAuroraSystem } from './systems/auroraSystem.js';
 import { createCosmicDustSystem } from './systems/cosmicDustSystem.js';
 import { createWaterSurfaceSystem } from './systems/waterSurfaceSystem.js';
 import { createShootingStarSystem } from './systems/shootingStarSystem.js';
+import { createHourCircleSystem } from './systems/hourCircleSystem.js';
+import { createCardinalDirectionSystem } from './systems/cardinalDirectionSystem.js';
 import { attachUIInteractions } from './ui/interactionController.js';
 import { setupTimeDisplay } from './ui/timeDisplay.js';
 import { calculateLocalSiderealTime } from './utils/astronomy.js';
@@ -32,6 +34,8 @@ class Planetarium {
             showShootingStars: true,
             showMoon: true,
             showAurora: true,
+            showHourCircles: false,
+            showCardinalDirections: false,
             autoRotate: false,
             playMusic: false
         };
@@ -74,6 +78,8 @@ class Planetarium {
         this.registerUpdater(createCosmicDustSystem(this));
         this.registerUpdater(createWaterSurfaceSystem(this, () => this.moonSystem.getCurrentState()));
         this.registerUpdater(createShootingStarSystem(this));
+        this.hourCircleSystem = createHourCircleSystem(this);
+        this.cardinalDirectionSystem = createCardinalDirectionSystem(this);
 
         attachUIInteractions(this);
         setupTimeDisplay(this, this.moonSystem);

@@ -56,58 +56,6 @@ function createSkyGradient(ctx) {
 }
 
 function createHorizonRing(ctx) {
-    const ringGeometry = new THREE.TorusGeometry(9000, 30, 16, 128);
-    ctx.horizonRingMaterial = new THREE.ShaderMaterial({
-        uniforms: {
-            time: { value: 0 }
-        },
-        vertexShader: `
-            varying vec2 vUv;
-            void main() {
-                vUv = uv;
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-        `,
-        fragmentShader: `
-            varying vec2 vUv;
-            uniform float time;
-            void main() {
-                vec3 color1 = vec3(0.15, 0.05, 0.1);
-                vec3 color2 = vec3(0.12, 0.06, 0.16);
-                vec3 color = mix(color1, color2, vUv.x);
-                float wave = sin(time * 0.35 + vUv.x * 6.2831) * 0.05;
-                float alpha = 0.32 + wave;
-                gl_FragColor = vec4(color, alpha);
-            }
-        `,
-        transparent: true,
-        blending: THREE.AdditiveBlending,
-        side: THREE.DoubleSide,
-        depthWrite: false
-    });
-    const ring = new THREE.Mesh(ringGeometry, ctx.horizonRingMaterial);
-    ring.rotation.x = Math.PI / 2;
-    ctx.scene.add(ring);
-
-    const linePoints = [];
-    const segments = 256;
-    for (let i = 0; i <= segments; i++) {
-        const angle = (i / segments) * Math.PI * 2;
-        linePoints.push(new THREE.Vector3(
-            Math.cos(angle) * 8500,
-            0,
-            Math.sin(angle) * 8500
-        ));
-    }
-    const lineGeometry = new THREE.BufferGeometry().setFromPoints(linePoints);
-    const lineMaterial = new THREE.LineBasicMaterial({
-        color: 0x8866aa,
-        transparent: true,
-        opacity: 0.5
-    });
-    const horizonLine = new THREE.Line(lineGeometry, lineMaterial);
-    ctx.scene.add(horizonLine);
-
     createHorizonLights(ctx);
     createCompassPoints(ctx, 8500);
 }
