@@ -62,6 +62,33 @@ export function normalizeDegrees(value) {
     return ((value % 360) + 360) % 360;
 }
 
+export function precessEquatorialJ2000ToDate(raDeg, decDeg, date) {
+    if (![raDeg, decDeg].every(v => typeof v === 'number')) return null;
+    const epochDate = date instanceof Date && !Number.isNaN(date.getTime()) ? date : new Date();
+    const jd = epochDate.getTime() / 86400000 + 2440587.5;
+    const t = (jd - 2451545.0) / 36525;
+
+    const zetaArcsec = 2306.2181 * t + 0.30188 * t * t + 0.017998 * t * t * t;
+    const zArcsec = 2306.2181 * t + 1.09468 * t * t + 0.018203 * t * t * t;
+    const thetaArcsec = 2004.3109 * t - 0.42665 * t * t - 0.041833 * t * t * t;
+
+    const zeta = degToRad(zetaArcsec / 3600);
+    const z = degToRad(zArcsec / 3600);
+    const theta = degToRad(thetaArcsec / 3600);
+
+    const ra = degToRad(raDeg);
+    const dec = degToRad(decDeg);
+
+    const A = Math.cos(dec) * Math.sin(ra + zeta);
+    const B = Math.cos(theta) * Math.cos(dec) * Math.cos(ra + zeta) - Math.sin(theta) * Math.sin(dec);
+    const C = Math.sin(theta) * Math.cos(dec) * Math.cos(ra + zeta) + Math.cos(theta) * Math.sin(dec);
+
+    const newRa = normalizeDegrees(radToDeg(Math.atan2(A, B) + z));
+    const newDec = radToDeg(Math.asin(clamp(C, -1, 1)));
+
+    return { ra: newRa, dec: newDec };
+}
+
 function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
 }

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { equatorialToHorizontalVector } from '../utils/astronomy.js';
+import { equatorialToHorizontalVector, precessEquatorialJ2000ToDate } from '../utils/astronomy.js';
 
 const GALACTIC_NORTH_POLE = { ra: 192.85948, dec: 27.12825 }; // IAU 2009 (J2000)
 const GALACTIC_CENTER = { ra: 266.4051, dec: -28.936175 };
@@ -366,15 +366,26 @@ function getBaseMilkyWayBasis() {
 
 function calculateGalacticBasis(ctx) {
     if (!ctx?.observer) return null;
-    const normalResult = equatorialToHorizontalVector(
+    const simulatedDate = ctx.getSimulatedDate?.() ?? new Date();
+    const galacticNorth = precessEquatorialJ2000ToDate(
         GALACTIC_NORTH_POLE.ra,
         GALACTIC_NORTH_POLE.dec,
+        simulatedDate
+    );
+    const galacticCenter = precessEquatorialJ2000ToDate(
+        GALACTIC_CENTER.ra,
+        GALACTIC_CENTER.dec,
+        simulatedDate
+    );
+    const normalResult = equatorialToHorizontalVector(
+        galacticNorth?.ra,
+        galacticNorth?.dec,
         ctx.localSiderealTime ?? 0,
         ctx.observer.lat
     );
     const centerResult = equatorialToHorizontalVector(
-        GALACTIC_CENTER.ra,
-        GALACTIC_CENTER.dec,
+        galacticCenter?.ra,
+        galacticCenter?.dec,
         ctx.localSiderealTime ?? 0,
         ctx.observer.lat
     );
