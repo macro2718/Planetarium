@@ -364,7 +364,7 @@ function getBaseMilkyWayBasis() {
     return { normal, axis, tangent };
 }
 
-function calculateGalacticBasis(ctx) {
+export function calculateGalacticBasis(ctx) {
     if (!ctx?.observer) return null;
     const simulatedDate = ctx.getSimulatedDate?.() ?? new Date();
     const galacticNorth = precessEquatorialJ2000ToDate(
