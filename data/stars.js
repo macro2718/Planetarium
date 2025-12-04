@@ -1090,8 +1090,8 @@ export const BASE_STAR_DATA = [
         dec: 23.4624,
         magnitude: 2.00,
         color: 0xffc58f,
-        info: 'おひつじ座α星。約66光年先にある橙色の巨星で、羊の頭を形作る主星。',
-        glowColor: 0x8bb5ff,
+        info: 'おひつじ座α星。アラビア語で「羊」を意味し、約66光年先で橙色に輝く巨星が羊の頭を示す。',
+        glowColor: 0xffc58f,
         featured: false
     },
     {
@@ -1103,8 +1103,8 @@ export const BASE_STAR_DATA = [
         dec: 20.8080,
         magnitude: 2.65,
         color: 0xb5d0ff,
-        info: 'おひつじ座β星。白く輝く分光連星で、ハマルと並んで羊の額を示す。',
-        glowColor: 0x8bb5ff,
+        info: 'おひつじ座β星。名前は「二番目」を意味し、白い分光連星がハマルと並んで羊の額を飾る。',
+        glowColor: 0xb5d0ff,
         featured: false
     },
     {
@@ -1116,8 +1116,8 @@ export const BASE_STAR_DATA = [
         dec: 11.8577,
         magnitude: 4.26,
         color: 0xb5d0ff,
-        info: 'かに座α星。白色の多重連星で、カニの爪（クロー）の位置を示す。',
-        glowColor: 0x8bb5ff,
+        info: 'かに座α星。アラビア語で「爪」を意味する名の通り、白色の多重連星がカニの鋏を示す。',
+        glowColor: 0xb5d0ff,
         featured: false
     },
     {
@@ -1128,9 +1128,9 @@ export const BASE_STAR_DATA = [
         ra: 130.8215,
         dec: 21.4685,
         magnitude: 4.67,
-        color: 0xb5d0ff,
-        info: 'かに座γ星。プレセペ星団の北側で輝く淡い星で「北のろば星」を意味する。',
-        glowColor: 0x8bb5ff,
+        color: 0xffd2a1,
+        info: 'かに座γ星。プレセペ星団の北で黄みを帯びて輝き、「北のろば星」の名でカニに荷を運ぶろばを表す。',
+        glowColor: 0xffd2a1,
         featured: false
     },
     {
@@ -1142,8 +1142,8 @@ export const BASE_STAR_DATA = [
         dec: 18.1543,
         magnitude: 3.94,
         color: 0xffd2a1,
-        info: 'かに座δ星。プレセペ星団の南に位置する黄みの巨星で「南のろば星」の名を持つ。',
-        glowColor: 0x8bb5ff,
+        info: 'かに座δ星。プレセペ星団の南で穏やかに光る黄白色の巨星で、「南のろば星」を意味する伝承名を持つ。',
+        glowColor: 0xffd2a1,
         featured: false
     },
 
@@ -1155,9 +1155,9 @@ export const BASE_STAR_DATA = [
         ra: 222.7208,
         dec: -16.0417,
         magnitude: 2.75,
-        color: 0xb5d0ff,
-        info: 'てんびん座α星。肉眼でも二重に見える連星系で、天秤の南の皿にあたる。',
-        glowColor: 0x8bb5ff,
+        color: 0xdfefff,
+        info: 'てんびん座α星。かつてさそり座の爪とされた名を持ち、肉眼でも分かれる二重星が天秤の南皿を形作る。',
+        glowColor: 0xdfefff,
         featured: false
     },
     {
@@ -1169,8 +1169,8 @@ export const BASE_STAR_DATA = [
         dec: -9.3829,
         magnitude: 2.61,
         color: 0xa8c8ff,
-        info: 'てんびん座β星。やや青緑がかって見えるとされる星で、天秤の北の皿を示す。',
-        glowColor: 0x8bb5ff,
+        info: 'てんびん座β星。名は「北の爪」を意味し、淡い青緑色が印象的な星で天秤の北皿を示す。',
+        glowColor: 0xa8c8ff,
         featured: false
     },
     {
@@ -1182,8 +1182,8 @@ export const BASE_STAR_DATA = [
         dec: -12.5449,
         magnitude: 3.60,
         color: 0xfff2c6,
-        info: 'やぎ座α星。見かけの二重星で、山羊の角先に位置する黄色の星。',
-        glowColor: 0x8bb5ff,
+        info: 'やぎ座α星。アラビア語で「子ヤギ」を意味し、見かけの二重星が角の付け根を黄色く照らす。',
+        glowColor: 0xfff2c6,
         featured: false
     },
     {
@@ -1195,8 +1195,8 @@ export const BASE_STAR_DATA = [
         dec: -14.7849,
         magnitude: 3.08,
         color: 0xfff4e8,
-        info: 'やぎ座β星。複数の伴星を持つ橙色の巨星で、アルゲディのすぐ南に並ぶ。',
-        glowColor: 0x8bb5ff,
+        info: 'やぎ座β星。「供物をささげる者」の名を持つ橙色の巨星で、複数の伴星とともにアルゲディの南に並ぶ。',
+        glowColor: 0xfff4e8,
         featured: false
     },
     {
@@ -1208,8 +1208,8 @@ export const BASE_STAR_DATA = [
         dec: -5.5712,
         magnitude: 2.89,
         color: 0xfff2c6,
-        info: 'みずがめ座β星。黄白色の超巨星で「最も幸運な星」と呼ばれる。',
-        glowColor: 0x8bb5ff,
+        info: 'みずがめ座β星。名前は「最も幸運な星」の意で、黄白色の超巨星が水瓶の肩口を明るくする。',
+        glowColor: 0xfff2c6,
         featured: false
     },
     {
@@ -1221,8 +1221,8 @@ export const BASE_STAR_DATA = [
         dec: -0.3198,
         magnitude: 2.94,
         color: 0xfff2c6,
-        info: 'みずがめ座α星。水瓶の胴に位置する黄白色の超巨星で、名前は「王の幸運な星」の意。',
-        glowColor: 0x8bb5ff,
+        info: 'みずがめ座α星。アラビア語で「王の幸運な星」を意味し、黄白色の超巨星が水瓶の胴を照らす。',
+        glowColor: 0xfff2c6,
         featured: false
     },
     {
@@ -1234,8 +1234,8 @@ export const BASE_STAR_DATA = [
         dec: -1.3873,
         magnitude: 3.84,
         color: 0xb5d0ff,
-        info: 'みずがめ座γ星。水瓶の縁付近にある青白い星で、アラビア語で「幸運の幕屋」を意味する。',
-        glowColor: 0x8bb5ff,
+        info: 'みずがめ座γ星。アラビア語で「幕屋の幸運」を意味し、水瓶の縁で青白く輝く。',
+        glowColor: 0xb5d0ff,
         featured: false
     },
     {
@@ -1247,8 +1247,8 @@ export const BASE_STAR_DATA = [
         dec: 2.7638,
         magnitude: 3.82,
         color: 0xb5d0ff,
-        info: 'うお座α星。2匹の魚を結ぶ結び目に位置する青白い星。',
-        glowColor: 0x8bb5ff,
+        info: 'うお座α星。名が「綱」を意味し、二匹の魚を結ぶ結び目に位置する青白い多重連星。',
+        glowColor: 0xb5d0ff,
         featured: false
     },
     {
