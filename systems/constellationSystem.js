@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { equatorialToHorizontalVector } from '../utils/astronomy.js';
 
 export function createConstellationSystem(ctx) {
     ctx.constellationsGroup = new THREE.Group();
@@ -119,38 +120,22 @@ function getStarSizeFromMagnitude(magnitude) {
     return 10 + brightness * 5;
 }
 
-function convertRADecToVector(ctx, raDeg, decDeg, radius) {
-    const lst = ctx.localSiderealTime;
-    const hourAngle = THREE.MathUtils.degToRad(((lst - raDeg) % 360 + 360) % 360);
-    const dec = THREE.MathUtils.degToRad(decDeg);
-    const lat = THREE.MathUtils.degToRad(ctx.observer.lat);
-    const sinAlt = Math.sin(dec) * Math.sin(lat) + Math.cos(dec) * Math.cos(lat) * Math.cos(hourAngle);
-    const alt = Math.asin(sinAlt);
-    if (alt <= 0) {
-        return null;
-    }
-    const cosAz = (Math.sin(dec) - Math.sin(alt) * Math.sin(lat)) / (Math.cos(alt) * Math.cos(lat));
-    let az = Math.acos(THREE.MathUtils.clamp(cosAz, -1, 1));
-    if (Math.sin(hourAngle) > 0) {
-        az = Math.PI * 2 - az;
-    }
-    const y = radius * Math.sin(alt);
-    const projectedRadius = radius * Math.cos(alt);
-    // 天文学的規約: 北から東へ時計回り（上から見ると反時計回り）
-    // Three.jsの座標系に合わせてXを反転
-    const x = -projectedRadius * Math.sin(az);
-    const z = projectedRadius * Math.cos(az);
-    return new THREE.Vector3(x, y, z);
-}
-
 function updateStarEntry(ctx, entry, radius) {
-    const position = convertRADecToVector(ctx, entry.data.ra, entry.data.dec, radius);
-    if (!position) {
+    const result = equatorialToHorizontalVector(
+        entry.data.ra,
+        entry.data.dec,
+        ctx.localSiderealTime,
+        ctx.observer.lat,
+        radius,
+        entry.position
+    );
+    if (!result || result.altDeg <= 0) {
         entry.aboveHorizon = false;
         entry.star.visible = false;
         entry.position.setScalar(0);
         return;
     }
+    const position = result.vector;
     entry.aboveHorizon = true;
     entry.position.copy(position);
     entry.star.position.copy(entry.position);

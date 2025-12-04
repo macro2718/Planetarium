@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { equatorialToHorizontalVector } from '../utils/astronomy.js';
 
 // 星の軌跡を描画するシステム
 export function createStarTrailSystem(ctx) {
@@ -87,8 +88,15 @@ export function createStarTrailSystem(ctx) {
         if (accumulator < sampleInterval) return;
         accumulator = 0;
         entries.forEach(entry => {
-            const position = convertRADecToVector(ctx, entry.data.ra, entry.data.dec, radius);
-            if (!position) {
+            const result = equatorialToHorizontalVector(
+                entry.data.ra,
+                entry.data.dec,
+                ctx.localSiderealTime,
+                ctx.observer.lat,
+                radius
+            );
+            const position = result?.vector;
+            if (!position || (result.altDeg ?? 0) <= 0) {
                 entry.active = null;
                 entry.lastPos = null;
                 entry.lastVisible = false;
@@ -121,25 +129,4 @@ export function createStarTrailSystem(ctx) {
             updateTrails(delta);
         }
     };
-}
-
-function convertRADecToVector(ctx, raDeg, decDeg, radius) {
-    if (typeof raDeg !== 'number' || typeof decDeg !== 'number') return null;
-    const lst = ctx.localSiderealTime || 0;
-    const hourAngle = THREE.MathUtils.degToRad(((lst - raDeg) % 360 + 360) % 360);
-    const dec = THREE.MathUtils.degToRad(decDeg);
-    const lat = THREE.MathUtils.degToRad(ctx.observer.lat);
-    const sinAlt = Math.sin(dec) * Math.sin(lat) + Math.cos(dec) * Math.cos(lat) * Math.cos(hourAngle);
-    const alt = Math.asin(sinAlt);
-    if (alt <= 0) return null;
-    const cosAz = (Math.sin(dec) - Math.sin(alt) * Math.sin(lat)) / (Math.cos(alt) * Math.cos(lat));
-    let az = Math.acos(THREE.MathUtils.clamp(cosAz, -1, 1));
-    if (Math.sin(hourAngle) > 0) {
-        az = Math.PI * 2 - az;
-    }
-    const y = radius * Math.sin(alt);
-    const projectedRadius = radius * Math.cos(alt);
-    const x = -projectedRadius * Math.sin(az);
-    const z = projectedRadius * Math.cos(az);
-    return new THREE.Vector3(x, y, z);
 }

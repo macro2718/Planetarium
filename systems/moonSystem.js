@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { equatorialToHorizontalVector, normalizeDegrees } from '../utils/astronomy.js';
 
 export function createMoonSystem(ctx) {
     ctx.moonGroup = new THREE.Group();
@@ -300,28 +301,23 @@ function calculateMoonState(ctx, date = new Date()) {
 }
 
 function convertEquatorialToHorizontal(ctx, raDeg, decDeg, radius) {
-    const lst = ctx.localSiderealTime ?? 0;
-    const hourAngle = THREE.MathUtils.degToRad(normalizeDegrees(lst - raDeg));
-    const dec = THREE.MathUtils.degToRad(decDeg);
-    const lat = THREE.MathUtils.degToRad(ctx.observer?.lat ?? 0);
-    const sinAlt = Math.sin(dec) * Math.sin(lat) + Math.cos(dec) * Math.cos(lat) * Math.cos(hourAngle);
-    const altitude = Math.asin(sinAlt);
-    const cosAz = (Math.sin(dec) - Math.sin(altitude) * Math.sin(lat)) / (Math.cos(altitude) * Math.cos(lat));
-    let az = Math.acos(THREE.MathUtils.clamp(cosAz, -1, 1));
-    if (Math.sin(hourAngle) > 0) {
-        az = Math.PI * 2 - az;
+    const result = equatorialToHorizontalVector(
+        raDeg,
+        decDeg,
+        ctx.localSiderealTime ?? 0,
+        ctx.observer?.lat ?? 0,
+        radius
+    );
+    if (!result) {
+        return {
+            position: new THREE.Vector3(0, -radius, 0),
+            altDeg: -90,
+            azDeg: 0
+        };
     }
-    const y = radius * Math.sin(altitude);
-    const projectedRadius = radius * Math.cos(altitude);
-    const x = -projectedRadius * Math.sin(az);
-    const z = projectedRadius * Math.cos(az);
     return {
-        position: new THREE.Vector3(x, y, z),
-        altDeg: THREE.MathUtils.radToDeg(altitude),
-        azDeg: THREE.MathUtils.radToDeg(az)
+        position: result.vector,
+        altDeg: result.altDeg,
+        azDeg: result.azDeg
     };
-}
-
-function normalizeDegrees(value) {
-    return ((value % 360) + 360) % 360;
 }
