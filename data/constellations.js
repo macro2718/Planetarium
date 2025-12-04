@@ -3,16 +3,18 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'orion',
         name: 'オリオン座',
         description: '冬の代表星座。三ツ星と赤いベテルギウスが目印。',
-        starIds: ['betelgeuse', 'bellatrix', 'mintaka', 'alnilam', 'alnitak', 'saiph', 'rigel'],
+        starIds: ['betelgeuse', 'bellatrix', 'mintaka', 'alnilam', 'alnitak', 'saiph', 'rigel', 'meissa'],
         lines: [
             ['betelgeuse', 'bellatrix'],
-            ['betelgeuse', 'saiph'],
-            ['bellatrix', 'rigel'],
+            ['betelgeuse', 'alnitak'],
+            ['bellatrix', 'mintaka'],
             ['mintaka', 'alnilam'],
             ['alnilam', 'alnitak'],
             ['alnitak', 'saiph'],
             ['mintaka', 'rigel'],
-            ['saiph', 'rigel']
+            ['saiph', 'rigel'],
+            ['meissa', 'betelgeuse'],
+            ['meissa', 'bellatrix']
         ]
     },
     {
@@ -152,11 +154,13 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'taurus',
         name: 'おうし座',
         description: 'ヒヤデスとプレアデスが形作る雄牛の顔。',
-        starIds: ['elnath', 'ain', 'aldebaran', 'alcyone'],
+        starIds: ['elnath', 'ain', 'aldebaran', 'alcyone', 'tianguan'],
         lines: [
             ['elnath', 'ain'],
             ['ain', 'aldebaran'],
-            ['ain', 'alcyone']
+            ['ain', 'alcyone'],
+            ['elnath', 'tianguan'],
+            ['tianguan', 'ain']
         ]
     },
     {
@@ -199,21 +203,26 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'pegasus',
         name: 'ペガスス座',
         description: '秋の夜空に大きな四角形「ペガススの大四辺形」を形作る天馬の星座。',
-        starIds: ['markab', 'scheat', 'algenib', 'alpheratz'],
+        starIds: ['markab', 'scheat', 'algenib', 'alpheratz', 'enif', 'biham', 'homam'],
         lines: [
             ['markab', 'scheat'],
             ['scheat', 'alpheratz'],
             ['alpheratz', 'algenib'],
-            ['algenib', 'markab']
+            ['algenib', 'markab'],
+            ['scheat', 'enif'],     // 首から鼻先へ
+            ['enif', 'biham'],      // 鼻先から胴体へ
+            ['biham', 'homam'],     // 胴体をたどる
+            ['homam', 'markab']     // 背中側で大四辺形に接続
         ]
     },
     {
         id: 'andromeda',
         name: 'アンドロメダ座',
         description: 'ペガススの大四辺形から鎖のように星が連なる星座。アンドロメダ銀河の位置の目印にもなる。',
-        starIds: ['alpheratz', 'mirach', 'almach'],
+        starIds: ['alpheratz', 'deltaAnd', 'mirach', 'almach'],
         lines: [
-            ['alpheratz', 'mirach'],
+            ['alpheratz', 'deltaAnd'],
+            ['deltaAnd', 'mirach'],
             ['mirach', 'almach']
         ]
     },
@@ -263,22 +272,30 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'gemini',
         name: 'ふたご座',
         description: '冬の夜空に並んで輝く双子の星座。',
-        starIds: ['castor', 'pollux', 'wasat'],
+        starIds: ['castor', 'pollux', 'wasat', 'alhena', 'mebsuta', 'tejat', 'propus'],
         lines: [
             ['castor', 'pollux'],       // 双子の頭
-            ['castor', 'wasat'],        // カストル側の胴体
-            ['pollux', 'wasat']         // ポルックス側の胴体
+            ['castor', 'wasat'],        // 胸元の結び
+            ['pollux', 'wasat'],
+            ['castor', 'mebsuta'],      // カストル側の胴体
+            ['mebsuta', 'tejat'],       // カストル側の脚
+            ['wasat', 'mebsuta'],       // 胸から肩へ
+            ['pollux', 'alhena'],       // ポルックス側の胴体
+            ['wasat', 'alhena'],        // 胸から肩へ
+            ['alhena', 'propus'],       // ポルックス側の脚
+            ['propus', 'tejat']         // 足元を結ぶ
         ]
     },
     {
         id: 'cancer',
         name: 'かに座',
         description: '暗い星が多いが、かにの爪と甲羅がかすかに描かれる星座。',
-        starIds: ['acubens', 'asellusBorealis', 'asellusAustralis'],
+        starIds: ['acubens', 'asellusBorealis', 'asellusAustralis', 'altarf'],
         lines: [
             ['acubens', 'asellusBorealis'],   // 右の爪〜甲羅
             ['acubens', 'asellusAustralis'],  // 右の爪〜甲羅
-            ['asellusBorealis', 'asellusAustralis'] // 甲羅まわり
+            ['asellusBorealis', 'asellusAustralis'], // 甲羅まわり
+            ['asellusAustralis', 'altarf']     // 南の脚先
         ]
     },
     {

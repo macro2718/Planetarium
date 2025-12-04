@@ -29,18 +29,32 @@ function createSkyGradient(ctx) {
         varying vec3 vWorldPosition;
         void main() {
             float h = normalize(vWorldPosition).y;
-            vec3 ground = vec3(0.01, 0.01, 0.02);
-            vec3 horizonGlow = vec3(0.08, 0.04, 0.12);
-            vec3 lowSky = vec3(0.02, 0.02, 0.06);
-            vec3 nightSky = vec3(0.0, 0.0, 0.02);
-            vec3 zenith = vec3(0.0, 0.0, 0.0);
+            
+            // 地平線付近（明るめの濃紺〜紫）
+            vec3 horizonGlow = vec3(0.12, 0.08, 0.18);
+            // 地平線少し上（やや暗い藍色）
+            vec3 lowSky = vec3(0.04, 0.03, 0.10);
+            // 中間の夜空（暗い紺）
+            vec3 midSky = vec3(0.015, 0.012, 0.04);
+            // 天頂付近（ほぼ真っ暗）
+            vec3 zenith = vec3(0.002, 0.002, 0.008);
+            // 地面（暗い）
+            vec3 ground = vec3(0.01, 0.01, 0.015);
+            
             vec3 color;
             if (h < 0.0) {
-                color = mix(ground, horizonGlow, smoothstep(-0.3, 0.0, h));
+                // 地平線より下（地面側）
+                color = mix(ground, horizonGlow, smoothstep(-0.5, 0.0, h));
             } else {
-                color = mix(horizonGlow, lowSky, smoothstep(0.0, 0.15, h));
-                color = mix(color, nightSky, smoothstep(0.1, 0.4, h));
-                color = mix(color, zenith, smoothstep(0.5, 1.0, h));
+                // 地平線から天頂へのグラデーション
+                // h=0（地平線）では明るく、h=1（天頂）では暗く
+                float t1 = smoothstep(0.0, 0.12, h);
+                float t2 = smoothstep(0.08, 0.35, h);
+                float t3 = smoothstep(0.25, 0.7, h);
+                
+                color = mix(horizonGlow, lowSky, t1);
+                color = mix(color, midSky, t2);
+                color = mix(color, zenith, t3);
             }
             gl_FragColor = vec4(color, 1.0);
         }
