@@ -6,8 +6,8 @@ export const BASE_CONSTELLATION_DATA = [
         starIds: ['betelgeuse', 'bellatrix', 'mintaka', 'alnilam', 'alnitak', 'saiph', 'rigel'],
         lines: [
             ['betelgeuse', 'bellatrix'],
-            ['betelgeuse', 'alnitak'],
-            ['bellatrix', 'mintaka'],
+            ['betelgeuse', 'saiph'],
+            ['bellatrix', 'rigel'],
             ['mintaka', 'alnilam'],
             ['alnilam', 'alnitak'],
             ['alnitak', 'saiph'],
@@ -79,6 +79,104 @@ export const BASE_CONSTELLATION_DATA = [
             ['zosma', 'denebola'],      // 背中からしっぽへ
             ['zosma', 'chertan'],       // 背中から後ろ足へ
             ['chertan', 'denebola']     // 後ろ足からしっぽへ（三角形を閉じる）
+        ]
+    },
+    {
+        id: 'scorpius',
+        name: 'さそり座',
+        description: '夏の南天を弓なりに横切る赤い心臓と長い尾。',
+        starIds: ['acrab', 'dschubba', 'antares', 'sargas', 'shaula', 'lesath'],
+        lines: [
+            ['acrab', 'dschubba'],    // 頭部
+            ['dschubba', 'antares'],  // 胸
+            ['antares', 'sargas'],    // 腹から尾へ
+            ['sargas', 'shaula'],     // 尾を伸ばす
+            ['shaula', 'lesath']      // 毒針の先端
+        ]
+    },
+    {
+        id: 'lyra',
+        name: 'こと座',
+        description: 'ベガを頂点に小さな平行四辺形を伴う琴の形。',
+        starIds: ['vega', 'sheliak', 'sulafat', 'deltalyr', 'zetalyr'],
+        lines: [
+            ['vega', 'sheliak'],
+            ['vega', 'sulafat'],
+            ['sheliak', 'deltalyr'],
+            ['deltalyr', 'zetalyr'],
+            ['zetalyr', 'sulafat'],
+            ['sheliak', 'sulafat']
+        ]
+    },
+    {
+        id: 'aquila',
+        name: 'わし座',
+        description: '天の川を横切る翼を広げたわし。',
+        starIds: ['tarazed', 'altair', 'alshain', 'denebokab'],
+        lines: [
+            ['tarazed', 'altair'],
+            ['altair', 'alshain'],
+            ['tarazed', 'denebokab'],
+            ['denebokab', 'altair']
+        ]
+    },
+    {
+        id: 'virgo',
+        name: 'おとめ座',
+        description: '麦の穂スピカを手にした女神の姿。',
+        starIds: ['vindemiatrix', 'porrima', 'heze', 'zaniah', 'spica'],
+        lines: [
+            ['vindemiatrix', 'porrima'],
+            ['porrima', 'heze'],
+            ['heze', 'spica'],
+            ['porrima', 'zaniah'],
+            ['zaniah', 'spica']
+        ]
+    },
+    {
+        id: 'bootes',
+        name: 'うしかい座',
+        description: '春の大曲線の先に見える羊飼い。',
+        starIds: ['nekkar', 'seginus', 'izar', 'arcturus', 'muphrid'],
+        lines: [
+            ['nekkar', 'seginus'],
+            ['seginus', 'izar'],
+            ['izar', 'arcturus'],
+            ['arcturus', 'muphrid'],
+            ['seginus', 'arcturus']
+        ]
+    },
+    {
+        id: 'taurus',
+        name: 'おうし座',
+        description: 'ヒヤデスとプレアデスが形作る雄牛の顔。',
+        starIds: ['elnath', 'ain', 'aldebaran', 'alcyone'],
+        lines: [
+            ['elnath', 'ain'],
+            ['ain', 'aldebaran'],
+            ['ain', 'alcyone']
+        ]
+    },
+    {
+        id: 'auriga',
+        name: 'ぎょしゃ座',
+        description: 'カペラを頂点とした五角形が特徴。',
+        starIds: ['capella', 'menkalinan', 'elnath', 'mahasim', 'kabdhilinan'],
+        lines: [
+            ['capella', 'menkalinan'],
+            ['menkalinan', 'elnath'],
+            ['capella', 'mahasim'],
+            ['mahasim', 'kabdhilinan'],
+            ['mahasim', 'elnath']
+        ]
+    },
+    {
+        id: 'canisMinor',
+        name: 'こいぬ座',
+        description: 'プロキオンとゴメイサが描く小さな犬。',
+        starIds: ['procyon', 'gomeisa'],
+        lines: [
+            ['procyon', 'gomeisa']
         ]
     }
 ];
