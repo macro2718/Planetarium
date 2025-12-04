@@ -221,25 +221,42 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'sagittarius',
         name: 'いて座',
         description: '夏の南の空に「ティーポット」の姿で現れ、天の川の中心方向を示す黄道星座。',
-        starIds: ['kausAustralis', 'nunki'],
+        starIds: ['kausBorealis', 'kausMedia', 'kausAustralis', 'nunki', 'ascella', 'alnasl', 'tauSgr', 'albaldah'],
         lines: [
-            ['kausAustralis', 'nunki']
+            ['kausBorealis', 'kausMedia'],       // ティーポット上部（左）
+            ['kausMedia', 'kausAustralis'],       // 左側の縁
+            ['kausAustralis', 'ascella'],         // 底面左〜右
+            ['ascella', 'nunki'],                 // 取っ手下部
+            ['nunki', 'kausBorealis'],            // 取っ手上部
+            ['kausMedia', 'alnasl'],              // 注ぎ口の付け根
+            ['alnasl', 'tauSgr'],                 // 注ぎ口の先端へ
+            ['tauSgr', 'kausAustralis'],          // 注ぎ口から底面へ戻る
+            ['kausMedia', 'albaldah'],            // ふたの中心
+            ['albaldah', 'nunki']                 // ふたから取っ手上部へ
         ]
     },
     {
         id: 'piscisAustrinus',
         name: 'みなみのうお座',
         description: '秋の南の空で孤独に輝く一等星フォーマルハウトを擁する星座。',
-        starIds: ['fomalhaut'],
-        lines: []
+        starIds: ['fomalhaut', 'dalim', 'epsilonPsa', 'deltaPsa', 'thetaPsa'],
+        lines: [
+            ['fomalhaut', 'dalim'],
+            ['dalim', 'deltaPsa'],
+            ['deltaPsa', 'epsilonPsa'],
+            ['epsilonPsa', 'fomalhaut'],
+            ['fomalhaut', 'thetaPsa']
+        ]
     },
     {
         id: 'aries',
         name: 'おひつじ座',
         description: '春の星座。2つの明るい星が羊の頭を形づくる。',
-        starIds: ['hamal', 'sheratan'],
+        starIds: ['hamal', 'sheratan', 'mesarthim', 'botein'],
         lines: [
-            ['hamal', 'sheratan']       // ハマル〜シェラタン（羊の頭）
+            ['mesarthim', 'hamal'],      // 角の付け根から頭へ
+            ['hamal', 'sheratan'],       // ハマル〜シェラタン（羊の頭）
+            ['sheratan', 'botein']       // 体へ続く星並び
         ]
     },
     {
@@ -268,45 +285,51 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'libra',
         name: 'てんびん座',
         description: 'さそり座の西に位置する、天秤の皿を表す星座。',
-        starIds: ['zubenelgenubi', 'zubeneschamali'],
+        starIds: ['zubenelgenubi', 'zubeneschamali', 'brachium', 'zubenelakrab'],
         lines: [
-            ['zubenelgenubi', 'zubeneschamali']   // 2つの皿
-        ]
-    },
-    {
-        id: 'sagittarius',
-        name: 'いて座',
-        description: '夏の南の空の「ティーポット」の一部として知られる射手の星座。',
-        starIds: ['kausAustralis', 'nunki'],
-        lines: [
-            ['kausAustralis', 'nunki']   // ティーポットの縁の一部
+            ['zubenelgenubi', 'zubeneschamali'],  // 皿と梁
+            ['zubenelgenubi', 'brachium'],         // 南の皿
+            ['zubeneschamali', 'zubenelakrab'],    // 北の皿
+            ['brachium', 'zubenelakrab']           // 天秤を囲む
         ]
     },
     {
         id: 'capricornus',
         name: 'やぎ座',
         description: '細長い三角形で描かれる海山羊の星座。',
-        starIds: ['algedi', 'dabih'],
+        starIds: ['algedi', 'dabih', 'nashira', 'denebAlgedi'],
         lines: [
-            ['algedi', 'dabih']          // 角〜胴体方向
+            ['algedi', 'dabih'],         // 角〜胴体方向
+            ['dabih', 'nashira'],
+            ['nashira', 'denebAlgedi'],
+            ['denebAlgedi', 'algedi'],
+            ['nashira', 'algedi']        // 山羊の輪郭を補強
         ]
     },
     {
         id: 'aquarius',
         name: 'みずがめ座',
         description: '水瓶から水が流れ出すような形に星が並ぶ。',
-        starIds: ['sadalsuud', 'sadalmelik', 'sadachbia'],
+        starIds: ['sadalsuud', 'sadalmelik', 'sadachbia', 'skat', 'situla', 'ancha'],
         lines: [
             ['sadalsuud', 'sadalmelik'], // 水瓶の口
-            ['sadalmelik', 'sadachbia']  // 水の流れの方向
+            ['sadalmelik', 'sadachbia'], // 水の流れの方向
+            ['sadachbia', 'skat'],       // 流れる水
+            ['sadalmelik', 'ancha'],     // 水瓶の胴
+            ['ancha', 'situla'],         // 取っ手の付け根
+            ['situla', 'sadachbia']      // 水瓶と水流をつなぐ
         ]
     },
     {
         id: 'pisces',
         name: 'うお座',
-        description: '二匹の魚を結ぶひもが大きなV字を描く星座。ここでは代表星を1つだけ登録。',
-        starIds: ['alrescha'],
+        description: '二匹の魚を結ぶひもが大きなV字を描く星座。結び目アルレシャを中心に形をたどれる。',
+        starIds: ['alrescha', 'torcular', 'fumalsamakah', 'alpherg'],
         lines: [
+            ['alrescha', 'torcular'],    // 西の魚へ伸びる紐
+            ['alrescha', 'fumalsamakah'],// 東の魚へ伸びる紐
+            ['fumalsamakah', 'alpherg'], // 東の魚を形作る
+            ['torcular', 'alpherg']      // 西の魚と紐を結ぶ
         ]
     }
 ];
