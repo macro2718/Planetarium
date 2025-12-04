@@ -14,7 +14,12 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
             waveScale: { value: 1.0 },
             deepColor: { value: new THREE.Color(0.01, 0.02, 0.06) },
             shallowColor: { value: new THREE.Color(0.03, 0.06, 0.12) },
-            skyReflectionColor: { value: new THREE.Color(0.05, 0.08, 0.18) }
+            skyReflectionColor: { value: new THREE.Color(0.05, 0.08, 0.18) },
+            tintColor: { value: new THREE.Color(0.08, 0.12, 0.22) },
+            foamColor: { value: new THREE.Color(0.85, 0.9, 0.98) },
+            horizonTintColor: { value: new THREE.Color(0.16, 0.2, 0.32) },
+            tintStrength: { value: 0.45 },
+            bloomIntensity: { value: 0.25 }
         },
         vertexShader: `
             uniform float time;
@@ -23,6 +28,8 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
             varying vec3 vWorldPosition;
             varying vec3 vNormal;
             varying float vWaveHeight;
+            varying float vFoamMask;
+            varying float vRadial;
             float hash(vec2 p) {
                 return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
             }
@@ -54,16 +61,22 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
                 float wave1 = sin(pos.x * 0.008 + time * 0.3) * cos(pos.z * 0.006 + time * 0.25) * 15.0;
                 float wave2 = sin(pos.x * 0.012 - time * 0.2 + pos.z * 0.01) * 8.0;
                 float wave3 = cos(pos.z * 0.015 + time * 0.35) * sin(pos.x * 0.009 - time * 0.15) * 6.0;
+                float swell = sin(length(pos.xz) * 0.002 - time * 0.15) * 10.0;
+                float directionalFlow = sin(dot(pos.xz, vec2(0.6, -0.4)) * 0.01 + time * 0.1) * 5.0;
                 float ripple1 = fbm(pos.xz * 0.02 + time * 0.4) * 4.0;
                 float ripple2 = fbm(pos.xz * 0.05 - time * 0.3) * 2.0;
                 float microWave = noise(pos.xz * 0.08 + time * 0.6) * 1.5;
-                float totalWave = (wave1 + wave2 + wave3 + ripple1 + ripple2 + microWave) * waveScale;
+                float totalWave = (wave1 + wave2 + wave3 + swell + directionalFlow + ripple1 + ripple2 + microWave) * waveScale;
                 float calmZone = smoothstep(0.2, 0.85, dist);
                 calmZone = pow(calmZone, 1.5);
                 totalWave *= calmZone;
                 totalWave *= smoothstep(1.0, 0.3, dist);
                 pos.y += totalWave;
                 vWaveHeight = totalWave;
+                float foam = smoothstep(5.0, 18.0, abs(totalWave));
+                foam += fbm(pos.xz * 0.12 + time * 0.5) * 0.35;
+                vFoamMask = clamp(foam * (1.0 - dist * 0.3), 0.0, 1.0);
+                vRadial = clamp(length(pos.xz) / 9500.0, 0.0, 1.0);
                 float dx = 0.015 * cos(pos.x * 0.008 + time * 0.3) * 15.0 +
                            0.012 * cos(pos.x * 0.012 - time * 0.2) * 8.0;
                 float dz = 0.006 * sin(pos.z * 0.006 + time * 0.25) * 15.0 +
@@ -82,10 +95,17 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
             uniform vec3 deepColor;
             uniform vec3 shallowColor;
             uniform vec3 skyReflectionColor;
+            uniform vec3 tintColor;
+            uniform vec3 foamColor;
+            uniform vec3 horizonTintColor;
+            uniform float tintStrength;
+            uniform float bloomIntensity;
             varying vec2 vUv;
             varying vec3 vWorldPosition;
             varying vec3 vNormal;
             varying float vWaveHeight;
+            varying float vFoamMask;
+            varying float vRadial;
             float hash(vec2 p) {
                 return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
             }
@@ -133,6 +153,8 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
                 fresnel = mix(0.2, 1.0, fresnel);
                 float depth = smoothstep(0.0, 8000.0, length(vWorldPosition.xz));
                 vec3 waterColor = mix(shallowColor, deepColor, depth);
+                vec3 tintedWater = mix(waterColor, tintColor, tintStrength * (0.3 + fresnel * 0.7));
+                waterColor = mix(waterColor, tintedWater, 0.6);
                 float waveHighlight = smoothstep(0.0, 20.0, vWaveHeight) * 0.15;
                 vec3 moonDir = normalize(moonPosition - vWorldPosition);
                 vec3 reflectDir = reflect(-viewDir, normal);
@@ -188,6 +210,14 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
                 finalColor += sparkleColor;
                 finalColor += horizonColor;
                 finalColor += vec3(waveHighlight * 0.5, waveHighlight * 0.55, waveHighlight * 0.7);
+                float caustics = fbm(vWorldPosition.xz * 0.04 + time * 0.15);
+                caustics = pow(max(caustics, 0.0), 3.0) * (1.0 - depth);
+                finalColor += vec3(0.18, 0.23, 0.3) * caustics * 0.35;
+                float foam = smoothstep(0.35, 0.9, vFoamMask);
+                vec3 foamContrib = foamColor * foam * (0.7 + fresnel * 0.3);
+                finalColor = mix(finalColor, foamContrib, clamp(foam * 0.5, 0.0, 0.6));
+                float bloom = smoothstep(0.6, 1.0, vRadial) * bloomIntensity;
+                finalColor += horizonTintColor * bloom;
                 float vignette = smoothstep(9500.0, 5000.0, length(vWorldPosition.xz));
                 finalColor *= (0.7 + vignette * 0.3);
                 float alpha = 0.92 + fresnel * 0.08;
