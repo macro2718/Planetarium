@@ -406,5 +406,63 @@ export const BASE_CONSTELLATION_DATA = [
             ['fumalsamakah', 'alpherg'], // 東の魚を形作る
             ['torcular', 'alpherg']      // 西の魚と紐を結ぶ
         ]
+    },
+    {
+        id: 'carina',
+        name: 'りゅうこつ座',
+        description: 'アルゴ船の船底から帆へ伸びる南天の象徴的な星座。カノープスが甲板を照らす。',
+        starIds: ['canopus', 'miaplacidus', 'thetaCar', 'aspidiske', 'avior'],
+        lines: [
+            ['canopus', 'miaplacidus'],   // 船底を描く
+            ['miaplacidus', 'thetaCar'],  // 帆柱へ
+            ['thetaCar', 'aspidiske'],    // 帆の上縁
+            ['aspidiske', 'avior'],       // 船尾へ滑る
+            ['avior', 'canopus'],         // 船体を閉じる
+            ['thetaCar', 'canopus']       // 帆柱を支える補強
+        ]
+    },
+    {
+        id: 'crux',
+        name: 'みなみじゅうじ座',
+        description: '十字架のシルエットで南天の方位を示す小さくも目立つ星座。',
+        starIds: ['gacrux', 'acrux', 'mimosa', 'ginan', 'imai'],
+        lines: [
+            ['gacrux', 'acrux'],      // 十字の縦軸
+            ['mimosa', 'ginan'],      // 十字の横軸
+            ['gacrux', 'mimosa'],     // 頭から右腕
+            ['gacrux', 'ginan'],      // 頭から左腕
+            ['acrux', 'imai'],        // 足元の延長
+            ['imai', 'mimosa'],       // 右下を補強
+            ['imai', 'ginan']         // 左下を補強
+        ]
+    },
+    {
+        id: 'coronaBorealis',
+        name: 'かんむり座',
+        description: 'アリアドネの冠が夜空に置かれたような繊細な弧を描く小星座。',
+        starIds: ['nusakan', 'gammaCrB', 'epsilonCrB', 'alphecca', 'thetaCrB'],
+        lines: [
+            ['nusakan', 'gammaCrB'],      // 冠の左側
+            ['gammaCrB', 'epsilonCrB'],   // 弧の下部
+            ['epsilonCrB', 'alphecca'],   // 宝石へ連なる
+            ['alphecca', 'thetaCrB'],     // 冠の右側
+            ['thetaCrB', 'nusakan'],      // 上部で閉じる
+            ['epsilonCrB', 'thetaCrB']    // 弧を補強
+        ]
+    },
+    {
+        id: 'ophiuchus',
+        name: 'へびつかい座',
+        description: 'へびを押さえ込む巨人が黄道上に立つ。頭のラス・アルハゲと手元のイェッドが特徴的。',
+        starIds: ['rasalhague', 'cebalrai', 'yedPrior', 'yedPosterior', 'sabik', 'zetaOph'],
+        lines: [
+            ['rasalhague', 'cebalrai'],   // 頭から肩
+            ['cebalrai', 'yedPrior'],     // 右腕の上部
+            ['yedPrior', 'yedPosterior'], // 手の甲
+            ['yedPosterior', 'zetaOph'],  // 蛇を押さえる腕
+            ['zetaOph', 'sabik'],         // 蛇と脚部
+            ['sabik', 'cebalrai'],        // 腰へ戻る
+            ['rasalhague', 'yedPrior']    // 頭から手への補強
+        ]
     }
 ];
