@@ -6,13 +6,13 @@ export const BASE_CONSTELLATION_DATA = [
         starIds: ['betelgeuse', 'bellatrix', 'mintaka', 'alnilam', 'alnitak', 'saiph', 'rigel'],
         lines: [
             ['betelgeuse', 'bellatrix'],
+            ['betelgeuse', 'alnitak'],
             ['bellatrix', 'mintaka'],
             ['mintaka', 'alnilam'],
             ['alnilam', 'alnitak'],
             ['alnitak', 'saiph'],
-            ['alnilam', 'rigel'],
             ['mintaka', 'rigel'],
-            ['betelgeuse', 'saiph']
+            ['saiph', 'rigel']
         ]
     },
     {
@@ -47,11 +47,10 @@ export const BASE_CONSTELLATION_DATA = [
         description: '夏の天頂を横切る十字型の星並び。',
         starIds: ['deneb', 'sadr', 'gienah', 'deltaCyg', 'albireo'],
         lines: [
-            ['deneb', 'sadr'],
-            ['sadr', 'gienah'],
-            ['sadr', 'deltaCyg'],
-            ['deltaCyg', 'albireo'],
-            ['sadr', 'albireo']
+            ['deneb', 'sadr'],       // 尾から胸へ（縦線上部）
+            ['sadr', 'albireo'],     // 胸から頭へ（縦線下部）
+            ['gienah', 'sadr'],      // 翼から胸へ（横線左）
+            ['sadr', 'deltaCyg']     // 胸から翼へ（横線右）
         ]
     },
     {
@@ -60,12 +59,12 @@ export const BASE_CONSTELLATION_DATA = [
         description: '北極星を含む小さなひしゃく。',
         starIds: ['polaris', 'yildun', 'epsilonUMi', 'zetaUMi', 'pherkad', 'kochab'],
         lines: [
-            ['polaris', 'yildun'],
-            ['yildun', 'epsilonUMi'],
-            ['epsilonUMi', 'zetaUMi'],
-            ['zetaUMi', 'pherkad'],
-            ['pherkad', 'kochab'],
-            ['kochab', 'polaris']
+            ['polaris', 'yildun'],      // 柄の先端（北極星）から
+            ['yildun', 'epsilonUMi'],   // 柄の中間
+            ['epsilonUMi', 'zetaUMi'],  // 柄の根元へ
+            ['zetaUMi', 'pherkad'],     // ひしゃくの底へ
+            ['zetaUMi', 'kochab'],      // ひしゃくの底へ（分岐）
+            ['pherkad', 'kochab']       // ひしゃくの底を閉じる
         ]
     },
     {
@@ -74,12 +73,12 @@ export const BASE_CONSTELLATION_DATA = [
         description: '春の夜空に輝くライオンのシルエット。',
         starIds: ['regulus', 'adhafera', 'algeiba', 'zosma', 'chertan', 'denebola'],
         lines: [
-            ['regulus', 'adhafera'],
-            ['adhafera', 'algeiba'],
-            ['algeiba', 'zosma'],
-            ['zosma', 'chertan'],
-            ['chertan', 'denebola'],
-            ['regulus', 'denebola']
+            ['regulus', 'algeiba'],     // 心臓からたてがみへ
+            ['algeiba', 'adhafera'],    // たてがみ（鎌の部分）
+            ['algeiba', 'zosma'],       // たてがみから背中へ
+            ['zosma', 'denebola'],      // 背中からしっぽへ
+            ['zosma', 'chertan'],       // 背中から後ろ足へ
+            ['chertan', 'denebola']     // 後ろ足からしっぽへ（三角形を閉じる）
         ]
     }
 ];
