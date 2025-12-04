@@ -77,10 +77,12 @@ function createStarLayer(ctx, count, radius, minSize, maxSize) {
         void main() {
             float dist = length(gl_PointCoord - vec2(0.5));
             if (dist > 0.5) discard;
-            float alpha = 1.0 - smoothstep(0.0, 0.5, dist);
-            float glow = exp(-dist * 4.0);
-            vec3 finalColor = vColor * (alpha + glow * 0.5) * vTwinkle;
-            gl_FragColor = vec4(finalColor, alpha * vTwinkle);
+            float alpha = 1.0 - smoothstep(0.0, 0.48, dist);
+            float glow = exp(-dist * 3.4);
+            float intensity = 1.35;
+            vec3 finalColor = vColor * (alpha + glow * 0.65) * vTwinkle * intensity;
+            float finalAlpha = clamp(alpha * 1.2 * vTwinkle + glow * 0.2, 0.0, 1.0);
+            gl_FragColor = vec4(finalColor, finalAlpha);
         }
     `;
     const material = new THREE.ShaderMaterial({

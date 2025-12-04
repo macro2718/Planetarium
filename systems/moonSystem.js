@@ -9,7 +9,7 @@ export function createMoonSystem(ctx) {
         phaseAngle: { value: 0 },
         illumination: { value: 0 },
         sunDirection: { value: new THREE.Vector3(0, 0.2, -1).normalize() },
-        albedo: { value: new THREE.Color(0.86, 0.85, 0.82) }
+        albedo: { value: new THREE.Color(0.93, 0.92, 0.89) }
     };
     const moonGeometry = new THREE.SphereGeometry(moonRadius, 128, 128);
     const moonMaterial = new THREE.ShaderMaterial({
@@ -106,16 +106,18 @@ export function createMoonSystem(ctx) {
                 vec3 viewDir = normalize(cameraPosition - vWorldPos);
                 float lambert = max(dot(vWorldNormal, lightDir), 0.0);
                 float softness = smoothstep(-0.2, 0.25, dot(vWorldNormal, lightDir));
-                vec3 diffuse = baseColor * (lambert * 0.9 + 0.2);
+                vec3 diffuse = baseColor * (lambert * 1.15 + 0.28);
+                vec3 halfVec = normalize(lightDir + viewDir);
+                float spec = pow(max(dot(vWorldNormal, halfVec), 0.0), 12.0);
                 float rim = pow(1.0 - max(dot(vWorldNormal, viewDir), 0.0), 2.0);
-                vec3 rimLight = vec3(0.3, 0.32, 0.36) * rim * 0.6;
+                vec3 rimLight = vec3(0.34, 0.36, 0.4) * rim * 0.75;
                 float nightside = 1.0 - clamp(dot(vWorldNormal, lightDir) * 0.5 + 0.5, 0.0, 1.0);
                 float earthshine = nightside * (1.0 - illumination) * max(dot(vWorldNormal, viewDir), 0.0) * 0.3;
-                vec3 color = diffuse + rimLight + earthshine;
+                vec3 color = diffuse + rimLight + earthshine + spec * vec3(0.5, 0.5, 0.52);
                 float phaseGlow = 0.5 + 0.5 * cos(phaseAngle);
-                color += vec3(0.02 * phaseGlow);
+                color += vec3(0.035 * phaseGlow);
                 color = mix(color, color * vec3(0.8, 0.85, 0.9), 0.2);
-                color = clamp(color, 0.05, 1.2);
+                color = clamp(color, 0.05, 1.4);
                 gl_FragColor = vec4(color, 1.0);
             }
         `

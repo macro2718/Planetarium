@@ -38,7 +38,9 @@ function createMilkyWayBandDome(ctx, bandNormal, bandAxis) {
             bandTangent: { value: bandTangent },
             colorWarm: { value: new THREE.Color(0.98, 0.78, 0.64) },
             colorCool: { value: new THREE.Color(0.68, 0.82, 1.0) },
-            colorCore: { value: new THREE.Color(1.08, 0.96, 0.88) }
+            colorCore: { value: new THREE.Color(1.08, 0.96, 0.88) },
+            brightnessBoost: { value: 1.25 },
+            alphaBoost: { value: 1.1 }
         },
         vertexShader: `
             varying vec3 vWorldPosition;
@@ -57,6 +59,8 @@ function createMilkyWayBandDome(ctx, bandNormal, bandAxis) {
             uniform vec3 colorCool;
             uniform vec3 colorCore;
             uniform float time;
+            uniform float brightnessBoost;
+            uniform float alphaBoost;
             float hash(vec3 p) {
                 return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453);
             }
@@ -108,14 +112,15 @@ function createMilkyWayBandDome(ctx, bandNormal, bandAxis) {
                 float brightness = base * (0.25 + 0.8 * coarse + 0.35 * fine);
                 brightness *= (1.0 - dust * 0.42);
                 brightness *= 0.85 + filaments * 0.2;
-                brightness = clamp(brightness, 0.0, 2.0);
+                brightness = clamp(brightness * brightnessBoost, 0.0, 2.4);
                 float along = uvw.x * 0.5 + 0.5;
                 float warmMix = smoothstep(0.08, 0.8, base);
                 warmMix += 0.25 * sin((along + time * 0.004) * 6.2831);
                 warmMix = clamp(warmMix, 0.0, 1.0);
                 vec3 color = mix(colorCool, colorWarm, warmMix);
                 color = mix(color, colorCore, smoothstep(0.3, 0.95, base) * 0.55 + filaments * 0.15);
-                float alpha = brightness * 0.55;
+                color *= 1.05 + filaments * 0.05;
+                float alpha = brightness * 0.65 * alphaBoost;
                 alpha *= smoothstep(0.0, 0.18, dir.y);
                 if (alpha < 0.002) discard;
                 gl_FragColor = vec4(color * brightness, clamp(alpha, 0.0, 1.0));
@@ -180,7 +185,10 @@ function createMilkyWayClusters(ctx, bandNormal, bandAxis) {
         geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
         geometry.setAttribute('twinklePhase', new THREE.Float32BufferAttribute(phases, 1));
         const material = new THREE.ShaderMaterial({
-            uniforms: { time: { value: 0 } },
+            uniforms: {
+                time: { value: 0 },
+                intensity: { value: 1.25 }
+            },
             vertexShader: `
                 attribute float size;
                 attribute float twinklePhase;
@@ -196,13 +204,15 @@ function createMilkyWayClusters(ctx, bandNormal, bandAxis) {
             `,
             fragmentShader: `
                 varying vec3 vColor;
+                uniform float intensity;
                 void main() {
                     float dist = length(gl_PointCoord - vec2(0.5));
                     if (dist > 0.5) discard;
                     float halo = exp(-dist * 4.0);
                     float alpha = 1.0 - smoothstep(0.0, 0.5, dist);
-                    vec3 color = vColor * (alpha + halo * 0.6);
-                    gl_FragColor = vec4(color, alpha * 0.85 + halo * 0.35);
+                    vec3 color = vColor * (alpha + halo * 0.6) * intensity;
+                    float finalAlpha = clamp((alpha * 0.85 + halo * 0.35) * intensity, 0.0, 1.0);
+                    gl_FragColor = vec4(color, finalAlpha);
                 }
             `,
             vertexColors: true,
@@ -240,7 +250,7 @@ function createMilkyWayMist(ctx, bandNormal, bandAxis) {
                 time: { value: 0 },
                 colorA: { value: new THREE.Color(0.86 + Math.random() * 0.08, 0.74 + Math.random() * 0.08, 0.94) },
                 colorB: { value: new THREE.Color(0.64, 0.86, 1.0) },
-                intensity: { value: 0.32 + Math.random() * 0.2 }
+                intensity: { value: 0.42 + Math.random() * 0.25 }
             },
             vertexShader: `
                 varying vec2 vUv;
@@ -288,12 +298,13 @@ function createMilkyWayMist(ctx, bandNormal, bandAxis) {
                     float band = exp(-pow(abs(p.y) * 1.6, 1.2));
                     float cloud = fbm(p * 1.8 + vec2(drift, -drift * 0.7));
                     float filaments = fbm(p * 4.5 + vec2(-drift * 0.3, drift * 0.5));
-                    float alpha = band * (0.28 + 0.55 * cloud) * intensity;
+                    float alpha = band * (0.35 + 0.65 * cloud) * intensity;
                     alpha *= 1.0 - smoothstep(0.55, 1.0, abs(p.x));
                     alpha *= 1.0 - smoothstep(0.35, 0.9, filaments);
                     if (alpha < 0.01) discard;
                     vec3 color = mix(colorB, colorA, 0.5 + 0.5 * cloud);
-                    color += filaments * 0.25;
+                    color += filaments * 0.32;
+                    color *= 1.05;
                     gl_FragColor = vec4(color, clamp(alpha, 0.0, 1.0));
                 }
             `,
