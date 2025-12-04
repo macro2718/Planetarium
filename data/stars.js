@@ -13,6 +13,78 @@ export const BASE_STAR_DATA = [
         featured: true
     },
     {
+        id: 'mirzam',
+        name: 'ミルザム',
+        nameEn: 'Mirzam',
+        constellation: 'おおいぬ座',
+        ra: 95.6750,
+        dec: -17.9559,
+        magnitude: 1.98,
+        color: 0xb5d0ff,
+        info: 'おおいぬ座β星。シリウスの西側で青白く輝き、冬の大犬の前足を示す。',
+        featured: false
+    },
+    {
+        id: 'muliphein',
+        name: 'ムリフエイン',
+        nameEn: 'Muliphein',
+        constellation: 'おおいぬ座',
+        ra: 100.9825,
+        dec: -15.6333,
+        magnitude: 4.10,
+        color: 0xb5d0ff,
+        info: 'おおいぬ座γ星。淡い光ながらシリウス周辺の星並びを整える連星系。',
+        featured: false
+    },
+    {
+        id: 'wezen',
+        name: 'ウェズン',
+        nameEn: 'Wezen',
+        constellation: 'おおいぬ座',
+        ra: 104.6564,
+        dec: -26.3932,
+        magnitude: 1.83,
+        color: 0xfff4e8,
+        info: 'おおいぬ座δ星。巨大な黄色超巨星で、犬の胴体を形作る。',
+        featured: false
+    },
+    {
+        id: 'adhara',
+        name: 'アダラ',
+        nameEn: 'Adhara',
+        constellation: 'おおいぬ座',
+        ra: 104.6563,
+        dec: -28.9721,
+        magnitude: 1.50,
+        color: 0xb5d0ff,
+        info: 'おおいぬ座ε星。肉眼で青白く輝き、銀河系でも屈指の光度を誇る。',
+        featured: false
+    },
+    {
+        id: 'furud',
+        name: 'フルド',
+        nameEn: 'Furud',
+        constellation: 'おおいぬ座',
+        ra: 105.7561,
+        dec: -30.4228,
+        magnitude: 3.02,
+        color: 0xb5d0ff,
+        info: 'おおいぬ座ζ星。尾に近い位置で青白い光を放つ主系列星。',
+        featured: false
+    },
+    {
+        id: 'aludra',
+        name: 'アルドラ',
+        nameEn: 'Aludra',
+        constellation: 'おおいぬ座',
+        ra: 109.3730,
+        dec: -29.3031,
+        magnitude: 2.45,
+        color: 0xb5d0ff,
+        info: 'おおいぬ座η星。尾の先に位置する青白い超巨星で、変光星としても知られる。',
+        featured: false
+    },
+    {
         id: 'procyon',
         name: 'プロキオン',
         nameEn: 'Procyon',
@@ -32,6 +104,7 @@ export const BASE_STAR_DATA = [
         ra: 112.3071,
         dec: 8.9256,
         magnitude: 2.89,
+        color: 0xb5d0ff,
         info: 'こいぬ座のβ星で、青白い主系列星。',
         featured: false
     },
@@ -55,6 +128,7 @@ export const BASE_STAR_DATA = [
         ra: 91.8933,
         dec: 44.9474,
         magnitude: 1.90,
+        color: 0xffffff,
         info: 'カペラと並ぶ明るさを持つ食連星で、ぎょしゃ座β星。',
         featured: false
     },
@@ -63,9 +137,10 @@ export const BASE_STAR_DATA = [
         name: 'マハシム',
         nameEn: 'Mahasim',
         constellation: 'ぎょしゃ座',
-        ra: 86.9391,
-        dec: 37.4060,
+        ra: 89.9292,
+        dec: 37.2125,
         magnitude: 2.65,
+        color: 0xb5d0ff,
         info: 'ぎょしゃ座の腕に位置する青白い巨星。',
         featured: false
     },
@@ -77,6 +152,7 @@ export const BASE_STAR_DATA = [
         ra: 76.3656,
         dec: 34.3284,
         magnitude: 3.69,
+        color: 0xffd2a1,
         info: 'ぎょしゃ座の南側に位置する変光星。',
         featured: false
     },
@@ -100,6 +176,7 @@ export const BASE_STAR_DATA = [
         ra: 81.5729,
         dec: 28.6075,
         magnitude: 1.65,
+        color: 0xb5d0ff,
         info: '角の先端に位置する青白い巨星で、ぎょしゃ座と境界を接する。',
         featured: false
     },
@@ -111,6 +188,7 @@ export const BASE_STAR_DATA = [
         ra: 67.1542,
         dec: 19.1804,
         magnitude: 3.53,
+        color: 0xffd2a1,
         info: 'おうしの右目にあたる恒星で、ヒヤデス星団の一員。',
         featured: false
     },
@@ -122,6 +200,7 @@ export const BASE_STAR_DATA = [
         ra: 56.7500,
         dec: 24.1143,
         magnitude: 2.87,
+        color: 0xa8c8ff,
         info: 'プレアデス星団で最も明るい星で、青い光が印象的。',
         featured: false
     },
@@ -145,6 +224,7 @@ export const BASE_STAR_DATA = [
         ra: 81.2828,
         dec: 6.3497,
         magnitude: 1.64,
+        color: 0xb5d0ff,
         info: '青白い巨星で、オリオン座の右肩を形作る。',
         featured: false
     },
@@ -156,6 +236,7 @@ export const BASE_STAR_DATA = [
         ra: 83.0017,
         dec: -0.2991,
         magnitude: 2.23,
+        color: 0xb5d0ff,
         info: 'オリオン座の三つ星の西端。実際は多重星系で構成される。',
         featured: false
     },
@@ -167,6 +248,7 @@ export const BASE_STAR_DATA = [
         ra: 84.0534,
         dec: -1.2019,
         magnitude: 1.69,
+        color: 0xa8c8ff,
         info: '三つ星中央の青色超巨星。地球から約2000光年離れている。',
         featured: false
     },
@@ -178,6 +260,7 @@ export const BASE_STAR_DATA = [
         ra: 85.1897,
         dec: -1.9426,
         magnitude: 1.74,
+        color: 0xa8c8ff,
         info: '三つ星の東端。馬頭星雲の近くに位置する多重星系。',
         featured: false
     },
@@ -189,6 +272,7 @@ export const BASE_STAR_DATA = [
         ra: 86.9391,
         dec: -9.6696,
         magnitude: 2.06,
+        color: 0xa8c8ff,
         info: 'オリオン座の左足にあたる青色超巨星。',
         featured: false
     },
@@ -200,6 +284,7 @@ export const BASE_STAR_DATA = [
         ra: 78.6345,
         dec: -8.2016,
         magnitude: 0.12,
+        color: 0xb5d0ff,
         info: '青白い超巨星で、地球から約860光年。冬の夜空で二番目に明るい。',
         featured: true
     },
@@ -211,6 +296,7 @@ export const BASE_STAR_DATA = [
         ra: 165.4603,
         dec: 61.7510,
         magnitude: 1.79,
+        color: 0xffd2a1,
         info: '北斗七星のひしゃくの縁を形作る橙色巨星。',
         featured: false
     },
@@ -222,6 +308,7 @@ export const BASE_STAR_DATA = [
         ra: 165.9320,
         dec: 56.3824,
         magnitude: 2.34,
+        color: 0xffffff,
         info: 'ドゥーベとともに北極星を指し示す道しるべとなる。',
         featured: false
     },
@@ -233,6 +320,7 @@ export const BASE_STAR_DATA = [
         ra: 168.5271,
         dec: 53.6948,
         magnitude: 2.43,
+        color: 0xffffff,
         info: '北斗七星の底部を成す白色主系列星。',
         featured: false
     },
@@ -244,6 +332,7 @@ export const BASE_STAR_DATA = [
         ra: 174.1362,
         dec: 57.0326,
         magnitude: 3.32,
+        color: 0xffffff,
         info: 'ひしゃくと柄の接続部にあたる恒星。',
         featured: false
     },
@@ -255,6 +344,7 @@ export const BASE_STAR_DATA = [
         ra: 193.5073,
         dec: 55.9598,
         magnitude: 1.76,
+        color: 0xffffff,
         info: '棒状磁場を持つ特異星で、北斗七星の柄の根元。',
         featured: false
     },
@@ -266,6 +356,7 @@ export const BASE_STAR_DATA = [
         ra: 200.9814,
         dec: 54.9254,
         magnitude: 2.23,
+        color: 0xffffff,
         info: '肉眼でも二重星として見分けられることで知られる。',
         featured: false
     },
@@ -277,6 +368,7 @@ export const BASE_STAR_DATA = [
         ra: 206.8850,
         dec: 49.3133,
         magnitude: 1.85,
+        color: 0xb5d0ff,
         info: '北斗七星の柄の先端で青白い光を放つ。',
         featured: false
     },
@@ -288,6 +380,7 @@ export const BASE_STAR_DATA = [
         ra: 2.2940,
         dec: 59.1502,
         magnitude: 2.28,
+        color: 0xfff4e8,
         info: 'カシオペア座のW字の端に位置する巨星。',
         featured: false
     },
@@ -299,6 +392,7 @@ export const BASE_STAR_DATA = [
         ra: 10.1260,
         dec: 56.5373,
         magnitude: 2.24,
+        color: 0xffd2a1,
         info: 'カシオペア座で最も明るい橙色巨星。',
         featured: false
     },
@@ -310,6 +404,7 @@ export const BASE_STAR_DATA = [
         ra: 14.1761,
         dec: 60.7167,
         magnitude: 2.47,
+        color: 0xb5d0ff,
         info: '急速回転するBe星で、変光を繰り返す。',
         featured: false
     },
@@ -321,6 +416,7 @@ export const BASE_STAR_DATA = [
         ra: 22.6750,
         dec: 60.2353,
         magnitude: 2.68,
+        color: 0xb5d0ff,
         info: 'W字の折れ曲がりを形成する青白い巨星。',
         featured: false
     },
@@ -332,6 +428,7 @@ export const BASE_STAR_DATA = [
         ra: 28.5982,
         dec: 63.6701,
         magnitude: 3.35,
+        color: 0xa8c8ff,
         info: 'W字の北側に位置する若い青色巨星。',
         featured: false
     },
@@ -343,6 +440,7 @@ export const BASE_STAR_DATA = [
         ra: 310.3579,
         dec: 45.2803,
         magnitude: 1.25,
+        color: 0xdfefff,
         info: '夏の大三角の一角。太陽の数万倍の光度を持つ青白い超巨星。',
         featured: true
     },
@@ -354,6 +452,7 @@ export const BASE_STAR_DATA = [
         ra: 305.5571,
         dec: 40.2567,
         magnitude: 2.23,
+        color: 0xfff4e8,
         info: '白鳥の胸に位置する黄色超巨星で、周囲に散光星雲が広がる。',
         featured: false
     },
@@ -365,6 +464,7 @@ export const BASE_STAR_DATA = [
         ra: 311.5525,
         dec: 33.9703,
         magnitude: 2.46,
+        color: 0xb5d0ff,
         info: '白鳥の翼を形作る青白い巨星で、ε星の固有名ギエナー。',
         featured: false
     },
@@ -376,6 +476,7 @@ export const BASE_STAR_DATA = [
         ra: 299.0761,
         dec: 45.1307,
         magnitude: 2.86,
+        color: 0xdfefff,
         info: '白鳥の首筋に位置する連星系。',
         featured: false
     },
@@ -387,6 +488,7 @@ export const BASE_STAR_DATA = [
         ra: 292.6800,
         dec: 27.9597,
         magnitude: 3.05,
+        color: 0xffd2a1,
         info: '金色と青色の二重星として有名で、肉眼でも美しいコントラストが楽しめる。',
         featured: true
     },
@@ -398,6 +500,7 @@ export const BASE_STAR_DATA = [
         ra: 37.9546,
         dec: 89.2641,
         magnitude: 1.98,
+        color: 0xfff4e8,
         info: '北極星として知られ、現在の地球の自転軸に最も近い恒星。',
         featured: true
     },
@@ -409,6 +512,7 @@ export const BASE_STAR_DATA = [
         ra: 263.0541,
         dec: 86.5860,
         magnitude: 4.35,
+        color: 0xb5d0ff,
         info: 'こぐま座の尾を形作る青白い主系列星。',
         featured: false
     },
@@ -417,9 +521,10 @@ export const BASE_STAR_DATA = [
         name: 'アカ・リル',
         nameEn: 'Epsilon Ursae Minoris',
         constellation: 'こぐま座',
-        ra: 256.5373,
+        ra: 251.4921,
         dec: 82.0373,
         magnitude: 4.19,
+        color: 0xfff4e8,
         info: '小北斗七星の柄の中央に位置する連星系。',
         featured: false
     },
@@ -431,6 +536,7 @@ export const BASE_STAR_DATA = [
         ra: 236.0143,
         dec: 77.7945,
         magnitude: 4.32,
+        color: 0xdfefff,
         info: '小さなひしゃくの柄の付け根を担う恒星。',
         featured: false
     },
@@ -442,6 +548,7 @@ export const BASE_STAR_DATA = [
         ra: 230.1820,
         dec: 71.8340,
         magnitude: 3.04,
+        color: 0xdfefff,
         info: 'ポラリスとともに「北の番人」と呼ばれる。',
         featured: false
     },
@@ -453,6 +560,7 @@ export const BASE_STAR_DATA = [
         ra: 222.6764,
         dec: 74.1555,
         magnitude: 2.08,
+        color: 0xffc58f,
         info: '古代には北極星の役割を担っていた橙色巨星。',
         featured: false
     },
@@ -464,6 +572,7 @@ export const BASE_STAR_DATA = [
         ra: 152.0937,
         dec: 11.9672,
         magnitude: 1.35,
+        color: 0xb5d0ff,
         info: '獅子の心臓を表す青白い主系列星。高速自転している。',
         featured: true
     },
@@ -475,6 +584,7 @@ export const BASE_STAR_DATA = [
         ra: 151.8331,
         dec: 23.4173,
         magnitude: 3.44,
+        color: 0xfff4e8,
         info: '獅子のたてがみに位置する黄色巨星。',
         featured: false
     },
@@ -486,6 +596,7 @@ export const BASE_STAR_DATA = [
         ra: 154.9931,
         dec: 19.8415,
         magnitude: 2.01,
+        color: 0xffd2a1,
         info: '美しい二重星として人気が高い。',
         featured: false
     },
@@ -497,6 +608,7 @@ export const BASE_STAR_DATA = [
         ra: 167.0886,
         dec: 20.5237,
         magnitude: 2.56,
+        color: 0xb5d0ff,
         info: 'しし座の背中に位置する青白い主系列星。',
         featured: false
     },
@@ -508,6 +620,7 @@ export const BASE_STAR_DATA = [
         ra: 168.8110,
         dec: 15.4315,
         magnitude: 3.34,
+        color: 0xdfefff,
         info: '後ろ足を形作るA型主系列星。',
         featured: false
     },
@@ -519,6 +632,7 @@ export const BASE_STAR_DATA = [
         ra: 177.2640,
         dec: 14.5721,
         magnitude: 2.14,
+        color: 0xdfefff,
         info: '春の大三角を構成する白色主系列星で、しっぽの先端に輝く。',
         featured: true
     },
@@ -542,6 +656,7 @@ export const BASE_STAR_DATA = [
         ra: 221.2468,
         dec: 27.0742,
         magnitude: 2.37,
+        color: 0xffc58f,
         info: '美しい色の対比で知られる連星系で、ボイエテスの腰帯を飾る。',
         featured: false
     },
@@ -553,6 +668,7 @@ export const BASE_STAR_DATA = [
         ra: 222.6760,
         dec: 19.1531,
         magnitude: 2.68,
+        color: 0xfff4e8,
         info: 'アークトゥルスの近くに位置する黄白色の巨星。',
         featured: false
     },
@@ -564,6 +680,7 @@ export const BASE_STAR_DATA = [
         ra: 224.7902,
         dec: 38.3083,
         magnitude: 3.08,
+        color: 0xdfefff,
         info: 'ボイエテスの左肩を形作る変光星。',
         featured: false
     },
@@ -575,6 +692,7 @@ export const BASE_STAR_DATA = [
         ra: 228.8751,
         dec: 40.3906,
         magnitude: 3.49,
+        color: 0xfff4e8,
         info: '頭部に位置する黄白色の巨星。',
         featured: false
     },
@@ -586,6 +704,7 @@ export const BASE_STAR_DATA = [
         ra: 201.2983,
         dec: -11.1613,
         magnitude: 0.98,
+        color: 0xa8c8ff,
         info: '青白い連星で、春の大三角の一頂点。',
         featured: true
     },
@@ -597,6 +716,7 @@ export const BASE_STAR_DATA = [
         ra: 190.4150,
         dec: -1.4490,
         magnitude: 3.50,
+        color: 0xfff4e8,
         info: 'おとめ座γ星。均等な明るさの連星として知られる。',
         featured: false
     },
@@ -608,6 +728,7 @@ export const BASE_STAR_DATA = [
         ra: 195.5440,
         dec: 10.9591,
         magnitude: 2.83,
+        color: 0xfff4e8,
         info: '葡萄摘みを意味する名前を持つ黄色巨星。',
         featured: false
     },
@@ -619,6 +740,7 @@ export const BASE_STAR_DATA = [
         ra: 202.0520,
         dec: -0.8667,
         magnitude: 3.37,
+        color: 0xdfefff,
         info: 'おとめ座の腰付近に位置する白色主系列星。',
         featured: false
     },
@@ -630,6 +752,7 @@ export const BASE_STAR_DATA = [
         ra: 200.9820,
         dec: -0.3560,
         magnitude: 3.85,
+        color: 0xdfefff,
         info: '三重星系で、乙女の腕を担う位置に輝く。',
         featured: false
     },
@@ -653,6 +776,7 @@ export const BASE_STAR_DATA = [
         ra: 240.0833,
         dec: -22.6217,
         magnitude: 2.29,
+        color: 0xa8c8ff,
         info: 'さそりの頭部を形作る青白い多重星系。',
         featured: false
     },
@@ -664,6 +788,7 @@ export const BASE_STAR_DATA = [
         ra: 240.5308,
         dec: -19.8047,
         magnitude: 2.56,
+        color: 0xb5d0ff,
         info: '頭部に位置する多重連星で、複雑な軌道を描く。',
         featured: false
     },
@@ -675,6 +800,7 @@ export const BASE_STAR_DATA = [
         ra: 252.9670,
         dec: -42.9978,
         magnitude: 1.87,
+        color: 0xfff4e8,
         info: 'さそりの尾の中ほどに輝く黄白色の巨星。',
         featured: false
     },
@@ -686,6 +812,7 @@ export const BASE_STAR_DATA = [
         ra: 263.4022,
         dec: -37.1038,
         magnitude: 1.62,
+        color: 0xa8c8ff,
         info: 'さそりの毒針にあたる青白い多重星系。',
         featured: true
     },
@@ -697,6 +824,7 @@ export const BASE_STAR_DATA = [
         ra: 263.7333,
         dec: -37.2958,
         magnitude: 2.70,
+        color: 0xb5d0ff,
         info: 'シャウラのすぐ隣に位置し、尾の先端を尖らせる青白い星。',
         featured: false
     },
@@ -708,6 +836,7 @@ export const BASE_STAR_DATA = [
         ra: 279.2347,
         dec: 38.7837,
         magnitude: 0.03,
+        color: 0xdfefff,
         info: '夏の大三角の最北に位置する青白い恒星。',
         featured: true
     },
@@ -719,6 +848,7 @@ export const BASE_STAR_DATA = [
         ra: 283.8163,
         dec: 33.3627,
         magnitude: 3.52,
+        color: 0xb5d0ff,
         info: '食変光星として知られるβ星で、こと座の平行四辺形を成す。',
         featured: false
     },
@@ -730,6 +860,7 @@ export const BASE_STAR_DATA = [
         ra: 284.8350,
         dec: 32.6896,
         magnitude: 3.25,
+        color: 0xb5d0ff,
         info: '琴の枠を形作るγ星。青白い巨星として輝く。',
         featured: false
     },
@@ -741,6 +872,7 @@ export const BASE_STAR_DATA = [
         ra: 282.5192,
         dec: 36.8986,
         magnitude: 4.22,
+        color: 0xffa260,
         info: 'こと座の北側に位置する赤色超巨星。',
         featured: false
     },
@@ -752,6 +884,7 @@ export const BASE_STAR_DATA = [
         ra: 285.6521,
         dec: 37.6050,
         magnitude: 4.36,
+        color: 0xdfefff,
         info: 'ダブル・ダブルと呼ばれる連星を含むこと座の一角。',
         featured: false
     },
@@ -763,6 +896,7 @@ export const BASE_STAR_DATA = [
         ra: 297.6958,
         dec: 8.8683,
         magnitude: 0.76,
+        color: 0xffffff,
         info: '彦星として知られる白色主系列星で、自転が非常に速い。',
         featured: true
     },
@@ -774,6 +908,7 @@ export const BASE_STAR_DATA = [
         ra: 297.0437,
         dec: 10.6141,
         magnitude: 2.72,
+        color: 0xffc966,
         info: 'アルタイルのすぐ北に位置する橙色巨星。',
         featured: false
     },
@@ -785,6 +920,7 @@ export const BASE_STAR_DATA = [
         ra: 296.5651,
         dec: 6.9925,
         magnitude: 3.71,
+        color: 0xfff4e8,
         info: 'アルタイルの南に並ぶ連星系。',
         featured: false
     },
@@ -796,6 +932,7 @@ export const BASE_STAR_DATA = [
         ra: 294.1800,
         dec: 13.8636,
         magnitude: 2.99,
+        color: 0xdfefff,
         info: '翼の先端に輝くζ星で、白く明るい光を放つ。',
         featured: false
     }

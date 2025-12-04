@@ -43,7 +43,7 @@ export const BASE_CONSTELLATION_DATA = [
     },
     {
         id: 'cygnus',
-        name: '白鳥座',
+        name: 'はくちょう座',
         description: '夏の天頂を横切る十字型の星並び。',
         starIds: ['deneb', 'sadr', 'gienah', 'deltaCyg', 'albireo'],
         lines: [
@@ -69,7 +69,7 @@ export const BASE_CONSTELLATION_DATA = [
     },
     {
         id: 'leo',
-        name: '獅子座',
+        name: 'しし座',
         description: '春の夜空に輝くライオンのシルエット。',
         starIds: ['regulus', 'adhafera', 'algeiba', 'zosma', 'chertan', 'denebola'],
         lines: [
@@ -177,6 +177,20 @@ export const BASE_CONSTELLATION_DATA = [
         starIds: ['procyon', 'gomeisa'],
         lines: [
             ['procyon', 'gomeisa']
+        ]
+    },
+    {
+        id: 'canisMajor',
+        name: 'おおいぬ座',
+        description: '冬の大三角の一角シリウスを中心に、大犬が南天を駆ける姿。',
+        starIds: ['sirius', 'mirzam', 'muliphein', 'wezen', 'adhara', 'furud', 'aludra'],
+        lines: [
+            ['mirzam', 'sirius'],
+            ['sirius', 'muliphein'],
+            ['sirius', 'wezen'],
+            ['wezen', 'adhara'],
+            ['adhara', 'furud'],
+            ['furud', 'aludra']
         ]
     }
 ];
