@@ -39,8 +39,9 @@ class Planetarium {
             autoRotate: false,
             playMusic: false
         };
-        this.audioContext = null;
-        this.audioTones = null;
+        this.bgmAudio = null;
+        this.bgmPlaylist = [];
+        this.bgmCurrentIndex = 0;
         this.isPlaying = false;
         this.raycaster = new THREE.Raycaster();
         this.raycaster.params.Points.threshold = 50;
@@ -148,51 +149,68 @@ class Planetarium {
         this.controls.maxPolarAngle = Math.min(Math.max(limit, minLimit), Math.PI - epsilon);
     }
 
-    startAmbientSound() {
-        if (this.audioContext) return;
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const createTone = (freq, type, gain) => {
-            const osc = this.audioContext.createOscillator();
-            const gainNode = this.audioContext.createGain();
-            const filter = this.audioContext.createBiquadFilter();
-            osc.type = type;
-            osc.frequency.value = freq;
-            filter.type = 'lowpass';
-            filter.frequency.value = 200;
-            gainNode.gain.value = gain;
-            osc.connect(filter);
-            filter.connect(gainNode);
-            gainNode.connect(this.audioContext.destination);
-            const lfo = this.audioContext.createOscillator();
-            const lfoGain = this.audioContext.createGain();
-            lfo.frequency.value = 0.05 + Math.random() * 0.1;
-            lfoGain.gain.value = freq * 0.02;
-            lfo.connect(lfoGain);
-            lfoGain.connect(osc.frequency);
-            lfo.start();
-            osc.start();
-            return { osc, gainNode, lfo };
-        };
-        this.audioTones = [
-            createTone(55, 'sine', 0.08),
-            createTone(82.5, 'sine', 0.05),
-            createTone(110, 'sine', 0.03),
-            createTone(65.4, 'triangle', 0.02)
+    async loadBgmPlaylist() {
+        // bgmフォルダ内のmp3ファイルリストを取得
+        // 静的なリストとして定義（サーバーサイドがないため）
+        const bgmFiles = [
+            'bgm/Weightless Dreaming.mp3'
         ];
+        this.bgmPlaylist = bgmFiles;
+        this.bgmCurrentIndex = 0;
+    }
+
+    async startBgm() {
+        if (this.isPlaying) return;
+        
+        if (this.bgmPlaylist.length === 0) {
+            await this.loadBgmPlaylist();
+        }
+        
+        if (this.bgmPlaylist.length === 0) {
+            console.warn('BGMファイルが見つかりません');
+            return;
+        }
+
+        this.playCurrentTrack();
+    }
+
+    playCurrentTrack() {
+        if (this.bgmAudio) {
+            this.bgmAudio.pause();
+            this.bgmAudio = null;
+        }
+
+        const trackPath = this.bgmPlaylist[this.bgmCurrentIndex];
+        this.bgmAudio = new Audio(trackPath);
+        this.bgmAudio.volume = 0.5;
+        
+        // 曲が終わったら次の曲へ
+        this.bgmAudio.addEventListener('ended', () => {
+            this.bgmCurrentIndex = (this.bgmCurrentIndex + 1) % this.bgmPlaylist.length;
+            if (this.isPlaying) {
+                this.playCurrentTrack();
+            }
+        });
+
+        this.bgmAudio.play().catch(err => {
+            console.error('BGM再生エラー:', err);
+        });
         this.isPlaying = true;
     }
 
-    stopAmbientSound() {
-        if (!this.audioContext) return;
-        if (this.audioTones) {
-            this.audioTones.forEach(tone => {
-                tone.osc.stop();
-                tone.lfo.stop();
-            });
-        }
-        this.audioContext.close();
-        this.audioContext = null;
+    stopBgm() {
+        if (!this.bgmAudio) return;
+        this.bgmAudio.pause();
+        this.bgmAudio.currentTime = 0;
         this.isPlaying = false;
+    }
+
+    startAmbientSound() {
+        this.startBgm();
+    }
+
+    stopAmbientSound() {
+        this.stopBgm();
     }
 
     hideLoading() {
