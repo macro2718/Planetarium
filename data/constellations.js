@@ -227,6 +227,64 @@ export const BASE_CONSTELLATION_DATA = [
         ]
     },
     {
+        id: 'cepheus',
+        name: 'ケフェウス座',
+        description: '北極星付近で家のような五角形を描く王の星座。',
+        starIds: ['errai', 'alfirk', 'alderamin', 'zetaCep', 'deltaCep'],
+        lines: [
+            ['errai', 'alfirk'],        // 王冠から肩
+            ['alfirk', 'alderamin'],    // 肩から腰
+            ['alderamin', 'zetaCep'],   // 腰回り
+            ['zetaCep', 'deltaCep'],    // 裾
+            ['deltaCep', 'errai'],      // 王の胸で閉じる
+            ['deltaCep', 'alfirk']      // 背中を補強
+        ]
+    },
+    {
+        id: 'draco',
+        name: 'りゅう座',
+        description: '北極星を取り囲む長い竜がとぐろを巻く星座。',
+        starIds: ['thuban', 'edasich', 'rastaban', 'kuma', 'eltanin', 'grumium', 'aldhibah'],
+        lines: [
+            ['thuban', 'edasich'],      // 尾根元
+            ['edasich', 'rastaban'],    // 背をたどる
+            ['rastaban', 'kuma'],       // 頭部へ
+            ['kuma', 'eltanin'],        // 竜の額
+            ['eltanin', 'grumium'],     // 顎先
+            ['grumium', 'aldhibah'],    // 下顎
+            ['aldhibah', 'rastaban'],   // 頭部を閉じる
+            ['edasich', 'aldhibah']     // 背から首筋への補強
+        ]
+    },
+    {
+        id: 'perseus',
+        name: 'ペルセウス座',
+        description: 'アンドロメダ姫を救う英雄が剣とメデューサの首を掲げる星座。',
+        starIds: ['mirfak', 'algol', 'miram', 'atik', 'menkib'],
+        lines: [
+            ['algol', 'mirfak'],        // 首を掲げる腕
+            ['mirfak', 'miram'],        // 胸から肩
+            ['miram', 'atik'],          // 腕から剣
+            ['atik', 'menkib'],         // 剣先
+            ['menkib', 'algol'],        // 剣から首へ戻る
+            ['mirfak', 'atik']          // 脚線美を補う
+        ]
+    },
+    {
+        id: 'cetus',
+        name: 'くじら座',
+        description: 'アンドロメダをのみ込もうとした海の怪物が描かれる大きな星座。',
+        starIds: ['menkar', 'kaffaljidhma', 'mira', 'batenKaitos', 'denebKaitos'],
+        lines: [
+            ['menkar', 'kaffaljidhma'], // 頭部
+            ['kaffaljidhma', 'mira'],   // 胴体前半
+            ['mira', 'batenKaitos'],    // 腹部
+            ['batenKaitos', 'denebKaitos'], // 尾びれ
+            ['denebKaitos', 'menkar'],  // 背中を閉じる
+            ['menkar', 'mira']          // 胴内を補強
+        ]
+    },
+    {
         id: 'sagittarius',
         name: 'いて座',
         description: '夏の南の空に「ティーポット」の姿で現れ、天の川の中心方向を示す黄道星座。',
