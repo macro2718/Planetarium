@@ -77,6 +77,11 @@ function setupControlButtons(ctx) {
     toggleButton('btn-aurora', 'showAurora', (visible) => {
         if (ctx.auroraGroup) ctx.auroraGroup.visible = visible;
     });
+    toggleButton('btn-star-trails', 'showStarTrails', (visible) => {
+        if (ctx.starTrailSystem) {
+            ctx.starTrailSystem.setEnabled(visible);
+        }
+    });
     const autoBtn = document.getElementById('btn-auto');
     if (autoBtn) {
         autoBtn.addEventListener('click', (e) => {
@@ -111,6 +116,26 @@ function setupControlButtons(ctx) {
             ctx.cardinalDirectionSystem.setVisible(visible);
         }
     });
+
+    const setImmersiveMode = (active) => {
+        document.body.classList.toggle('immersive-mode', active);
+        immersiveBtn?.classList.toggle('active', active);
+    };
+
+    const immersiveBtn = document.getElementById('btn-immersive');
+    if (immersiveBtn) {
+        immersiveBtn.addEventListener('click', () => {
+            const next = !document.body.classList.contains('immersive-mode');
+            setImmersiveMode(next);
+        });
+    }
+
+    const exitImmersiveBtn = document.getElementById('exit-immersive');
+    if (exitImmersiveBtn) {
+        exitImmersiveBtn.addEventListener('click', () => {
+            setImmersiveMode(false);
+        });
+    }
 }
 
 function setupTimeControls(ctx) {

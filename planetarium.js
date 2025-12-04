@@ -13,6 +13,7 @@ import { createWaterSurfaceSystem } from './systems/waterSurfaceSystem.js';
 import { createShootingStarSystem } from './systems/shootingStarSystem.js';
 import { createHourCircleSystem } from './systems/hourCircleSystem.js';
 import { createCardinalDirectionSystem } from './systems/cardinalDirectionSystem.js';
+import { createStarTrailSystem } from './systems/starTrailSystem.js';
 import { attachUIInteractions } from './ui/interactionController.js';
 import { setupTimeDisplay } from './ui/timeDisplay.js';
 import { calculateLocalSiderealTime } from './utils/astronomy.js';
@@ -35,6 +36,7 @@ class Planetarium {
             showAurora: true,
             showHourCircles: false,
             showCardinalDirections: false,
+            showStarTrails: false,
             autoRotate: false,
             playMusic: false
         };
@@ -87,6 +89,8 @@ class Planetarium {
         this.registerUpdater(createShootingStarSystem(this));
         this.hourCircleSystem = createHourCircleSystem(this);
         this.cardinalDirectionSystem = createCardinalDirectionSystem(this);
+        this.starTrailSystem = createStarTrailSystem(this);
+        this.registerUpdater(this.starTrailSystem);
 
         attachUIInteractions(this);
         setupTimeDisplay(this, this.moonSystem);
