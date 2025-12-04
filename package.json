@@ -1,0 +1,19 @@
+{
+  "name": "planetarium",
+  "version": "1.0.0",
+  "description": "`astroCatalog.js` に `AstroCatalog` クラスを配置し、恒星/星座データは `data/stars.js` と `data/constellations.js` に分割しました。構造化されたデータを 1 件追加するだけで、画面側に自動的に反映されます。",
+  "main": "astroCatalog.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "node tests/astronomy.test.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "three": "^0.160.0"
+  }
+}
