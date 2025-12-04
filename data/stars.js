@@ -172,12 +172,12 @@ export const BASE_STAR_DATA = [
         id: 'elnath',
         name: 'エルナト',
         nameEn: 'Elnath',
-        constellation: 'おうし座',
+        constellation: 'おうし座 / ぎょしゃ座',
         ra: 81.5729,
         dec: 28.6075,
         magnitude: 1.65,
         color: 0xb5d0ff,
-        info: '角の先端に位置する青白い巨星で、ぎょしゃ座と境界を接する。',
+        info: '角の先端に位置する青白い巨星で、おうし座の角とぎょしゃ座の肩を共有する。',
         featured: false
     },
     {
