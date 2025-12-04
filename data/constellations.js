@@ -6,8 +6,8 @@ export const BASE_CONSTELLATION_DATA = [
         starIds: ['betelgeuse', 'bellatrix', 'mintaka', 'alnilam', 'alnitak', 'saiph', 'rigel'],
         lines: [
             ['betelgeuse', 'bellatrix'],
-            ['betelgeuse', 'alnitak'],
-            ['bellatrix', 'mintaka'],
+            ['betelgeuse', 'saiph'],
+            ['bellatrix', 'rigel'],
             ['mintaka', 'alnilam'],
             ['alnilam', 'alnitak'],
             ['alnitak', 'saiph'],

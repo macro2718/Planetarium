@@ -78,7 +78,7 @@ export const BASE_STAR_DATA = [
         constellation: 'オリオン座',
         ra: 83.0017,
         dec: -0.2991,
-        magnitude: 2.41,
+        magnitude: 2.23,
         info: 'オリオン座の三つ星の西端。実際は多重星系で構成される。',
         featured: false
     },
@@ -188,7 +188,7 @@ export const BASE_STAR_DATA = [
         constellation: 'おおぐま座',
         ra: 200.9814,
         dec: 54.9254,
-        magnitude: 2.06,
+        magnitude: 2.23,
         info: '肉眼でも二重星として見分けられることで知られる。',
         featured: false
     },
@@ -285,10 +285,10 @@ export const BASE_STAR_DATA = [
         name: 'ギエナー',
         nameEn: 'Gienah',
         constellation: 'はくちょう座',
-        ra: 297.6958,
-        dec: 35.0794,
-        magnitude: 2.48,
-        info: '白鳥の翼を形作る青白い巨星。',
+        ra: 311.5525,
+        dec: 33.9703,
+        magnitude: 2.46,
+        info: '白鳥の翼を形作る青白い巨星で、ε星の固有名ギエナー。',
         featured: false
     },
     {
