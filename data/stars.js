@@ -25,6 +25,17 @@ export const BASE_STAR_DATA = [
         featured: true
     },
     {
+        id: 'gomeisa',
+        name: 'ゴメイサ',
+        nameEn: 'Gomeisa',
+        constellation: 'こいぬ座',
+        ra: 112.3071,
+        dec: 8.9256,
+        magnitude: 2.89,
+        info: 'こいぬ座のβ星で、青白い主系列星。',
+        featured: false
+    },
+    {
         id: 'capella',
         name: 'カペラ',
         nameEn: 'Capella',
@@ -37,6 +48,39 @@ export const BASE_STAR_DATA = [
         featured: true
     },
     {
+        id: 'menkalinan',
+        name: 'メンカリナン',
+        nameEn: 'Menkalinan',
+        constellation: 'ぎょしゃ座',
+        ra: 91.8933,
+        dec: 44.9474,
+        magnitude: 1.90,
+        info: 'カペラと並ぶ明るさを持つ食連星で、ぎょしゃ座β星。',
+        featured: false
+    },
+    {
+        id: 'mahasim',
+        name: 'マハシム',
+        nameEn: 'Mahasim',
+        constellation: 'ぎょしゃ座',
+        ra: 86.9391,
+        dec: 37.4060,
+        magnitude: 2.65,
+        info: 'ぎょしゃ座の腕に位置する青白い巨星。',
+        featured: false
+    },
+    {
+        id: 'kabdhilinan',
+        name: 'カブジリナン',
+        nameEn: 'Kabdhilinan',
+        constellation: 'ぎょしゃ座',
+        ra: 76.3656,
+        dec: 34.3284,
+        magnitude: 3.69,
+        info: 'ぎょしゃ座の南側に位置する変光星。',
+        featured: false
+    },
+    {
         id: 'aldebaran',
         name: 'アルデバラン',
         nameEn: 'Aldebaran',
@@ -47,6 +91,39 @@ export const BASE_STAR_DATA = [
         color: 0xffc58f,
         info: 'おうし座の赤色巨星。ヒヤデス星団の前を通るように見えることで有名。',
         featured: true
+    },
+    {
+        id: 'elnath',
+        name: 'エルナト',
+        nameEn: 'Elnath',
+        constellation: 'おうし座',
+        ra: 81.5729,
+        dec: 28.6075,
+        magnitude: 1.65,
+        info: '角の先端に位置する青白い巨星で、ぎょしゃ座と境界を接する。',
+        featured: false
+    },
+    {
+        id: 'ain',
+        name: 'アイン',
+        nameEn: 'Ain',
+        constellation: 'おうし座',
+        ra: 67.1542,
+        dec: 19.1804,
+        magnitude: 3.53,
+        info: 'おうしの右目にあたる恒星で、ヒヤデス星団の一員。',
+        featured: false
+    },
+    {
+        id: 'alcyone',
+        name: 'アルキオーネ',
+        nameEn: 'Alcyone',
+        constellation: 'おうし座',
+        ra: 56.7500,
+        dec: 24.1143,
+        magnitude: 2.87,
+        info: 'プレアデス星団で最も明るい星で、青い光が印象的。',
+        featured: false
     },
     {
         id: 'betelgeuse',
@@ -458,6 +535,50 @@ export const BASE_STAR_DATA = [
         featured: true
     },
     {
+        id: 'izar',
+        name: 'イザール',
+        nameEn: 'Izar',
+        constellation: 'うしかい座',
+        ra: 221.2468,
+        dec: 27.0742,
+        magnitude: 2.37,
+        info: '美しい色の対比で知られる連星系で、ボイエテスの腰帯を飾る。',
+        featured: false
+    },
+    {
+        id: 'muphrid',
+        name: 'ムフリド',
+        nameEn: 'Muphrid',
+        constellation: 'うしかい座',
+        ra: 222.6760,
+        dec: 19.1531,
+        magnitude: 2.68,
+        info: 'アークトゥルスの近くに位置する黄白色の巨星。',
+        featured: false
+    },
+    {
+        id: 'seginus',
+        name: 'セギヌス',
+        nameEn: 'Seginus',
+        constellation: 'うしかい座',
+        ra: 224.7902,
+        dec: 38.3083,
+        magnitude: 3.08,
+        info: 'ボイエテスの左肩を形作る変光星。',
+        featured: false
+    },
+    {
+        id: 'nekkar',
+        name: 'ネッカル',
+        nameEn: 'Nekkar',
+        constellation: 'うしかい座',
+        ra: 228.8751,
+        dec: 40.3906,
+        magnitude: 3.49,
+        info: '頭部に位置する黄白色の巨星。',
+        featured: false
+    },
+    {
         id: 'spica',
         name: 'スピカ',
         nameEn: 'Spica',
@@ -467,6 +588,50 @@ export const BASE_STAR_DATA = [
         magnitude: 0.98,
         info: '青白い連星で、春の大三角の一頂点。',
         featured: true
+    },
+    {
+        id: 'porrima',
+        name: 'ポリマ',
+        nameEn: 'Porrima',
+        constellation: 'おとめ座',
+        ra: 190.4150,
+        dec: -1.4490,
+        magnitude: 3.50,
+        info: 'おとめ座γ星。均等な明るさの連星として知られる。',
+        featured: false
+    },
+    {
+        id: 'vindemiatrix',
+        name: 'ビンデミアトリクス',
+        nameEn: 'Vindemiatrix',
+        constellation: 'おとめ座',
+        ra: 195.5440,
+        dec: 10.9591,
+        magnitude: 2.83,
+        info: '葡萄摘みを意味する名前を持つ黄色巨星。',
+        featured: false
+    },
+    {
+        id: 'heze',
+        name: 'ヘゼ',
+        nameEn: 'Heze',
+        constellation: 'おとめ座',
+        ra: 202.0520,
+        dec: -0.8667,
+        magnitude: 3.37,
+        info: 'おとめ座の腰付近に位置する白色主系列星。',
+        featured: false
+    },
+    {
+        id: 'zaniah',
+        name: 'ザニアー',
+        nameEn: 'Zaniah',
+        constellation: 'おとめ座',
+        ra: 200.9820,
+        dec: -0.3560,
+        magnitude: 3.85,
+        info: '三重星系で、乙女の腕を担う位置に輝く。',
+        featured: false
     },
     {
         id: 'antares',
@@ -481,6 +646,61 @@ export const BASE_STAR_DATA = [
         featured: true
     },
     {
+        id: 'dschubba',
+        name: 'デヘブ',
+        nameEn: 'Dschubba',
+        constellation: 'さそり座',
+        ra: 240.0833,
+        dec: -22.6217,
+        magnitude: 2.29,
+        info: 'さそりの頭部を形作る青白い多重星系。',
+        featured: false
+    },
+    {
+        id: 'acrab',
+        name: 'アクラブ',
+        nameEn: 'Acrab',
+        constellation: 'さそり座',
+        ra: 240.5308,
+        dec: -19.8047,
+        magnitude: 2.56,
+        info: '頭部に位置する多重連星で、複雑な軌道を描く。',
+        featured: false
+    },
+    {
+        id: 'sargas',
+        name: 'サルガス',
+        nameEn: 'Sargas',
+        constellation: 'さそり座',
+        ra: 252.9670,
+        dec: -42.9978,
+        magnitude: 1.87,
+        info: 'さそりの尾の中ほどに輝く黄白色の巨星。',
+        featured: false
+    },
+    {
+        id: 'shaula',
+        name: 'シャウラ',
+        nameEn: 'Shaula',
+        constellation: 'さそり座',
+        ra: 263.4022,
+        dec: -37.1038,
+        magnitude: 1.62,
+        info: 'さそりの毒針にあたる青白い多重星系。',
+        featured: true
+    },
+    {
+        id: 'lesath',
+        name: 'レスサト',
+        nameEn: 'Lesath',
+        constellation: 'さそり座',
+        ra: 263.7333,
+        dec: -37.2958,
+        magnitude: 2.70,
+        info: 'シャウラのすぐ隣に位置し、尾の先端を尖らせる青白い星。',
+        featured: false
+    },
+    {
         id: 'vega',
         name: 'ベガ',
         nameEn: 'Vega',
@@ -492,6 +712,50 @@ export const BASE_STAR_DATA = [
         featured: true
     },
     {
+        id: 'sheliak',
+        name: 'シェリアク',
+        nameEn: 'Sheliak',
+        constellation: 'こと座',
+        ra: 283.8163,
+        dec: 33.3627,
+        magnitude: 3.52,
+        info: '食変光星として知られるβ星で、こと座の平行四辺形を成す。',
+        featured: false
+    },
+    {
+        id: 'sulafat',
+        name: 'スルファト',
+        nameEn: 'Sulafat',
+        constellation: 'こと座',
+        ra: 284.8350,
+        dec: 32.6896,
+        magnitude: 3.25,
+        info: '琴の枠を形作るγ星。青白い巨星として輝く。',
+        featured: false
+    },
+    {
+        id: 'deltalyr',
+        name: 'デルタ星',
+        nameEn: 'Delta2 Lyrae',
+        constellation: 'こと座',
+        ra: 282.5192,
+        dec: 36.8986,
+        magnitude: 4.22,
+        info: 'こと座の北側に位置する赤色超巨星。',
+        featured: false
+    },
+    {
+        id: 'zetalyr',
+        name: 'ゼータ星',
+        nameEn: 'Zeta Lyrae',
+        constellation: 'こと座',
+        ra: 285.6521,
+        dec: 37.6050,
+        magnitude: 4.36,
+        info: 'ダブル・ダブルと呼ばれる連星を含むこと座の一角。',
+        featured: false
+    },
+    {
         id: 'altair',
         name: 'アルタイル',
         nameEn: 'Altair',
@@ -501,5 +765,38 @@ export const BASE_STAR_DATA = [
         magnitude: 0.76,
         info: '彦星として知られる白色主系列星で、自転が非常に速い。',
         featured: true
+    },
+    {
+        id: 'tarazed',
+        name: 'タラゼド',
+        nameEn: 'Tarazed',
+        constellation: 'わし座',
+        ra: 297.0437,
+        dec: 10.6141,
+        magnitude: 2.72,
+        info: 'アルタイルのすぐ北に位置する橙色巨星。',
+        featured: false
+    },
+    {
+        id: 'alshain',
+        name: 'アルシャイン',
+        nameEn: 'Alshain',
+        constellation: 'わし座',
+        ra: 296.5651,
+        dec: 6.9925,
+        magnitude: 3.71,
+        info: 'アルタイルの南に並ぶ連星系。',
+        featured: false
+    },
+    {
+        id: 'denebokab',
+        name: 'デネブ・オカブ',
+        nameEn: 'Deneb el Okab',
+        constellation: 'わし座',
+        ra: 294.1800,
+        dec: 13.8636,
+        magnitude: 2.99,
+        info: '翼の先端に輝くζ星で、白く明るい光を放つ。',
+        featured: false
     }
 ];
