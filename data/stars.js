@@ -1024,7 +1024,7 @@ export const BASE_STAR_DATA = [
         id: 'alpheratz',
         name: 'アルフェラツ',
         nameEn: 'Alpheratz',
-        constellation: 'アンドロメダ座',
+        constellation: 'アンドロメダ座 / ペガスス座',
         ra: 2.0958,
         dec: 29.0906,
         magnitude: 2.06,
