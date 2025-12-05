@@ -1,6 +1,4 @@
-export const BASE_STAR_DATA = [
-    // オリオン座
-    {
+export const BASE_STAR_DATA = [    {
         id: 'rigel',
         name: 'リゲル',
         nameEn: 'Rigel',
@@ -150,7 +148,6 @@ export const BASE_STAR_DATA = [
         featured: false
     },
 
-    // カシオペア座
     {
         id: 'caph',
         name: 'カフ',
@@ -226,7 +223,6 @@ export const BASE_STAR_DATA = [
         featured: false
     },
 
-    // はくちょう座
     {
         id: 'deneb',
         name: 'デネブ',
@@ -302,7 +298,6 @@ export const BASE_STAR_DATA = [
         featured: true
     },
 
-    // こぐま座
     {
         id: 'polaris',
         name: 'ポラリス',
@@ -408,7 +403,6 @@ export const BASE_STAR_DATA = [
         featured: false
     },
 
-    // おおぐま座
     {
         id: 'dubhe',
         name: 'ドゥーベ',
@@ -514,7 +508,6 @@ export const BASE_STAR_DATA = [
         featured: false
     },
 
-    // しし座
     {
         id: 'regulus',
         name: 'レグルス',
@@ -617,6 +610,519 @@ export const BASE_STAR_DATA = [
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'しし座η星。ライオンの額を意味する白色超巨星。',
+        featured: false
+    },
+
+    {
+        id: 'antares',
+        name: 'アンタレス',
+        nameEn: 'Antares',
+        nameSIMBAD: 'Antares',
+        constellation: 'さそり座',
+        ra: 247.351915,
+        dec: -26.432003,
+        magnitude: 0.91,
+        color: 0xff7440,
+        glowColor: 0xff4010,
+        info: '赤色超巨星で、夏の南の空に深紅の光を放つ。',
+        featured: true
+    },
+
+    {
+        id: 'dschubba',
+        name: 'ジュバ',
+        nameEn: 'Dschubba',
+        nameSIMBAD: 'Dschubba',
+        constellation: 'さそり座',
+        ra: 240.083355,
+        dec: -22.621706,
+        magnitude: 2.32,
+        color: 0xa8c8ff,
+        glowColor: 0x70a0ff,
+        info: 'さそりの頭部を形作る青白い多重星系。',
+        featured: false
+    },
+
+    {
+        id: 'fang',
+        name: 'ファング',
+        nameEn: 'Fang',
+        nameSIMBAD: 'Fang',
+        constellation: 'さそり座',
+        ra: 239.712972,
+        dec: -26.114108,
+        magnitude: 2.91,
+        color: 0xa8c8ff,
+        glowColor: 0x70a0ff,
+        info: 'さそりの牙に位置する三重星。',
+        featured: false
+    },
+
+    {
+        id: 'acrab',
+        name: 'アクラブ',
+        nameEn: 'Acrab',
+        nameSIMBAD: 'Acrab',
+        constellation: 'さそり座',
+        ra: 241.359292,
+        dec: -19.805389,
+        magnitude: 2.50,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: '頭部に位置する多重連星で、複雑な軌道を描く。',
+        featured: false
+    },
+
+    {
+        id: 'larawag',
+        name: 'ララワグ',
+        nameEn: 'Larawag',
+        nameSIMBAD: 'Larawag',
+        constellation: 'さそり座',
+        ra: 252.540878,
+        dec: -34.293232,
+        magnitude: 2.29,
+        color: 0xa8c8ff,
+        glowColor: 0x70a0ff,
+        info: 'さそりの尻尾の付け根に位置するオレンジ色の巨星。名前はアボリジニによる呼称に由来する。',
+        featured: false
+    },
+
+    {
+        id: 'zetaSco',
+        name: 'ゼータ・スコルピイ',
+        nameEn: 'Zeta Scorpii',
+        nameSIMBAD: 'Zeta02 Sco',   // 二重星ゆえ02を付与
+        constellation: 'さそり座',
+        ra: 253.645854,
+        dec: -42.361316,
+        magnitude: 3.62,
+        color: 0xa8c8ff,
+        glowColor: 0x70a0ff,
+        info: 'さそり座ζ星。離れた2つの星からなる視覚的二重星。',
+        featured: false
+    },
+
+    {
+        id: 'sargas',
+        name: 'サルガス',
+        nameEn: 'Sargas',
+        nameSIMBAD: 'Sargas',
+        constellation: 'さそり座',
+        ra: 264.329708,
+        dec: -42.997828,
+        magnitude: 1.85,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: 'さそりの尾の中ほどに輝く黄白色の巨星。',
+        featured: false
+    },
+
+    {
+        id: 'girtab',
+        name: 'ギルタブ',
+        nameEn: 'Girtab',
+        nameSIMBAD: 'kappa Sco',
+        constellation: 'さそり座',
+        ra: 265.621980,
+        dec: -39.029983,
+        magnitude: 2.39,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: '古代シュメール語で「サソリ」を意味する名前を持つ分光連星。',
+        featured: false
+    },
+
+    {
+        id: 'shaula',
+        name: 'シャウラ',
+        nameEn: 'Shaula',
+        nameSIMBAD: 'Shaula',
+        constellation: 'さそり座',
+        ra: 263.402167,
+        dec: -37.103824,
+        magnitude: 1.63,
+        color: 0xa8c8ff,
+        glowColor: 0x70a0ff,
+        info: 'さそりの毒針にあたる青白い多重星系。',
+        featured: true
+    },
+
+    {
+        id: 'lesath',
+        name: 'レスサト',
+        nameEn: 'Lesath',
+        nameSIMBAD: 'Lesath',
+        constellation: 'さそり座',
+        ra: 262.690988,
+        dec: -37.295813,
+        magnitude: 2.65,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'シャウラのすぐ隣に位置し、尾の先端を尖らせる青白い星。',
+        featured: false
+    },
+
+    // こと座
+    {
+        id: 'vega',
+        name: 'ベガ',
+        nameEn: 'Vega',
+        nameSIMBAD: 'Vega',
+        constellation: 'こと座',
+        ra: 279.234735,
+        dec: 38.783689,
+        magnitude: 0.03,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: '夏の大三角の最北に位置する青白い恒星。',
+        featured: true
+    },
+
+    {
+        id: 'epsilonLyr',
+        name: 'イプシロン・ライラ',
+        nameEn: 'Epsilon Lyrae',
+        nameSIMBAD: 'Epsilon01 Lyrae',   // 4重星ゆえ01を付与
+        constellation: 'こと座',
+        ra: 281.084775,
+        dec: 39.670126,
+        magnitude: 4.59,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'こと座の二重二重星として知られる有名な4重星系。ダブル・ダブルとも呼ばれる。',
+        featured: false
+    },
+
+    {
+        id: 'zetalyr',
+        name: 'ゼータ・ライラ',
+        nameEn: 'Zeta Lyrae',
+        nameSIMBAD: 'Zeta01 Lyrae',   // 二重星ゆえ01を付与
+        constellation: 'こと座',
+        ra: 281.193155,
+        dec: 37.605122,
+        magnitude: 4.36,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'こと座ζ星。視覚的二重星で、主星は青白い光を放つ。',
+        featured: false
+    },
+
+    {
+        id: 'sheliak',
+        name: 'シェリアク',
+        nameEn: 'Sheliak',
+        nameSIMBAD: 'Sheliak',
+        constellation: 'こと座',
+        ra: 282.519980,
+        dec: 33.362667,
+        magnitude: 3.42,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: '食変光星として知られるβ星で、こと座の平行四辺形を成す。',
+        featured: false
+    },
+
+    {
+        id: 'sulafat',
+        name: 'スルファト',
+        nameEn: 'Sulafat',
+        nameSIMBAD: 'Sulafat',
+        constellation: 'こと座',
+        ra: 284.735927,
+        dec: 32.689556,
+        magnitude: 3.25,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: '琴の枠を形作るγ星。青白い巨星として輝く。',
+        featured: false
+    },
+
+    {
+        id: 'deltalyr',
+        name: 'デルタ・ライラ',
+        nameEn: 'Delta2 Lyrae',
+        nameSIMBAD: 'Delta2 Lyrae',
+        constellation: 'こと座',
+        ra: 283.626178,
+        dec: 36.898620,
+        magnitude: 4.30,
+        color: 0xffa260,
+        glowColor: 0xff6030,
+        info: 'こと座の北側に位置する、こと座δ星。赤色巨星と主系列星からなる二重星。',
+        featured: false
+    },
+
+    // わし座
+    {
+        id: 'altair',
+        name: 'アルタイル',
+        nameEn: 'Altair',
+        nameSIMBAD: 'Altair',
+        constellation: 'わし座',
+        ra: 297.695827,
+        dec: 8.868321,
+        magnitude: 0.76,
+        color: 0xffffff,
+        glowColor: 0xccccff,
+        info: '彦星として知られる白色主系列星で、自転が非常に速い。',
+        featured: true
+    },
+
+    {
+        id: 'deltaAql',
+        name: 'デルタ・アクイラエ',
+        nameEn: 'Delta Aquilae',
+        nameSIMBAD: 'Delta Aquilae',
+        constellation: 'わし座',
+        ra: 291.374589,
+        dec: 3.114779,
+        magnitude: 3.36,
+        color: 0xffc966,
+        glowColor: 0xff9030,
+        info: 'わし座の翼を形作るδ星。近接連星系。',
+        featured: false
+    },
+
+    {
+        id: 'lambdaAql',
+        name: 'ラムダ・アクイラエ',
+        nameEn: 'Lambda Aquilae',
+        nameSIMBAD: 'Lambda Aquilae',
+        constellation: 'わし座',
+        ra: 286.562244,
+        dec: -4.882563,
+        magnitude: 3.43,
+        color: 0xffc966,
+        glowColor: 0xff9030,
+        info: 'わし座の胴体付近を構成する。圧倒的な自転速度の速さが特徴。',
+        featured: false
+    },
+
+    {
+        id: 'thetaAql',
+        name: 'シータ・アクイラエ',
+        nameEn: 'Theta Aquilae',
+        nameSIMBAD: 'Theta Aquilae',
+        constellation: 'わし座',
+        ra: 302.826195,
+        dec: -0.821464,
+        magnitude: 3.22,
+        color: 0xffc966,
+        glowColor: 0xff9030,
+        info: '猛烈に速く自転しながら青白く輝く連星系。',
+        featured: false
+    },
+
+    {
+        id: 'tarazed',
+        name: 'タラゼド',
+        nameEn: 'Tarazed',
+        nameSIMBAD: 'Tarazed',
+        constellation: 'わし座',
+        ra: 296.564912,
+        dec: 10.613259,
+        magnitude: 2.72,
+        color: 0xffc966,
+        glowColor: 0xff9030,
+        info: 'アルタイルのすぐ北に位置する橙色巨星。',
+        featured: false
+    },
+
+    {
+        id: 'alshain',
+        name: 'アルシャイン',
+        nameEn: 'Alshain',
+        nameSIMBAD: 'Alshain',
+        constellation: 'わし座',
+        ra: 298.828304,
+        dec: 6.406764,
+        magnitude: 3.71,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: 'アルタイルの南に並ぶ連星系。',
+        featured: false
+    },
+
+    {
+        id: 'denebokabborealis',
+        name: 'デネブ・オカブ・ボレアリス',
+        nameEn: 'Deneb el Okab Borealis',
+        nameSIMBAD: 'zet Aql',
+        constellation: 'わし座',
+        ra: 286.352533,
+        dec: 13.863477,
+        magnitude: 2.99,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: '翼の先端に輝くζ星で、白く明るい光を放つ。北のデネブ・オカブ。',
+        featured: false
+    },
+
+    // おとめ座
+    {
+        id: 'spica',
+        name: 'スピカ',
+        nameEn: 'Spica',
+        nameSIMBAD: 'Spica',
+        constellation: 'おとめ座',
+        ra: 201.298247,
+        dec: -11.161319,
+        magnitude: 0.97,
+        color: 0xa8c8ff,
+        glowColor: 0x70a0ff,
+        info: '青白い連星で、春の大三角の一頂点。',
+        featured: true
+    },
+
+    {
+        id: 'porrima',
+        name: 'ポリマ',
+        nameEn: 'Porrima',
+        nameSIMBAD: 'Porrima',
+        constellation: 'おとめ座',
+        ra: 190.415118,
+        dec: -1.449404,
+        magnitude: 2.74,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: 'おとめ座γ星。均等な明るさの連星として知られる。',
+        featured: false
+    },
+
+    {
+        id: 'vindemiatrix',
+        name: 'ビンデミアトリクス',
+        nameEn: 'Vindemiatrix',
+        nameSIMBAD: 'Vindemiatrix',
+        constellation: 'おとめ座',
+        ra: 195.544154,
+        dec: 10.959149,
+        magnitude: 2.79,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: '葡萄摘みを意味する名前を持つ黄色巨星。',
+        featured: false
+    },
+
+    {
+        id: 'heze',
+        name: 'ヘゼ',
+        nameEn: 'Heze',
+        nameSIMBAD: 'Heze',
+        constellation: 'おとめ座',
+        ra: 203.673297,
+        dec: -0.595816,
+        magnitude: 3.38,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'おとめ座の腰付近に位置する白色主系列星。',
+        featured: false
+    },
+
+    {
+        id: 'syrma',
+        name: 'シュルマ',
+        nameEn: 'Syrma',
+        nameSIMBAD: 'Syrma',
+        constellation: 'おとめ座',
+        ra: 214.003618,
+        dec: -6.000547,
+        magnitude: 4.08,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'ドレスの裾を意味する名前を持つ恒星。',
+        featured: false
+    },
+
+    {
+        id: 'rijlAwwa',
+        name: 'リジル・アル・アウワ',
+        nameEn: 'Rijl al Awwa',
+        nameSIMBAD: 'mu Virginis',
+        constellation: 'おとめ座',
+        ra: 220.765100,
+        dec: -5.658201,
+        magnitude: 3.88,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: '古くは描かれていた「吠える犬」の星座の足に位置していたため、「吠える犬の足」を意味する名前を持つ。',
+        featured: false
+    },
+
+    {
+        id: 'tauVir',
+        name: 'タウ・ヴァージニス',
+        nameEn: 'Tau Virginis',
+        nameSIMBAD: 'tau Virginis',
+        constellation: 'おとめ座',
+        ra: 210.411640,
+        dec: 1.544531,
+        magnitude: 4.24,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'おとめの腰を形作る恒星。',
+        featured: false
+    },
+
+    {
+        id: 'zaniah',
+        name: 'ザニアー',
+        nameEn: 'Zaniah',
+        nameSIMBAD: 'Zaniah',
+        constellation: 'おとめ座',
+        ra: 184.976427,
+        dec: -0.666796,
+        magnitude: 3.90,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: '三重星系で、乙女の腕を担う位置に輝く。',
+        featured: false
+    },
+
+    {
+        id: 'zavijava',
+        name: 'ザヴィヤヴァ',
+        nameEn: 'Zavijava',
+        nameSIMBAD: 'Zavijava',
+        constellation: 'おとめ座',
+        ra: 177.673827,
+        dec: 1.7647226,
+        magnitude: 3.60,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'おとめ座の頭部に位置するβ星。ザヴィヤヴァは本来γ星の名前であった。',
+        featured: false
+    },
+
+    {
+        id: 'nuVir',
+        name: 'ニュー・ヴァージニス',
+        nameEn: 'Nu Virginis',
+        nameSIMBAD: 'nu Virginis',
+        constellation: 'おとめ座',
+        ra: 176.464832,
+        dec: 6.529375,
+        magnitude: 4.04,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'やや赤みを帯びた光を放つ半規則型変光星。',
+        featured: false
+    },
+
+    {
+        id: 'omicronVir',
+        name: 'オミクロン・ヴァージニス',
+        nameEn: 'Omicron Virginis',
+        nameSIMBAD: 'omicron Virginis',
+        constellation: 'おとめ座',
+        ra: 181.302216,
+        dec: 8.733019,
+        magnitude: 4.12,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'おとめ座オミクロン星。白く輝く若い恒星。',
         featured: false
     },
 
@@ -1217,306 +1723,6 @@ export const BASE_STAR_DATA = [
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: '頭部に位置する黄白色の巨星。',
-        featured: false
-    },
-
-    {
-        id: 'spica',
-        name: 'スピカ',
-        nameEn: 'Spica',
-        nameSIMBAD: 'Spica',
-        constellation: 'おとめ座',
-        ra: 201.298247,
-        dec: -11.161319,
-        magnitude: 0.97,
-        color: 0xa8c8ff,
-        glowColor: 0x70a0ff,
-        info: '青白い連星で、春の大三角の一頂点。',
-        featured: true
-    },
-
-    {
-        id: 'porrima',
-        name: 'ポリマ',
-        nameEn: 'Porrima',
-        nameSIMBAD: 'Porrima',
-        constellation: 'おとめ座',
-        ra: 190.415118,
-        dec: -1.449404,
-        magnitude: 2.74,
-        color: 0xfff4e8,
-        glowColor: 0xffe8b5,
-        info: 'おとめ座γ星。均等な明るさの連星として知られる。',
-        featured: false
-    },
-
-    {
-        id: 'vindemiatrix',
-        name: 'ビンデミアトリクス',
-        nameEn: 'Vindemiatrix',
-        nameSIMBAD: 'Vindemiatrix',
-        constellation: 'おとめ座',
-        ra: 195.544154,
-        dec: 10.959149,
-        magnitude: 2.79,
-        color: 0xfff4e8,
-        glowColor: 0xffe8b5,
-        info: '葡萄摘みを意味する名前を持つ黄色巨星。',
-        featured: false
-    },
-
-    {
-        id: 'heze',
-        name: 'ヘゼ',
-        nameEn: 'Heze',
-        nameSIMBAD: 'Heze',
-        constellation: 'おとめ座',
-        ra: 203.673297,
-        dec: -0.595816,
-        magnitude: 3.38,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: 'おとめ座の腰付近に位置する白色主系列星。',
-        featured: false
-    },
-
-    {
-        id: 'zaniah',
-        name: 'ザニアー',
-        nameEn: 'Zaniah',
-        nameSIMBAD: 'Zaniah',
-        constellation: 'おとめ座',
-        ra: 184.976427,
-        dec: -0.666796,
-        magnitude: 3.90,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: '三重星系で、乙女の腕を担う位置に輝く。',
-        featured: false
-    },
-
-    {
-        id: 'antares',
-        name: 'アンタレス',
-        nameEn: 'Antares',
-        nameSIMBAD: 'Antares',
-        constellation: 'さそり座',
-        ra: 247.351915,
-        dec: -26.432003,
-        magnitude: 0.91,
-        color: 0xff7440,
-        glowColor: 0xff4010,
-        info: '赤色超巨星で、夏の南の空に深紅の光を放つ。',
-        featured: true
-    },
-
-    {
-        id: 'dschubba',
-        name: 'デヘブ',
-        nameEn: 'Dschubba',
-        nameSIMBAD: 'Dschubba',
-        constellation: 'さそり座',
-        ra: 240.083355,
-        dec: -22.621706,
-        magnitude: 2.32,
-        color: 0xa8c8ff,
-        glowColor: 0x70a0ff,
-        info: 'さそりの頭部を形作る青白い多重星系。',
-        featured: false
-    },
-
-    {
-        id: 'acrab',
-        name: 'アクラブ',
-        nameEn: 'Acrab',
-        nameSIMBAD: 'Acrab',
-        constellation: 'さそり座',
-        ra: 241.359292,
-        dec: -19.805389,
-        magnitude: 2.50,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: '頭部に位置する多重連星で、複雑な軌道を描く。',
-        featured: false
-    },
-
-    {
-        id: 'sargas',
-        name: 'サルガス',
-        nameEn: 'Sargas',
-        nameSIMBAD: 'Sargas',
-        constellation: 'さそり座',
-        ra: 264.329708,
-        dec: -42.997828,
-        magnitude: 1.85,
-        color: 0xfff4e8,
-        glowColor: 0xffe8b5,
-        info: 'さそりの尾の中ほどに輝く黄白色の巨星。',
-        featured: false
-    },
-
-    {
-        id: 'shaula',
-        name: 'シャウラ',
-        nameEn: 'Shaula',
-        nameSIMBAD: 'Shaula',
-        constellation: 'さそり座',
-        ra: 263.402167,
-        dec: -37.103824,
-        magnitude: 1.63,
-        color: 0xa8c8ff,
-        glowColor: 0x70a0ff,
-        info: 'さそりの毒針にあたる青白い多重星系。',
-        featured: true
-    },
-
-    {
-        id: 'lesath',
-        name: 'レスサト',
-        nameEn: 'Lesath',
-        nameSIMBAD: 'Lesath',
-        constellation: 'さそり座',
-        ra: 262.690988,
-        dec: -37.295813,
-        magnitude: 2.65,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: 'シャウラのすぐ隣に位置し、尾の先端を尖らせる青白い星。',
-        featured: false
-    },
-
-    {
-        id: 'vega',
-        name: 'ベガ',
-        nameEn: 'Vega',
-        nameSIMBAD: 'Vega',
-        constellation: 'こと座',
-        ra: 279.234735,
-        dec: 38.783689,
-        magnitude: 0.03,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: '夏の大三角の最北に位置する青白い恒星。',
-        featured: true
-    },
-
-    {
-        id: 'sheliak',
-        name: 'シェリアク',
-        nameEn: 'Sheliak',
-        nameSIMBAD: 'Sheliak',
-        constellation: 'こと座',
-        ra: 282.519980,
-        dec: 33.362667,
-        magnitude: 3.42,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: '食変光星として知られるβ星で、こと座の平行四辺形を成す。',
-        featured: false
-    },
-
-    {
-        id: 'sulafat',
-        name: 'スルファト',
-        nameEn: 'Sulafat',
-        nameSIMBAD: 'Sulafat',
-        constellation: 'こと座',
-        ra: 284.735927,
-        dec: 32.689556,
-        magnitude: 3.25,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: '琴の枠を形作るγ星。青白い巨星として輝く。',
-        featured: false
-    },
-
-    {
-        id: 'deltalyr',
-        name: 'デルタ・ライラ',
-        nameEn: 'Delta2 Lyrae',
-        nameSIMBAD: 'Delta2 Lyrae',
-        constellation: 'こと座',
-        ra: 283.626178,
-        dec: 36.898620,
-        magnitude: 4.30,
-        color: 0xffa260,
-        glowColor: 0xff6030,
-        info: 'こと座の北側に位置する赤色巨星で、散開星団Stephenson 1の一員。',
-        featured: false
-    },
-
-    {
-        id: 'zetalyr',
-        name: 'ゼータ星',
-        nameEn: 'Zeta Lyrae',
-        nameSIMBAD: 'Zeta01 Lyrae',
-        constellation: 'こと座',
-        ra: 281.193155,
-        dec: 37.605122,
-        magnitude: 4.36,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: 'ダブル・ダブルと呼ばれる連星を含むこと座の一角。',
-        featured: false
-    },
-
-    {
-        id: 'altair',
-        name: 'アルタイル',
-        nameEn: 'Altair',
-        nameSIMBAD: 'Altair',
-        constellation: 'わし座',
-        ra: 297.695827,
-        dec: 8.868321,
-        magnitude: 0.76,
-        color: 0xffffff,
-        glowColor: 0xccccff,
-        info: '彦星として知られる白色主系列星で、自転が非常に速い。',
-        featured: true
-    },
-
-    {
-        id: 'tarazed',
-        name: 'タラゼド',
-        nameEn: 'Tarazed',
-        nameSIMBAD: 'Tarazed',
-        constellation: 'わし座',
-        ra: 296.564912,
-        dec: 10.613259,
-        magnitude: 2.72,
-        color: 0xffc966,
-        glowColor: 0xff9030,
-        info: 'アルタイルのすぐ北に位置する橙色巨星。',
-        featured: false
-    },
-
-    {
-        id: 'alshain',
-        name: 'アルシャイン',
-        nameEn: 'Alshain',
-        nameSIMBAD: 'Alshain',
-        constellation: 'わし座',
-        ra: 298.828304,
-        dec: 6.406764,
-        magnitude: 3.71,
-        color: 0xfff4e8,
-        glowColor: 0xffe8b5,
-        info: 'アルタイルの南に並ぶ連星系。',
-        featured: false
-    },
-
-    {
-        id: 'denebokabborealis',
-        name: 'デネブ・オカブ・ボレアリス',
-        nameEn: 'Deneb el Okab Borealis',
-        nameSIMBAD: 'zet Aql',
-        constellation: 'わし座',
-        ra: 286.352533,
-        dec: 13.863477,
-        magnitude: 2.99,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: '翼の先端に輝くζ星で、白く明るい光を放つ。北のデネブ・オカブ。',
         featured: false
     },
 

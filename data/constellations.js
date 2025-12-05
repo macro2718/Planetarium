@@ -91,26 +91,31 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'scorpius',
         name: 'さそり座',
         description: '夏の南天を弓なりに横切る赤い心臓と長い尾。',
-        starIds: ['acrab', 'dschubba', 'antares', 'sargas', 'shaula', 'lesath'],
+        starIds: ['acrab', 'dschubba', 'fang', 'antares', 'larawag', 'zetaSco', 'sargas', 'girtab', 'shaula', 'lesath'],
         lines: [
             ['acrab', 'dschubba'],    // 頭部
+            ['fang', 'dschubba'],    // 頭部
             ['dschubba', 'antares'],  // 胸
-            ['antares', 'sargas'],    // 腹から尾へ
-            ['sargas', 'shaula'],     // 尾を伸ばす
-            ['shaula', 'lesath']      // 毒針の先端
+            ['antares', 'larawag'],    // 腹から尾の付け根へ
+            ['larawag', 'zetaSco'],    // 尾の付け根から尾へ
+            ['zetaSco', 'sargas'],    // 尾を伸ばす
+            ['sargas', 'girtab'],     // 尾を伸ばす
+            ['girtab', 'lesath'],     // 尾を伸ばす
+            ['lesath', 'shaula']      // 毒針の先端
         ]
     },
     {
         id: 'lyra',
         name: 'こと座',
         description: 'ベガを頂点に小さな平行四辺形を伴う琴の形。',
-        starIds: ['vega', 'sheliak', 'sulafat', 'deltalyr', 'zetalyr'],
+        starIds: ['vega', 'epsilonLyr', 'sheliak', 'sulafat', 'deltalyr', 'zetalyr'],
         lines: [
-            ['vega', 'sheliak'],
-            ['vega', 'sulafat'],
-            ['sheliak', 'deltalyr'],
+            ['vega', 'zetalyr'],
+            ['vega', 'epsilonLyr'],
+            ['epsilonLyr', 'zetalyr'],
+            ['sulafat', 'deltalyr'],
             ['deltalyr', 'zetalyr'],
-            ['zetalyr', 'sulafat'],
+            ['zetalyr', 'sheliak'],
             ['sheliak', 'sulafat']
         ]
     },
@@ -118,24 +123,33 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'aquila',
         name: 'わし座',
         description: '天の川を横切る翼を広げたわし。',
-        starIds: ['tarazed', 'altair', 'alshain', 'denebokabborealis'],
+        starIds: ['tarazed', 'altair', 'deltaAql', 'lambdaAql', 'thetaAql', 'alshain', 'denebokabborealis'],
         lines: [
             ['tarazed', 'altair'],   // 上の翼
+            ['tarazed', 'deltaAql'],   // 上の翼
             ['altair', 'alshain'],   // 下の翼
-            ['tarazed', 'denebokabborealis']
+            ['deltaAql', 'denebokabborealis'],
+            ['deltaAql', 'lambdaAql'],
+            ['deltaAql', 'thetaAql'],
         ]
     },
     {
         id: 'virgo',
         name: 'おとめ座',
         description: '麦の穂スピカを手にした女神の姿。',
-        starIds: ['vindemiatrix', 'porrima', 'heze', 'zaniah', 'spica'],
+        starIds: ['vindemiatrix', 'porrima', 'heze', 'syrma', 'rijlAwwa', 'tauVir', 'zaniah', 'nuVir', 'omicronVir', 'spica','zavijava'],
         lines: [
             ['vindemiatrix', 'porrima'],
             ['porrima', 'heze'],
-            ['heze', 'spica'],
+            ['heze', 'syrma'],
+            ['syrma', 'rijlAwwa'],
+            ['heze', 'tauVir'],
             ['porrima', 'zaniah'],
-            ['zaniah', 'spica']
+            ['porrima', 'spica'],
+            ['zaniah', 'zavijava'],
+            ['nuVir', 'zavijava'],
+            ['nuVir', 'omicronVir'],
+            ['omicronVir', 'zaniah']
         ]
     },
     {
