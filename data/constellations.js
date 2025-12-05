@@ -116,10 +116,9 @@ export const BASE_CONSTELLATION_DATA = [
         description: '天の川を横切る翼を広げたわし。',
         starIds: ['tarazed', 'altair', 'alshain', 'denebokab'],
         lines: [
-            ['tarazed', 'altair'],
-            ['altair', 'alshain'],
-            ['tarazed', 'denebokab'],
-            ['denebokab', 'altair']
+            ['tarazed', 'altair'],   // 上の翼
+            ['altair', 'alshain'],   // 下の翼
+            ['tarazed', 'denebokab']
         ]
     },
     {
@@ -169,9 +168,10 @@ export const BASE_CONSTELLATION_DATA = [
         lines: [
             ['capella', 'menkalinan'],
             ['menkalinan', 'elnath'],
-            ['capella', 'mahasim'],
+            ['elnath', 'mahasim'],
             ['mahasim', 'kabdhilinan'],
-            ['mahasim', 'elnath']
+            ['kabdhilinan', 'capella'],
+            
         ]
     },
     {
@@ -330,16 +330,15 @@ export const BASE_CONSTELLATION_DATA = [
         description: '冬の夜空に並んで輝く双子の星座。',
         starIds: ['castor', 'pollux', 'wasat', 'alhena', 'mebsuta', 'tejat', 'propus'],
         lines: [
-            ['castor', 'pollux'],       // 双子の頭
-            ['castor', 'wasat'],        // 胸元の結び
+            // カストル側の体
+            ['castor', 'wasat'],
+            ['wasat', 'mebsuta'],
+            ['mebsuta', 'tejat'],
+
+            // ポルックス側の体
             ['pollux', 'wasat'],
-            ['castor', 'mebsuta'],      // カストル側の胴体
-            ['mebsuta', 'tejat'],       // カストル側の脚
-            ['wasat', 'mebsuta'],       // 胸から肩へ
-            ['pollux', 'alhena'],       // ポルックス側の胴体
-            ['wasat', 'alhena'],        // 胸から肩へ
-            ['alhena', 'propus'],       // ポルックス側の脚
-            ['propus', 'tejat']         // 足元を結ぶ
+            ['wasat', 'alhena'],
+            ['alhena', 'propus']
         ]
     },
     {
@@ -375,7 +374,6 @@ export const BASE_CONSTELLATION_DATA = [
             ['zubenelgenubi', 'zubeneschamali'],  // 皿と梁
             ['zubenelgenubi', 'brachium'],         // 南の皿
             ['zubeneschamali', 'zubenelakrab'],    // 北の皿
-            ['brachium', 'zubenelakrab']           // 天秤を囲む
         ]
     },
     {

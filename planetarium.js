@@ -11,7 +11,7 @@ import { createAuroraSystem } from './systems/auroraSystem.js';
 import { createCosmicDustSystem } from './systems/cosmicDustSystem.js';
 import { createWaterSurfaceSystem } from './systems/waterSurfaceSystem.js';
 import { createShootingStarSystem } from './systems/shootingStarSystem.js';
-import { createHourCircleSystem } from './systems/hourCircleSystem.js';
+import { createHourCircleSystem, createDeclinationCircleSystem, createCelestialEquatorSystem, createEclipticSystem } from './systems/hourCircleSystem.js';
 import { createCardinalDirectionSystem } from './systems/cardinalDirectionSystem.js';
 import { createStarTrailSystem } from './systems/starTrailSystem.js';
 import { attachUIInteractions } from './ui/interactionController.js';
@@ -35,6 +35,9 @@ class Planetarium {
             showMoon: true,
             showAurora: true,
             showHourCircles: false,
+            showDeclinationCircles: false,
+            showCelestialEquator: false,
+            showEcliptic: false,
             showCardinalDirections: false,
             showStarTrails: false,
             autoRotate: false,
@@ -88,9 +91,14 @@ class Planetarium {
         this.registerUpdater(createWaterSurfaceSystem(this, () => this.moonSystem.getCurrentState()));
         this.registerUpdater(createShootingStarSystem(this));
         this.hourCircleSystem = createHourCircleSystem(this);
+        this.declinationCircleSystem = createDeclinationCircleSystem(this);
+        this.celestialEquatorSystem = createCelestialEquatorSystem(this);
+        this.eclipticSystem = createEclipticSystem(this);
         this.cardinalDirectionSystem = createCardinalDirectionSystem(this);
         this.starTrailSystem = createStarTrailSystem(this);
         this.registerUpdater(this.starTrailSystem);
+        this.registerUpdater(this.celestialEquatorSystem);
+        this.registerUpdater(this.eclipticSystem);
 
         attachUIInteractions(this);
         setupTimeDisplay(this, this.moonSystem);

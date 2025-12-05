@@ -110,6 +110,27 @@ function setupControlButtons(ctx) {
         }
     });
     
+    // 赤緯圏表示ボタン
+    toggleButton('btn-declination-circles', 'showDeclinationCircles', (visible) => {
+        if (ctx.declinationCircleSystem) {
+            ctx.declinationCircleSystem.setVisible(visible);
+        }
+    });
+    
+    // 天の赤道表示ボタン
+    toggleButton('btn-celestial-equator', 'showCelestialEquator', (visible) => {
+        if (ctx.celestialEquatorSystem) {
+            ctx.celestialEquatorSystem.setVisible(visible);
+        }
+    });
+    
+    // 黄道表示ボタン
+    toggleButton('btn-ecliptic', 'showEcliptic', (visible) => {
+        if (ctx.eclipticSystem) {
+            ctx.eclipticSystem.setVisible(visible);
+        }
+    });
+    
     // 方位表示ボタン
     toggleButton('btn-cardinal-directions', 'showCardinalDirections', (visible) => {
         if (ctx.cardinalDirectionSystem) {
