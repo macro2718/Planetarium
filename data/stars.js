@@ -741,16 +741,16 @@ export const BASE_STAR_DATA = [
         featured: false
     },
     {
-        id: 'gienah',
-        name: 'ギエナー',
-        nameEn: 'Gienah',
+        id: 'aljanah',
+        name: 'アルジャナー',
+        nameEn: 'Aljanah',
         constellation: 'はくちょう座',
         ra: 311.5525,
         dec: 33.9703,
         magnitude: 2.46,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: '白鳥の翼を形作る青白い巨星で、ε星の固有名ギエナー。',
+        info: '白鳥の翼を形作る青白い巨星で、はくちょう座ε星。伝統的にギエナーと呼ばれることもある。',
         featured: false
     },
     {

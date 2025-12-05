@@ -33,11 +33,11 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'cygnus',
         name: 'はくちょう座',
         description: '夏の天頂を横切る十字型の星並び。',
-        starIds: ['deneb', 'sadr', 'gienah', 'deltaCyg', 'albireo'],
+        starIds: ['deneb', 'sadr', 'aljanah', 'deltaCyg', 'albireo'],
         lines: [
             ['deneb', 'sadr'],       // 尾から胸へ（縦線上部）
             ['sadr', 'albireo'],     // 胸から頭へ（縦線下部）
-            ['gienah', 'sadr'],      // 翼から胸へ（横線左）
+            ['aljanah', 'sadr'],      // 翼から胸へ（横線左）
             ['sadr', 'deltaCyg']     // 胸から翼へ（横線右）
         ]
     },
@@ -67,8 +67,6 @@ export const BASE_CONSTELLATION_DATA = [
             ['megrez', 'alioth'],       // 背から尾へ
             ['alioth', 'mizar'],        // 尾を延ばす
             ['mizar', 'alkaid'],        // 尾の先端
-            ['phecda', 'alioth'],       // 胴体を斜めに結ぶ
-            ['dubhe', 'megrez']         // 肩から背を補強
         ]
     },
     {
@@ -360,14 +358,12 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'hydra',
         name: 'うみへび座',
         description: '全天で最も長い星座。孤独なアルファルドを中心に蛇の胴体が春の空を横切る。',
-        starIds: ['ashlesha', 'minchir', 'minkar', 'alphard', 'ukdah', 'muHydrae'],
+        starIds: ['ashlesha', 'minchir', 'alphard', 'ukdah', 'muHydrae'],
         lines: [
             ['ashlesha', 'minchir'],        // 頭部の弧
-            ['minchir', 'minkar'],          // 頭から首へ
-            ['minkar', 'alphard'],          // 胸元から心臓
+            ['minchir', 'alphard'],         // 頭と心臓を結ぶ
             ['alphard', 'ukdah'],           // 胴体を南へ伸ばす
             ['ukdah', 'muHydrae'],          // しっぽへ
-            ['minchir', 'alphard']          // 頭と心臓を結ぶ
         ]
     },
     {
