@@ -60,7 +60,7 @@ class Planetarium {
         this.observer = { lat: 35.6895, lon: 139.6917 };
         this.timeMode = 'realtime';
         this.timeScale = 240; // simulation seconds per real second (custom mode)
-        this.dayScale = 1; // simulated days per real second (fixed time mode)
+        this.dayScale = 1; // days per real second (fixed-time mode)
         this.simulationStartDate = new Date();
         const nowSeconds = performance.now() * 0.001;
         this.simulationStartPerf = nowSeconds;
@@ -175,13 +175,16 @@ class Planetarium {
                 const simulatedMs = this.simulationStartDate.getTime() + elapsed * 1000 * scale;
                 this.simulatedDate = new Date(simulatedMs);
             } else if (this.timeMode === 'fixed-time') {
+                // 時刻固定モード: 指定時刻を維持しつつ、日付を離散的に進める
                 const scale = this.isTimePaused ? 0 : this.dayScale;
+                // 経過秒数 * dayScale で進んだ日数を計算（離散的）
+                const daysPassed = Math.floor(elapsed * scale);
                 const baseDate = new Date(this.simulationStartDate);
+                baseDate.setDate(baseDate.getDate() + daysPassed);
                 const startOfDay = new Date(baseDate);
                 startOfDay.setHours(0, 0, 0, 0);
-                const timeOfDayMs = this.fixedTimeOfDayMs ?? (baseDate.getTime() - startOfDay.getTime());
-                const simulatedMs = startOfDay.getTime() + elapsed * 86400000 * scale + timeOfDayMs;
-                this.simulatedDate = new Date(simulatedMs);
+                const timeOfDayMs = this.fixedTimeOfDayMs ?? 0;
+                this.simulatedDate = new Date(startOfDay.getTime() + timeOfDayMs);
             }
         }
         this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, this.observer.lon);

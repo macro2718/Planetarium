@@ -1320,7 +1320,7 @@
         <div class="home-content">
             <div class="home-badge">Virtual Observatory</div>
             <h1 class="home-title">PLANETARIUM</h1>
-            <p class="home-subtitle">— 星空への旅 —</p>
+            <p class="home-subtitle">— AURORA VOYAGE —</p>
             <p class="home-tagline">静謐な宇宙に浮かぶオーロラのゆらめきと、星々の鼓動をそのまま閉じ込めた仮想天文台。光が呼吸するような、洗練された星空体験へご案内します。</p>
             <div class="home-meta">
                 <div class="meta-item">
@@ -1401,13 +1401,17 @@
                 <button class="control-btn small" id="time-mode-custom">カスタム</button>
                 <button class="control-btn small" id="time-mode-fixed">時刻固定</button>
             </div>
-            <label class="control-label" for="custom-datetime">日時</label>
-            <input class="control-input" type="datetime-local" id="custom-datetime">
-            <label class="control-label" for="custom-speed"><span id="speed-label-prefix">時間倍率</span> <span id="custom-speed-display">×240</span></label>
-            <input class="control-input" type="number" id="custom-speed" step="1" value="240">
-            <button class="control-btn small" id="time-toggle-play">⏸ 一時停止</button>
-            <button class="control-btn small" id="apply-custom-time">設定を適用</button>
-            <p class="control-hint" id="time-speed-hint">倍率0で停止。負の値で時間を逆行させることもできます。</p>
+            <div id="time-settings-container">
+                <label class="control-label" for="custom-datetime">日時</label>
+                <input class="control-input" type="datetime-local" id="custom-datetime">
+                <div id="custom-time-controls">
+                    <label class="control-label" for="custom-speed"><span id="speed-label-prefix">時間倍率</span> <span id="custom-speed-display">×240</span></label>
+                    <input class="control-input" type="number" id="custom-speed" step="1" value="240">
+                </div>
+                <button class="control-btn small" id="time-toggle-play">▶️ 再生</button>
+                <button class="control-btn small" id="apply-custom-time">設定を適用</button>
+                <p class="control-hint" id="time-speed-hint">倍率0で停止。負の値で時間を逆行させることもできます。</p>
+            </div>
         </div>
         <div class="control-section">
             <div class="section-title">VISUALS</div>

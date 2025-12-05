@@ -34,17 +34,17 @@ function updateTimeDisplay(ctx, moonSystem) {
     if (modeEl) {
         const isRealtime = ctx.timeMode === 'realtime';
         const isFixedTime = ctx.timeMode === 'fixed-time';
-        const scale = Number.isFinite(isFixedTime ? ctx.dayScale : ctx.timeScale)
-            ? (isFixedTime ? ctx.dayScale : ctx.timeScale)
-            : 1;
-        const formattedScale = scale.toLocaleString('ja-JP', { maximumFractionDigits: 3 });
         const paused = ctx.isTimePaused && !isRealtime;
         if (isRealtime) {
             modeEl.textContent = 'リアルタイム';
         } else if (isFixedTime) {
+            const scale = Number.isFinite(ctx.dayScale) ? ctx.dayScale : 1;
+            const formattedScale = scale.toLocaleString('ja-JP', { maximumFractionDigits: 3 });
             const label = scale === 0 || paused ? '一時停止' : `${formattedScale} 日/秒`;
             modeEl.textContent = `時刻固定 (${label})`;
         } else {
+            const scale = Number.isFinite(ctx.timeScale) ? ctx.timeScale : 1;
+            const formattedScale = scale.toLocaleString('ja-JP', { maximumFractionDigits: 3 });
             const label = scale === 0 || paused ? '一時停止' : `×${formattedScale}`;
             modeEl.textContent = `カスタム (${label})`;
         }

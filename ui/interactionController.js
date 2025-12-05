@@ -191,29 +191,40 @@ function setupTimeControls(ctx) {
         return;
     }
 
+    const timeSettingsContainer = document.getElementById('time-settings-container');
+
+    const updateControlsVisibility = () => {
+        const isRealtime = ctx.timeMode === 'realtime';
+        // リアルタイムモードでは設定全体を非表示
+        if (timeSettingsContainer) {
+            timeSettingsContainer.style.display = isRealtime ? 'none' : 'block';
+        }
+    };
+
     const updateButtonState = () => {
         const mode = ctx.timeMode;
         realtimeBtn?.classList.toggle('active', mode === 'realtime');
         customBtn?.classList.toggle('active', mode === 'custom');
         fixedBtn?.classList.toggle('active', mode === 'fixed-time');
         updatePlaybackButton();
+        updateControlsVisibility();
     };
 
     const updateSpeedDisplay = () => {
         if (!speedDisplay || !speedInput) return;
-        const value = parseFloat(speedInput.value);
         const isFixed = ctx.timeMode === 'fixed-time';
+        const value = parseFloat(speedInput.value);
         const fallback = isFixed ? ctx.dayScale : ctx.timeScale;
         const scale = Number.isFinite(value) ? value : (Number.isFinite(fallback) ? fallback : 1);
         const formatted = scale.toLocaleString('ja-JP', { maximumFractionDigits: 3 });
-        speedDisplay.textContent = isFixed ? `${formatted} 日/秒` : `×${formatted}`;
-        if (speedLabel) {
-            speedLabel.textContent = isFixed ? '日付倍率' : '時間倍率';
-        }
-        if (speedHint) {
-            speedHint.textContent = isFixed
-                ? '倍率0で停止。負の値で日付を逆行させることもできます。'
-                : '倍率0で停止。負の値で時間を逆行させることもできます。';
+        if (isFixed) {
+            speedDisplay.textContent = `${formatted} 日/秒`;
+            if (speedLabel) speedLabel.textContent = '日付倍率';
+            if (speedHint) speedHint.textContent = '倍率0で停止。負の値で日付を戻すこともできます。';
+        } else {
+            speedDisplay.textContent = `×${formatted}`;
+            if (speedLabel) speedLabel.textContent = '時間倍率';
+            if (speedHint) speedHint.textContent = '倍率0で停止。負の値で時間を逆行させることもできます。';
         }
     };
 
@@ -230,6 +241,7 @@ function setupTimeControls(ctx) {
             }
         }
         updateSpeedDisplay();
+        updateControlsVisibility();
     };
 
     const readInputDate = () => {
@@ -241,7 +253,7 @@ function setupTimeControls(ctx) {
 
     const applyCustomSettings = (targetMode = ctx.timeMode === 'fixed-time' ? 'fixed-time' : 'custom') => {
         const targetDate = readInputDate() ?? (typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date());
-        const rawScale = speedInput ? parseFloat(speedInput.value) : ctx.timeScale;
+        const rawScale = speedInput ? parseFloat(speedInput.value) : (targetMode === 'fixed-time' ? ctx.dayScale : ctx.timeScale);
         if (targetMode === 'fixed-time') {
             const nextScale = Number.isFinite(rawScale) ? rawScale : (Number.isFinite(ctx.dayScale) ? ctx.dayScale : 1);
             ctx.setTimeMode?.('fixed-time', { date: targetDate, dayScale: nextScale });
@@ -249,7 +261,8 @@ function setupTimeControls(ctx) {
             const nextScale = Number.isFinite(rawScale) ? rawScale : (Number.isFinite(ctx.timeScale) ? ctx.timeScale : 1);
             ctx.setTimeMode?.('custom', { date: targetDate, timeScale: nextScale });
         }
-        ctx.toggleTimePause?.(false);
+        // 最初は一時停止状態にする
+        ctx.toggleTimePause?.(true);
         syncInputsFromCtx(true);
         updateButtonState();
     };
@@ -283,9 +296,11 @@ function setupTimeControls(ctx) {
 
     const updatePlaybackButton = () => {
         if (!playbackBtn) return;
-        const paused = ctx.isTimePaused && ctx.timeMode !== 'realtime';
+        const isRealtime = ctx.timeMode === 'realtime';
+        const paused = ctx.isTimePaused && !isRealtime;
         playbackBtn.textContent = paused ? '▶️ 再生' : '⏸ 一時停止';
-        playbackBtn.disabled = ctx.timeMode === 'realtime';
+        playbackBtn.style.display = 'inline-block';
+        playbackBtn.disabled = isRealtime;
     };
 
     playbackBtn?.addEventListener('click', () => {
