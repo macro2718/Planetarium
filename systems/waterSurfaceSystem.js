@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from '../three.module.js';
 
 export function createWaterSurfaceSystem(ctx, moonStateProvider) {
     ctx.waterSurfaceGroup = new THREE.Group();

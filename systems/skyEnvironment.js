@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from '../three.module.js';
 
 /**
  * Builds the night-sky gradients, horizon ring, horizon lights, and compass labels.

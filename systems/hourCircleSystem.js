@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from '../three.module.js';
 
 /**
  * 時圏（天球上の経線）システム

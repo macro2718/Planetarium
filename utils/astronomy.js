@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from '../three.module.js';
 
 export function calculateLocalSiderealTime(date, longitudeDeg) {
     const jd = date.getTime() / 86400000 + 2440587.5;

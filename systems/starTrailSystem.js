@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from '../three.module.js';
 import { equatorialToHorizontalVector } from '../utils/astronomy.js';
 
 // 星の軌跡を描画するシステム

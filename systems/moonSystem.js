@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from '../three.module.js';
 import { equatorialToHorizontalVector, normalizeDegrees } from '../utils/astronomy.js';
 
 export function createMoonSystem(ctx) {

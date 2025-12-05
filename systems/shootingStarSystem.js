@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from '../three.module.js';
 
 const DEFAULT_DELTA = 0.016;
 const METEOR_RADIUS = 3200;

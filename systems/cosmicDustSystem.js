@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from '../three.module.js';
 
 export function createCosmicDustSystem(ctx) {
     ctx.cosmicDustGroup = new THREE.Group();

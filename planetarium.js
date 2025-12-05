@@ -1,5 +1,5 @@
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import * as THREE from './three.module.js';
+import { OrbitControls } from './vendor/three/addons/controls/OrbitControls.js';
 import { AstroCatalog } from './astroCatalog.js';
 import { createSkyEnvironment } from './systems/skyEnvironment.js';
 import { createStarFieldSystem } from './systems/starFieldSystem.js';
