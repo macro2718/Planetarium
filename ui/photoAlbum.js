@@ -289,11 +289,18 @@ export class PhotoAlbumSystem {
         const homeScreen = document.getElementById('home-screen');
         const albumScreen = document.getElementById('album-screen');
         
+        // ホーム画面を即時表示（トランジションなし）
+        if (homeScreen) {
+            homeScreen.classList.add('instant-show');
+            homeScreen.classList.remove('hidden');
+            // 次回のためにinstant-showクラスを削除
+            requestAnimationFrame(() => {
+                homeScreen.classList.remove('instant-show');
+            });
+        }
+        // アルバムをフェードアウト（ホームの上に重なっているのでフェードで消える）
         if (albumScreen) {
             albumScreen.classList.add('hidden');
-        }
-        if (homeScreen) {
-            homeScreen.classList.remove('hidden');
         }
         this.onHomeScreen = true;
     }
