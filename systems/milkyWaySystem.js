@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from '../three.module.js';
 import { equatorialToHorizontalVector, precessEquatorialJ2000ToDate } from '../utils/astronomy.js';
 
 const GALACTIC_NORTH_POLE = { ra: 192.85948, dec: 27.12825 }; // IAU 2009 (J2000)
@@ -63,6 +63,7 @@ function createMilkyWayBandDome(ctx, bandNormal, bandAxis) {
             bandNormal: { value: bandNormal },
             bandAxis: { value: bandAxis },
             bandTangent: { value: bandTangent },
+            coreVisibility: { value: 1 },
             colorWarm: { value: new THREE.Color(0.98, 0.78, 0.64) },
             colorCool: { value: new THREE.Color(0.68, 0.82, 1.0) },
             colorCore: { value: new THREE.Color(1.08, 0.96, 0.88) },
@@ -82,6 +83,7 @@ function createMilkyWayBandDome(ctx, bandNormal, bandAxis) {
             uniform vec3 bandNormal;
             uniform vec3 bandAxis;
             uniform vec3 bandTangent;
+            uniform float coreVisibility;
             uniform vec3 colorWarm;
             uniform vec3 colorCool;
             uniform vec3 colorCore;
@@ -137,12 +139,17 @@ function createMilkyWayBandDome(ctx, bandNormal, bandAxis) {
                 float filaments = fbm(uvw * 24.0 + vec3(1.7, time * 0.04, 2.3));
                 float dust = smoothstep(0.32, 0.75, fbm(uvw * 12.0 + vec3(3.1, time * 0.05, -2.8)));
                 float brightness = base * (0.25 + 0.8 * coarse + 0.35 * fine);
-                float centerGradient = mix(0.38, 1.0, pow(clamp(uvw.x * 0.5 + 0.5, 0.0, 1.0), 0.75));
+                float along = uvw.x * 0.5 + 0.5;
+                float centerGradient = mix(0.38, 1.0, pow(clamp(along, 0.0, 1.0), 0.75));
+                float centerSide = smoothstep(0.28, 0.92, along);
+                float seasonalFade = mix(0.45, 1.0, coreVisibility);
+                float coreLift = mix(0.78, 1.55, coreVisibility);
+                brightness *= seasonalFade;
                 brightness *= centerGradient;
+                brightness *= mix(1.0, coreLift, centerSide);
                 brightness *= (1.0 - dust * 0.42);
                 brightness *= 0.85 + filaments * 0.2;
                 brightness = clamp(brightness * brightnessBoost, 0.0, 2.4);
-                float along = uvw.x * 0.5 + 0.5;
                 float warmMix = smoothstep(0.08, 0.8, base);
                 warmMix += 0.25 * sin((along + time * 0.004) * 6.2831);
                 warmMix = clamp(warmMix, 0.0, 1.0);
@@ -150,6 +157,7 @@ function createMilkyWayBandDome(ctx, bandNormal, bandAxis) {
                 color = mix(color, colorCore, smoothstep(0.3, 0.95, base) * 0.55 + filaments * 0.15);
                 color *= 1.05 + filaments * 0.05;
                 float alpha = brightness * 0.65 * alphaBoost;
+                alpha *= mix(0.65, 1.1, coreVisibility * centerSide);
                 alpha *= smoothstep(0.0, 0.18, dir.y);
                 if (alpha < 0.002) discard;
                 gl_FragColor = vec4(color * brightness, clamp(alpha, 0.0, 1.0));
@@ -188,6 +196,8 @@ function createMilkyWayClusters(ctx, bandNormal, bandAxis) {
         while (positions.length / 3 < layer.count && attempts < layer.count * 4) {
             attempts++;
             const t = Math.random() * Math.PI * 2;
+            const longitudeBias = Math.pow(0.5 + 0.5 * Math.cos(t), 1.35);
+            if (Math.random() > 0.25 + 0.75 * longitudeBias) continue;
             const radialDir = new THREE.Vector3()
                 .copy(bandAxis).multiplyScalar(Math.cos(t))
                 .add(bandBinormal.clone().multiplyScalar(Math.sin(t)))
@@ -203,9 +213,15 @@ function createMilkyWayClusters(ctx, bandNormal, bandAxis) {
             const color = layer.tint.clone();
             color.lerp(new THREE.Color(1.0, 0.88, 0.76), proximity * randomWarm * 0.6);
             color.offsetHSL(0, 0, (Math.random() - 0.5) * 0.08);
+            color.multiplyScalar(0.9 + longitudeBias * 0.4);
+            color.setRGB(
+                THREE.MathUtils.clamp(color.r, 0, 1.4),
+                THREE.MathUtils.clamp(color.g, 0, 1.4),
+                THREE.MathUtils.clamp(color.b, 0, 1.4)
+            );
             colors.push(color.r, color.g, color.b);
             const baseSize = layer.size[0] + Math.pow(Math.random(), 2) * (layer.size[1] - layer.size[0]);
-            sizes.push(baseSize + proximity * 0.8);
+            sizes.push((baseSize + proximity * 0.8) * (0.75 + longitudeBias * 0.65));
             phases.push(Math.random() * Math.PI * 2);
         }
         const geometry = new THREE.BufferGeometry();
@@ -216,15 +232,22 @@ function createMilkyWayClusters(ctx, bandNormal, bandAxis) {
         const material = new THREE.ShaderMaterial({
             uniforms: {
                 time: { value: 0 },
-                intensity: { value: 1.25 }
+                intensity: { value: 1.25 },
+                bandAxis: { value: bandAxis },
+                coreVisibility: { value: 1 }
             },
             vertexShader: `
                 attribute float size;
                 attribute float twinklePhase;
                 varying vec3 vColor;
+                varying float vCoreBias;
+                uniform vec3 bandAxis;
                 uniform float time;
                 void main() {
                     vColor = color;
+                    vec3 axis = normalize(bandAxis);
+                    vec3 worldPos = (modelMatrix * vec4(position, 1.0)).xyz;
+                    vCoreBias = dot(normalize(worldPos), axis) * 0.5 + 0.5;
                     float sparkle = 0.6 + 0.4 * sin(time * 1.4 + twinklePhase);
                     vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
                     gl_PointSize = size * sparkle * (260.0 / -mvPosition.z);
@@ -233,14 +256,19 @@ function createMilkyWayClusters(ctx, bandNormal, bandAxis) {
             `,
             fragmentShader: `
                 varying vec3 vColor;
+                varying float vCoreBias;
                 uniform float intensity;
+                uniform float coreVisibility;
                 void main() {
                     float dist = length(gl_PointCoord - vec2(0.5));
                     if (dist > 0.5) discard;
                     float halo = exp(-dist * 4.0);
                     float alpha = 1.0 - smoothstep(0.0, 0.5, dist);
-                    vec3 color = vColor * (alpha + halo * 0.6) * intensity;
-                    float finalAlpha = clamp((alpha * 0.85 + halo * 0.35) * intensity, 0.0, 1.0);
+                    float coreSide = smoothstep(0.35, 0.95, vCoreBias);
+                    float visibility = mix(0.45, 1.0, coreVisibility);
+                    float boost = mix(0.85, 1.35, coreVisibility * coreSide);
+                    vec3 color = vColor * (alpha + halo * 0.6) * intensity * visibility * boost;
+                    float finalAlpha = clamp((alpha * 0.85 + halo * 0.35) * intensity * visibility * boost, 0.0, 1.0);
                     gl_FragColor = vec4(color, finalAlpha);
                 }
             `,
@@ -265,6 +293,8 @@ function createMilkyWayMist(ctx, bandNormal, bandAxis) {
     while (created < patches && attempts < patches * 6) {
         attempts++;
         const t = (created / patches) * Math.PI * 2 + Math.random() * 0.35;
+        const longitudeBias = Math.pow(0.5 + 0.5 * Math.cos(t), 1.35);
+        if (Math.random() > 0.35 + 0.65 * longitudeBias) continue;
         const radialDir = new THREE.Vector3()
             .copy(bandAxis).multiplyScalar(Math.cos(t))
             .add(bandBinormal.clone().multiplyScalar(Math.sin(t)))
@@ -279,21 +309,30 @@ function createMilkyWayMist(ctx, bandNormal, bandAxis) {
                 time: { value: 0 },
                 colorA: { value: new THREE.Color(0.86 + Math.random() * 0.08, 0.74 + Math.random() * 0.08, 0.94) },
                 colorB: { value: new THREE.Color(0.64, 0.86, 1.0) },
-                intensity: { value: 0.42 + Math.random() * 0.25 }
+                intensity: { value: (0.42 + Math.random() * 0.25) * (0.7 + longitudeBias * 0.7) },
+                bandAxis: { value: bandAxis },
+                coreVisibility: { value: 1 }
             },
             vertexShader: `
                 varying vec2 vUv;
+                varying float vCoreBias;
+                uniform vec3 bandAxis;
                 void main() {
                     vUv = uv;
+                    vec3 axis = normalize(bandAxis);
+                    vec3 worldPos = (modelMatrix * vec4(position, 1.0)).xyz;
+                    vCoreBias = dot(normalize(worldPos), axis) * 0.5 + 0.5;
                     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
                 }
             `,
             fragmentShader: `
                 varying vec2 vUv;
+                varying float vCoreBias;
                 uniform float time;
                 uniform vec3 colorA;
                 uniform vec3 colorB;
                 uniform float intensity;
+                uniform float coreVisibility;
                 float hash(vec2 p) {
                     return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
                 }
@@ -334,7 +373,11 @@ function createMilkyWayMist(ctx, bandNormal, bandAxis) {
                     vec3 color = mix(colorB, colorA, 0.5 + 0.5 * cloud);
                     color += filaments * 0.32;
                     color *= 1.05;
-                    gl_FragColor = vec4(color, clamp(alpha, 0.0, 1.0));
+                    float visibility = mix(0.45, 1.0, coreVisibility);
+                    float centerBias = smoothstep(0.32, 0.92, vCoreBias);
+                    float boost = mix(0.85, 1.35, coreVisibility * centerBias);
+                    color *= mix(0.9, 1.1, coreVisibility * centerBias);
+                    gl_FragColor = vec4(color, clamp(alpha * visibility * boost, 0.0, 1.0));
                 }
             `,
             transparent: true,
@@ -347,7 +390,7 @@ function createMilkyWayMist(ctx, bandNormal, bandAxis) {
         patch.position.copy(position);
         patch.lookAt(0, 0, 0);
         patch.rotation.z += Math.random() * Math.PI * 2;
-        patch.scale.setScalar(0.85 + Math.random() * 0.5);
+        patch.scale.setScalar((0.85 + Math.random() * 0.5) * (0.75 + longitudeBias * 0.6));
         ctx.milkyWayGroup.add(patch);
         created++;
     }
@@ -404,10 +447,18 @@ export function calculateGalacticBasis(ctx) {
     }
     axis.normalize();
     const tangent = new THREE.Vector3().crossVectors(normal, axis).normalize();
-    return { normal, axis, tangent };
+    return { normal, axis, tangent, centerDir };
+}
+
+function calculateCoreVisibility(centerDir) {
+    if (!centerDir) return 1;
+    const altitude = THREE.MathUtils.clamp(centerDir.y, -1, 1);
+    const horizonFactor = THREE.MathUtils.clamp((altitude + 0.05) / 0.65, 0, 1);
+    return Math.pow(horizonFactor, 0.6);
 }
 
 function updateBandUniforms(ctx, basis) {
+    const coreVisibility = calculateCoreVisibility(basis?.centerDir);
     ctx.milkyWayMaterials.forEach(material => {
         const uniforms = material.uniforms;
         if (!uniforms) return;
@@ -419,6 +470,9 @@ function updateBandUniforms(ctx, basis) {
         }
         if (uniforms.bandTangent?.value) {
             uniforms.bandTangent.value.copy(basis.tangent);
+        }
+        if (typeof uniforms.coreVisibility?.value === 'number') {
+            uniforms.coreVisibility.value = coreVisibility;
         }
     });
 }
