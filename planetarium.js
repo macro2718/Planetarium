@@ -60,10 +60,16 @@ class Planetarium {
         this.observer = { lat: 35.6895, lon: 139.6917 };
         this.timeMode = 'realtime';
         this.timeScale = 240; // simulation seconds per real second (custom mode)
+        this.dayScale = 1; // simulated days per real second (fixed time mode)
         this.simulationStartDate = new Date();
         const nowSeconds = performance.now() * 0.001;
         this.simulationStartPerf = nowSeconds;
         this.simulatedDate = new Date(this.simulationStartDate);
+        this.fixedTimeOfDayMs = this.simulationStartDate.getHours() * 3600000
+            + this.simulationStartDate.getMinutes() * 60000
+            + this.simulationStartDate.getSeconds() * 1000
+            + this.simulationStartDate.getMilliseconds();
+        this.isTimePaused = false;
         this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, this.observer.lon);
         this.infoTimeout = null;
         this.currentMoonState = null;
@@ -164,8 +170,19 @@ class Planetarium {
             this.simulatedDate = new Date();
         } else {
             const elapsed = nowSeconds - this.simulationStartPerf;
-            const simulatedMs = this.simulationStartDate.getTime() + elapsed * 1000 * this.timeScale;
-            this.simulatedDate = new Date(simulatedMs);
+            if (this.timeMode === 'custom') {
+                const scale = this.isTimePaused ? 0 : this.timeScale;
+                const simulatedMs = this.simulationStartDate.getTime() + elapsed * 1000 * scale;
+                this.simulatedDate = new Date(simulatedMs);
+            } else if (this.timeMode === 'fixed-time') {
+                const scale = this.isTimePaused ? 0 : this.dayScale;
+                const baseDate = new Date(this.simulationStartDate);
+                const startOfDay = new Date(baseDate);
+                startOfDay.setHours(0, 0, 0, 0);
+                const timeOfDayMs = this.fixedTimeOfDayMs ?? (baseDate.getTime() - startOfDay.getTime());
+                const simulatedMs = startOfDay.getTime() + elapsed * 86400000 * scale + timeOfDayMs;
+                this.simulatedDate = new Date(simulatedMs);
+            }
         }
         this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, this.observer.lon);
     }
@@ -177,11 +194,13 @@ class Planetarium {
     setTimeMode(mode, options = {}) {
         if (mode === 'realtime') {
             this.timeMode = 'realtime';
+            this.isTimePaused = false;
             this.simulationStartDate = new Date();
             this.simulationStartPerf = this.getCurrentPerfSeconds();
             this.simulatedDate = new Date(this.simulationStartDate);
         } else if (mode === 'custom') {
             this.timeMode = 'custom';
+            this.isTimePaused = false;
             if (typeof options.timeScale === 'number' && !Number.isNaN(options.timeScale)) {
                 this.timeScale = options.timeScale;
             }
@@ -193,11 +212,47 @@ class Planetarium {
             this.simulationStartDate = new Date(baseDate);
             this.simulationStartPerf = this.getCurrentPerfSeconds();
             this.simulatedDate = new Date(baseDate);
+            this.fixedTimeOfDayMs = baseDate.getHours() * 3600000
+                + baseDate.getMinutes() * 60000
+                + baseDate.getSeconds() * 1000
+                + baseDate.getMilliseconds();
+        } else if (mode === 'fixed-time') {
+            this.timeMode = 'fixed-time';
+            this.isTimePaused = false;
+            if (typeof options.dayScale === 'number' && !Number.isNaN(options.dayScale)) {
+                this.dayScale = options.dayScale;
+            }
+            const providedDate = options.date instanceof Date
+                ? options.date
+                : (options.date ? new Date(options.date) : null);
+            const hasValidDate = providedDate && !Number.isNaN(providedDate.getTime());
+            const baseDate = hasValidDate ? providedDate : this.getSimulatedDate();
+            this.fixedTimeOfDayMs = baseDate.getHours() * 3600000
+                + baseDate.getMinutes() * 60000
+                + baseDate.getSeconds() * 1000
+                + baseDate.getMilliseconds();
+            this.simulationStartDate = new Date(baseDate);
+            this.simulationStartPerf = this.getCurrentPerfSeconds();
+            this.simulatedDate = new Date(baseDate);
         } else {
             console.warn('Unknown time mode:', mode);
             return;
         }
         this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, this.observer.lon);
+    }
+
+    toggleTimePause(forceState) {
+        if (this.timeMode === 'realtime') {
+            this.isTimePaused = false;
+            return this.isTimePaused;
+        }
+        const nowSeconds = this.getCurrentPerfSeconds();
+        this.updateSimulationTime(nowSeconds);
+        const next = typeof forceState === 'boolean' ? forceState : !this.isTimePaused;
+        this.isTimePaused = next;
+        this.simulationStartDate = new Date(this.simulatedDate);
+        this.simulationStartPerf = nowSeconds;
+        return this.isTimePaused;
     }
 
     getCurrentPerfSeconds() {

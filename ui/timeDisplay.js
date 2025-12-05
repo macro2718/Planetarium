@@ -33,10 +33,21 @@ function updateTimeDisplay(ctx, moonSystem) {
     const modeEl = document.getElementById('time-mode-indicator');
     if (modeEl) {
         const isRealtime = ctx.timeMode === 'realtime';
-        const scale = Number.isFinite(ctx.timeScale) ? ctx.timeScale : 1;
-        const formattedScale = scale.toLocaleString('ja-JP', { maximumFractionDigits: 2 });
-        const scaleLabel = scale === 0 ? '×0 (停止)' : `×${formattedScale}`;
-        modeEl.textContent = isRealtime ? 'リアルタイム' : `カスタム ${scaleLabel}`;
+        const isFixedTime = ctx.timeMode === 'fixed-time';
+        const scale = Number.isFinite(isFixedTime ? ctx.dayScale : ctx.timeScale)
+            ? (isFixedTime ? ctx.dayScale : ctx.timeScale)
+            : 1;
+        const formattedScale = scale.toLocaleString('ja-JP', { maximumFractionDigits: 3 });
+        const paused = ctx.isTimePaused && !isRealtime;
+        if (isRealtime) {
+            modeEl.textContent = 'リアルタイム';
+        } else if (isFixedTime) {
+            const label = scale === 0 || paused ? '一時停止' : `${formattedScale} 日/秒`;
+            modeEl.textContent = `時刻固定 (${label})`;
+        } else {
+            const label = scale === 0 || paused ? '一時停止' : `×${formattedScale}`;
+            modeEl.textContent = `カスタム (${label})`;
+        }
     }
     const moonState = typeof moonSystem.syncWithContextTime === 'function'
         ? moonSystem.syncWithContextTime()

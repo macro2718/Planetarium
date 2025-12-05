@@ -178,32 +178,42 @@ function setupControlButtons(ctx) {
 function setupTimeControls(ctx) {
     const realtimeBtn = document.getElementById('time-mode-realtime');
     const customBtn = document.getElementById('time-mode-custom');
+    const fixedBtn = document.getElementById('time-mode-fixed');
     const dateInput = document.getElementById('custom-datetime');
     const speedInput = document.getElementById('custom-speed');
     const applyBtn = document.getElementById('apply-custom-time');
     const speedDisplay = document.getElementById('custom-speed-display');
+    const speedLabel = document.getElementById('speed-label-prefix');
+    const speedHint = document.getElementById('time-speed-hint');
+    const playbackBtn = document.getElementById('time-toggle-play');
 
-    if (!realtimeBtn && !customBtn && !dateInput && !speedInput) {
+    if (!realtimeBtn && !customBtn && !fixedBtn && !dateInput && !speedInput) {
         return;
     }
 
     const updateButtonState = () => {
-        if (ctx.timeMode === 'realtime') {
-            realtimeBtn?.classList.add('active');
-            customBtn?.classList.remove('active');
-        } else {
-            customBtn?.classList.add('active');
-            realtimeBtn?.classList.remove('active');
-        }
+        const mode = ctx.timeMode;
+        realtimeBtn?.classList.toggle('active', mode === 'realtime');
+        customBtn?.classList.toggle('active', mode === 'custom');
+        fixedBtn?.classList.toggle('active', mode === 'fixed-time');
+        updatePlaybackButton();
     };
 
     const updateSpeedDisplay = () => {
         if (!speedDisplay || !speedInput) return;
         const value = parseFloat(speedInput.value);
-        if (Number.isFinite(value)) {
-            speedDisplay.textContent = `×${value}`;
-        } else {
-            speedDisplay.textContent = '×1';
+        const isFixed = ctx.timeMode === 'fixed-time';
+        const fallback = isFixed ? ctx.dayScale : ctx.timeScale;
+        const scale = Number.isFinite(value) ? value : (Number.isFinite(fallback) ? fallback : 1);
+        const formatted = scale.toLocaleString('ja-JP', { maximumFractionDigits: 3 });
+        speedDisplay.textContent = isFixed ? `${formatted} 日/秒` : `×${formatted}`;
+        if (speedLabel) {
+            speedLabel.textContent = isFixed ? '日付倍率' : '時間倍率';
+        }
+        if (speedHint) {
+            speedHint.textContent = isFixed
+                ? '倍率0で停止。負の値で日付を逆行させることもできます。'
+                : '倍率0で停止。負の値で時間を逆行させることもできます。';
         }
     };
 
@@ -212,8 +222,12 @@ function setupTimeControls(ctx) {
             const current = typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date();
             dateInput.value = formatDatetimeLocal(current);
         }
-        if (speedInput && Number.isFinite(ctx.timeScale)) {
-            speedInput.value = ctx.timeScale;
+        const isFixed = ctx.timeMode === 'fixed-time';
+        if (speedInput) {
+            const scale = isFixed ? ctx.dayScale : ctx.timeScale;
+            if (Number.isFinite(scale)) {
+                speedInput.value = scale;
+            }
         }
         updateSpeedDisplay();
     };
@@ -225,23 +239,40 @@ function setupTimeControls(ctx) {
         return parsed;
     };
 
-    const applyCustomSettings = () => {
+    const applyCustomSettings = (targetMode = ctx.timeMode === 'fixed-time' ? 'fixed-time' : 'custom') => {
         const targetDate = readInputDate() ?? (typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date());
         const rawScale = speedInput ? parseFloat(speedInput.value) : ctx.timeScale;
-        const nextScale = Number.isFinite(rawScale) ? rawScale : (Number.isFinite(ctx.timeScale) ? ctx.timeScale : 1);
-        ctx.setTimeMode?.('custom', { date: targetDate, timeScale: nextScale });
+        if (targetMode === 'fixed-time') {
+            const nextScale = Number.isFinite(rawScale) ? rawScale : (Number.isFinite(ctx.dayScale) ? ctx.dayScale : 1);
+            ctx.setTimeMode?.('fixed-time', { date: targetDate, dayScale: nextScale });
+        } else {
+            const nextScale = Number.isFinite(rawScale) ? rawScale : (Number.isFinite(ctx.timeScale) ? ctx.timeScale : 1);
+            ctx.setTimeMode?.('custom', { date: targetDate, timeScale: nextScale });
+        }
+        ctx.toggleTimePause?.(false);
         syncInputsFromCtx(true);
         updateButtonState();
     };
 
     realtimeBtn?.addEventListener('click', () => {
         ctx.setTimeMode?.('realtime');
+        ctx.toggleTimePause?.(false);
         syncInputsFromCtx(true);
         updateButtonState();
     });
 
     customBtn?.addEventListener('click', () => {
-        applyCustomSettings();
+        if (speedInput && Number.isFinite(ctx.timeScale)) {
+            speedInput.value = ctx.timeScale;
+        }
+        applyCustomSettings('custom');
+    });
+
+    fixedBtn?.addEventListener('click', () => {
+        if (speedInput && Number.isFinite(ctx.dayScale)) {
+            speedInput.value = ctx.dayScale;
+        }
+        applyCustomSettings('fixed-time');
     });
 
     applyBtn?.addEventListener('click', () => {
@@ -250,8 +281,21 @@ function setupTimeControls(ctx) {
 
     speedInput?.addEventListener('input', updateSpeedDisplay);
 
+    const updatePlaybackButton = () => {
+        if (!playbackBtn) return;
+        const paused = ctx.isTimePaused && ctx.timeMode !== 'realtime';
+        playbackBtn.textContent = paused ? '▶️ 再生' : '⏸ 一時停止';
+        playbackBtn.disabled = ctx.timeMode === 'realtime';
+    };
+
+    playbackBtn?.addEventListener('click', () => {
+        ctx.toggleTimePause?.();
+        updatePlaybackButton();
+    });
+
     syncInputsFromCtx(true);
     updateButtonState();
+    updatePlaybackButton();
 }
 
 function isObjectWorldVisible(object) {
