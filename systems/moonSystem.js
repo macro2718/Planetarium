@@ -107,18 +107,18 @@ export function createMoonSystem(ctx) {
                 vec3 viewDir = normalize(cameraPosition - vWorldPos);
                 float lambert = max(dot(vWorldNormal, lightDir), 0.0);
                 float softness = smoothstep(-0.2, 0.25, dot(vWorldNormal, lightDir));
-                vec3 diffuse = baseColor * (lambert * 1.15 + 0.28);
+                vec3 diffuse = baseColor * (lambert * 1.15 + 0.03);
                 vec3 halfVec = normalize(lightDir + viewDir);
                 float spec = pow(max(dot(vWorldNormal, halfVec), 0.0), 12.0);
                 float rim = pow(1.0 - max(dot(vWorldNormal, viewDir), 0.0), 2.0);
-                vec3 rimLight = vec3(0.34, 0.36, 0.4) * rim * 0.75;
+                vec3 rimLight = vec3(0.34, 0.36, 0.4) * rim * 0.3;
                 float nightside = 1.0 - clamp(dot(vWorldNormal, lightDir) * 0.5 + 0.5, 0.0, 1.0);
-                float earthshine = nightside * (1.0 - illumination) * max(dot(vWorldNormal, viewDir), 0.0) * 0.3;
-                vec3 color = diffuse + rimLight + earthshine + spec * vec3(0.5, 0.5, 0.52);
+                float earthshine = nightside * (1.0 - illumination) * max(dot(vWorldNormal, viewDir), 0.0) * 0.08;
+                vec3 color = diffuse + rimLight * lambert + earthshine + spec * vec3(0.5, 0.5, 0.52) * lambert;
                 float phaseGlow = 0.5 + 0.5 * cos(phaseAngle);
-                color += vec3(0.035 * phaseGlow);
+                color += vec3(0.015 * phaseGlow * lambert);
                 color = mix(color, color * vec3(0.8, 0.85, 0.9), 0.2);
-                color = clamp(color, 0.05, 1.4);
+                color = clamp(color, 0.01, 1.4);
                 gl_FragColor = vec4(color, 1.0);
             }
         `
