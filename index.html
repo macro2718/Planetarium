@@ -1399,13 +1399,15 @@
             <div class="dual-button-group">
                 <button class="control-btn small active" id="time-mode-realtime">リアルタイム</button>
                 <button class="control-btn small" id="time-mode-custom">カスタム</button>
+                <button class="control-btn small" id="time-mode-fixed">時刻固定</button>
             </div>
             <label class="control-label" for="custom-datetime">日時</label>
             <input class="control-input" type="datetime-local" id="custom-datetime">
-            <label class="control-label" for="custom-speed">時間倍率 <span id="custom-speed-display">×240</span></label>
+            <label class="control-label" for="custom-speed"><span id="speed-label-prefix">時間倍率</span> <span id="custom-speed-display">×240</span></label>
             <input class="control-input" type="number" id="custom-speed" step="1" value="240">
+            <button class="control-btn small" id="time-toggle-play">⏸ 一時停止</button>
             <button class="control-btn small" id="apply-custom-time">設定を適用</button>
-            <p class="control-hint">倍率0で停止。負の値で時間を逆行させることもできます。</p>
+            <p class="control-hint" id="time-speed-hint">倍率0で停止。負の値で時間を逆行させることもできます。</p>
         </div>
         <div class="control-section">
             <div class="section-title">VISUALS</div>
