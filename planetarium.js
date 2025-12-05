@@ -175,7 +175,7 @@ class Planetarium {
                 const simulatedMs = this.simulationStartDate.getTime() + elapsed * 1000 * scale;
                 this.simulatedDate = new Date(simulatedMs);
             } else if (this.timeMode === 'fixed-time') {
-                // 時刻固定モード: 指定時刻を維持しつつ、日付を離散的に進める
+                // 日付送りモード: 指定時刻を維持しつつ、日付を離散的に進める
                 const scale = this.isTimePaused ? 0 : this.dayScale;
                 // 経過秒数 * dayScale で進んだ日数を計算（離散的）
                 const daysPassed = Math.floor(elapsed * scale);

@@ -41,12 +41,12 @@ function updateTimeDisplay(ctx, moonSystem) {
             const scale = Number.isFinite(ctx.dayScale) ? ctx.dayScale : 1;
             const formattedScale = scale.toLocaleString('ja-JP', { maximumFractionDigits: 3 });
             const label = scale === 0 || paused ? '一時停止' : `${formattedScale} 日/秒`;
-            modeEl.textContent = `時刻固定 (${label})`;
+            modeEl.textContent = `日付送り (${label})`;
         } else {
             const scale = Number.isFinite(ctx.timeScale) ? ctx.timeScale : 1;
             const formattedScale = scale.toLocaleString('ja-JP', { maximumFractionDigits: 3 });
             const label = scale === 0 || paused ? '一時停止' : `×${formattedScale}`;
-            modeEl.textContent = `カスタム (${label})`;
+            modeEl.textContent = `倍速再生 (${label})`;
         }
     }
     const moonState = typeof moonSystem.syncWithContextTime === 'function'
