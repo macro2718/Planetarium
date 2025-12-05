@@ -17,6 +17,7 @@ import { createStarTrailSystem } from './systems/starTrailSystem.js';
 import { attachUIInteractions } from './ui/interactionController.js';
 import { setupTimeDisplay } from './ui/timeDisplay.js';
 import { calculateLocalSiderealTime } from './utils/astronomy.js';
+import { getPhotoAlbumSystem, setupPhotoCaptureButton } from './ui/photoAlbum.js';
 
 // ========================================
 // プラネタリウム - 美しい星空シミュレーション
@@ -128,12 +129,19 @@ class Planetarium {
     }
 
     setupRenderer() {
-        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this.renderer = new THREE.WebGLRenderer({ 
+            antialias: true, 
+            alpha: true,
+            preserveDrawingBuffer: true  // 写真撮影のために必要
+        });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
         this.renderer.toneMappingExposure = 1.2;
         document.getElementById('canvas-container').appendChild(this.renderer.domElement);
+        
+        // 写真撮影ボタンのセットアップ
+        setupPhotoCaptureButton(this.renderer);
     }
 
     setupControls() {

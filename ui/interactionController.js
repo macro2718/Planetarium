@@ -1,10 +1,16 @@
 import * as THREE from '../three.module.js';
+import { getPhotoAlbumSystem } from './photoAlbum.js';
 
 export function attachUIInteractions(ctx) {
     setupResizeHandler(ctx);
     setupClickHandler(ctx);
     setupControlButtons(ctx);
     setupTimeControls(ctx);
+    
+    // PhotoAlbumSystemの初期化（DOMが準備されてから）
+    const albumSystem = getPhotoAlbumSystem();
+    albumSystem.init();
+    
     return {
         showStarInfo: (data) => showStarInfo(ctx, data),
         hideStarInfo: () => hideStarInfo(ctx)
@@ -82,6 +88,16 @@ function setupControlButtons(ctx) {
             ctx.starTrailSystem.setEnabled(visible);
         }
     });
+    
+    // ホームに戻るボタン
+    const homeBtn = document.getElementById('btn-home');
+    if (homeBtn) {
+        homeBtn.addEventListener('click', () => {
+            const albumSystem = getPhotoAlbumSystem();
+            albumSystem.showHomeFromPlanetarium();
+        });
+    }
+    
     const autoBtn = document.getElementById('btn-auto');
     if (autoBtn) {
         autoBtn.addEventListener('click', (e) => {
