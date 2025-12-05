@@ -225,15 +225,16 @@ function calculateMoonState(ctx, date = new Date()) {
     const reference = new Date('2024-01-11T11:57:00Z');
     const diffDays = (date - reference) / (1000 * 60 * 60 * 24);
     const moonAge = ((diffDays % lunarCycle) + lunarCycle) % lunarCycle;
-    const phase = moonAge / lunarCycle;
-    const phaseAngle = phase * Math.PI * 2;
-    const illumination = 0.5 * (1 - Math.cos(phaseAngle));
-    const label = getMoonPhaseLabel(phase);
-
     const daysSinceJ2000 = (date - new Date('2000-01-01T12:00:00Z')) / (1000 * 60 * 60 * 24);
+    const L0 = normalizeDegrees(280.46646 + 0.98564736 * daysSinceJ2000);
+    const M_sun = normalizeDegrees(357.5291092 + 0.98560028 * daysSinceJ2000); // Sun mean anomaly
+    const sunEquation = 1.914602 * Math.sin(THREE.MathUtils.degToRad(M_sun))
+        + 0.019993 * Math.sin(THREE.MathUtils.degToRad(2 * M_sun))
+        + 0.000289 * Math.sin(THREE.MathUtils.degToRad(3 * M_sun));
+    const sunLon = normalizeDegrees(L0 + sunEquation);
+
     const L = normalizeDegrees(218.3164477 + 13.17639648 * daysSinceJ2000); // Mean longitude
     const D = normalizeDegrees(297.8501921 + 12.19074912 * daysSinceJ2000); // Mean elongation
-    const M_sun = normalizeDegrees(357.5291092 + 0.98560028 * daysSinceJ2000); // Sun mean anomaly
     const M_moon = normalizeDegrees(134.9633964 + 13.06499295 * daysSinceJ2000); // Moon mean anomaly
     const F = normalizeDegrees(93.2720950 + 13.22935024 * daysSinceJ2000); // Latitude argument
 
@@ -279,13 +280,20 @@ function calculateMoonState(ctx, date = new Date()) {
     const raDeg = THREE.MathUtils.radToDeg(raRad);
     const decDeg = THREE.MathUtils.radToDeg(decRad);
 
+    const sunRaDec = convertEclipticToEquatorial(sunLon, 0, obliquity);
+    const sunHorizontal = convertEquatorialToHorizontal(ctx, sunRaDec.ra, sunRaDec.dec, 1);
+    const sunVector = sunHorizontal?.position ?? new THREE.Vector3(1, 0, 0);
+
     const moonDistance = 2600;
     const { position, altDeg, azDeg } = convertEquatorialToHorizontal(ctx, raDeg, decDeg, moonDistance);
-    const viewDir = position.clone().normalize();
-    const sunDirection = new THREE.Vector3()
-        .copy(viewDir)
-        .applyAxisAngle(new THREE.Vector3(0, 1, 0), phaseAngle)
-        .normalize();
+
+    const phaseDifference = normalizeDegrees(lon - sunLon);
+    const phaseAngle = THREE.MathUtils.degToRad(phaseDifference);
+    const illumination = 0.5 * (1 - Math.cos(phaseAngle));
+    const phase = phaseDifference / 360;
+    const label = getMoonPhaseLabel(phase);
+
+    const sunDirection = sunVector.clone().normalize();
 
     return {
         phase,
@@ -301,6 +309,23 @@ function calculateMoonState(ctx, date = new Date()) {
         raDeg,
         decDeg
     };
+}
+
+function convertEclipticToEquatorial(lonDeg, latDeg, obliquityDeg) {
+    const lonRad = THREE.MathUtils.degToRad(lonDeg);
+    const latRad = THREE.MathUtils.degToRad(latDeg);
+    const obRad = THREE.MathUtils.degToRad(obliquityDeg);
+
+    const sinDec = Math.sin(latRad) * Math.cos(obRad) + Math.cos(latRad) * Math.sin(obRad) * Math.sin(lonRad);
+    const dec = Math.asin(Math.min(1, Math.max(-1, sinDec)));
+
+    const y = Math.sin(lonRad) * Math.cos(obRad) - Math.tan(latRad) * Math.sin(obRad);
+    const x = Math.cos(lonRad);
+    const ra = Math.atan2(y, x);
+
+    const raDeg = normalizeDegrees(THREE.MathUtils.radToDeg(ra));
+    const decDeg = THREE.MathUtils.radToDeg(dec);
+    return { ra: raDeg, dec: decDeg };
 }
 
 function convertEquatorialToHorizontal(ctx, raDeg, decDeg, radius) {
