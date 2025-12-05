@@ -114,11 +114,11 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'aquila',
         name: 'わし座',
         description: '天の川を横切る翼を広げたわし。',
-        starIds: ['tarazed', 'altair', 'alshain', 'denebokab'],
+        starIds: ['tarazed', 'altair', 'alshain', 'denebokabborealis'],
         lines: [
             ['tarazed', 'altair'],   // 上の翼
             ['altair', 'alshain'],   // 下の翼
-            ['tarazed', 'denebokab']
+            ['tarazed', 'denebokabborealis']
         ]
     },
     {
@@ -164,13 +164,13 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'auriga',
         name: 'ぎょしゃ座',
         description: 'カペラを頂点とした五角形が特徴。',
-        starIds: ['capella', 'menkalinan', 'elnath', 'mahasim', 'kabdhilinan'],
+        starIds: ['capella', 'menkalinan', 'elnath', 'mahasim', 'hassaleh'],
         lines: [
             ['capella', 'menkalinan'],
             ['menkalinan', 'elnath'],
             ['elnath', 'mahasim'],
-            ['mahasim', 'kabdhilinan'],
-            ['kabdhilinan', 'capella'],
+            ['mahasim', 'hassaleh'],
+            ['hassaleh', 'capella'],
             
         ]
     },
@@ -614,14 +614,11 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'puppis',
         name: 'とも座',
         description: 'アルゴ船の船尾を担う星座。舵と甲板を結ぶ星々が南天の水平線近くに連なる。',
-        starIds: ['naos', 'ahadi', 'tureis', 'etaPup', 'asmidiske'],
+        starIds: ['naos', 'ahadi', 'tureis', 'asmidiske'],
         lines: [
             ['naos', 'ahadi'],
             ['ahadi', 'tureis'],
-            ['tureis', 'etaPup'],
-            ['etaPup', 'asmidiske'],
             ['asmidiske', 'naos'],
-            ['etaPup', 'naos']
         ]
     }
 ];
