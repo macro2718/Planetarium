@@ -357,6 +357,20 @@ export const BASE_CONSTELLATION_DATA = [
         ]
     },
     {
+        id: 'hydra',
+        name: 'うみへび座',
+        description: '全天で最も長い星座。孤独なアルファルドを中心に蛇の胴体が春の空を横切る。',
+        starIds: ['ashlesha', 'minchir', 'minkar', 'alphard', 'ukdah', 'muHydrae'],
+        lines: [
+            ['ashlesha', 'minchir'],        // 頭部の弧
+            ['minchir', 'minkar'],          // 頭から首へ
+            ['minkar', 'alphard'],          // 胸元から心臓
+            ['alphard', 'ukdah'],           // 胴体を南へ伸ばす
+            ['ukdah', 'muHydrae'],          // しっぽへ
+            ['minchir', 'alphard']          // 頭と心臓を結ぶ
+        ]
+    },
+    {
         id: 'libra',
         name: 'てんびん座',
         description: 'さそり座の西に位置する、天秤の皿を表す星座。',
@@ -408,6 +422,22 @@ export const BASE_CONSTELLATION_DATA = [
         ]
     },
     {
+        id: 'centaurus',
+        name: 'ケンタウルス座',
+        description: '南天で最も目立つケンタウロスの星座。アルファ・ケンタウリとハダルが南十字を導く。',
+        starIds: ['muhlifain', 'hadar', 'rigilKentaurus', 'menkent', 'epsilonCen', 'deltaCen'],
+        lines: [
+            ['muhlifain', 'hadar'],           // 胴体から肩
+            ['hadar', 'rigilKentaurus'],      // 肩から前脚
+            ['rigilKentaurus', 'menkent'],    // 前脚から頭部
+            ['menkent', 'muhlifain'],         // 頭から背へ戻る
+            ['hadar', 'epsilonCen'],          // 胴の南縁
+            ['epsilonCen', 'deltaCen'],       // 後脚上部
+            ['deltaCen', 'muhlifain'],        // 胴体を閉じる
+            ['epsilonCen', 'rigilKentaurus']  // 胴中央の補強
+        ]
+    },
+    {
         id: 'carina',
         name: 'りゅうこつ座',
         description: 'アルゴ船の船底から帆へ伸びる南天の象徴的な星座。カノープスが甲板を照らす。',
@@ -448,6 +478,20 @@ export const BASE_CONSTELLATION_DATA = [
             ['alphecca', 'thetaCrB'],     // 冠の右側
             ['thetaCrB', 'nusakan'],      // 上部で閉じる
             ['epsilonCrB', 'thetaCrB']    // 弧を補強
+        ]
+    },
+    {
+        id: 'hercules',
+        name: 'ヘラクレス座',
+        description: '夏の大三角の北側でうずくまる英雄の星座。赤く脈打つラス・アルゲティが頭部の目印。',
+        starIds: ['rasalgethi', 'kornephoros', 'sarin', 'rutilicus', 'etaHer'],
+        lines: [
+            ['rasalgethi', 'kornephoros'],   // 頭から肩
+            ['kornephoros', 'sarin'],        // 肩から胸
+            ['sarin', 'rutilicus'],          // 胸から膝
+            ['rutilicus', 'etaHer'],         // 膝から腕先
+            ['etaHer', 'rasalgethi'],        // 腕から頭へ戻る
+            ['sarin', 'etaHer']              // 胸と腕を補強
         ]
     },
     {

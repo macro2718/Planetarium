@@ -137,6 +137,8 @@ function createMilkyWayBandDome(ctx, bandNormal, bandAxis) {
                 float filaments = fbm(uvw * 24.0 + vec3(1.7, time * 0.04, 2.3));
                 float dust = smoothstep(0.32, 0.75, fbm(uvw * 12.0 + vec3(3.1, time * 0.05, -2.8)));
                 float brightness = base * (0.25 + 0.8 * coarse + 0.35 * fine);
+                float centerGradient = mix(0.38, 1.0, pow(clamp(uvw.x * 0.5 + 0.5, 0.0, 1.0), 0.75));
+                brightness *= centerGradient;
                 brightness *= (1.0 - dust * 0.42);
                 brightness *= 0.85 + filaments * 0.2;
                 brightness = clamp(brightness * brightnessBoost, 0.0, 2.4);
