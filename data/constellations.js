@@ -508,5 +508,74 @@ export const BASE_CONSTELLATION_DATA = [
             ['sabik', 'cebalrai'],        // 腰へ戻る
             ['rasalhague', 'yedPrior']    // 頭から手への補強
         ]
+    },
+    {
+        id: 'delphinus',
+        name: 'いるか座',
+        description: '夏の宵空に小さなひし形で跳ね上がり、七夕の天の川に寄り添う可憐な星座。',
+        starIds: ['sualocin', 'rotanev', 'gammaDel', 'deltaDel', 'aldulfin'],
+        lines: [
+            ['sualocin', 'rotanev'],
+            ['rotanev', 'gammaDel'],
+            ['gammaDel', 'aldulfin'],
+            ['aldulfin', 'deltaDel'],
+            ['deltaDel', 'sualocin'],
+            ['gammaDel', 'deltaDel']
+        ]
+    },
+    {
+        id: 'corvus',
+        name: 'からす座',
+        description: '春の南空で台形に並ぶ四つの星が翼を広げるカラスの姿を描く。',
+        starIds: ['gienah', 'kraz', 'algorab', 'minkar', 'alchiba'],
+        lines: [
+            ['gienah', 'kraz'],
+            ['kraz', 'algorab'],
+            ['algorab', 'minkar'],
+            ['minkar', 'gienah'],
+            ['minkar', 'alchiba'],
+            ['alchiba', 'gienah']
+        ]
+    },
+    {
+        id: 'eridanus',
+        name: 'エリダヌス座',
+        description: 'オリオンの足元から南天へと流れ下る長い河の星座。アケルナルが河口を照らす。',
+        starIds: ['cursa', 'rana', 'zaurak', 'acamar', 'achernar'],
+        lines: [
+            ['cursa', 'rana'],
+            ['rana', 'zaurak'],
+            ['zaurak', 'acamar'],
+            ['acamar', 'achernar'],
+            ['rana', 'acamar']
+        ]
+    },
+    {
+        id: 'serpens',
+        name: 'へび座',
+        description: 'へびつかい座に両断される珍しい星座。頭部と尾部が黄道沿いにゆるやかにうねる。',
+        starIds: ['unukalhai', 'chow', 'gammaSer', 'epsilonSer', 'etaSer', 'alya'],
+        lines: [
+            ['unukalhai', 'chow'],
+            ['chow', 'gammaSer'],
+            ['gammaSer', 'epsilonSer'],
+            ['epsilonSer', 'etaSer'],
+            ['etaSer', 'alya'],
+            ['gammaSer', 'unukalhai']
+        ]
+    },
+    {
+        id: 'lepus',
+        name: 'うさぎ座',
+        description: 'オリオンの足元で跳ね回る野うさぎ。冬の低空に並ぶ黄白色の星列が愛らしい。',
+        starIds: ['arneb', 'nihal', 'epsilonLep', 'muLep', 'kappaLep'],
+        lines: [
+            ['arneb', 'nihal'],
+            ['nihal', 'epsilonLep'],
+            ['epsilonLep', 'muLep'],
+            ['muLep', 'arneb'],
+            ['muLep', 'kappaLep'],
+            ['kappaLep', 'arneb']
+        ]
     }
 ];
