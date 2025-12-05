@@ -52,6 +52,7 @@ export function createConstellationSystem(ctx) {
             data,
             position: new THREE.Vector3(),
             aboveHorizon: false,
+            hasPosition: false,
             glow
         };
         starEntries.set(data.id, entry);
@@ -78,6 +79,8 @@ export function createConstellationSystem(ctx) {
                 blending: THREE.AdditiveBlending
             });
             const line = new THREE.Line(lineGeometry, lineMaterial);
+            // フラストラムカリングを無効化（視点移動で線が消える問題を防ぐ）
+            line.frustumCulled = false;
             line.userData = { horizonVisible: true };
             ctx.constellationsGroup.add(line);
             ctx.constellationLines.push(line);
@@ -129,23 +132,45 @@ function updateStarEntry(ctx, entry, radius) {
         radius,
         entry.position
     );
-    if (!result || result.altDeg <= 0) {
+    if (!result) {
         entry.aboveHorizon = false;
+        entry.hasPosition = false;
         entry.star.visible = false;
         entry.position.setScalar(0);
         return;
     }
     const position = result.vector;
-    entry.aboveHorizon = true;
+    // 位置は常に更新（星座線のため）
+    entry.hasPosition = true;
     entry.position.copy(position);
     entry.star.position.copy(entry.position);
-    entry.star.visible = true;
+    
+    // 地平線上かどうかで星の表示を制御
+    if (result.altDeg <= 0) {
+        entry.aboveHorizon = false;
+        entry.star.visible = false;
+    } else {
+        entry.aboveHorizon = true;
+        entry.star.visible = true;
+    }
 }
 
 function updateLineEntry(entry, starEntries) {
     const start = starEntries.get(entry.startId);
     const end = starEntries.get(entry.endId);
-    if (!start || !end || !start.aboveHorizon || !end.aboveHorizon) {
+    // 両方の星のデータと位置が存在するか確認
+    if (!start || !end) {
+        entry.line.userData.horizonVisible = false;
+        return;
+    }
+    // 位置データがない場合は非表示
+    if (!start.hasPosition || !end.hasPosition) {
+        entry.line.userData.horizonVisible = false;
+        return;
+    }
+    // 少なくとも一方の星が地平線上にあれば線を表示
+    const anyVisible = start.aboveHorizon || end.aboveHorizon;
+    if (!anyVisible) {
         entry.line.userData.horizonVisible = false;
         return;
     }
