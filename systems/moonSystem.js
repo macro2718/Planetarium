@@ -284,7 +284,7 @@ function calculateMoonState(ctx, date = new Date()) {
     const viewDir = position.clone().normalize();
     const sunDirection = new THREE.Vector3()
         .copy(viewDir)
-        .applyAxisAngle(new THREE.Vector3(0, 1, 0), phaseAngle - Math.PI)
+        .applyAxisAngle(new THREE.Vector3(0, 1, 0), phaseAngle)
         .normalize();
 
     return {
