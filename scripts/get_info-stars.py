@@ -14,5 +14,5 @@ def get_star_info(name):
     return ra, dec, vmag
 
 # 例：Wezen（delta CMa）
-info = get_star_info("Zeta Herculis")
+info = get_star_info("Eta Leonis")
 print(info)

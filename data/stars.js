@@ -1,4 +1,626 @@
-export const BASE_STAR_DATA = [    {
+export const BASE_STAR_DATA = [
+    // オリオン座
+    {
+        id: 'rigel',
+        name: 'リゲル',
+        nameEn: 'Rigel',
+        nameSIMBAD: 'Rigel',
+        constellation: 'オリオン座',
+        ra: 78.634467,
+        dec: -8.201638,
+        magnitude: 0.13,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: '青白い超巨星で、地球から約860光年。夜空でおよそ7番目に明るい。',
+        featured: true
+    },
+
+    {
+        id: 'meissa',
+        name: 'メイサ',
+        nameEn: 'Meissa',
+        nameSIMBAD: 'Meissa',
+        constellation: 'オリオン座',
+        ra: 83.784490,
+        dec: 9.934156,
+        magnitude: 3.66,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'オリオン座λ星。ハローを持つ青白い巨星で、オリオンの頭部を形作る。',
+        featured: false
+    },
+
+    {
+        id: 'betelgeuse',
+        name: 'ベテルギウス',
+        nameEn: 'Betelgeuse',
+        nameSIMBAD: 'Betelgeuse',
+        constellation: 'オリオン座',
+        ra: 88.792939,
+        dec: 7.407064,
+        magnitude: 0.42,
+        color: 0xffa260,
+        glowColor: 0xff6030,
+        info: 'オリオン座の赤色超巨星。半径は太陽の約900倍にも達する。',
+        featured: true
+    },
+
+    {
+        id: 'bellatrix',
+        name: 'ベラトリクス',
+        nameEn: 'Bellatrix',
+        nameSIMBAD: 'Bellatrix',
+        constellation: 'オリオン座',
+        ra: 81.282764,
+        dec: 6.349703,
+        magnitude: 1.64,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: '青白い巨星で、オリオン座の右肩を形作る。',
+        featured: false
+    },
+
+    {
+        id: 'mintaka',
+        name: 'ミンタカ',
+        nameEn: 'Mintaka',
+        nameSIMBAD: 'Mintaka',
+        constellation: 'オリオン座',
+        ra: 83.001667,
+        dec: -0.299095,
+        magnitude: 2.41,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'オリオン座の三つ星の西端。実際は多重星系で構成される。',
+        featured: false
+    },
+
+    {
+        id: 'alnilam',
+        name: 'アルニラム',
+        nameEn: 'Alnilam',
+        nameSIMBAD: 'Alnilam',
+        constellation: 'オリオン座',
+        ra: 84.053389,
+        dec: -1.201919,
+        magnitude: 1.69,
+        color: 0xa8c8ff,
+        glowColor: 0x70a0ff,
+        info: '三つ星中央の青色超巨星。地球から約2000光年離れている。',
+        featured: false
+    },
+
+    {
+        id: 'alnitak',
+        name: 'アルニタク',
+        nameEn: 'Alnitak',
+        nameSIMBAD: 'Alnitak',
+        constellation: 'オリオン座',
+        ra: 85.189694,
+        dec: -1.942574,
+        magnitude: 1.77,
+        color: 0xa8c8ff,
+        glowColor: 0x70a0ff,
+        info: '三つ星の東端。馬頭星雲の近くに位置する多重星系。',
+        featured: false
+    },
+
+    {
+        id: 'saiph',
+        name: 'サイフ',
+        nameEn: 'Saiph',
+        nameSIMBAD: 'Saiph',
+        constellation: 'オリオン座',
+        ra: 86.939120,
+        dec: -9.669605,
+        magnitude: 2.06,
+        color: 0xa8c8ff,
+        glowColor: 0x70a0ff,
+        info: 'オリオン座の左足にあたる青色超巨星。',
+        featured: false
+    },
+
+    {
+        id: 'tabit',
+        name: 'タビト',
+        nameEn: 'Tabit',
+        nameSIMBAD: 'Tabit',
+        constellation: 'オリオン座',
+        ra: 72.460047,
+        dec: 6.961278,
+        magnitude: 3.19,
+        color: 0xa8c8ff,
+        glowColor: 0x70a0ff,
+        info: 'オリオン座π星の列の3番目。太陽より少し大きいF型準巨星。',
+        featured: false
+    },
+
+    {
+        id: 'muOri',
+        name: 'ミュー・オリオン',
+        nameEn: 'Mu Orionis',
+        nameSIMBAD: 'mu Ori',
+        constellation: 'オリオン座',
+        ra: 90.595820,
+        dec: 9.647273,
+        magnitude: 4.12,
+        color: 0xa8c8ff,
+        glowColor: 0x70a0ff,
+        info: 'オリオン座μ星。4つの恒星から構成される多重連星系。',
+        featured: false
+    },
+
+    // カシオペア座
+    {
+        id: 'caph',
+        name: 'カフ',
+        nameEn: 'Caph',
+        nameSIMBAD: 'Caph',
+        constellation: 'カシオペア座',
+        ra: 2.294522,
+        dec: 59.149781,
+        magnitude: 2.27,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: 'カシオペア座のW字の端に位置する巨星。',
+        featured: false
+    },
+
+    {
+        id: 'shedar',
+        name: 'シェダル',
+        nameEn: 'Schedar',
+        nameSIMBAD: 'Schedar',
+        constellation: 'カシオペア座',
+        ra: 10.126846,
+        dec: 56.537329,
+        magnitude: 2.23,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: 'カシオペア座で最も明るい橙色巨星。',
+        featured: false
+    },
+
+    {
+        id: 'gammaCas',
+        name: 'ツィー',
+        nameEn: 'Gamma Cassiopeiae',
+        nameSIMBAD: 'Gamma Cassiopeiae',
+        constellation: 'カシオペア座',
+        ra: 14.177213,
+        dec: 60.716740,
+        magnitude: 2.39,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: '急速回転するBe星で、変光を繰り返す。',
+        featured: false
+    },
+
+    {
+        id: 'ruchbah',
+        name: 'ルクバー',
+        nameEn: 'Ruchbah',
+        nameSIMBAD: 'Ruchbah',
+        constellation: 'カシオペア座',
+        ra: 21.453964,
+        dec: 60.235284,
+        magnitude: 2.68,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'W字の折れ曲がりを形成する青白い巨星。',
+        featured: false
+    },
+
+    {
+        id: 'segin',
+        name: 'シギン',
+        nameEn: 'Segin',
+        nameSIMBAD: 'Segin',
+        constellation: 'カシオペア座',
+        ra: 28.598892,
+        dec: 63.670100,
+        magnitude: 3.37,
+        color: 0xa8c8ff,
+        glowColor: 0x70a0ff,
+        info: 'W字の北側に位置する若い青色巨星。',
+        featured: false
+    },
+
+    // はくちょう座
+    {
+        id: 'deneb',
+        name: 'デネブ',
+        nameEn: 'Deneb',
+        nameSIMBAD: 'Deneb',
+        constellation: 'はくちょう座',
+        ra: 310.357980,
+        dec: 45.280339,
+        magnitude: 1.25,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: '夏の大三角の一角。太陽の数万倍の光度を持つ青白い超巨星。',
+        featured: true
+    },
+
+    {
+        id: 'sadr',
+        name: 'サドル',
+        nameEn: 'Sadr',
+        nameSIMBAD: 'Sadr',
+        constellation: 'はくちょう座',
+        ra: 305.557091,
+        dec: 40.256679,
+        magnitude: 2.23,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: '白鳥の胸に位置する黄色超巨星で、周囲に散光星雲が広がる。',
+        featured: false
+    },
+
+    {
+        id: 'aljanah',
+        name: 'アルジャナー',
+        nameEn: 'Aljanah',
+        nameSIMBAD: 'Aljanah',
+        constellation: 'はくちょう座',
+        ra: 311.552801,
+        dec: 33.970328,
+        magnitude: 2.48,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: '白鳥の翼を形作る青白い巨星で、はくちょう座ε星。伝統的にギエナーと呼ばれることもある。',
+        featured: false
+    },
+
+    {
+        id: 'fawaris',
+        name: 'ファワリス',
+        nameEn: 'Fawaris',
+        nameSIMBAD: 'Delta Cygni',
+        constellation: 'はくちょう座',
+        ra: 296.243654,
+        dec: 45.130815,
+        magnitude: 2.87,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: '白鳥の片翼を形作る青白い準巨星で、はくちょう座δ星。ファワリスは連星系の主星の名前。',
+        featured: false
+    },
+
+    {
+        id: 'albireo',
+        name: 'アルビレオ',
+        nameEn: 'Albireo',
+        nameSIMBAD: 'Albireo',
+        constellation: 'はくちょう座',
+        ra: 292.680315,
+        dec: 27.959674,
+        magnitude: 3.08,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: '金色と青色の二重星として有名で、肉眼でも美しいコントラストが楽しめる。',
+        featured: true
+    },
+
+    // こぐま座
+    {
+        id: 'polaris',
+        name: 'ポラリス',
+        nameEn: 'Polaris',
+        nameSIMBAD: 'Polaris',
+        constellation: 'こぐま座',
+        ra: 37.954561,
+        dec: 89.264109,
+        magnitude: 2.02,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: '北極星として知られ、現在の地球の自転軸に最も近い恒星。',
+        featured: true
+    },
+
+    {
+        id: 'yildun',
+        name: 'イルドゥン',
+        nameEn: 'Yildun',
+        nameSIMBAD: 'Yildun',
+        constellation: 'こぐま座',
+        ra: 263.054159,
+        dec: 86.586460,
+        magnitude: 4.34,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'こぐま座の尾を形作る青白い主系列星。',
+        featured: false
+    },
+
+    {
+        id: 'epsilonUMi',
+        name: 'イプシロン・ウルサ・ミノリス',
+        nameEn: 'Epsilon Ursae Minoris',
+        nameSIMBAD: 'Epsilon Ursae Minoris',
+        constellation: 'こぐま座',
+        ra: 251.492682,
+        dec: 82.037258,
+        magnitude: 4.21,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: '小北斗七星の柄の中央に位置する連星系。',
+        featured: false
+    },
+
+    {
+        id: 'ahfaFarkadain',
+        name: 'アハ・アル・ファルカデイン',
+        nameEn: 'Ahfa al Farkadain',
+        nameSIMBAD: 'Zeta Ursae Minoris',
+        constellation: 'こぐま座',
+        ra: 236.014661,
+        dec: 77.794493,
+        magnitude: 4.27,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'こぐま座ζ星。小さなひしゃくの柄の付け根を担う恒星。',
+        featured: false
+    },
+
+    {
+        id: 'pherkad',
+        name: 'フェルカド',
+        nameEn: 'Pherkad',
+        nameSIMBAD: 'Pherkad',
+        constellation: 'こぐま座',
+        ra: 230.182098,
+        dec: 71.834025,
+        magnitude: 3.00,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'ポラリスとともに「北の番人」と呼ばれる。',
+        featured: false
+    },
+
+    {
+        id: 'kochab',
+        name: 'コカブ',
+        nameEn: 'Kochab',
+        nameSIMBAD: 'Kochab',
+        constellation: 'こぐま座',
+        ra: 222.676357,
+        dec: 74.155504,
+        magnitude: 2.08,
+        color: 0xffc58f,
+        glowColor: 0xff9050,
+        info: '古代には北極星の役割を担っていた橙色巨星。',
+        featured: false
+    },
+
+    {
+        id: 'etaUMi',
+        name: 'イータ・ウルサ・ミノリス',
+        nameEn: 'Eta Ursae Minoris',
+        nameSIMBAD: 'eta UMi',
+        constellation: 'こぐま座',
+        ra: 244.376126,
+        dec: 75.755343,
+        magnitude: 4.95,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'こぐま座η星。アンワル・アル・ファルカダインとも呼ばれる、小熊の子牛たちの一員。',
+        featured: false
+    },
+
+    // おおぐま座
+    {
+        id: 'dubhe',
+        name: 'ドゥーベ',
+        nameEn: 'Dubhe',
+        nameSIMBAD: 'Dubhe',
+        constellation: 'おおぐま座',
+        ra: 165.931965,
+        dec: 61.751035,
+        magnitude: 1.79,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: '北斗七星のひしゃくの縁を形作る橙色巨星。',
+        featured: false
+    },
+
+    {
+        id: 'merak',
+        name: 'メラク',
+        nameEn: 'Merak',
+        nameSIMBAD: 'Merak',
+        constellation: 'おおぐま座',
+        ra: 165.460332,
+        dec: 56.382434,
+        magnitude: 2.37,
+        color: 0xffffff,
+        glowColor: 0xccccff,
+        info: 'ドゥーベとともに北極星を指し示す道しるべとなる。',
+        featured: false
+    },
+
+    {
+        id: 'phecda',
+        name: 'フェクダ',
+        nameEn: 'Phecda',
+        nameSIMBAD: 'Phecda',
+        constellation: 'おおぐま座',
+        ra: 178.457697,
+        dec: 53.694760,
+        magnitude: 2.44,
+        color: 0xffffff,
+        glowColor: 0xccccff,
+        info: '北斗七星の底部を成す白色主系列星。',
+        featured: false
+    },
+
+    {
+        id: 'megrez',
+        name: 'メグレズ',
+        nameEn: 'Megrez',
+        nameSIMBAD: 'Megrez',
+        constellation: 'おおぐま座',
+        ra: 183.856499,
+        dec: 57.032617,
+        magnitude: 3.32,
+        color: 0xffffff,
+        glowColor: 0xccccff,
+        info: 'ひしゃくと柄の接続部にあたる恒星。',
+        featured: false
+    },
+
+    {
+        id: 'alioth',
+        name: 'アリオト',
+        nameEn: 'Alioth',
+        nameSIMBAD: 'Alioth',
+        constellation: 'おおぐま座',
+        ra: 193.507290,
+        dec: 55.959823,
+        magnitude: 1.77,
+        color: 0xffffff,
+        glowColor: 0xccccff,
+        info: '棒状磁場を持つ特異星で、北斗七星の柄の根元。',
+        featured: false
+    },
+
+    {
+        id: 'mizar',
+        name: 'ミザール',
+        nameEn: 'Mizar',
+        nameSIMBAD: 'Zeta01 UMa',
+        constellation: 'おおぐま座',
+        ra: 200.981426,
+        dec: 54.925360,
+        magnitude: 2.22,
+        color: 0xffffff,
+        glowColor: 0xccccff,
+        info: '肉眼でも二重星として見分けられることで知られる。',
+        featured: false
+    },
+
+    {
+        id: 'alkaid',
+        name: 'アルカイド',
+        nameEn: 'Alkaid',
+        nameSIMBAD: 'Alkaid',
+        constellation: 'おおぐま座',
+        ra: 206.885157,
+        dec: 49.313267,
+        magnitude: 1.86,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: '北斗七星の柄の先端で青白い光を放つ。',
+        featured: false
+    },
+
+    // しし座
+    {
+        id: 'regulus',
+        name: 'レグルス',
+        nameEn: 'Regulus',
+        nameSIMBAD: 'Regulus',
+        constellation: 'しし座',
+        ra: 152.092962,
+        dec: 11.967209,
+        magnitude: 1.40,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: '獅子の心臓を表す青白い主系列星。高速自転している。',
+        featured: true
+    },
+
+    {
+        id: 'adhafera',
+        name: 'アダフェラ',
+        nameEn: 'Adhafera',
+        nameSIMBAD: 'Adhafera',
+        constellation: 'しし座',
+        ra: 154.172563,
+        dec: 23.417317,
+        magnitude: 3.41,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: '獅子のたてがみに位置する黄色巨星。',
+        featured: false
+    },
+
+    {
+        id: 'algeiba',
+        name: 'アルギエバ',
+        nameEn: 'Algieba',
+        nameSIMBAD: 'Algieba',
+        constellation: 'しし座',
+        ra: 154.993127,
+        dec: 19.841485,
+        magnitude: 2.01,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: '美しい二重星として人気が高い。',
+        featured: false
+    },
+
+    {
+        id: 'zosma',
+        name: 'ゾスマ',
+        nameEn: 'Zosma',
+        nameSIMBAD: 'Zosma',
+        constellation: 'しし座',
+        ra: 168.527089,
+        dec: 20.523718,
+        magnitude: 2.53,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'しし座の背中に位置する青白い主系列星。',
+        featured: false
+    },
+
+    {
+        id: 'chertan',
+        name: 'ケルタン',
+        nameEn: 'Chertan',
+        nameSIMBAD: 'Chertan',
+        constellation: 'しし座',
+        ra: 168.560024,
+        dec: 15.429571,
+        magnitude: 3.35,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: '後ろ足を形作るA型主系列星。',
+        featured: false
+    },
+
+    {
+        id: 'denebola',
+        name: 'デネボラ',
+        nameEn: 'Denebola',
+        nameSIMBAD: 'Denebola',
+        constellation: 'しし座',
+        ra: 177.264910,
+        dec: 14.572058,
+        magnitude: 2.13,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: '春の大三角を構成する白色主系列星で、しっぽの先端に輝く。',
+        featured: true
+    },
+
+    {
+        id: 'aljabhah',
+        name: 'アル・ジャブハ',
+        nameEn: 'Al Jabhah',
+        nameSIMBAD: 'Eta Leonis',
+        constellation: 'しし座',
+        ra: 151.833135,
+        dec: 16.762663,
+        magnitude: 3.41,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'しし座η星。ライオンの額を意味する白色超巨星。',
+        featured: false
+    },
+
+    {
         id: 'sirius',
         name: 'シリウス',
         nameEn: 'Sirius',
@@ -264,97 +886,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.03,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'おうし座ζ星。カニ星雲の近くにある青白い巨星で、角の先端を形作る。',
-        featured: false
-    },
-
-    {
-        id: 'betelgeuse',
-        name: 'ベテルギウス',
-        nameEn: 'Betelgeuse',
-        nameSIMBAD: 'Betelgeuse',
-        constellation: 'オリオン座',
-        ra: 88.792939,
-        dec: 7.407064,
-        magnitude: 0.42,
-        color: 0xffa260,
-        glowColor: 0xff6030,
-        info: 'オリオン座の赤色超巨星。半径は太陽の約900倍にも達する。',
-        featured: true
-    },
-
-    {
-        id: 'bellatrix',
-        name: 'ベラトリクス',
-        nameEn: 'Bellatrix',
-        nameSIMBAD: 'Bellatrix',
-        constellation: 'オリオン座',
-        ra: 81.282764,
-        dec: 6.349703,
-        magnitude: 1.64,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: '青白い巨星で、オリオン座の右肩を形作る。',
-        featured: false
-    },
-
-    {
-        id: 'mintaka',
-        name: 'ミンタカ',
-        nameEn: 'Mintaka',
-        nameSIMBAD: 'Mintaka',
-        constellation: 'オリオン座',
-        ra: 83.001667,
-        dec: -0.299095,
-        magnitude: 2.41,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: 'オリオン座の三つ星の西端。実際は多重星系で構成される。',
-        featured: false
-    },
-
-    {
-        id: 'alnilam',
-        name: 'アルニラム',
-        nameEn: 'Alnilam',
-        nameSIMBAD: 'Alnilam',
-        constellation: 'オリオン座',
-        ra: 84.053389,
-        dec: -1.201919,
-        magnitude: 1.69,
-        color: 0xa8c8ff,
-        glowColor: 0x70a0ff,
-        info: '三つ星中央の青色超巨星。地球から約2000光年離れている。',
-        featured: false
-    },
-
-    {
-        id: 'alnitak',
-        name: 'アルニタク',
-        nameEn: 'Alnitak',
-        nameSIMBAD: 'Alnitak',
-        constellation: 'オリオン座',
-        ra: 85.189694,
-        dec: -1.942574,
-        magnitude: 1.77,
-        color: 0xa8c8ff,
-        glowColor: 0x70a0ff,
-        info: '三つ星の東端。馬頭星雲の近くに位置する多重星系。',
-        featured: false
-    },
-
-    {
-        id: 'saiph',
-        name: 'サイフ',
-        nameEn: 'Saiph',
-        nameSIMBAD: 'Saiph',
-        constellation: 'オリオン座',
-        ra: 86.939120,
-        dec: -9.669605,
-        magnitude: 2.06,
-        color: 0xa8c8ff,
-        glowColor: 0x70a0ff,
-        info: 'オリオン座の左足にあたる青色超巨星。',
+        info: 'おうし座ζ星。カニ星雲の近くにある青白い巨星で、角の先端を形作る。中国の占星術で用いられる星官の一つである「天關」に由来',
         featured: false
     },
 
@@ -611,471 +1143,6 @@ export const BASE_STAR_DATA = [    {
         glowColor: 0xffb870,
         info: 'ケンタウルス座θ星。橙色巨星で、ケンタウロスの頭部を温かく描く。',
         featured: false
-    },
-
-    {
-        id: 'rigel',
-        name: 'リゲル',
-        nameEn: 'Rigel',
-        nameSIMBAD: 'Rigel',
-        constellation: 'オリオン座',
-        ra: 78.634467,
-        dec: -8.201638,
-        magnitude: 0.13,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: '青白い超巨星で、地球から約860光年。夜空でおよそ7番目に明るい。',
-        featured: true
-    },
-
-    {
-        id: 'meissa',
-        name: 'メイサ',
-        nameEn: 'Meissa',
-        nameSIMBAD: 'Meissa',
-        constellation: 'オリオン座',
-        ra: 83.784490,
-        dec: 9.934156,
-        magnitude: 3.66,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: 'オリオン座λ星。ハローを持つ青白い巨星で、オリオンの頭部を形作る。',
-        featured: false
-    },
-
-    {
-        id: 'dubhe',
-        name: 'ドゥーベ',
-        nameEn: 'Dubhe',
-        nameSIMBAD: 'Dubhe',
-        constellation: 'おおぐま座',
-        ra: 165.931965,
-        dec: 61.751035,
-        magnitude: 1.79,
-        color: 0xffd2a1,
-        glowColor: 0xffb870,
-        info: '北斗七星のひしゃくの縁を形作る橙色巨星。',
-        featured: false
-    },
-
-    {
-        id: 'merak',
-        name: 'メラク',
-        nameEn: 'Merak',
-        nameSIMBAD: 'Merak',
-        constellation: 'おおぐま座',
-        ra: 165.460332,
-        dec: 56.382434,
-        magnitude: 2.37,
-        color: 0xffffff,
-        glowColor: 0xccccff,
-        info: 'ドゥーベとともに北極星を指し示す道しるべとなる。',
-        featured: false
-    },
-
-    {
-        id: 'phecda',
-        name: 'フェクダ',
-        nameEn: 'Phecda',
-        nameSIMBAD: 'Phecda',
-        constellation: 'おおぐま座',
-        ra: 178.457697,
-        dec: 53.694760,
-        magnitude: 2.44,
-        color: 0xffffff,
-        glowColor: 0xccccff,
-        info: '北斗七星の底部を成す白色主系列星。',
-        featured: false
-    },
-
-    {
-        id: 'megrez',
-        name: 'メグレズ',
-        nameEn: 'Megrez',
-        nameSIMBAD: 'Megrez',
-        constellation: 'おおぐま座',
-        ra: 183.856499,
-        dec: 57.032617,
-        magnitude: 3.32,
-        color: 0xffffff,
-        glowColor: 0xccccff,
-        info: 'ひしゃくと柄の接続部にあたる恒星。',
-        featured: false
-    },
-
-    {
-        id: 'alioth',
-        name: 'アリオト',
-        nameEn: 'Alioth',
-        nameSIMBAD: 'Alioth',
-        constellation: 'おおぐま座',
-        ra: 193.507290,
-        dec: 55.959823,
-        magnitude: 1.77,
-        color: 0xffffff,
-        glowColor: 0xccccff,
-        info: '棒状磁場を持つ特異星で、北斗七星の柄の根元。',
-        featured: false
-    },
-
-    {
-        id: 'mizar',
-        name: 'ミザール',
-        nameEn: 'Mizar',
-        nameSIMBAD: 'Zeta01 UMa',
-        constellation: 'おおぐま座',
-        ra: 200.981426,
-        dec: 54.925360,
-        magnitude: 2.22,
-        color: 0xffffff,
-        glowColor: 0xccccff,
-        info: '肉眼でも二重星として見分けられることで知られる。',
-        featured: false
-    },
-
-    {
-        id: 'alkaid',
-        name: 'アルカイド',
-        nameEn: 'Alkaid',
-        nameSIMBAD: 'Alkaid',
-        constellation: 'おおぐま座',
-        ra: 206.885157,
-        dec: 49.313267,
-        magnitude: 1.86,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: '北斗七星の柄の先端で青白い光を放つ。',
-        featured: false
-    },
-
-    {
-        id: 'caph',
-        name: 'カフ',
-        nameEn: 'Caph',
-        nameSIMBAD: 'Caph',
-        constellation: 'カシオペア座',
-        ra: 2.294522,
-        dec: 59.149781,
-        magnitude: 2.27,
-        color: 0xfff4e8,
-        glowColor: 0xffe8b5,
-        info: 'カシオペア座のW字の端に位置する巨星。',
-        featured: false
-    },
-
-    {
-        id: 'shedar',
-        name: 'シェダル',
-        nameEn: 'Schedar',
-        nameSIMBAD: 'Schedar',
-        constellation: 'カシオペア座',
-        ra: 10.126846,
-        dec: 56.537329,
-        magnitude: 2.23,
-        color: 0xffd2a1,
-        glowColor: 0xffb870,
-        info: 'カシオペア座で最も明るい橙色巨星。',
-        featured: false
-    },
-
-    {
-        id: 'gammaCas',
-        name: 'ツィー',
-        nameEn: 'Gamma Cassiopeiae',
-        nameSIMBAD: 'Gamma Cassiopeiae',
-        constellation: 'カシオペア座',
-        ra: 14.177213,
-        dec: 60.716740,
-        magnitude: 2.39,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: '急速回転するBe星で、変光を繰り返す。',
-        featured: false
-    },
-
-    {
-        id: 'ruchbah',
-        name: 'ルクバー',
-        nameEn: 'Ruchbah',
-        nameSIMBAD: 'Ruchbah',
-        constellation: 'カシオペア座',
-        ra: 21.453964,
-        dec: 60.235284,
-        magnitude: 2.68,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: 'W字の折れ曲がりを形成する青白い巨星。',
-        featured: false
-    },
-
-    {
-        id: 'segin',
-        name: 'シギン',
-        nameEn: 'Segin',
-        nameSIMBAD: 'Segin',
-        constellation: 'カシオペア座',
-        ra: 28.598892,
-        dec: 63.670100,
-        magnitude: 3.37,
-        color: 0xa8c8ff,
-        glowColor: 0x70a0ff,
-        info: 'W字の北側に位置する若い青色巨星。',
-        featured: false
-    },
-
-    {
-        id: 'deneb',
-        name: 'デネブ',
-        nameEn: 'Deneb',
-        nameSIMBAD: 'Deneb',
-        constellation: 'はくちょう座',
-        ra: 310.357980,
-        dec: 45.280339,
-        magnitude: 1.25,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: '夏の大三角の一角。太陽の数万倍の光度を持つ青白い超巨星。',
-        featured: true
-    },
-
-    {
-        id: 'sadr',
-        name: 'サドル',
-        nameEn: 'Sadr',
-        nameSIMBAD: 'Sadr',
-        constellation: 'はくちょう座',
-        ra: 305.557091,
-        dec: 40.256679,
-        magnitude: 2.23,
-        color: 0xfff4e8,
-        glowColor: 0xffe8b5,
-        info: '白鳥の胸に位置する黄色超巨星で、周囲に散光星雲が広がる。',
-        featured: false
-    },
-
-    {
-        id: 'aljanah',
-        name: 'アルジャナー',
-        nameEn: 'Aljanah',
-        nameSIMBAD: 'Aljanah',
-        constellation: 'はくちょう座',
-        ra: 311.552801,
-        dec: 33.970328,
-        magnitude: 2.48,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: '白鳥の翼を形作る青白い巨星で、はくちょう座ε星。伝統的にギエナーと呼ばれることもある。',
-        featured: false
-    },
-
-    {
-        id: 'deltaCyg',
-        name: 'ルクバ',
-        nameEn: 'Delta Cygni',
-        nameSIMBAD: 'Delta Cygni',
-        constellation: 'はくちょう座',
-        ra: 296.243654,
-        dec: 45.130815,
-        magnitude: 2.87,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: '白鳥の首筋に位置する連星系。',
-        featured: false
-    },
-
-    {
-        id: 'albireo',
-        name: 'アルビレオ',
-        nameEn: 'Albireo',
-        nameSIMBAD: 'Albireo',
-        constellation: 'はくちょう座',
-        ra: 292.680315,
-        dec: 27.959674,
-        magnitude: 3.08,
-        color: 0xffd2a1,
-        glowColor: 0xffb870,
-        info: '金色と青色の二重星として有名で、肉眼でも美しいコントラストが楽しめる。',
-        featured: true
-    },
-
-    {
-        id: 'polaris',
-        name: 'ポラリス',
-        nameEn: 'Polaris',
-        nameSIMBAD: 'Polaris',
-        constellation: 'こぐま座',
-        ra: 37.954561,
-        dec: 89.264109,
-        magnitude: 2.02,
-        color: 0xfff4e8,
-        glowColor: 0xffe8b5,
-        info: '北極星として知られ、現在の地球の自転軸に最も近い恒星。',
-        featured: true
-    },
-
-    {
-        id: 'yildun',
-        name: 'イルドゥン',
-        nameEn: 'Yildun',
-        nameSIMBAD: 'Yildun',
-        constellation: 'こぐま座',
-        ra: 263.054159,
-        dec: 86.586460,
-        magnitude: 4.34,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: 'こぐま座の尾を形作る青白い主系列星。',
-        featured: false
-    },
-
-    {
-        id: 'epsilonUMi',
-        name: 'アカ・リル',
-        nameEn: 'Epsilon Ursae Minoris',
-        nameSIMBAD: 'Epsilon Ursae Minoris',
-        constellation: 'こぐま座',
-        ra: 251.492682,
-        dec: 82.037258,
-        magnitude: 4.21,
-        color: 0xfff4e8,
-        glowColor: 0xffe8b5,
-        info: '小北斗七星の柄の中央に位置する連星系。',
-        featured: false
-    },
-
-    {
-        id: 'zetaUMi',
-        name: 'アハ・アル・ファルカデイン',
-        nameEn: 'Zeta Ursae Minoris',
-        nameSIMBAD: 'Zeta Ursae Minoris',
-        constellation: 'こぐま座',
-        ra: 236.014661,
-        dec: 77.794493,
-        magnitude: 4.27,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: '小さなひしゃくの柄の付け根を担う恒星。',
-        featured: false
-    },
-
-    {
-        id: 'pherkad',
-        name: 'フェルカド',
-        nameEn: 'Pherkad',
-        nameSIMBAD: 'Pherkad',
-        constellation: 'こぐま座',
-        ra: 230.182098,
-        dec: 71.834025,
-        magnitude: 3.00,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: 'ポラリスとともに「北の番人」と呼ばれる。',
-        featured: false
-    },
-
-    {
-        id: 'kochab',
-        name: 'コカブ',
-        nameEn: 'Kochab',
-        nameSIMBAD: 'Kochab',
-        constellation: 'こぐま座',
-        ra: 222.676357,
-        dec: 74.155504,
-        magnitude: 2.08,
-        color: 0xffc58f,
-        glowColor: 0xff9050,
-        info: '古代には北極星の役割を担っていた橙色巨星。',
-        featured: false
-    },
-
-    {
-        id: 'regulus',
-        name: 'レグルス',
-        nameEn: 'Regulus',
-        nameSIMBAD: 'Regulus',
-        constellation: 'しし座',
-        ra: 152.092962,
-        dec: 11.967209,
-        magnitude: 1.40,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: '獅子の心臓を表す青白い主系列星。高速自転している。',
-        featured: true
-    },
-
-    {
-        id: 'adhafera',
-        name: 'アダフェラ',
-        nameEn: 'Adhafera',
-        nameSIMBAD: 'Adhafera',
-        constellation: 'しし座',
-        ra: 154.172563,
-        dec: 23.417317,
-        magnitude: 3.41,
-        color: 0xfff4e8,
-        glowColor: 0xffe8b5,
-        info: '獅子のたてがみに位置する黄色巨星。',
-        featured: false
-    },
-
-    {
-        id: 'algeiba',
-        name: 'アルギエバ',
-        nameEn: 'Algieba',
-        nameSIMBAD: 'Algieba',
-        constellation: 'しし座',
-        ra: 154.993127,
-        dec: 19.841485,
-        magnitude: 2.01,
-        color: 0xffd2a1,
-        glowColor: 0xffb870,
-        info: '美しい二重星として人気が高い。',
-        featured: false
-    },
-
-    {
-        id: 'zosma',
-        name: 'ゾスマ',
-        nameEn: 'Zosma',
-        nameSIMBAD: 'Zosma',
-        constellation: 'しし座',
-        ra: 168.527089,
-        dec: 20.523718,
-        magnitude: 2.53,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: 'しし座の背中に位置する青白い主系列星。',
-        featured: false
-    },
-
-    {
-        id: 'chertan',
-        name: 'ケルタン',
-        nameEn: 'Chertan',
-        nameSIMBAD: 'Chertan',
-        constellation: 'しし座',
-        ra: 168.560024,
-        dec: 15.429571,
-        magnitude: 3.35,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: '後ろ足を形作るA型主系列星。',
-        featured: false
-    },
-
-    {
-        id: 'denebola',
-        name: 'デネボラ',
-        nameEn: 'Denebola',
-        nameSIMBAD: 'Denebola',
-        constellation: 'しし座',
-        ra: 177.264910,
-        dec: 14.572058,
-        magnitude: 2.13,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: '春の大三角を構成する白色主系列星で、しっぽの先端に輝く。',
-        featured: true
     },
 
     {
@@ -2474,23 +2541,8 @@ export const BASE_STAR_DATA = [    {
     },
 
     {
-        id: 'dalim',
-        name: 'ダリム',
-        nameEn: 'Dalim',
-        nameSIMBAD: 'Dalim',
-        constellation: 'みなみのうお座',
-        ra: 48.018874,
-        dec: -28.987622,
-        magnitude: 3.98,
-        color: 0xfff2c6,
-        info: 'みなみのうお座α星。フォーマルハウトの近くで、魚の胴体を支える黄白色の星。',
-        glowColor: 0x8bb5ff,
-        featured: false
-    },
-
-    {
         id: 'epsilonPsa',
-        name: 'エプシロン・みなみのうお座',
+        name: 'イプシロン・ピスキス・アウストリニ',
         nameEn: 'Epsilon Piscis Austrini',
         nameSIMBAD: 'Epsilon Piscis Austrini',
         constellation: 'みなみのうお座',
@@ -2505,7 +2557,7 @@ export const BASE_STAR_DATA = [    {
 
     {
         id: 'deltaPsa',
-        name: 'デルタ・みなみのうお座',
+        name: 'デルタ・ピスキス・アウストリニ',
         nameEn: 'Delta Piscis Austrini',
         nameSIMBAD: 'Delta Piscis Austrini',
         constellation: 'みなみのうお座',
@@ -2520,7 +2572,7 @@ export const BASE_STAR_DATA = [    {
 
     {
         id: 'thetaPsa',
-        name: 'シータ・みなみのうお座',
+        name: 'シータ・ピスキス・アウストリニ',
         nameEn: 'Theta Piscis Austrini',
         nameSIMBAD: 'Theta Piscis Austrini',
         constellation: 'みなみのうお座',

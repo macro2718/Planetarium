@@ -3,7 +3,7 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'orion',
         name: 'オリオン座',
         description: '冬の代表星座。三ツ星と赤いベテルギウスが目印。',
-        starIds: ['betelgeuse', 'bellatrix', 'mintaka', 'alnilam', 'alnitak', 'saiph', 'rigel', 'meissa'],
+        starIds: ['betelgeuse', 'bellatrix', 'mintaka', 'alnilam', 'alnitak', 'saiph', 'rigel', 'meissa', 'tabit', 'muOri'],
         lines: [
             ['betelgeuse', 'bellatrix'],
             ['betelgeuse', 'alnitak'],
@@ -12,9 +12,10 @@ export const BASE_CONSTELLATION_DATA = [
             ['alnilam', 'alnitak'],
             ['alnitak', 'saiph'],
             ['mintaka', 'rigel'],
-            ['saiph', 'rigel'],
             ['meissa', 'betelgeuse'],
-            ['meissa', 'bellatrix']
+            ['meissa', 'bellatrix'],
+            ['bellatrix', 'tabit'],
+            ['betelgeuse', 'muOri']
         ]
     },
     {
@@ -33,26 +34,27 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'cygnus',
         name: 'はくちょう座',
         description: '夏の天頂を横切る十字型の星並び。',
-        starIds: ['deneb', 'sadr', 'aljanah', 'deltaCyg', 'albireo'],
+        starIds: ['deneb', 'sadr', 'aljanah', 'fawaris', 'albireo'],
         lines: [
             ['deneb', 'sadr'],       // 尾から胸へ（縦線上部）
             ['sadr', 'albireo'],     // 胸から頭へ（縦線下部）
             ['aljanah', 'sadr'],      // 翼から胸へ（横線左）
-            ['sadr', 'deltaCyg']     // 胸から翼へ（横線右）
+            ['sadr', 'fawaris']     // 胸から翼へ（横線右）
         ]
     },
     {
         id: 'ursaMinor',
         name: 'こぐま座',
         description: '北極星を含む小さなひしゃく。',
-        starIds: ['polaris', 'yildun', 'epsilonUMi', 'zetaUMi', 'pherkad', 'kochab'],
+        starIds: ['polaris', 'yildun', 'epsilonUMi', 'ahfaFarkadain', 'pherkad', 'kochab', 'etaUMi'],
         lines: [
             ['polaris', 'yildun'],      // 柄の先端（北極星）から
             ['yildun', 'epsilonUMi'],   // 柄の中間
-            ['epsilonUMi', 'zetaUMi'],  // 柄の根元へ
-            ['zetaUMi', 'pherkad'],     // ひしゃくの底へ
-            ['zetaUMi', 'kochab'],      // ひしゃくの底へ（分岐）
-            ['pherkad', 'kochab']       // ひしゃくの底を閉じる
+            ['epsilonUMi', 'ahfaFarkadain'],  // 柄の根元へ
+            ['ahfaFarkadain', 'etaUMi'],     // ひしゃくの底へ
+            ['etaUMi', 'pherkad'],      // ひしゃくの底
+            ['pherkad', 'kochab'],       // ひしゃくの底を閉じる
+            ['kochab', 'ahfaFarkadain']      // ひしゃくの上部
         ]
     },
     {
@@ -73,13 +75,15 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'leo',
         name: 'しし座',
         description: '春の夜空に輝くライオンのシルエット。',
-        starIds: ['regulus', 'adhafera', 'algeiba', 'zosma', 'chertan', 'denebola'],
+        starIds: ['regulus', 'adhafera', 'algeiba', 'zosma', 'chertan', 'denebola', 'aljabhah'],
         lines: [
-            ['regulus', 'algeiba'],     // 心臓からたてがみへ
+            ['regulus', 'aljabhah'],     // 心臓からたてがみへ
+            ['algeiba', 'aljabhah'],    // たてがみから頭へ
             ['algeiba', 'adhafera'],    // たてがみ（鎌の部分）
             ['algeiba', 'zosma'],       // たてがみから背中へ
             ['zosma', 'denebola'],      // 背中からしっぽへ
             ['zosma', 'chertan'],       // 背中から後ろ足へ
+            ['aljabhah', 'chertan'],   // 頭から後ろ足へ
             ['chertan', 'denebola']     // 後ろ足からしっぽへ（三角形を閉じる）
         ]
     },

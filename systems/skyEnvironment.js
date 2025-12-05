@@ -71,7 +71,6 @@ function createSkyGradient(ctx) {
 
 function createHorizonRing(ctx) {
     createHorizonLights(ctx);
-    createCompassPoints(ctx, 8500);
 }
 
 function createHorizonLights(ctx) {
@@ -131,65 +130,3 @@ function createHorizonLights(ctx) {
     ctx.scene.add(lights);
 }
 
-function createCompassPoints(ctx, radius = 8500) {
-    if (ctx.compassGroup) {
-        ctx.scene.remove(ctx.compassGroup);
-    }
-    ctx.compassGroup = new THREE.Group();
-    const markers = [
-        { label: 'N', angle: 0, color: 0x9fc7ff },
-        { label: 'E', angle: Math.PI / 2, color: 0xb0ffd4 },
-        { label: 'S', angle: Math.PI, color: 0xffcde0 },
-        { label: 'W', angle: Math.PI * 1.5, color: 0xd2e3ff }
-    ];
-    markers.forEach(marker => {
-        const sprite = createLabelSprite(marker.label, marker.color);
-        const x = Math.cos(marker.angle) * radius;
-        const z = Math.sin(marker.angle) * radius;
-        sprite.position.set(x, 40, z);
-        ctx.compassGroup.add(sprite);
-        const lineGeometry = new THREE.BufferGeometry().setFromPoints([
-            new THREE.Vector3(x, 0, z),
-            new THREE.Vector3(x, 120, z)
-        ]);
-        const lineMaterial = new THREE.LineBasicMaterial({
-            color: marker.color,
-            transparent: true,
-            opacity: 0.35,
-            blending: THREE.AdditiveBlending
-        });
-        ctx.compassGroup.add(new THREE.Line(lineGeometry, lineMaterial));
-    });
-    ctx.scene.add(ctx.compassGroup);
-}
-
-function createLabelSprite(text, color = 0xb7d4ff) {
-    const size = 256;
-    const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
-    const ctx2d = canvas.getContext('2d');
-    if (!ctx2d) return new THREE.Sprite();
-    ctx2d.clearRect(0, 0, size, size);
-    ctx2d.font = '700 110px "Space Grotesk", "Zen Kaku Gothic New", sans-serif';
-    ctx2d.textAlign = 'center';
-    ctx2d.textBaseline = 'middle';
-    ctx2d.fillStyle = 'rgba(255, 255, 255, 0.9)';
-    ctx2d.strokeStyle = 'rgba(255, 255, 255, 0.35)';
-    ctx2d.lineWidth = 6;
-    ctx2d.shadowColor = 'rgba(120, 180, 255, 0.85)';
-    ctx2d.shadowBlur = 32;
-    ctx2d.strokeText(text, size / 2, size / 2 + 8);
-    ctx2d.fillText(text, size / 2, size / 2 + 8);
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.needsUpdate = true;
-    const material = new THREE.SpriteMaterial({
-        map: texture,
-        transparent: true,
-        depthWrite: false,
-        color: new THREE.Color(color)
-    });
-    const sprite = new THREE.Sprite(material);
-    sprite.scale.set(200, 200, 1);
-    return sprite;
-}
