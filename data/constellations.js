@@ -577,5 +577,57 @@ export const BASE_CONSTELLATION_DATA = [
             ['muLep', 'kappaLep'],
             ['kappaLep', 'arneb']
         ]
+    },
+    {
+        id: 'triangulum',
+        name: 'さんかく座',
+        description: '秋の空で細い三角形を描く小星座。銀河系外のアンドロメダ銀河へと視線を導く目印。',
+        starIds: ['mothallah', 'deltotum', 'gammaTri'],
+        lines: [
+            ['mothallah', 'deltotum'],
+            ['deltotum', 'gammaTri'],
+            ['gammaTri', 'mothallah']
+        ]
+    },
+    {
+        id: 'sagitta',
+        name: 'や座',
+        description: '夏の天の川に小さな矢が浮かぶ星座。ささやかな光で射手の矢を思わせる直線を描く。',
+        starIds: ['sham', 'betaSge', 'gammaSge', 'deltaSge', 'epsilonSge'],
+        lines: [
+            ['sham', 'betaSge'],
+            ['betaSge', 'gammaSge'],
+            ['gammaSge', 'deltaSge'],
+            ['deltaSge', 'epsilonSge'],
+            ['gammaSge', 'sham']
+        ]
+    },
+    {
+        id: 'vela',
+        name: 'ほ座',
+        description: 'アルゴ船の帆にあたる部分で、南天の海を渡る帆布が青白い光で張られる。',
+        starIds: ['regor', 'alsephina', 'suhail', 'markeb', 'muVel'],
+        lines: [
+            ['regor', 'alsephina'],
+            ['alsephina', 'markeb'],
+            ['markeb', 'muVel'],
+            ['muVel', 'suhail'],
+            ['suhail', 'regor'],
+            ['alsephina', 'suhail']
+        ]
+    },
+    {
+        id: 'puppis',
+        name: 'とも座',
+        description: 'アルゴ船の船尾を担う星座。舵と甲板を結ぶ星々が南天の水平線近くに連なる。',
+        starIds: ['naos', 'ahadi', 'tureis', 'etaPup', 'asmidiske'],
+        lines: [
+            ['naos', 'ahadi'],
+            ['ahadi', 'tureis'],
+            ['tureis', 'etaPup'],
+            ['etaPup', 'asmidiske'],
+            ['asmidiske', 'naos'],
+            ['etaPup', 'naos']
+        ]
     }
 ];
