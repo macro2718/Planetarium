@@ -547,15 +547,38 @@
         #home-screen {
             position: fixed;
             inset: 0;
-            background: radial-gradient(circle at 30% 20%, rgba(35, 65, 140, 0.4), transparent 45%),
-                        radial-gradient(circle at 70% 80%, rgba(120, 50, 150, 0.35), transparent 50%),
-                        linear-gradient(135deg, #050814, #04030c 50%, #010101);
+            background:
+                radial-gradient(circle at 30% 20%, rgba(35, 65, 140, 0.4), transparent 45%),
+                radial-gradient(circle at 70% 80%, rgba(120, 50, 150, 0.35), transparent 50%),
+                linear-gradient(135deg, #050814, #04030c 50%, #010101);
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 2000;
             transition: opacity 0.6s ease, visibility 0.6s ease;
+            overflow: hidden;
+        }
+
+        #home-screen::before,
+        #home-screen::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        #home-screen::before {
+            background:
+                radial-gradient(900px 900px at 20% 35%, rgba(140, 200, 255, 0.18), transparent 65%),
+                radial-gradient(1200px 1200px at 80% 20%, rgba(255, 180, 230, 0.16), transparent 60%),
+                radial-gradient(1000px 1000px at 50% 80%, rgba(80, 200, 180, 0.12), transparent 70%);
+            mix-blend-mode: screen;
+            filter: blur(8px) saturate(110%);
+            animation: drift 24s ease-in-out infinite alternate;
+        }
+
+        #home-screen::after {
+            background: radial-gradient(80% 70% at 50% 50%, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.65));
         }
 
         #home-screen.hidden {
@@ -564,64 +587,225 @@
             pointer-events: none;
         }
 
+        .home-ornaments {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orbit {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(156, 196, 255, 0.18);
+            filter: drop-shadow(0 0 12px rgba(140, 190, 255, 0.25));
+            animation: rotateOrbit 24s linear infinite;
+        }
+
+        .orbit.orbit-one {
+            width: 520px;
+            height: 520px;
+            top: 20%;
+            left: -5%;
+            border-color: rgba(160, 210, 255, 0.22);
+            animation-duration: 30s;
+        }
+
+        .orbit.orbit-two {
+            width: 420px;
+            height: 420px;
+            bottom: 14%;
+            right: -2%;
+            border-color: rgba(255, 190, 230, 0.18);
+            animation-duration: 26s;
+            animation-direction: reverse;
+        }
+
+        .orbit.glow {
+            width: 680px;
+            height: 680px;
+            top: 8%;
+            right: 12%;
+            border: none;
+            background: radial-gradient(circle, rgba(150, 210, 255, 0.12) 0%, transparent 55%);
+            filter: blur(6px);
+            animation: floatSlow 18s ease-in-out infinite;
+        }
+
+        .floating-spark {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+            border-radius: 50%;
+            filter: drop-shadow(0 0 8px rgba(160, 220, 255, 0.7));
+            animation: floatSlow 12s ease-in-out infinite;
+        }
+
+        .spark-a { top: 24%; left: 18%; animation-delay: -2s; }
+        .spark-b { top: 62%; right: 20%; animation-delay: 1.5s; }
+        .spark-c { bottom: 18%; left: 32%; animation-delay: 3s; }
+
+        .home-content {
+            position: relative;
+            padding: 60px 70px;
+            background: linear-gradient(145deg, rgba(12, 18, 42, 0.92), rgba(16, 28, 60, 0.78));
+            border: 1px solid rgba(136, 173, 255, 0.35);
+            border-radius: 26px;
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.55),
+                0 0 80px rgba(120, 180, 255, 0.25);
+            backdrop-filter: blur(16px);
+            max-width: 880px;
+            width: min(86vw, 920px);
+            overflow: hidden;
+        }
+
+        .home-content::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(120deg, rgba(140, 200, 255, 0.12), rgba(255, 190, 230, 0.06)),
+                radial-gradient(circle at 30% 20%, rgba(150, 210, 255, 0.18), transparent 45%);
+            mix-blend-mode: screen;
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        .home-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: 1px solid rgba(136, 173, 255, 0.6);
+            background: linear-gradient(135deg, rgba(40, 60, 120, 0.9), rgba(20, 30, 70, 0.7));
+            color: rgba(255, 255, 255, 0.82);
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0, 10, 30, 0.45);
+            margin-bottom: 24px;
+        }
+
+        .home-badge::before {
+            content: '✦';
+            color: #a4dcff;
+            text-shadow: 0 0 10px rgba(164, 220, 255, 0.7);
+        }
+
         .home-title {
-            font-size: 48px;
-            letter-spacing: 20px;
+            font-size: 56px;
+            letter-spacing: 18px;
             font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
             font-weight: 700;
-            background: linear-gradient(120deg, #b7e8ff 0%, #f4d5ff 40%, #9dd0ff 80%);
+            background: linear-gradient(120deg, #c6ecff 0%, #f4d5ff 40%, #9dd0ff 80%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 14px;
             text-shadow: 0 20px 60px rgba(100, 150, 255, 0.5);
             animation: homeGlow 3s ease-in-out infinite alternate;
         }
 
         .home-subtitle {
-            font-size: 14px;
-            letter-spacing: 8px;
-            color: rgba(255, 255, 255, 0.6);
+            font-size: 15px;
+            letter-spacing: 10px;
+            color: rgba(255, 255, 255, 0.7);
             text-transform: uppercase;
-            margin-bottom: 60px;
+            margin-bottom: 22px;
+        }
+
+        .home-tagline {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.76);
+            letter-spacing: 0.6px;
+            line-height: 1.8;
+            margin-bottom: 28px;
+            max-width: 640px;
+        }
+
+        .home-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+
+        .meta-item {
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(136, 173, 255, 0.18);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
+
+        .meta-label {
+            display: block;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.55);
+            margin-bottom: 6px;
+        }
+
+        .meta-value {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            letter-spacing: 0.4px;
         }
 
         .home-buttons {
             display: flex;
-            gap: 30px;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .home-btn {
-            padding: 20px 50px;
-            border-radius: 16px;
-            border: 2px solid rgba(136, 173, 255, 0.5);
-            background: linear-gradient(135deg, rgba(12, 18, 42, 0.8), rgba(30, 50, 100, 0.5));
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 16px;
-            letter-spacing: 4px;
+            padding: 18px 32px;
+            border-radius: 14px;
+            border: 1px solid rgba(136, 173, 255, 0.55);
+            background: linear-gradient(135deg, rgba(12, 18, 42, 0.9), rgba(30, 50, 100, 0.65));
+            color: rgba(255, 255, 255, 0.92);
+            font-size: 15px;
+            letter-spacing: 3px;
             cursor: pointer;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 15px 40px rgba(0, 20, 60, 0.6);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 15px 40px rgba(0, 20, 60, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
             font-family: 'Zen Kaku Gothic New', sans-serif;
+            min-width: 210px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
         }
 
         .home-btn:hover {
-            transform: translateY(-5px);
+            transform: translateY(-4px);
             border-color: rgba(136, 173, 255, 0.9);
-            box-shadow: 0 20px 50px rgba(100, 150, 255, 0.4);
-            background: linear-gradient(135deg, rgba(30, 50, 100, 0.8), rgba(60, 80, 150, 0.5));
+            box-shadow: 0 24px 60px rgba(100, 150, 255, 0.35);
+            background: linear-gradient(135deg, rgba(30, 50, 100, 0.9), rgba(60, 80, 150, 0.65));
         }
 
         .home-btn .btn-icon {
-            display: block;
-            font-size: 32px;
-            margin-bottom: 10px;
+            font-size: 26px;
         }
 
         @keyframes homeGlow {
             from { filter: brightness(1); }
-            to { filter: brightness(1.2); }
+            to { filter: brightness(1.18); }
+        }
+
+        @keyframes rotateOrbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes floatSlow {
+            0% { transform: translate3d(0, 0, 0); }
+            50% { transform: translate3d(0, -12px, 0); }
+            100% { transform: translate3d(0, 0, 0); }
         }
 
         /* アルバム画面 */
@@ -950,17 +1134,43 @@
 <body>
     <!-- ホーム画面 -->
     <div id="home-screen">
-        <h1 class="home-title">PLANETARIUM</h1>
-        <p class="home-subtitle">Aurora Voyage</p>
-        <div class="home-buttons">
-            <button class="home-btn" id="enter-planetarium">
-                <span class="btn-icon">🌌</span>
-                プラネタリウム
-            </button>
-            <button class="home-btn" id="open-album">
-                <span class="btn-icon">📷</span>
-                アルバム
-            </button>
+        <div class="home-ornaments">
+            <span class="orbit orbit-one"></span>
+            <span class="orbit orbit-two"></span>
+            <span class="orbit glow"></span>
+            <span class="floating-spark spark-a"></span>
+            <span class="floating-spark spark-b"></span>
+            <span class="floating-spark spark-c"></span>
+        </div>
+        <div class="home-content">
+            <div class="home-badge">Immersive Star Dome</div>
+            <h1 class="home-title">PLANETARIUM</h1>
+            <p class="home-subtitle">Aurora Voyage</p>
+            <p class="home-tagline">静かな宇宙に浮かぶオーロラのゆらめきと、星々の鼓動をそのまま閉じ込めたプラネタリウム。光が呼吸するような、洗練された星空体験へご案内します。</p>
+            <div class="home-meta">
+                <div class="meta-item">
+                    <span class="meta-label">EXPERIENCE</span>
+                    <span class="meta-value">リアルタイムの星空と旅する</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">VISUALS</span>
+                    <span class="meta-value">オーロラ・天の川・流星</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">MEMORIES</span>
+                    <span class="meta-value">アルバムに煌めきを保存</span>
+                </div>
+            </div>
+            <div class="home-buttons">
+                <button class="home-btn" id="enter-planetarium">
+                    <span class="btn-icon">🌌</span>
+                    プラネタリウムをはじめる
+                </button>
+                <button class="home-btn" id="open-album">
+                    <span class="btn-icon">📷</span>
+                    アルバムを開く
+                </button>
+            </div>
         </div>
     </div>
 
