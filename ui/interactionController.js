@@ -77,6 +77,13 @@ function setupControlButtons(ctx) {
             ctx.shootingStarsGroup.visible = visible;
         }
     });
+    toggleButton('btn-sun', 'showSun', (visible) => {
+        if (ctx.sunSystem?.setEnabled) {
+            ctx.sunSystem.setEnabled(visible);
+        } else if (ctx.sunGroup) {
+            ctx.sunGroup.visible = visible;
+        }
+    });
     toggleButton('btn-moon', 'showMoon', (visible) => {
         if (ctx.moonGroup) ctx.moonGroup.visible = visible;
     });
