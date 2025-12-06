@@ -275,24 +275,32 @@ export class PhotoAlbumSystem {
     backToHome() {
         const homeScreen = document.getElementById('home-screen');
         const albumScreen = document.getElementById('album-screen');
-        
-        // ホーム画面を即時表示（トランジションなし）
+
+        // フェードアウト・フェードイン トランジション
+        // ホーム画面(z-index:2000)がアルバム画面(z-index:1500)より上にあるため、
+        // 先にホーム画面を表示してからアルバムをフェードアウトすることで
+        // 背後のプラネタリウムが見えないようにする
+
+        // 1. ホーム画面を透明状態で表示（アルバムの上に重なる）
         if (homeScreen) {
-            homeScreen.classList.add('instant-show');
+            homeScreen.classList.add('fading-in');
             homeScreen.classList.remove('hidden');
-            // 次回のためにinstant-showクラスを削除
+            
+            // 次のフレームでフェードインを開始
             requestAnimationFrame(() => {
-                homeScreen.classList.remove('instant-show');
+                homeScreen.classList.remove('fading-in');
             });
         }
-        // アルバムをフェードアウト（ホームの上に重なっているのでフェードで消える）
-        if (albumScreen) {
-            albumScreen.classList.add('hidden');
-        }
-        this.onHomeScreen = true;
-    }
 
-    showHomeFromPlanetarium() {
+        // 2. ホーム画面のフェードイン完了後にアルバム画面を非表示
+        setTimeout(() => {
+            if (albumScreen) {
+                albumScreen.classList.add('hidden');
+            }
+        }, 600); // ホーム画面のトランジション完了を待つ
+
+        this.onHomeScreen = true;
+    }    showHomeFromPlanetarium() {
         const homeScreen = document.getElementById('home-screen');
         if (homeScreen) {
             homeScreen.classList.remove('hidden');

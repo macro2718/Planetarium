@@ -51,13 +51,27 @@ function createLocationCard(location) {
     const regionLabel = REGION_LABELS[location.region] || location.region;
     
     card.innerHTML = `
-        <div class="location-card-icon">${location.icon}</div>
-        <div class="location-card-name">${location.name}</div>
-        <div class="location-card-region">${regionLabel} · ${location.nameEn}</div>
+        <div class="location-card-header">
+            <div class="location-region-chip">${regionLabel}</div>
+        </div>
+        <div class="location-card-name">
+            <span class="jp">${location.name}</span>
+            <span class="en">${location.nameEn}</span>
+        </div>
         <div class="location-card-description">${location.description}</div>
-        <div class="location-card-coords">
-            <span>📍 ${formatCoordinate(location.lat, true)}</span>
-            <span>🧭 ${formatCoordinate(location.lon, false)}</span>
+        <div class="location-card-meta">
+            <div class="meta-block">
+                <span class="meta-label">LATITUDE</span>
+                <span class="meta-value">${formatCoordinate(location.lat, true)}</span>
+            </div>
+            <div class="meta-block">
+                <span class="meta-label">LONGITUDE</span>
+                <span class="meta-value">${formatCoordinate(location.lon, false)}</span>
+            </div>
+        </div>
+        <div class="location-card-foot">
+            <span class="foot-icon">✶</span>
+            <span>CELESTIAL GATE</span>
         </div>
     `;
 
@@ -101,10 +115,39 @@ function setupBackButton() {
     const backBtn = document.getElementById('location-back');
     if (backBtn) {
         backBtn.addEventListener('click', () => {
-            hideLocationScreen();
-            showHomeScreen();
+            backToHomeFromLocation();
         });
     }
+}
+
+/**
+ * 場所選択画面からホームに戻る（フェードトランジション付き）
+ */
+function backToHomeFromLocation() {
+    const homeScreen = document.getElementById('home-screen');
+    const locationScreen = document.getElementById('location-screen');
+
+    // ホーム画面(z-index:2000)が場所選択画面(z-index:1800)より上にあるため、
+    // 先にホーム画面を表示してからフェードインすることで
+    // 背後のプラネタリウムが見えないようにする
+
+    // 1. ホーム画面を透明状態で表示（場所選択画面の上に重なる）
+    if (homeScreen) {
+        homeScreen.classList.add('fading-in');
+        homeScreen.classList.remove('hidden');
+        
+        // 次のフレームでフェードインを開始
+        requestAnimationFrame(() => {
+            homeScreen.classList.remove('fading-in');
+        });
+    }
+
+    // 2. ホーム画面のフェードイン完了後に場所選択画面を非表示
+    setTimeout(() => {
+        if (locationScreen) {
+            locationScreen.classList.add('hidden');
+        }
+    }, 600); // ホーム画面のトランジション完了を待つ
 }
 
 /**
