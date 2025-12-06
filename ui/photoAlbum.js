@@ -191,15 +191,10 @@ export class PhotoAlbumSystem {
 
     setupEventListeners() {
         // ホーム画面のボタン
-        const enterPlanetariumBtn = document.getElementById('enter-planetarium');
         const openAlbumBtn = document.getElementById('open-album');
         const albumBackBtn = document.getElementById('album-back');
         
-        if (enterPlanetariumBtn) {
-            enterPlanetariumBtn.addEventListener('click', () => {
-                this.enterPlanetarium();
-            });
-        }
+        // enter-planetarium ボタンは interactionController.js で処理されるため、ここでは設定しない
         
         if (openAlbumBtn) {
             openAlbumBtn.addEventListener('click', () => {
@@ -262,14 +257,6 @@ export class PhotoAlbumSystem {
                 }
             }
         });
-    }
-
-    enterPlanetarium() {
-        const homeScreen = document.getElementById('home-screen');
-        if (homeScreen) {
-            homeScreen.classList.add('hidden');
-        }
-        this.onHomeScreen = false;
     }
 
     openAlbum() {

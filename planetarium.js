@@ -20,6 +20,7 @@ import { attachUIInteractions } from './ui/interactionController.js';
 import { setupTimeDisplay } from './ui/timeDisplay.js';
 import { calculateLocalSiderealTime } from './utils/astronomy.js';
 import { getPhotoAlbumSystem, setupPhotoCaptureButton } from './ui/photoAlbum.js';
+import { initLocationSelector, setPlanetarium } from './ui/locationSelector.js';
 
 // ========================================
 // プラネタリウム - 美しい星空シミュレーション
@@ -117,6 +118,15 @@ class Planetarium {
 
         attachUIInteractions(this);
         setupTimeDisplay(this, this.moonSystem);
+        
+        // 場所選択システムの初期化
+        setPlanetarium(this);
+        initLocationSelector({
+            onSelect: (location) => {
+                console.log(`観測地を変更: ${location.name}`);
+            }
+        });
+        
         this.hideLoading();
         this.animate();
     }
@@ -200,6 +210,19 @@ class Planetarium {
 
     getSimulatedDate() {
         return this.simulatedDate ?? new Date();
+    }
+
+    /**
+     * 観測地の緯度経度を変更
+     * @param {number} lat - 緯度 (-90 〜 90)
+     * @param {number} lon - 経度 (-180 〜 180)
+     */
+    setObserverLocation(lat, lon) {
+        this.observer.lat = lat;
+        this.observer.lon = lon;
+        // 恒星時を再計算
+        this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, this.observer.lon);
+        console.log(`観測地を設定: 緯度 ${lat.toFixed(4)}, 経度 ${lon.toFixed(4)}`);
     }
 
     setTimeMode(mode, options = {}) {
