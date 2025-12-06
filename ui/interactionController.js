@@ -95,6 +95,21 @@ function setupControlButtons(ctx) {
             ctx.lensFlareSystem.setEnabled(visible);
         }
     });
+
+    const surfaceBtn = document.getElementById('btn-surface-mode');
+    if (surfaceBtn) {
+        const updateSurfaceLabel = () => {
+            const isLand = ctx.settings.surfaceType === 'land';
+            surfaceBtn.textContent = isLand ? '地面: 陸地' : '地面: 海';
+            surfaceBtn.classList.toggle('active', isLand);
+        };
+        surfaceBtn.addEventListener('click', () => {
+            ctx.settings.surfaceType = ctx.settings.surfaceType === 'land' ? 'water' : 'land';
+            ctx.waterSurfaceSystem?.setSurfaceType(ctx.settings.surfaceType);
+            updateSurfaceLabel();
+        });
+        updateSurfaceLabel();
+    }
     toggleButton('btn-star-trails', 'showStarTrails', (visible) => {
         if (ctx.starTrailSystem) {
             ctx.starTrailSystem.setEnabled(visible);
