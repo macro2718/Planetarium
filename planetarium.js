@@ -6,6 +6,7 @@ import { createStarFieldSystem } from './systems/starFieldSystem.js';
 import { createMilkyWaySystem } from './systems/milkyWaySystem.js';
 import { createConstellationSystem } from './systems/constellationSystem.js';
 import { createNebulaSystem } from './systems/nebulaSystem.js';
+import { createSunSystem } from './systems/sunSystem.js';
 import { createMoonSystem } from './systems/moonSystem.js';
 import { createAuroraSystem } from './systems/auroraSystem.js';
 import { createCosmicDustSystem } from './systems/cosmicDustSystem.js';
@@ -33,6 +34,7 @@ class Planetarium {
             showMilkyWay: true,
             showConstellations: true,
             showShootingStars: true,
+            showSun: false,
             showMoon: true,
             showAurora: true,
             showHourCircles: false,
@@ -91,6 +93,8 @@ class Planetarium {
         this.constellationSystem = createConstellationSystem(this);
         this.registerUpdater(this.constellationSystem);
         createNebulaSystem(this);
+        this.sunSystem = createSunSystem(this);
+        this.registerUpdater(this.sunSystem);
         this.moonSystem = createMoonSystem(this);
         this.registerUpdater(this.moonSystem);
         this.registerUpdater(createAuroraSystem(this));
