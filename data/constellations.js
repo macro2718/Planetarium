@@ -305,45 +305,51 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'cetus',
         name: 'くじら座',
         description: 'アンドロメダをのみ込もうとした海の怪物が描かれる大きな星座。',
-        starIds: ['menkar', 'kaffaljidhma', 'mira', 'batenKaitos', 'denebKaitos'],
-        lines: [
+            starIds: ['menkar', 'kaffaljidhma', 'mira', 'batenKaitos', 'denebKaitos', 'tauCeti', 'denebAlgenubi', 'denebShemali'],
+            lines: [
             ['menkar', 'kaffaljidhma'], // 頭部
             ['kaffaljidhma', 'mira'],   // 胴体前半
             ['mira', 'batenKaitos'],    // 腹部
-            ['batenKaitos', 'denebKaitos'], // 尾びれ
-            ['denebKaitos', 'menkar'],  // 背中を閉じる
-            ['menkar', 'mira']          // 胴内を補強
+            ['batenKaitos', 'tauCeti'], // 尾びれ
+            ['tauCeti', 'denebKaitos'], // 尾びれ
+            ['denebKaitos', 'denebShemali'],  // 背中を閉じる
+            ['denebShemali', 'denebAlgenubi'],
+            ['denebAlgenubi', 'batenKaitos']
         ]
     },
     {
         id: 'sagittarius',
         name: 'いて座',
         description: '夏の南の空に「ティーポット」の姿で現れ、天の川の中心方向を示す黄道星座。',
-        starIds: ['kausBorealis', 'kausMedia', 'kausAustralis', 'nunki', 'ascella', 'alnasl', 'tauSgr', 'albaldah'],
+        starIds: ['kausBorealis', 'kausMedia', 'kausAustralis', 'nunki', 'ascella', 'alnasl', 'phiSgr', 'tauSgr', 'albaldah'],
         lines: [
-            ['kausBorealis', 'kausMedia'],       // ティーポット上部（左）
             ['kausMedia', 'kausAustralis'],       // 左側の縁
+            ['kausAustralis', 'alnasl'],          // 注ぎ口の先端へ
+            ['alnasl', 'kausMedia'],              // 注ぎ口の付け根
+            ['kausBorealis', 'kausMedia'],       // ティーポット上部（左）
             ['kausAustralis', 'ascella'],         // 底面左〜右
-            ['ascella', 'nunki'],                 // 取っ手下部
-            ['nunki', 'kausBorealis'],            // 取っ手上部
-            ['kausMedia', 'alnasl'],              // 注ぎ口の付け根
-            ['alnasl', 'tauSgr'],                 // 注ぎ口の先端へ
-            ['tauSgr', 'kausAustralis'],          // 注ぎ口から底面へ戻る
-            ['kausMedia', 'albaldah'],            // ふたの中心
-            ['albaldah', 'nunki']                 // ふたから取っ手上部へ
+            ['ascella', 'tauSgr'],                 // 取っ手下部
+            ['tauSgr', 'nunki'],                 // 取っ手下部
+            ['nunki', 'phiSgr'],            // 取っ手上部
+            ['phiSgr', 'kausBorealis'],            // 取っ手上部からふたへ
+            ['phiSgr', 'kausMedia'],            // 取っ手上部からふたへ
+            ['phiSgr', 'ascella'],            // 取っ手上部からふたへ
         ]
     },
     {
         id: 'piscisAustrinus',
         name: 'みなみのうお座',
         description: '秋の南の空で孤独に輝く一等星フォーマルハウトを擁する星座。',
-        starIds: ['fomalhaut', 'dalim', 'epsilonPsa', 'deltaPsa', 'thetaPsa'],
+        starIds: ['fomalhaut', 'betaPsa', 'epsilonPsa', 'deltaPsa', 'muPsa', 'iotaPsa', 'thetaPsa'],
         lines: [
-            ['fomalhaut', 'dalim'],
-            ['dalim', 'deltaPsa'],
-            ['deltaPsa', 'epsilonPsa'],
-            ['epsilonPsa', 'fomalhaut'],
-            ['fomalhaut', 'thetaPsa']
+            ['fomalhaut', 'deltaPsa'],
+            ['deltaPsa', 'betaPsa'],
+            ['deltaPsa', 'muPsa'],
+            ['muPsa', 'iotaPsa'],
+            ['iotaPsa', 'thetaPsa'],
+            ['thetaPsa', 'muPsa'],
+            ['muPsa', 'epsilonPsa'],
+            ['epsilonPsa', 'fomalhaut']
         ]
     },
     {
@@ -354,35 +360,43 @@ export const BASE_CONSTELLATION_DATA = [
         lines: [
             ['mesarthim', 'hamal'],      // 角の付け根から頭へ
             ['hamal', 'sheratan'],       // ハマル〜シェラタン（羊の頭）
-            ['sheratan', 'botein']       // 体へ続く星並び
         ]
     },
     {
         id: 'gemini',
         name: 'ふたご座',
         description: '冬の夜空に並んで輝く双子の星座。',
-        starIds: ['castor', 'pollux', 'wasat', 'alhena', 'mebsuta', 'tejat', 'propus'],
+        starIds: ['castor', 'pollux', 'wasat', 'mekbuda', 'alhena', 'mebsuta', 'nuGem', 'thetaGem', 'tauGem', 'lambdaGem', 'alzirr', 'kappaGem', 'iotaGem', 'upsilonGem', 'tejat', 'propus'],
         lines: [
             // カストル側の体
-            ['castor', 'wasat'],
-            ['wasat', 'mebsuta'],
+            ['castor', 'tauGem'],
+            ['tauGem', 'iotaGem'],
+            ['tauGem', 'thetaGem'],
+            ['tauGem', 'mebsuta'],
             ['mebsuta', 'tejat'],
+            ['tejat', 'propus'],
+            ['mebsuta', 'nuGem'],
 
             // ポルックス側の体
-            ['pollux', 'wasat'],
-            ['wasat', 'alhena'],
-            ['alhena', 'propus']
+            ['pollux', 'upsilonGem'],
+            ['upsilonGem', 'kappaGem'],
+            ['upsilonGem', 'iotaGem'],
+            ['upsilonGem', 'wasat'],
+            ['wasat', 'mekbuda'],
+            ['mekbuda', 'alhena'],
+            ['wasat', 'lambdaGem'],
+            ['lambdaGem', 'alzirr'],
         ]
     },
     {
         id: 'cancer',
         name: 'かに座',
         description: '暗い星が多いが、かにの爪と甲羅がかすかに描かれる星座。',
-        starIds: ['acubens', 'asellusBorealis', 'asellusAustralis', 'altarf'],
+        starIds: ['acubens', 'asellusBorealis', 'asellusAustralis', 'altarf', 'iotaCancri'],
         lines: [
-            ['acubens', 'asellusBorealis'],   // 右の爪〜甲羅
-            ['acubens', 'asellusAustralis'],  // 右の爪〜甲羅
+            ['iotaCancri', 'asellusBorealis'],   // 右の爪〜甲羅
             ['asellusBorealis', 'asellusAustralis'], // 甲羅まわり
+            ['asellusAustralis', 'acubens'],  // 右の爪〜甲羅
             ['asellusAustralis', 'altarf']     // 南の脚先
         ]
     },
@@ -390,50 +404,65 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'hydra',
         name: 'うみへび座',
         description: '全天で最も長い星座。孤独なアルファルドを中心に蛇の胴体が春の空を横切る。',
-        starIds: ['ashlesha', 'minchir', 'alphard', 'ukdah', 'muHydrae'],
+        starIds: ['ashlesha', 'minchir', 'alphard', 'ukdah', 'zetaHya', 'deltaHya', 'zhang', 'lambdaHya', 'xiHya', 'betaHya', 'gammaHya', 'piHya'],
         lines: [
-            ['ashlesha', 'minchir'],        // 頭部の弧
-            ['minchir', 'alphard'],         // 頭と心臓を結ぶ
-            ['alphard', 'ukdah'],           // 胴体を南へ伸ばす
-            ['ukdah', 'muHydrae'],          // しっぽへ
+            ['zetaHya', 'minchir'],
+            ['minchir', 'deltaHya'],
+            ['deltaHya', 'ashlesha'],
+            ['ashlesha', 'zetaHya'],
+            ['zetaHya', 'ukdah'],
+            ['ukdah', 'alphard'],           // 胴体を南へ伸ばす
+            ['alphard', 'zhang'],
+            ['zhang', 'lambdaHya'],
+            ['lambdaHya', 'xiHya'],
+            ['xiHya', 'betaHya'],
+            ['betaHya', 'gammaHya'],
+            ['gammaHya', 'piHya']          // 胴体の先端
         ]
     },
     {
         id: 'libra',
         name: 'てんびん座',
         description: 'さそり座の西に位置する、天秤の皿を表す星座。',
-        starIds: ['zubenelgenubi', 'zubeneschamali', 'brachium', 'zubenelakrab'],
+        starIds: ['zubenelgenubi', 'zubeneschamali', 'brachium', 'zubenelhakrabi', 'upsilonLib'],
         lines: [
-            ['zubenelgenubi', 'zubeneschamali'],  // 皿と梁
+            ['zubeneschamali', 'zubenelgenubi'],  // 皿と梁
             ['zubenelgenubi', 'brachium'],         // 南の皿
-            ['zubeneschamali', 'zubenelakrab'],    // 北の皿
+            ['zubeneschamali', 'zubenelhakrabi'],    // 北の皿
+            ['zubenelhakrabi', 'zubenelgenubi'],
+            ['zubenelhakrabi', 'upsilonLib']
         ]
     },
     {
         id: 'capricornus',
         name: 'やぎ座',
         description: '細長い三角形で描かれる海山羊の星座。',
-        starIds: ['algedi', 'dabih', 'nashira', 'denebAlgedi'],
+        starIds: ['algedi', 'dabih', 'nashira', 'dorsum', 'omegaCap', 'zetaCap', 'denebAlgedi'],
         lines: [
             ['algedi', 'dabih'],         // 角〜胴体方向
-            ['dabih', 'nashira'],
-            ['nashira', 'denebAlgedi'],
-            ['denebAlgedi', 'algedi'],
-            ['nashira', 'algedi']        // 山羊の輪郭を補強
+            ['dabih', 'omegaCap'],
+            ['omegaCap', 'zetaCap'],     // 胴体をたどる
+            ['zetaCap', 'denebAlgedi'],       // 胴体をたどる
+            ['denebAlgedi', 'nashira'],     // 胴体をたどる
+            ['nashira', 'dorsum'],        // 尾へ
+            ['dorsum', 'algedi'],
         ]
     },
     {
         id: 'aquarius',
         name: 'みずがめ座',
         description: '水瓶から水が流れ出すような形に星が並ぶ。',
-        starIds: ['sadalsuud', 'sadalmelik', 'sadachbia', 'skat', 'situla', 'ancha'],
+        starIds: ['albali', 'sadalsuud', 'sadalmelik', 'sadachbia', 'skat', 'situla', 'zetaAqr', 'piAqr', 'hydor', 'ancha'],
         lines: [
+            ['albali', 'sadalsuud'],
             ['sadalsuud', 'sadalmelik'], // 水瓶の口
             ['sadalmelik', 'sadachbia'], // 水の流れの方向
-            ['sadachbia', 'skat'],       // 流れる水
-            ['sadalmelik', 'ancha'],     // 水瓶の胴
-            ['ancha', 'situla'],         // 取っ手の付け根
-            ['situla', 'sadachbia']      // 水瓶と水流をつなぐ
+            ['sadachbia', 'zetaAqr'],
+            ['zetaAqr', 'piAqr'],       // 水の流れをたどる
+            ['piAqr', 'sadalmelik'], 
+            ['ancha', 'sadalmelik'],         // 取っ手の付け根
+            ['hydor', 'skaanchat'],               // 取っ手をたどる
+            ['skat', 'hydor']            // 取っ手をたどる
         ]
     },
     {
@@ -443,9 +472,8 @@ export const BASE_CONSTELLATION_DATA = [
         starIds: ['alrescha', 'torcular', 'fumalsamakah', 'alpherg'],
         lines: [
             ['alrescha', 'torcular'],    // 西の魚へ伸びる紐
+            ['torcular', 'alpherg'],      // 西の魚と紐を結ぶ
             ['alrescha', 'fumalsamakah'],// 東の魚へ伸びる紐
-            ['fumalsamakah', 'alpherg'], // 東の魚を形作る
-            ['torcular', 'alpherg']      // 西の魚と紐を結ぶ
         ]
     },
     {
