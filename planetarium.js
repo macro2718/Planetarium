@@ -47,7 +47,8 @@ class Planetarium {
             showStarTrails: false,
             autoRotate: false,
             playMusic: false,
-            showLensFlare: true
+            showLensFlare: true,
+            surfaceType: 'water'
         };
         this.bgmAudio = null;
         this.bgmPlaylist = [];
@@ -102,7 +103,8 @@ class Planetarium {
         this.registerUpdater(this.moonSystem);
         this.registerUpdater(createAuroraSystem(this));
         this.registerUpdater(createCosmicDustSystem(this));
-        this.registerUpdater(createWaterSurfaceSystem(this, () => this.moonSystem.getCurrentState()));
+        this.waterSurfaceSystem = createWaterSurfaceSystem(this, () => this.moonSystem.getCurrentState());
+        this.registerUpdater(this.waterSurfaceSystem);
         this.registerUpdater(createShootingStarSystem(this));
         this.hourCircleSystem = createHourCircleSystem(this);
         this.declinationCircleSystem = createDeclinationCircleSystem(this);
