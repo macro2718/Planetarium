@@ -461,7 +461,7 @@ export const BASE_CONSTELLATION_DATA = [
             ['zetaAqr', 'piAqr'],       // 水の流れをたどる
             ['piAqr', 'sadalmelik'], 
             ['ancha', 'sadalmelik'],         // 取っ手の付け根
-            ['hydor', 'skaanchat'],               // 取っ手をたどる
+            ['hydor', 'ancha'],               // 取っ手をたどる
             ['skat', 'hydor']            // 取っ手をたどる
         ]
     },
