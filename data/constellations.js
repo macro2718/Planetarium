@@ -469,41 +469,55 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'pisces',
         name: 'うお座',
         description: '二匹の魚を結ぶひもが大きなV字を描く星座。結び目アルレシャを中心に形をたどれる。',
-        starIds: ['alrescha', 'torcular', 'fumalsamakah', 'alpherg'],
+        starIds: ['alrescha', 'torcular', 'fumalsamakah', 'omegaPsc', 'iotaPsc', 'thetaPsc', 'lambdaPsc', 'alpherg', 'phiPsc', 'tauPsc', 'upsilonPsc', 'epsilonPsc'],
         lines: [
             ['alrescha', 'torcular'],    // 西の魚へ伸びる紐
             ['torcular', 'alpherg'],      // 西の魚と紐を結ぶ
-            ['alrescha', 'fumalsamakah'],// 東の魚へ伸びる紐
+            ['alpherg', 'phiPsc'],      // 西の魚
+            ['phiPsc', 'tauPsc'], 
+            ['tauPsc', 'upsilonPsc'],
+            ['upsilonPsc', 'phiPsc'],
+            ['alrescha', 'epsilonPsc'],     // 東の魚へ伸びる紐
+            ['epsilonPsc', 'omegaPsc'],
+            ['omegaPsc', 'iotaPsc'],
+            ['iotaPsc', 'lambdaPsc'],     // 東の魚へ伸びる紐
+            ['lambdaPsc', 'fumalsamakah'],
+            ['fumalsamakah', 'thetaPsc'],
+            ['thetaPsc', 'iotaPsc']
         ]
     },
     {
         id: 'centaurus',
         name: 'ケンタウルス座',
         description: '南天で最も目立つケンタウロスの星座。アルファ・ケンタウリとハダルが南十字を導く。',
-        starIds: ['muhlifain', 'hadar', 'rigilKentaurus', 'menkent', 'epsilonCen', 'deltaCen'],
+        starIds: ['muhlifain', 'hadar', 'zetaCen', 'piCen', 'rhoCen', 'omicron1Cen', 'sigmaCen', 'nuCen', 'alhakim', 'rigilKentaurus', 'menkent', 'epsilonCen', 'deltaCen'],
         lines: [
-            ['muhlifain', 'hadar'],           // 胴体から肩
-            ['hadar', 'rigilKentaurus'],      // 肩から前脚
-            ['rigilKentaurus', 'menkent'],    // 前脚から頭部
-            ['menkent', 'muhlifain'],         // 頭から背へ戻る
+            ['rigilKentaurus', 'hadar'],      // 肩から前脚
             ['hadar', 'epsilonCen'],          // 胴の南縁
-            ['epsilonCen', 'deltaCen'],       // 後脚上部
-            ['deltaCen', 'muhlifain'],        // 胴体を閉じる
-            ['epsilonCen', 'rigilKentaurus']  // 胴中央の補強
+            ['epsilonCen', 'muhlifain'],      // 胴の北縁
+            ['muhlifain', 'zetaCen'],           // 胴体から肩
+            ['muhlifain', 'sigmaCen'],
+            ['sigmaCen', 'deltaCen'],
+            ['deltaCen', 'piCen'],
+            ['sigmaCen', 'rhoCen'],
+            ['rhoCen', 'omicron1Cen'],
+            ['zetaCen', 'nuCen'], 
+            ['nuCen', 'menkent'],    // 前脚から頭部
+            ['nuCen', 'alhakim'],
         ]
     },
     {
         id: 'carina',
         name: 'りゅうこつ座',
         description: 'アルゴ船の船底から帆へ伸びる南天の象徴的な星座。カノープスが甲板を照らす。',
-        starIds: ['canopus', 'miaplacidus', 'thetaCar', 'aspidiske', 'avior'],
+        starIds: ['canopus', 'miaplacidus', 'thetaCar', 'omegaCar', 'chiCar', 'aspidiske', 'avior'],
         lines: [
             ['canopus', 'miaplacidus'],   // 船底を描く
-            ['miaplacidus', 'thetaCar'],  // 帆柱へ
+            ['miaplacidus', 'omegaCar'],  // 帆柱へ
+            ['omegaCar', 'thetaCar'],     // 帆柱から帆へ
             ['thetaCar', 'aspidiske'],    // 帆の上縁
             ['aspidiske', 'avior'],       // 船尾へ滑る
-            ['avior', 'canopus'],         // 船体を閉じる
-            ['thetaCar', 'canopus']       // 帆柱を支える補強
+            ['avior', 'chiCar'],         // 船尾から帆の下縁へ
         ]
     },
     {
@@ -513,12 +527,7 @@ export const BASE_CONSTELLATION_DATA = [
         starIds: ['gacrux', 'acrux', 'mimosa', 'ginan', 'imai'],
         lines: [
             ['gacrux', 'acrux'],      // 十字の縦軸
-            ['mimosa', 'ginan'],      // 十字の横軸
-            ['gacrux', 'mimosa'],     // 頭から右腕
-            ['gacrux', 'ginan'],      // 頭から左腕
-            ['acrux', 'imai'],        // 足元の延長
-            ['imai', 'mimosa'],       // 右下を補強
-            ['imai', 'ginan']         // 左下を補強
+            ['imai', 'mimosa']       // 右下を補強
         ]
     },
     {
@@ -527,41 +536,50 @@ export const BASE_CONSTELLATION_DATA = [
         description: 'アリアドネの冠が夜空に置かれたような繊細な弧を描く小星座。',
         starIds: ['nusakan', 'gammaCrB', 'epsilonCrB', 'alphecca', 'thetaCrB'],
         lines: [
-            ['nusakan', 'gammaCrB'],      // 冠の左側
-            ['gammaCrB', 'epsilonCrB'],   // 弧の下部
-            ['epsilonCrB', 'alphecca'],   // 宝石へ連なる
-            ['alphecca', 'thetaCrB'],     // 冠の右側
-            ['thetaCrB', 'nusakan'],      // 上部で閉じる
-            ['epsilonCrB', 'thetaCrB']    // 弧を補強
+            ['thetaCrB', 'nusakan'],     // 上部で閉じる
+            ['nusakan', 'alphecca'],     // 冠の左側
+            ['alphecca', 'gammaCrB'],    // 宝石へ連なる
+            ['gammaCrB', 'epsilonCrB']   // 弧の下部
         ]
     },
     {
         id: 'hercules',
         name: 'ヘラクレス座',
         description: '夏の大三角の北側でうずくまる英雄の星座。赤く脈打つラス・アルゲティが頭部の目印。',
-        starIds: ['rasalgethi', 'kornephoros', 'sarin', 'rutilicus', 'etaHer'],
+        starIds: ['rasalgethi', 'kornephoros', 'sarin', 'rutilicus', 'gammaHer', 'muHer', 'iotaHer', 'thetaHer', 'tauHer', 'epsilonHer', 'piHer', 'etaHer'],
         lines: [
-            ['rasalgethi', 'kornephoros'],   // 頭から肩
-            ['kornephoros', 'sarin'],        // 肩から胸
-            ['sarin', 'rutilicus'],          // 胸から膝
-            ['rutilicus', 'etaHer'],         // 膝から腕先
-            ['etaHer', 'rasalgethi'],        // 腕から頭へ戻る
-            ['sarin', 'etaHer']              // 胸と腕を補強
+            ['sarin', 'epsilonHer'],
+            ['epsilonHer', 'piHer'],       // 腰から足へ
+            ['piHer', 'etaHer'],           // 腰から胸へ
+            ['etaHer', 'rutilicus'],
+            ['rutilicus', 'kornephoros'],
+            ['kornephoros', 'rasalgethi'],   // 頭から肩
+            ['rasalgethi', 'sarin'],        // 肩から胸
+            ['rutilicus', 'epsilonHer'],
+            ['etaHer', 'tauHer'],
+            ['piHer', 'thetaHer'],
+            ['thetaHer', 'iotaHer'],
+            ['sarin', 'muHer'],
+            ['kornephoros', 'gammaHer']
         ]
     },
     {
         id: 'ophiuchus',
         name: 'へびつかい座',
         description: 'へびを押さえ込む巨人が黄道上に立つ。頭のラス・アルハゲと手元のイェッドが特徴的。',
-        starIds: ['rasalhague', 'cebalrai', 'yedPrior', 'yedPosterior', 'sabik', 'zetaOph'],
+        starIds: ['rasalhague', 'cebalrai', 'yedPrior', 'marfik', 'sinistra', 'thetaOph', 'gammaOph', 'yedPosterior', 'sabik', 'kappaOph', 'zetaOph'],
         lines: [
             ['rasalhague', 'cebalrai'],   // 頭から肩
-            ['cebalrai', 'yedPrior'],     // 右腕の上部
-            ['yedPrior', 'yedPosterior'], // 手の甲
-            ['yedPosterior', 'zetaOph'],  // 蛇を押さえる腕
-            ['zetaOph', 'sabik'],         // 蛇と脚部
-            ['sabik', 'cebalrai'],        // 腰へ戻る
-            ['rasalhague', 'yedPrior']    // 頭から手への補強
+            ['cebalrai', 'sabik'],     // 右腕の上部
+            ['sabik', 'zetaOph'],         // 蛇と脚部
+            ['zetaOph', 'yedPosterior'],  // 蛇を押さえる腕
+            ['yedPosterior', 'yedPrior'], // 手の甲
+            ['yedPrior', 'marfik'],    // 頭から手への補強
+            ['marfik', 'kappaOph'],
+            ['zetaOph', 'kappaOph'],
+            ['cebalrai', 'gammaOph'],
+            ['gammaOph', 'sinistra'],
+            ['sabik', 'thetaOph']
         ]
     },
     {
@@ -570,12 +588,11 @@ export const BASE_CONSTELLATION_DATA = [
         description: '夏の宵空に小さなひし形で跳ね上がり、七夕の天の川に寄り添う可憐な星座。',
         starIds: ['sualocin', 'rotanev', 'gammaDel', 'deltaDel', 'aldulfin'],
         lines: [
-            ['sualocin', 'rotanev'],
-            ['rotanev', 'gammaDel'],
-            ['gammaDel', 'aldulfin'],
-            ['aldulfin', 'deltaDel'],
-            ['deltaDel', 'sualocin'],
-            ['gammaDel', 'deltaDel']
+            ['sualocin', 'gammaDel'],
+            ['gammaDel', 'deltaDel'],
+            ['deltaDel', 'rotanev'],
+            ['rotanev', 'sualocin'],
+            ['rotanev', 'aldulfin']
         ]
     },
     {
@@ -584,53 +601,68 @@ export const BASE_CONSTELLATION_DATA = [
         description: '春の南空で台形に並ぶ四つの星が翼を広げるカラスの姿を描く。',
         starIds: ['gienah', 'kraz', 'algorab', 'minkar', 'alchiba'],
         lines: [
-            ['gienah', 'kraz'],
-            ['kraz', 'algorab'],
-            ['algorab', 'minkar'],
+            ['gienah', 'algorab'],
+            ['algorab', 'kraz'],
+            ['kraz', 'minkar'],
             ['minkar', 'gienah'],
-            ['minkar', 'alchiba'],
-            ['alchiba', 'gienah']
+            ['minkar', 'alchiba']
         ]
     },
     {
         id: 'eridanus',
         name: 'エリダヌス座',
         description: 'オリオンの足元から南天へと流れ下る長い河の星座。アケルナルが河口を照らす。',
-        starIds: ['cursa', 'rana', 'zaurak', 'acamar', 'achernar'],
+        starIds: ['cursa', 'rana', 'zaurak', 'chiEri', 'acamar', 'achernar', 'nuEri', 'azha', 'angetenar', 'tau4Eri', 'kappaEri', 'upsilon2Eri', 'iotaEri'],
         lines: [
-            ['cursa', 'rana'],
+            ['achernar', 'chiEri'],
+            ['chiEri', 'kappaEri'],
+            ['kappaEri', 'iotaEri'],
+            ['iotaEri', 'acamar'],
+            ['acamar', 'upsilon2Eri'],
+            ['upsilon2Eri', 'tau4Eri'],
+            ['tau4Eri', 'angetenar'],
+            ['angetenar', 'azha'],
+            ['azha', 'rana'],
             ['rana', 'zaurak'],
-            ['zaurak', 'acamar'],
-            ['acamar', 'achernar'],
-            ['rana', 'acamar']
+            ['zaurak', 'nuEri'],
+            ['nuEri', 'cursa']
         ]
     },
     {
         id: 'serpens',
         name: 'へび座',
         description: 'へびつかい座に両断される珍しい星座。頭部と尾部が黄道沿いにゆるやかにうねる。',
-        starIds: ['unukalhai', 'chow', 'gammaSer', 'epsilonSer', 'etaSer', 'alya'],
+        starIds: ['unukalhai', 'chow', 'gudja', 'iotaSer', 'gammaSer', 'epsilonSer', 'deltaSer', 'muSer', 'xiSer', 'etaSer', 'alya'],
         lines: [
-            ['unukalhai', 'chow'],
+            ['muSer', 'epsilonSer'],
+            ['epsilonSer', 'unukalhai'],
+            ['unukalhai', 'deltaSer'],
+            ['deltaSer', 'chow'],
             ['chow', 'gammaSer'],
-            ['gammaSer', 'epsilonSer'],
-            ['epsilonSer', 'etaSer'],
-            ['etaSer', 'alya'],
-            ['gammaSer', 'unukalhai']
+            ['gammaSer', 'gudja'],
+            ['gudja', 'iotaSer'],
+            ['iotaSer', 'chow'],
+            ['xiSer', 'etaSer'],
+            ['etaSer', 'alya']
         ]
     },
     {
         id: 'lepus',
         name: 'うさぎ座',
         description: 'オリオンの足元で跳ね回る野うさぎ。冬の低空に並ぶ黄白色の星列が愛らしい。',
-        starIds: ['arneb', 'nihal', 'epsilonLep', 'muLep', 'kappaLep'],
+        starIds: ['arneb', 'nihal', 'epsilonLep', 'muLep', 'thetaLep', 'etaLep', 'deltaLep', 'zetaLep', 'lambdaLep', 'kappaLep'],
         lines: [
             ['arneb', 'nihal'],
             ['nihal', 'epsilonLep'],
             ['epsilonLep', 'muLep'],
             ['muLep', 'arneb'],
             ['muLep', 'kappaLep'],
-            ['kappaLep', 'arneb']
+            ['muLep', 'lambdaLep'],
+            ['arneb', 'zetaLep'],
+            ['zetaLep', 'etaLep'],
+            ['etaLep', 'thetaLep'],
+            ['thetaLep', 'deltaLep'],
+            ['deltaLep', 'nihal']
         ]
     },
     {
@@ -650,36 +682,35 @@ export const BASE_CONSTELLATION_DATA = [
         description: '夏の天の川に小さな矢が浮かぶ星座。ささやかな光で射手の矢を思わせる直線を描く。',
         starIds: ['sham', 'betaSge', 'gammaSge', 'deltaSge', 'epsilonSge'],
         lines: [
-            ['sham', 'betaSge'],
-            ['betaSge', 'gammaSge'],
-            ['gammaSge', 'deltaSge'],
-            ['deltaSge', 'epsilonSge'],
-            ['gammaSge', 'sham']
+            ['sham', 'deltaSge'],
+            ['betaSge', 'deltaSge'],
+            ['gammaSge', 'deltaSge']
         ]
     },
     {
         id: 'vela',
         name: 'ほ座',
         description: 'アルゴ船の帆にあたる部分で、南天の海を渡る帆布が青白い光で張られる。',
-        starIds: ['regor', 'alsephina', 'suhail', 'markeb', 'muVel'],
+        starIds: ['regor', 'alsephina', 'suhail', 'markeb', 'psiVel', 'muVel'],
         lines: [
             ['regor', 'alsephina'],
             ['alsephina', 'markeb'],
             ['markeb', 'muVel'],
-            ['muVel', 'suhail'],
-            ['suhail', 'regor'],
-            ['alsephina', 'suhail']
+            ['muVel', 'psiVel'],
+            ['psiVel', 'suhail'],
+            ['suhail', 'regor']
         ]
     },
     {
         id: 'puppis',
         name: 'とも座',
         description: 'アルゴ船の船尾を担う星座。舵と甲板を結ぶ星々が南天の水平線近くに連なる。',
-        starIds: ['naos', 'ahadi', 'tureis', 'asmidiske'],
+        starIds: ['naos', 'ahadi', 'tureis', 'asmidiske', 'nuPup'],
         lines: [
-            ['naos', 'ahadi'],
-            ['ahadi', 'tureis'],
-            ['asmidiske', 'naos'],
+            ['naos', 'tureis'],
+            ['tureis', 'asmidiske'],
+            ['asmidiske', 'ahadi'],
+            ['ahadi', 'nuPup']
         ]
     }
 ];

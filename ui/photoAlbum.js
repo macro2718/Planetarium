@@ -300,7 +300,9 @@ export class PhotoAlbumSystem {
         }, 600); // ホーム画面のトランジション完了を待つ
 
         this.onHomeScreen = true;
-    }    showHomeFromPlanetarium() {
+    }
+
+    showHomeFromPlanetarium() {
         const homeScreen = document.getElementById('home-screen');
         if (homeScreen) {
             homeScreen.classList.remove('hidden');
