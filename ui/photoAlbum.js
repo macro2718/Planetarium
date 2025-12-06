@@ -262,7 +262,7 @@ export class PhotoAlbumSystem {
     openAlbum() {
         const homeScreen = document.getElementById('home-screen');
         const albumScreen = document.getElementById('album-screen');
-        
+
         if (homeScreen) {
             homeScreen.classList.add('hidden');
         }
@@ -270,6 +270,8 @@ export class PhotoAlbumSystem {
             albumScreen.classList.remove('hidden');
             this.renderAlbumGrid();
         }
+
+        document.body.classList.remove('home-visible');
     }
 
     backToHome() {
@@ -300,6 +302,7 @@ export class PhotoAlbumSystem {
         }, 600); // ホーム画面のトランジション完了を待つ
 
         this.onHomeScreen = true;
+        document.body.classList.add('home-visible');
     }
 
     showHomeFromPlanetarium() {
@@ -308,6 +311,7 @@ export class PhotoAlbumSystem {
             homeScreen.classList.remove('hidden');
         }
         this.onHomeScreen = true;
+        document.body.classList.add('home-visible');
     }
 
     isOnHomeScreen() {

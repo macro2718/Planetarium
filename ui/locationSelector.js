@@ -11,7 +11,8 @@ let onLocationSelected = null;
  */
 export function initLocationSelector(options = {}) {
     onLocationSelected = options.onSelect;
-    
+
+    document.body.classList.add('home-visible');
     setupLocationGrid();
     setupBackButton();
     setupEnterButton();
@@ -94,6 +95,8 @@ function selectLocation(location) {
     // 場所選択画面を非表示
     hideLocationScreen();
 
+    document.body.classList.remove('home-visible');
+
     // プラネタリウム画面を表示
     const homeScreen = document.getElementById('home-screen');
     if (homeScreen) {
@@ -126,6 +129,8 @@ function setupBackButton() {
 function backToHomeFromLocation() {
     const homeScreen = document.getElementById('home-screen');
     const locationScreen = document.getElementById('location-screen');
+
+    document.body.classList.add('home-visible');
 
     // ホーム画面(z-index:2000)が場所選択画面(z-index:1800)より上にあるため、
     // 先にホーム画面を表示してからフェードインすることで
@@ -172,7 +177,9 @@ function setupEnterButton() {
 export function showLocationScreen() {
     const locationScreen = document.getElementById('location-screen');
     const homeScreen = document.getElementById('home-screen');
-    
+
+    document.body.classList.remove('home-visible');
+
     if (locationScreen) {
         locationScreen.classList.remove('hidden');
     }
@@ -199,6 +206,7 @@ function showHomeScreen() {
     if (homeScreen) {
         homeScreen.classList.remove('hidden');
     }
+    document.body.classList.add('home-visible');
 }
 
 /**

@@ -477,6 +477,17 @@
             transition: opacity 0.35s ease, transform 0.35s ease;
         }
 
+        body.home-visible #controls,
+        body.home-visible #time-display,
+        body.home-visible #info-panel,
+        body.home-visible #title,
+        body.home-visible #subtitle {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+
         body.immersive-mode #exit-immersive {
             opacity: 0.95;
             pointer-events: auto;
@@ -1884,6 +1895,13 @@
                 <button class="control-btn small" id="time-toggle-play">▶️ 再生</button>
                 <button class="control-btn small" id="apply-custom-time">設定を適用</button>
                 <p class="control-hint" id="time-speed-hint">倍率0で停止。負の値で時間を逆行させることもできます。</p>
+            </div>
+        </div>
+        <div class="control-section" id="surface-control-section">
+            <div class="section-title">SURFACE</div>
+            <div class="control-grid">
+                <button class="control-btn" data-surface-type="water">海</button>
+                <button class="control-btn" data-surface-type="land">陸地</button>
             </div>
         </div>
         <div class="control-section">
