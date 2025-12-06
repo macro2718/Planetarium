@@ -30,14 +30,14 @@ function createSkyGradient(ctx) {
         void main() {
             float h = normalize(vWorldPosition).y;
             
-            // 地平線付近（明るめの濃紺〜紫）
-            vec3 horizonGlow = vec3(0.12, 0.08, 0.18);
-            // 地平線少し上（やや暗い藍色）
-            vec3 lowSky = vec3(0.04, 0.03, 0.10);
-            // 中間の夜空（暗い紺）
-            vec3 midSky = vec3(0.015, 0.012, 0.04);
-            // 天頂付近（ほぼ真っ暗）
-            vec3 zenith = vec3(0.002, 0.002, 0.008);
+            // 地平線付近（大気がないので黒）
+            vec3 horizonGlow = vec3(0.0, 0.0, 0.0);
+            // 地平線少し上
+            vec3 lowSky = vec3(0.0, 0.0, 0.0);
+            // 中間の夜空
+            vec3 midSky = vec3(0.0, 0.0, 0.0);
+            // 天頂付近
+            vec3 zenith = vec3(0.0, 0.0, 0.0);
             // 地面（暗い）
             vec3 ground = vec3(0.01, 0.01, 0.015);
             

@@ -5,14 +5,20 @@ export function createSunSystem(ctx) {
     ctx.sunGroup = new THREE.Group();
     ctx.scene.add(ctx.sunGroup);
 
+    // 太陽光（平行光源）を追加
+    // 大気がないので、非常に鋭く明るい光
+    const sunLight = new THREE.DirectionalLight(0xffffff, 3.0);
+    ctx.scene.add(sunLight);
+
     const coreRadius = 140;
     const glowRadius = 220;
 
     const sunTexture = createSunTexture();
 
     const sunGeometry = new THREE.SphereGeometry(coreRadius, 64, 64);
+    // 大気がないため、太陽は純白に輝く
     const sunMaterial = new THREE.MeshBasicMaterial({
-        color: new THREE.Color(1.0, 0.98, 0.92),
+        color: new THREE.Color(1.0, 1.0, 1.0),
         map: sunTexture,
         transparent: true
     });
@@ -30,9 +36,9 @@ export function createSunSystem(ctx) {
 
     const glowGeometry = new THREE.SphereGeometry(glowRadius, 32, 32);
     const glowMaterial = new THREE.MeshBasicMaterial({
-        color: new THREE.Color(1.0, 0.86, 0.64),
+        color: new THREE.Color(1.0, 1.0, 1.0),
         transparent: true,
-        opacity: 0.14,
+        opacity: 0.05, // 大気散乱がないので控えめに
         blending: THREE.AdditiveBlending,
         depthWrite: false
     });
@@ -41,7 +47,7 @@ export function createSunSystem(ctx) {
 
     const coronaSprite = new THREE.Sprite(new THREE.SpriteMaterial({
         map: coronaTexture,
-        color: new THREE.Color(1.0, 0.92, 0.86),
+        color: new THREE.Color(1.0, 1.0, 1.0),
         transparent: true,
         blending: THREE.AdditiveBlending,
         depthWrite: false
@@ -56,8 +62,14 @@ export function createSunSystem(ctx) {
         if (!state) return;
         ctx.sunGroup.position.copy(state.position);
         ctx.sunGroup.lookAt(0, 0, 0);
+        
+        // 光源の位置を更新
+        sunLight.position.copy(state.position);
+        
         const visible = (ctx.settings?.showSun ?? false) && state.altDeg > -5;
         ctx.sunGroup.visible = visible;
+        sunLight.visible = visible;
+
         sunCore.userData.magnitude = `高度 ${state.altDeg.toFixed(1)}°`;
         sunCore.userData.info = `方位 ${state.azDeg.toFixed(1)}° / 赤経 ${state.raDeg.toFixed(1)}° / 赤緯 ${state.decDeg.toFixed(1)}°`;
     };
@@ -83,7 +95,9 @@ export function createSunSystem(ctx) {
         setEnabled: (enabled) => {
             ctx.settings.showSun = enabled;
             const state = ensureState();
-            ctx.sunGroup.visible = enabled && state.altDeg > -5;
+            const visible = enabled && state.altDeg > -5;
+            ctx.sunGroup.visible = visible;
+            sunLight.visible = visible;
         },
         update: () => {
             ensureState();
@@ -163,15 +177,15 @@ function createSunTexture() {
     const center = size / 2;
 
     const coreGradient = ctx2d.createRadialGradient(center, center, size * 0.06, center, center, size * 0.48);
-    coreGradient.addColorStop(0, 'rgba(255, 250, 235, 1)');
-    coreGradient.addColorStop(0.5, 'rgba(255, 236, 205, 0.95)');
-    coreGradient.addColorStop(0.82, 'rgba(255, 220, 170, 0.75)');
-    coreGradient.addColorStop(1, 'rgba(210, 160, 120, 0.55)');
+    coreGradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    coreGradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.98)');
+    coreGradient.addColorStop(0.82, 'rgba(255, 255, 255, 0.9)');
+    coreGradient.addColorStop(1, 'rgba(255, 255, 255, 0.8)');
 
     ctx2d.fillStyle = coreGradient;
     ctx2d.fillRect(0, 0, size, size);
 
-    ctx2d.strokeStyle = 'rgba(255, 255, 255, 0.28)';
+    ctx2d.strokeStyle = 'rgba(255, 255, 255, 0.5)';
     ctx2d.lineWidth = size * 0.02;
     ctx2d.beginPath();
     ctx2d.arc(center, center, size * 0.48, 0, Math.PI * 2);
@@ -191,9 +205,9 @@ function createCoronaTexture() {
     const ctx2d = canvas.getContext('2d');
     const center = size / 2;
     const coronaGradient = ctx2d.createRadialGradient(center, center, size * 0.12, center, center, size * 0.48);
-    coronaGradient.addColorStop(0, 'rgba(255, 220, 190, 0.55)');
-    coronaGradient.addColorStop(0.45, 'rgba(255, 210, 160, 0.18)');
-    coronaGradient.addColorStop(1, 'rgba(255, 210, 160, 0)');
+    coronaGradient.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+    coronaGradient.addColorStop(0.45, 'rgba(255, 255, 255, 0.1)');
+    coronaGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
     ctx2d.fillStyle = coronaGradient;
     ctx2d.fillRect(0, 0, size, size);
