@@ -6,11 +6,15 @@ export function createSunSystem(ctx) {
     ctx.scene.add(ctx.sunGroup);
 
     const coreRadius = 140;
-    const glowRadius = 200;
+    const glowRadius = 220;
+
+    const sunTexture = createSunTexture();
 
     const sunGeometry = new THREE.SphereGeometry(coreRadius, 64, 64);
     const sunMaterial = new THREE.MeshBasicMaterial({
-        color: new THREE.Color(1.0, 0.93, 0.76)
+        color: new THREE.Color(1.0, 0.98, 0.92),
+        map: sunTexture,
+        transparent: true
     });
     const sunCore = new THREE.Mesh(sunGeometry, sunMaterial);
     sunCore.userData = {
@@ -22,16 +26,28 @@ export function createSunSystem(ctx) {
     ctx.sunGroup.add(sunCore);
     ctx.clickableObjects.push(sunCore);
 
+    const coronaTexture = createCoronaTexture();
+
     const glowGeometry = new THREE.SphereGeometry(glowRadius, 32, 32);
     const glowMaterial = new THREE.MeshBasicMaterial({
-        color: new THREE.Color(1.0, 0.78, 0.42),
+        color: new THREE.Color(1.0, 0.86, 0.64),
         transparent: true,
-        opacity: 0.32,
+        opacity: 0.14,
         blending: THREE.AdditiveBlending,
         depthWrite: false
     });
     const sunGlow = new THREE.Mesh(glowGeometry, glowMaterial);
     ctx.sunGroup.add(sunGlow);
+
+    const coronaSprite = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: coronaTexture,
+        color: new THREE.Color(1.0, 0.92, 0.86),
+        transparent: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+    }));
+    coronaSprite.scale.set(glowRadius * 1.8, glowRadius * 1.8, 1);
+    ctx.sunGroup.add(coronaSprite);
 
     const sunState = { current: null };
     const getDate = () => (typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date());
@@ -135,4 +151,54 @@ function convertEquatorialToHorizontal(ctx, raDeg, decDeg, radius) {
         altDeg: result.altDeg,
         azDeg: result.azDeg
     };
+}
+
+function createSunTexture() {
+    const size = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+
+    const ctx2d = canvas.getContext('2d');
+    const center = size / 2;
+
+    const coreGradient = ctx2d.createRadialGradient(center, center, size * 0.06, center, center, size * 0.48);
+    coreGradient.addColorStop(0, 'rgba(255, 250, 235, 1)');
+    coreGradient.addColorStop(0.5, 'rgba(255, 236, 205, 0.95)');
+    coreGradient.addColorStop(0.82, 'rgba(255, 220, 170, 0.75)');
+    coreGradient.addColorStop(1, 'rgba(210, 160, 120, 0.55)');
+
+    ctx2d.fillStyle = coreGradient;
+    ctx2d.fillRect(0, 0, size, size);
+
+    ctx2d.strokeStyle = 'rgba(255, 255, 255, 0.28)';
+    ctx2d.lineWidth = size * 0.02;
+    ctx2d.beginPath();
+    ctx2d.arc(center, center, size * 0.48, 0, Math.PI * 2);
+    ctx2d.stroke();
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
+}
+
+function createCoronaTexture() {
+    const size = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+
+    const ctx2d = canvas.getContext('2d');
+    const center = size / 2;
+    const coronaGradient = ctx2d.createRadialGradient(center, center, size * 0.12, center, center, size * 0.48);
+    coronaGradient.addColorStop(0, 'rgba(255, 220, 190, 0.55)');
+    coronaGradient.addColorStop(0.45, 'rgba(255, 210, 160, 0.18)');
+    coronaGradient.addColorStop(1, 'rgba(255, 210, 160, 0)');
+
+    ctx2d.fillStyle = coronaGradient;
+    ctx2d.fillRect(0, 0, size, size);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
 }
