@@ -15,7 +15,6 @@ export function initLocationSelector(options = {}) {
     document.body.classList.add('home-visible');
     setupLocationGrid();
     setupBackButton();
-    setupEnterButton();
 }
 
 /**
@@ -128,47 +127,43 @@ function setupBackButton() {
  */
 function backToHomeFromLocation() {
     const homeScreen = document.getElementById('home-screen');
+    const modeScreen = document.getElementById('mode-screen');
     const locationScreen = document.getElementById('location-screen');
 
     document.body.classList.add('home-visible');
 
-    // ホーム画面(z-index:2000)が場所選択画面(z-index:1800)より上にあるため、
-    // 先にホーム画面を表示してからフェードインすることで
-    // 背後のプラネタリウムが見えないようにする
+    // モード選択画面が存在する場合は、そちらへ戻す
+    if (modeScreen) {
+        modeScreen.classList.add('fading-in');
+        modeScreen.classList.remove('hidden');
 
-    // 1. ホーム画面を透明状態で表示（場所選択画面の上に重なる）
+        requestAnimationFrame(() => {
+            modeScreen.classList.remove('fading-in');
+        });
+
+        setTimeout(() => {
+            if (locationScreen) {
+                locationScreen.classList.add('hidden');
+            }
+        }, 600);
+        return;
+    }
+
+    // フォールバックとしてホーム画面へ戻る
     if (homeScreen) {
         homeScreen.classList.add('fading-in');
         homeScreen.classList.remove('hidden');
-        
-        // 次のフレームでフェードインを開始
+
         requestAnimationFrame(() => {
             homeScreen.classList.remove('fading-in');
         });
     }
 
-    // 2. ホーム画面のフェードイン完了後に場所選択画面を非表示
     setTimeout(() => {
         if (locationScreen) {
             locationScreen.classList.add('hidden');
         }
-    }, 600); // ホーム画面のトランジション完了を待つ
-}
-
-/**
- * ホーム画面の「星空を見る」ボタンを場所選択画面へ誘導
- */
-function setupEnterButton() {
-    const enterBtn = document.getElementById('enter-planetarium');
-    if (enterBtn) {
-        // 既存のイベントリスナーを削除するため、クローンで置き換え
-        const newBtn = enterBtn.cloneNode(true);
-        enterBtn.parentNode.replaceChild(newBtn, enterBtn);
-        
-        newBtn.addEventListener('click', () => {
-            showLocationScreen();
-        });
-    }
+    }, 600);
 }
 
 /**

@@ -21,6 +21,8 @@ import { setupTimeDisplay } from './ui/timeDisplay.js';
 import { calculateLocalSiderealTime } from './utils/astronomy.js';
 import { getPhotoAlbumSystem, setupPhotoCaptureButton } from './ui/photoAlbum.js';
 import { initLocationSelector, setPlanetarium } from './ui/locationSelector.js';
+import { initModeSelector } from './ui/modeSelector.js';
+import { initEventArchive, setArchivePlanetarium } from './ui/eventArchive.js';
 
 // ========================================
 // プラネタリウム - 美しい星空シミュレーション
@@ -120,7 +122,7 @@ class Planetarium {
 
         attachUIInteractions(this);
         setupTimeDisplay(this, this.moonSystem);
-        
+
         // 場所選択システムの初期化
         setPlanetarium(this);
         initLocationSelector({
@@ -128,7 +130,18 @@ class Planetarium {
                 console.log(`観測地を変更: ${location.name}`);
             }
         });
-        
+
+        // 星影アーカイブ（歴史イベント）
+        setArchivePlanetarium(this);
+        initEventArchive({
+            onSelect: (event) => {
+                console.log(`星影アーカイブ: ${event.title} に移動`);
+            }
+        });
+
+        // ホームからのモード選択
+        initModeSelector();
+
         this.hideLoading();
         this.animate();
     }
