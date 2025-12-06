@@ -10,7 +10,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: '青白い超巨星で、地球から約860光年。夜空でおよそ7番目に明るい。',
-        featured: true
+        featured: true,
+        sp_type: 'B8Ia'
     },
 
     {
@@ -25,7 +26,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'オリオン座λ星。ハローを持つ青白い巨星で、オリオンの頭部を形作る。',
-        featured: false
+        featured: false,
+        sp_type: 'O8IIIf+B0.5V'
     },
 
     {
@@ -40,7 +42,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffa260,
         glowColor: 0xff6030,
         info: 'オリオン座の赤色超巨星。半径は太陽の約900倍にも達する。',
-        featured: true
+        featured: true,
+        sp_type: 'M1-M2Ia-Iab'
     },
 
     {
@@ -55,7 +58,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: '青白い巨星で、オリオン座の右肩を形作る。',
-        featured: false
+        featured: false,
+        sp_type: 'B2III'
     },
 
     {
@@ -70,7 +74,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'オリオン座の三つ星の西端。実際は多重星系で構成される。',
-        featured: false
+        featured: false,
+        sp_type: 'O9.5IINwk'
     },
 
     {
@@ -85,7 +90,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: '三つ星中央の青色超巨星。地球から約2000光年離れている。',
-        featured: false
+        featured: false,
+        sp_type: 'B0Ia'
     },
 
     {
@@ -100,7 +106,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: '三つ星の東端。馬頭星雲の近くに位置する多重星系。',
-        featured: false
+        featured: false,
+        sp_type: 'O9.7Ib+B0III'
     },
 
     {
@@ -115,7 +122,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: 'オリオン座の左足にあたる青色超巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'B0.5Ia'
     },
 
     {
@@ -130,7 +138,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: 'オリオン座π星の列の3番目。太陽より少し大きいF型準巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'F6V'
     },
 
     {
@@ -145,7 +154,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: 'オリオン座μ星。4つの恒星から構成される多重連星系。',
-        featured: false
+        featured: false,
+        sp_type: 'A1Vm+F2V'
     },
 
     {
@@ -160,7 +170,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'カシオペア座のW字の端に位置する巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'F2III'
     },
 
     {
@@ -175,7 +186,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'カシオペア座で最も明るい橙色巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'K0-IIIa'
     },
 
     {
@@ -190,7 +202,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: '急速回転するBe星で、変光を繰り返す。',
-        featured: false
+        featured: false,
+        sp_type: 'B0.5IVpe'
     },
 
     {
@@ -205,7 +218,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'W字の折れ曲がりを形成する青白い巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'A5IV'
     },
 
     {
@@ -220,7 +234,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: 'W字の北側に位置する若い青色巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'B3Vp_sh'
     },
 
     {
@@ -235,7 +250,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: '夏の大三角の一角。太陽の数万倍の光度を持つ青白い超巨星。',
-        featured: true
+        featured: true,
+        sp_type: 'A2Ia'
     },
 
     {
@@ -250,7 +266,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: '白鳥の胸に位置する黄色超巨星で、周囲に散光星雲が広がる。',
-        featured: false
+        featured: false,
+        sp_type: 'F8Ib'
     },
 
     {
@@ -265,7 +282,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: '白鳥の翼を形作る青白い巨星で、はくちょう座ε星。伝統的にギエナーと呼ばれることもある。',
-        featured: false
+        featured: false,
+        sp_type: 'K0III'
     },
 
     {
@@ -280,7 +298,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: '白鳥の片翼を形作る青白い準巨星で、はくちょう座δ星。ファワリスは連星系の主星の名前。',
-        featured: false
+        featured: false,
+        sp_type: 'B9.5IV'
     },
 
     {
@@ -295,7 +314,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: '金色と青色の二重星として有名で、肉眼でも美しいコントラストが楽しめる。',
-        featured: true
+        featured: true,
+        sp_type: 'K3II+B9.5V'
     },
 
     {
@@ -310,7 +330,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: '北極星として知られ、現在の地球の自転軸に最も近い恒星。',
-        featured: true
+        featured: true,
+        sp_type: 'F8Ib'
     },
 
     {
@@ -325,7 +346,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'こぐま座の尾を形作る青白い主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'A1Van'
     },
 
     {
@@ -340,7 +362,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: '小北斗七星の柄の中央に位置する連星系。',
-        featured: false
+        featured: false,
+        sp_type: 'G5III'
     },
 
     {
@@ -355,7 +378,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'こぐま座ζ星。小さなひしゃくの柄の付け根を担う恒星。',
-        featured: false
+        featured: false,
+        sp_type: 'A3Vn'
     },
 
     {
@@ -370,7 +394,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'ポラリスとともに「北の番人」と呼ばれる。',
-        featured: false
+        featured: false,
+        sp_type: 'A2III'
     },
 
     {
@@ -385,7 +410,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: '古代には北極星の役割を担っていた橙色巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'K4-III'
     },
 
     {
@@ -400,7 +426,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'こぐま座η星。アンワル・アル・ファルカダインとも呼ばれる、小熊の子牛たちの一員。',
-        featured: false
+        featured: false,
+        sp_type: 'F5V'
     },
 
     {
@@ -415,7 +442,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: '北斗七星のひしゃくの縁を形作る橙色巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'G9III+A7.5'
     },
 
     {
@@ -430,7 +458,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffffff,
         glowColor: 0xccccff,
         info: 'ドゥーベとともに北極星を指し示す道しるべとなる。',
-        featured: false
+        featured: false,
+        sp_type: 'A1IVps'
     },
 
     {
@@ -445,7 +474,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffffff,
         glowColor: 0xccccff,
         info: '北斗七星の底部を成す白色主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'A0V'
     },
 
     {
@@ -460,7 +490,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffffff,
         glowColor: 0xccccff,
         info: 'ひしゃくと柄の接続部にあたる恒星。',
-        featured: false
+        featured: false,
+        sp_type: 'A2Vn'
     },
 
     {
@@ -475,7 +506,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffffff,
         glowColor: 0xccccff,
         info: '棒状磁場を持つ特異星で、北斗七星の柄の根元。',
-        featured: false
+        featured: false,
+        sp_type: 'A1III-IVpkB9'
     },
 
     {
@@ -490,7 +522,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffffff,
         glowColor: 0xccccff,
         info: '肉眼でも二重星として見分けられることで知られる。',
-        featured: false
+        featured: false,
+        sp_type: 'A1.5Vas'
     },
 
     {
@@ -505,7 +538,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: '北斗七星の柄の先端で青白い光を放つ。',
-        featured: false
+        featured: false,
+        sp_type: 'B3V'
     },
 
     {
@@ -520,7 +554,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: '獅子の心臓を表す青白い主系列星。高速自転している。',
-        featured: true
+        featured: true,
+        sp_type: 'B8IVn'
     },
 
     {
@@ -535,7 +570,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: '獅子のたてがみに位置する黄色巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'F0IIIa'
     },
 
     {
@@ -550,7 +586,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: '美しい二重星として人気が高い。',
-        featured: false
+        featured: false,
+        sp_type: 'K1-III+G7IIIb'
     },
 
     {
@@ -565,7 +602,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'しし座の背中に位置する青白い主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'A5IV(n)'
     },
 
     {
@@ -580,7 +618,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: '後ろ足を形作るA型主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'A2IV'
     },
 
     {
@@ -595,7 +634,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: '春の大三角を構成する白色主系列星で、しっぽの先端に輝く。',
-        featured: true
+        featured: true,
+        sp_type: 'A3Va'
     },
 
     {
@@ -610,7 +650,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'しし座η星。ライオンの額を意味する白色超巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'A0Ib'
     },
 
     {
@@ -625,7 +666,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xff7440,
         glowColor: 0xff4010,
         info: '赤色超巨星で、夏の南の空に深紅の光を放つ。',
-        featured: true
+        featured: true,
+        sp_type: 'M1.5Iab+B2Vn'
     },
 
     {
@@ -640,7 +682,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: 'さそりの頭部を形作る青白い多重星系。',
-        featured: false
+        featured: false,
+        sp_type: 'B0.3IV'
     },
 
     {
@@ -655,7 +698,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: 'さそりの牙に位置する三重星。',
-        featured: false
+        featured: false,
+        sp_type: 'B1V+B2:V:'
     },
 
     {
@@ -670,7 +714,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: '頭部に位置する多重連星で、複雑な軌道を描く。',
-        featured: false
+        featured: false,
+        sp_type: 'B1V+B2V'
     },
 
     {
@@ -685,7 +730,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: 'さそりの尻尾の付け根に位置するオレンジ色の巨星。名前はアボリジニによる呼称に由来する。',
-        featured: false
+        featured: false,
+        sp_type: 'K1III'
     },
 
     {
@@ -700,7 +746,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: 'さそり座ζ星。離れた2つの星からなる視覚的二重星。',
-        featured: false
+        featured: false,
+        sp_type: 'K3III'
     },
 
     {
@@ -715,7 +762,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'さそりの尾の中ほどに輝く黄白色の巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'F1III'
     },
 
     {
@@ -730,7 +778,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: '古代シュメール語で「サソリ」を意味する名前を持つ分光連星。',
-        featured: false
+        featured: false,
+        sp_type: 'B1.5III'
     },
 
     {
@@ -745,7 +794,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: 'さそりの毒針にあたる青白い多重星系。',
-        featured: true
+        featured: true,
+        sp_type: 'B2IV+DA7.9'
     },
 
     {
@@ -760,7 +810,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'シャウラのすぐ隣に位置し、尾の先端を尖らせる青白い星。',
-        featured: false
+        featured: false,
+        sp_type: 'B2IV'
     },
 
     {
@@ -775,7 +826,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: '夏の大三角の最北に位置する青白い恒星。',
-        featured: true
+        featured: true,
+        sp_type: 'A0V'
     },
 
     {
@@ -790,7 +842,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'こと座の二重二重星として知られる有名な4重星系。ダブル・ダブルとも呼ばれる。',
-        featured: false
+        featured: false,
+        sp_type: 'A3V+F0V'
     },
 
     {
@@ -805,7 +858,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'こと座ζ星。視覚的二重星で、主星は青白い光を放つ。',
-        featured: false
+        featured: false,
+        sp_type: 'kA5hF0VmF3'
     },
 
     {
@@ -820,7 +874,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: '食変光星として知られるβ星で、こと座の平行四辺形を成す。',
-        featured: false
+        featured: false,
+        sp_type: 'B8.5Ib-II'
     },
 
     {
@@ -835,7 +890,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: '琴の枠を形作るγ星。青白い巨星として輝く。',
-        featured: false
+        featured: false,
+        sp_type: 'B9.5II-III'
     },
 
     {
@@ -850,7 +906,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffa260,
         glowColor: 0xff6030,
         info: 'こと座の北側に位置する、こと座δ星。赤色巨星と主系列星からなる二重星。',
-        featured: false
+        featured: false,
+        sp_type: 'M4II'
     },
 
     {
@@ -865,7 +922,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffffff,
         glowColor: 0xccccff,
         info: '彦星として知られる白色主系列星で、自転が非常に速い。',
-        featured: true
+        featured: true,
+        sp_type: 'A7Vn'
     },
 
     {
@@ -880,7 +938,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc966,
         glowColor: 0xff9030,
         info: 'わし座の翼を形作るδ星。近接連星系。',
-        featured: false
+        featured: false,
+        sp_type: 'F1IV-V(n)'
     },
 
     {
@@ -895,7 +954,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc966,
         glowColor: 0xff9030,
         info: 'わし座の胴体付近を構成する。圧倒的な自転速度の速さが特徴。',
-        featured: false
+        featured: false,
+        sp_type: 'B8.5V'
     },
 
     {
@@ -910,7 +970,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc966,
         glowColor: 0xff9030,
         info: '猛烈に速く自転しながら青白く輝く連星系。',
-        featured: false
+        featured: false,
+        sp_type: 'B9.5III'
     },
 
     {
@@ -925,7 +986,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc966,
         glowColor: 0xff9030,
         info: 'アルタイルのすぐ北に位置する橙色巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'K3II'
     },
 
     {
@@ -940,7 +1002,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'アルタイルの南に並ぶ連星系。',
-        featured: false
+        featured: false,
+        sp_type: 'G8IV'
     },
 
     {
@@ -955,7 +1018,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: '翼の先端に輝くζ星で、白く明るい光を放つ。北のデネブ・オカブ。',
-        featured: false
+        featured: false,
+        sp_type: 'A0IV-Vnn'
     },
 
     {
@@ -970,7 +1034,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: '青白い連星で、春の大三角の一頂点。',
-        featured: true
+        featured: true,
+        sp_type: 'B1V'
     },
 
     {
@@ -985,7 +1050,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'おとめ座γ星。均等な明るさの連星として知られる。',
-        featured: false
+        featured: false,
+        sp_type: 'F1-F2V'
     },
 
     {
@@ -1000,7 +1066,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: '葡萄摘みを意味する名前を持つ黄色巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'G8III-IIIb'
     },
 
     {
@@ -1015,7 +1082,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'おとめ座の腰付近に位置する白色主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'A2Van'
     },
 
     {
@@ -1030,7 +1098,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'ドレスの裾を意味する名前を持つ恒星。',
-        featured: false
+        featured: false,
+        sp_type: 'F7III'
     },
 
     {
@@ -1045,7 +1114,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: '古くは描かれていた「吠える犬」の星座の足に位置していたため、「吠える犬の足」を意味する名前を持つ。',
-        featured: false
+        featured: false,
+        sp_type: 'F2V'
     },
 
     {
@@ -1060,7 +1130,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'おとめの腰を形作る恒星。',
-        featured: false
+        featured: false,
+        sp_type: 'A2IV/V'
     },
 
     {
@@ -1075,7 +1146,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: '三重星系で、乙女の腕を担う位置に輝く。',
-        featured: false
+        featured: false,
+        sp_type: 'A2IV'
     },
 
     {
@@ -1090,7 +1162,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'おとめ座の頭部に位置するβ星。ザヴィヤヴァは本来γ星の名前であった。',
-        featured: false
+        featured: false,
+        sp_type: 'F9V'
     },
 
     {
@@ -1105,7 +1178,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'やや赤みを帯びた光を放つ半規則型変光星。',
-        featured: false
+        featured: false,
+        sp_type: 'M1III'
     },
 
     {
@@ -1120,7 +1194,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'おとめ座オミクロン星。白く輝く若い恒星。',
-        featured: false
+        featured: false,
+        sp_type: 'G8IIICN0.5CH1Ba1'
     },
 
     {
@@ -1135,7 +1210,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc966,
         glowColor: 0xff9030,
         info: '地球から36.7光年の橙色巨星で、春の大曲線を辿る目印。',
-        featured: true
+        featured: true,
+        sp_type: 'K1.5IIIFe-0.5'
     },
 
     {
@@ -1150,7 +1226,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: '美しい色の対比で知られる連星系で、ボイエテスの腰帯を飾る。',
-        featured: false
+        featured: false,
+        sp_type: 'K0-II-III'
     },
 
     {
@@ -1165,7 +1242,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'アークトゥルスの近くに位置する黄白色の巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'G0IV'
     },
 
     {
@@ -1180,7 +1258,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'うしかい座γ星。ボイエテスの左肩を形作る変光星。',
-        featured: false
+        featured: false,
+        sp_type: 'A7IV+(n)'
     },
 
     {
@@ -1195,7 +1274,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'うしかい座β星。頭部に位置する黄白色の巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'G8IIIaFe-0.5'
     },
 
     {
@@ -1210,7 +1290,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'うしかい座β星。頭部に位置する黄白色の巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'K3-III'
     },
 
     {
@@ -1225,7 +1306,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'うしかい座β星。頭部に位置する黄白色の巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'G8IIIFe-1'
     },
 
     {
@@ -1240,7 +1322,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'おうし座の赤色巨星。ヒヤデス星団の前を通るように見えることで有名。',
-        featured: true
+        featured: true,
+        sp_type: 'K5+III'
     },
 
     {
@@ -1255,7 +1338,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: '角の先端に位置する青白い巨星で、おうし座の角とぎょしゃ座の肩を共有する。',
-        featured: false
+        featured: false,
+        sp_type: 'B7III'
     },
 
     {
@@ -1270,7 +1354,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'おうしの右目にあたる恒星で、ヒヤデス星団の一員。',
-        featured: false
+        featured: false,
+        sp_type: 'G9.5IIICN0.5'
     },
 
     {
@@ -1285,7 +1370,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: 'プレアデス星団で最も明るい星で、青い光が印象的。',
-        featured: false
+        featured: false,
+        sp_type: 'B7III'
     },
 
     {
@@ -1300,7 +1386,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'おうし座ζ星。カニ星雲の近くにある青白い巨星で、角の先端を形作る。中国の占星術で用いられる星官の一つである「天關」に由来',
-        featured: false
+        featured: false,
+        sp_type: 'B1IVe_shell'
     },
 
     {
@@ -1315,7 +1402,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'おうし座ζ星。カニ星雲の近くにある青白い巨星で、角の先端を形作る。中国の占星術で用いられる星官の一つである「天關」に由来',
-        featured: false
+        featured: false,
+        sp_type: 'G9.5IIIabCN0.5'
     },
 
     {
@@ -1330,7 +1418,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'おうし座ζ星。カニ星雲の近くにある青白い巨星で、角の先端を形作る。中国の占星術で用いられる星官の一つである「天關」に由来',
-        featured: false
+        featured: false,
+        sp_type: 'B4IV'
     },
 
     {
@@ -1345,7 +1434,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'おうし座ζ星。カニ星雲の近くにある青白い巨星で、角の先端を形作る。中国の占星術で用いられる星官の一つである「天關」に由来',
-        featured: false
+        featured: false,
+        sp_type: 'B9Vn'
     },
 
     {
@@ -1360,7 +1450,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'おうし座ζ星。カニ星雲の近くにある青白い巨星で、角の先端を形作る。中国の占星術で用いられる星官の一つである「天關」に由来',
-        featured: false
+        featured: false,
+        sp_type: ''
     },
 
     {
@@ -1375,7 +1466,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff2c6,
         glowColor: 0xffd580,
         info: '太陽系から約42光年。冬の六角形の一角で、黄金色の光を放つ双子星。',
-        featured: true
+        featured: true,
+        sp_type: 'G3III:'
     },
 
     {
@@ -1390,7 +1482,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffffff,
         glowColor: 0xccccff,
         info: 'カペラと並ぶ明るさを持つ食連星で、ぎょしゃ座β星。',
-        featured: false
+        featured: false,
+        sp_type: 'A1IV-Vp'
     },
 
     {
@@ -1405,7 +1498,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ぎょしゃ座の腕に位置する青白い巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'A0VpSi'
     },
 
     {
@@ -1420,7 +1514,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'ぎょしゃ座ι星。ぎょしゃ座の南側に位置する変光星。',
-        featured: false
+        featured: false,
+        sp_type: 'K3II-III'
     },
 
     {
@@ -1435,7 +1530,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'ぎょしゃ座ι星。ぎょしゃ座の南側に位置する変光星。',
-        featured: false
+        featured: false,
+        sp_type: 'K0IIIb'
     },
 
     {
@@ -1450,7 +1546,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: '地球から11.5光年。冬の大三角を形作る一角で、淡い黄白色に輝く。',
-        featured: true
+        featured: true,
+        sp_type: 'F5IV-V+DQZ'
     },
 
     {
@@ -1465,7 +1562,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'こいぬ座のβ星で、青白い主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'B8Ve'
     },
 
     {
@@ -1480,7 +1578,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         info: '地球から約8.6光年。冬の夜空で最も明るい恒星で、青白い光が特徴。',
         glowColor: 0x8bb5ff,
-        featured: true
+        featured: true,
+        sp_type: 'A0mA1Va'
     },
 
     {
@@ -1495,7 +1594,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'おおいぬ座β星。シリウスの西側で青白く輝き、冬の大犬の前足を示す。',
-        featured: false
+        featured: false,
+        sp_type: 'B1II-III'
     },
 
     {
@@ -1510,7 +1610,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'おおいぬ座γ星。淡い光ながらシリウス周辺の星並びを整える連星系。',
-        featured: false
+        featured: false,
+        sp_type: 'B8II'
     },
 
     {
@@ -1525,7 +1626,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'おおいぬ座δ星。巨大な黄色超巨星で、犬の胴体を形作る。',
-        featured: false
+        featured: false,
+        sp_type: 'F8Ia'
     },
 
     {
@@ -1540,7 +1642,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'おおいぬ座ε星。肉眼で青白く輝き、銀河系でも屈指の光度を誇る。',
-        featured: false
+        featured: false,
+        sp_type: 'B1.5II'
     },
 
     {
@@ -1555,7 +1658,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'おおいぬ座ζ星。尾に近い位置で青白い光を放つ主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'B2.5V'
     },
 
     {
@@ -1570,7 +1674,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'おおいぬ座η星。尾の先に位置する青白い超巨星で、変光星としても知られる。',
-        featured: false
+        featured: false,
+        sp_type: 'B5Ia'
     },
 
     {
@@ -1585,7 +1690,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'ペガスス座α星。ペガススの大四辺形の一角を成す青白い星。',
-        featured: false
+        featured: false,
+        sp_type: 'A0IV'
     },
 
     {
@@ -1600,7 +1706,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'ペガスス座β星。大四辺形の一角で、赤みを帯びた巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'M2.5II-III'
     },
 
     {
@@ -1615,7 +1722,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc966,
         glowColor: 0xff9030,
         info: 'ペガスス座ε星。鼻先にあたる橙色の超巨星で、変光星としても知られる。',
-        featured: false
+        featured: false,
+        sp_type: 'K2Ib-II'
     },
 
     {
@@ -1630,7 +1738,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'ペガスス座θ星。エニフから胴体へ伸びる位置で淡く青白く輝く星。',
-        featured: false
+        featured: false,
+        sp_type: 'A1Va'
     },
 
     {
@@ -1645,7 +1754,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'ペガスス座ζ星。背中付近に位置する白っぽい星で、スクエアから首をつなぐ。',
-        featured: false
+        featured: false,
+        sp_type: 'B8.5IV'
     },
 
     {
@@ -1660,7 +1770,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ペガスス座γ星。大四辺形の南東端に位置する青白い星。',
-        featured: false
+        featured: false,
+        sp_type: 'B2IV'
     },
 
     {
@@ -1675,7 +1786,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ペガスス座γ星。大四辺形の南東端に位置する青白い星。',
-        featured: false
+        featured: false,
+        sp_type: 'G8II+F0V'
     },
 
     {
@@ -1690,7 +1802,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ペガスス座γ星。大四辺形の南東端に位置する青白い星。',
-        featured: false
+        featured: false,
+        sp_type: 'G8+III'
     },
 
     {
@@ -1705,7 +1818,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'アンドロメダ座α星であり、ペガススの大四辺形の一角も担う青白い星。',
-        featured: true
+        featured: true,
+        sp_type: 'B8IV-VHgMn'
     },
 
     {
@@ -1720,7 +1834,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'アンドロメダ座δ星。アルフェラツとミラクの間に並ぶ橙色の巨星で、鎖をたどる目印になる。',
-        featured: false
+        featured: false,
+        sp_type: 'K3III-IIIbCN0.5'
     },
 
     {
@@ -1735,7 +1850,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'アンドロメダ座β星。赤みを帯びた巨星で、アンドロメダ銀河を探す目印にもなる。',
-        featured: true
+        featured: true,
+        sp_type: 'M0+IIIa'
     },
 
     {
@@ -1750,7 +1866,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'アンドロメダ座γ星。色の対比が美しい多重連星として知られる。',
-        featured: false
+        featured: false,
+        sp_type: 'K2+IIb'
     },
 
     {
@@ -1765,7 +1882,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'ケフェウス座α星。高速自転する白色巨星で王の肩口を明るく照らす。',
-        featured: false
+        featured: false,
+        sp_type: 'A8Vn'
     },
 
     {
@@ -1780,7 +1898,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: 'ケフェウス座β星。青白い脈動変光星で王冠から伸びる背を形作る。',
-        featured: false
+        featured: false,
+        sp_type: 'B0.5IIIs'
     },
 
     {
@@ -1795,7 +1914,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'ケフェウス座γ星。将来の北極星候補とされる橙色巨星で王冠の頂を示す。',
-        featured: false
+        featured: false,
+        sp_type: 'K1III-IVCN1'
     },
 
     {
@@ -1810,7 +1930,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'セファイド変光星の原型。周期的に明るさを変えながら王の腰を形作る。',
-        featured: false
+        featured: false,
+        sp_type: 'F5Iab:+B7-8'
     },
 
     {
@@ -1825,7 +1946,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'ケフェウス座ζ星。温かな橙色で王の腰帯を描く巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'K1.5Ib'
     },
 
     {
@@ -1840,7 +1962,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'ケフェウス座ζ星。温かな橙色で王の腰帯を描く巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'K0-III'
     },
 
     {
@@ -1855,7 +1978,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'ケフェウス座ζ星。温かな橙色で王の腰帯を描く巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'M2-Ia'
     },
 
     {
@@ -1870,7 +1994,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'りゅう座α星。古代エジプト時代には北極星だった白色巨星で胴の付け根を成す。',
-        featured: false
+        featured: false,
+        sp_type: 'A0III'
     },
 
     {
@@ -1885,7 +2010,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'りゅう座ι星。橙色に輝く巨星で竜の背をゆるやかに折り曲げる。',
-        featured: false
+        featured: false,
+        sp_type: 'K2III'
     },
 
     {
@@ -1900,7 +2026,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc966,
         glowColor: 0xff9030,
         info: 'りゅう座β星。竜の目を表す橙色巨星で首の付け根を照らす。',
-        featured: false
+        featured: false,
+        sp_type: 'G2Ib-IIa'
     },
 
     {
@@ -1915,7 +2042,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc966,
         glowColor: 0xff9030,
         info: 'りゅう座γ星。竜の頭頂に位置する赤みの巨星で夏の北天に目立つ。',
-        featured: false
+        featured: false,
+        sp_type: 'K5III'
     },
 
     {
@@ -1930,7 +2058,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'りゅう座ζ星。青白い光で首筋を描き、竜の鱗を連ねる。',
-        featured: false
+        featured: false,
+        sp_type: 'B8III'
     },
 
     {
@@ -1945,7 +2074,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'りゅう座ζ星。青白い光で首筋を描き、竜の鱗を連ねる。',
-        featured: false
+        featured: false,
+        sp_type: 'G8-IIIab'
     },
 
     {
@@ -1960,7 +2090,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'りゅう座ζ星。青白い光で首筋を描き、竜の鱗を連ねる。',
-        featured: false
+        featured: false,
+        sp_type: 'F7V'
     },
 
     {
@@ -1975,7 +2106,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'りゅう座ζ星。青白い光で首筋を描き、竜の鱗を連ねる。',
-        featured: false
+        featured: false,
+        sp_type: 'G9III'
     },
 
     {
@@ -1990,7 +2122,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'りゅう座ζ星。青白い光で首筋を描き、竜の鱗を連ねる。',
-        featured: false
+        featured: false,
+        sp_type: 'M0III-IIIaCa1'
     },
 
     {
@@ -2005,7 +2138,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'りゅう座ξ星。竜の顎を形作る橙色星で頭部全体を結ぶ要所。',
-        featured: false
+        featured: false,
+        sp_type: 'K2III'
     },
 
     {
@@ -2020,7 +2154,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'りゅう座ν星。竜の頭部を閉じる淡い白色連星でラスタバンとエタミンを結ぶ。',
-        featured: false
+        featured: false,
+        sp_type: 'kA3hF0mF0(IV-V)'
     },
 
     {
@@ -2035,7 +2170,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'ペルセウス座α星。散開星団を率いる若い白色巨星で英雄の胸を示す。',
-        featured: true
+        featured: true,
+        sp_type: 'F5Ib'
     },
 
     {
@@ -2050,7 +2186,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: '呪われた「悪魔の星」として知られる食変光星で、メデューサの頭を握る位置に輝く。',
-        featured: true
+        featured: true,
+        sp_type: 'B8V'
     },
 
     {
@@ -2065,7 +2202,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'ペルセウス座η星。橙色に輝き英雄の肩から腕へ滑らかな線を描く。',
-        featured: false
+        featured: false,
+        sp_type: 'K3-Ib-IIa'
     },
 
     {
@@ -2080,7 +2218,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ペルセウス座ζ星。青白い巨星が足元を伸ばし、アンドロメダへ剣を向けるラインを強調する。',
-        featured: false
+        featured: false,
+        sp_type: 'B1III'
     },
 
     {
@@ -2095,7 +2234,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ペルセウス座ζ星。青白い巨星が足元を伸ばし、アンドロメダへ剣を向けるラインを強調する。',
-        featured: false
+        featured: false,
+        sp_type: 'B1Ib'
     },
 
     {
@@ -2110,7 +2250,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ペルセウス座ζ星。青白い巨星が足元を伸ばし、アンドロメダへ剣を向けるラインを強調する。',
-        featured: false
+        featured: false,
+        sp_type: 'B0.5III'
     },
 
     {
@@ -2125,7 +2266,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ペルセウス座ζ星。青白い巨星が足元を伸ばし、アンドロメダへ剣を向けるラインを強調する。',
-        featured: false
+        featured: false,
+        sp_type: 'G9.5IIIb'
     },
 
     {
@@ -2140,7 +2282,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ペルセウス座ζ星。青白い巨星が足元を伸ばし、アンドロメダへ剣を向けるラインを強調する。',
-        featured: false
+        featured: false,
+        sp_type: 'G0V'
     },
 
     {
@@ -2155,7 +2298,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ペルセウス座ζ星。青白い巨星が足元を伸ばし、アンドロメダへ剣を向けるラインを強調する。',
-        featured: false
+        featured: false,
+        sp_type: 'B5III'
     },
 
     {
@@ -2170,7 +2314,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ペルセウス座ζ星。青白い巨星が足元を伸ばし、アンドロメダへ剣を向けるラインを強調する。',
-        featured: false
+        featured: false,
+        sp_type: 'G9III+A2-III:'
     },
 
     {
@@ -2185,7 +2330,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ペルセウス座ξ星。熱い青色超巨星で剣先を鋭く描き出す。',
-        featured: false
+        featured: false,
+        sp_type: 'O7.5III(n)((f))'
     },
 
     {
@@ -2200,7 +2346,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'くじら座α星。赤みを帯びた巨星で巨大な頭部を形作る。',
-        featured: false
+        featured: false,
+        sp_type: 'M1.5IIIa'
     },
 
     {
@@ -2215,7 +2362,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'くじら座β星。尾びれ付近に位置する橙色の巨星で秋の南天を彩る。別名デネブ・カイトス。',
-        featured: false
+        featured: false,
+        sp_type: 'G9.5IIICH-1'
     },
 
     {
@@ -2230,7 +2378,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xff7440,
         glowColor: 0xff4010,
         info: '規則的に明滅する長周期変光星で、くじらの心臓部を脈動させる。',
-        featured: true
+        featured: true,
+        sp_type: 'M5-9IIIe+DA'
     },
 
     {
@@ -2245,7 +2394,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'くじら座γ星。白っぽい光で頭部から胴体へ続く綱を象る。',
-        featured: false
+        featured: false,
+        sp_type: 'A2Vn+F4V'
     },
 
     {
@@ -2260,7 +2410,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'くじら座ζ星。巨大な胴体の腹部に位置する橙色巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'K0.5III'
     },
 
     {
@@ -2275,7 +2426,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'くじら座ζ星。巨大な胴体の腹部に位置する橙色巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'K1+IIICN0.5'
     },
 
     {
@@ -2290,7 +2442,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'くじら座ζ星。巨大な胴体の腹部に位置する橙色巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'G8V'
     },
 
     {
@@ -2305,7 +2458,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'くじら座ζ星。巨大な胴体の腹部に位置する橙色巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'K2-IIIb'
     },
 
     {
@@ -2320,7 +2474,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'いて座で最も明るい星。弓の一番低い部分を形作る青白い巨星。',
-        featured: true
+        featured: true,
+        sp_type: 'B9IVp_lB?'
     },
 
     {
@@ -2335,7 +2490,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'いて座σ星。ティーポットの柄の付け根付近に位置する青白い星。',
-        featured: true
+        featured: true,
+        sp_type: 'B2.5V'
     },
 
     {
@@ -2350,7 +2506,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff2c6,
         info: 'いて座δ星。弓の中央部に位置する橙色の巨星で、ティーポットの底辺を支える。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'K2.5IIIaCN0.5'
     },
 
     {
@@ -2365,7 +2522,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff2c6,
         info: 'いて座λ星。弓の上部にある黄白色の巨星で、ティーポットの柄の上端となる。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'K1IIIb'
     },
 
     {
@@ -2380,7 +2538,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         info: 'いて座ζ星。青白い巨星で、柄の付け根（脇の下）に位置する。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'A2.5Va'
     },
 
     {
@@ -2395,7 +2554,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         info: 'いて座γ星。弓矢の矢じり、ティーポットの注ぎ口先端にあたる橙色の星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'K0+III'
     },
 
     {
@@ -2410,7 +2570,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         info: 'いて座τ星。注ぎ口の線をなす黄みがかった星で、アルナスルとカウス・アウストラリスを結ぶ。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'K1.5IIIb'
     },
 
     {
@@ -2425,7 +2586,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         info: 'いて座τ星。注ぎ口の線をなす黄みがかった星で、アルナスルとカウス・アウストラリスを結ぶ。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'B8III'
     },
 
     {
@@ -2440,7 +2602,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff2c6,
         info: 'いて座π星。茶色がかった巨星で、ティーポットのふた中央にあたる。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'F2II-III'
     },
 
     {
@@ -2455,7 +2618,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: '秋の南の空で孤独に輝く一等星。周囲には塵の円盤が広がっていることでも知られる。',
-        featured: true
+        featured: true,
+        sp_type: 'A4V'
     },
 
     {
@@ -2470,7 +2634,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         info: 'みなみのうお座ε星。青白い光の連星で、フォーマルハウトの周囲に並ぶ体の星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'B7III'
     },
 
     {
@@ -2485,7 +2650,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         info: 'みなみのうお座δ星。オレンジ色の巨星で、魚の尾寄りを形作る。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'G8III'
     },
 
     {
@@ -2500,7 +2666,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         info: 'みなみのうお座θ星。淡い青白色の星で、フォーマルハウトと合わせて輪郭を補う。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'A1V'
     },
 
     {
@@ -2515,7 +2682,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         info: 'みなみのうお座ε星。青白い光の連星で、フォーマルハウトの周囲に並ぶ体の星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'A1Va'
     },
 
     {
@@ -2530,7 +2698,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         info: 'みなみのうお座ε星。青白い光の連星で、フォーマルハウトの周囲に並ぶ体の星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'A1.5IVn'
     },
 
     {
@@ -2545,7 +2714,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         info: 'みなみのうお座ε星。青白い光の連星で、フォーマルハウトの周囲に並ぶ体の星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'A0IV'
     },
 
     {
@@ -2560,7 +2730,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         info: 'おひつじ座α星。アラビア語で「羊」を意味し、約66光年先で橙色に輝く巨星が羊の頭を示す。',
         glowColor: 0xffc58f,
-        featured: false
+        featured: false,
+        sp_type: 'K2-IIIbCa-1'
     },
 
     {
@@ -2575,7 +2746,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         info: 'おひつじ座β星。名前は「二番目」を意味し、白い分光連星がハマルと並んで羊の額を飾る。',
         glowColor: 0xb5d0ff,
-        featured: false
+        featured: false,
+        sp_type: 'kA4hA5mA5Va'
     },
 
     {
@@ -2590,7 +2762,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         info: 'おひつじ座γ星。近接連星として知られ、羊の角の付け根に輝く。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'A0Vnp_lB'
     },
 
     {
@@ -2605,7 +2778,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff2c6,
         info: 'おひつじ座δ星。やや赤みの巨星で、シェラタンから体へ続く部分を示す。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'G9.5IIIb'
     },
 
     {
@@ -2620,7 +2794,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'ふたご座で最も明るい恒星で、冬の夜空でオレンジ色に輝く一等星。',
-        featured: true
+        featured: true,
+        sp_type: 'K0IIIb'
     },
 
     {
@@ -2635,7 +2810,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: '6重連星からなる系で、ポルックスのすぐそばに白く輝く恒星。',
-        featured: false
+        featured: false,
+        sp_type: 'A1V+A2Vm'
     },
 
     {
@@ -2650,7 +2826,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffffff,
         glowColor: 0xccccff,
         info: 'ふたご座δ星。双子の胴体付近を形作るやや暗い星。',
-        featured: false
+        featured: false,
+        sp_type: 'F2VkF0mF0'
     },
 
     {
@@ -2665,7 +2842,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffffff,
         glowColor: 0xccccff,
         info: 'ふたご座δ星。双子の胴体付近を形作るやや暗い星。',
-        featured: false
+        featured: false,
+        sp_type: 'G1Ib'
     },
 
     {
@@ -2680,7 +2858,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffffff,
         glowColor: 0xccccff,
         info: 'ふたご座δ星。双子の胴体付近を形作るやや暗い星。',
-        featured: false
+        featured: false,
+        sp_type: 'A4IV'
     },
 
     {
@@ -2695,7 +2874,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'ふたご座γ星。青白い光でポルックスの足元を飾る明るい主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'F5IV-V'
     },
 
     {
@@ -2710,7 +2890,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'ふたご座γ星。青白い光でポルックスの足元を飾る明るい主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'G8III-IIIb'
     },
 
     {
@@ -2725,7 +2906,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'ふたご座γ星。青白い光でポルックスの足元を飾る明るい主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'M0III'
     },
 
     {
@@ -2740,7 +2922,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'ふたご座γ星。青白い光でポルックスの足元を飾る明るい主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'G9IIIb'
     },
 
     {
@@ -2755,7 +2938,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'ふたご座γ星。青白い光でポルックスの足元を飾る明るい主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'K2III'
     },
 
     {
@@ -2770,7 +2954,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'ふたご座γ星。青白い光でポルックスの足元を飾る明るい主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'A2IV'
     },
 
     {
@@ -2785,7 +2970,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'ふたご座γ星。青白い光でポルックスの足元を飾る明るい主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'C4+,4'
     },
 
     {
@@ -2800,7 +2986,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'ふたご座γ星。青白い光でポルックスの足元を飾る明るい主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'A1.5IV+'
     },
 
     {
@@ -2815,7 +3002,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'ふたご座ε星。金色に輝く超巨星で、カストル側の胴体を形作る。',
-        featured: false
+        featured: false,
+        sp_type: 'G8Ib'
     },
 
     {
@@ -2830,7 +3018,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffa260,
         glowColor: 0xff6030,
         info: 'ふたご座μ星。赤みを帯びた巨星で、カストルの足先に位置する。',
-        featured: false
+        featured: false,
+        sp_type: 'M3IIIab'
     },
 
     {
@@ -2845,7 +3034,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'ふたご座η星。別名テジャト・プライオル。ポルックス側の足を示す橙色の半規則変光星。',
-        featured: false
+        featured: false,
+        sp_type: 'M2IIIa'
     },
 
     {
@@ -2860,7 +3050,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         info: 'かに座β星。黄みがかった巨星で、カニが南東に伸ばす脚先を照らす。',
         glowColor: 0xffc58f,
-        featured: false
+        featured: false,
+        sp_type: 'K4IIIBa0.5:'
     },
 
     {
@@ -2875,7 +3066,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         info: 'かに座α星。アラビア語で「爪」を意味する名の通り、白色の多重連星がカニの鋏を示す。',
         glowColor: 0xb5d0ff,
-        featured: false
+        featured: false,
+        sp_type: 'kA7VmF0/2III/IVSr'
     },
 
     {
@@ -2890,7 +3082,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         info: 'かに座γ星。プレセペ星団の北で黄みを帯びて輝き、「北のろば星」の名でカニに荷を運ぶろばを表す。',
         glowColor: 0xffd2a1,
-        featured: false
+        featured: false,
+        sp_type: 'A1Va'
     },
 
     {
@@ -2905,7 +3098,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         info: 'かに座δ星。プレセペ星団の南で穏やかに光る黄白色の巨星で、「南のろば星」を意味する伝承名を持つ。',
         glowColor: 0xffd2a1,
-        featured: false
+        featured: false,
+        sp_type: 'K0+IIIb'
     },
 
     {
@@ -2920,7 +3114,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         info: 'かに座δ星。プレセペ星団の南で穏やかに光る黄白色の巨星で、「南のろば星」を意味する伝承名を持つ。',
         glowColor: 0xffd2a1,
-        featured: false
+        featured: false,
+        sp_type: 'G8IIIaBa0.2'
     },
 
     {
@@ -2935,7 +3130,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'うみへび座ε星。インド神話に由来する名を持ち、蛇の頭部を淡く照らす。',
-        featured: false
+        featured: false,
+        sp_type: 'G1III+A8V'
     },
 
     {
@@ -2950,7 +3146,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'うみへび座ζ星。アラビア語で「鼻」を表し、長い頭部を流れる星。',
-        featured: false
+        featured: false,
+        sp_type: 'K1III'
     },
 
     {
@@ -2965,7 +3162,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'うみへび座γ星。オレンジ色の巨星で、蛇の胸元を示す。',
-        featured: false
+        featured: false,
+        sp_type: 'K2+IIIa'
     },
 
     {
@@ -2980,7 +3178,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'うみへび座α星。「孤独な星」と呼ばれる橙色巨星で、蛇の心臓に輝く。',
-        featured: true
+        featured: true,
+        sp_type: 'K3IIIa'
     },
 
     {
@@ -2995,7 +3194,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'うみへび座ι星。しっぽへと続く結び目を表し、淡い黄白色で輝く。',
-        featured: false
+        featured: false,
+        sp_type: 'K2.5III'
     },
 
     {
@@ -3010,7 +3210,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'うみへび座μ星。長い胴の終端付近で赤味を帯びた光を放つ。',
-        featured: false
+        featured: false,
+        sp_type: 'G7IIIb'
     },
 
     {
@@ -3025,7 +3226,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'うみへび座μ星。長い胴の終端付近で赤味を帯びた光を放つ。',
-        featured: false
+        featured: false,
+        sp_type: 'G8.5III'
     },
 
     {
@@ -3040,7 +3242,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'うみへび座μ星。長い胴の終端付近で赤味を帯びた光を放つ。',
-        featured: false
+        featured: false,
+        sp_type: 'A0Vnn'
     },
 
     {
@@ -3055,7 +3258,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'うみへび座μ星。長い胴の終端付近で赤味を帯びた光を放つ。',
-        featured: false
+        featured: false,
+        sp_type: 'G7III'
     },
 
     {
@@ -3070,7 +3274,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'うみへび座μ星。長い胴の終端付近で赤味を帯びた光を放つ。',
-        featured: false
+        featured: false,
+        sp_type: 'K0IIIbCN0.5'
     },
 
     {
@@ -3085,7 +3290,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'うみへび座μ星。長い胴の終端付近で赤味を帯びた光を放つ。',
-        featured: false
+        featured: false,
+        sp_type: 'kB8hB8HeA0VSi'
     },
 
     {
@@ -3100,7 +3306,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'うみへび座μ星。長い胴の終端付近で赤味を帯びた光を放つ。',
-        featured: false
+        featured: false,
+        sp_type: 'G8IIIa'
     },
 
     {
@@ -3115,7 +3322,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'うみへび座μ星。長い胴の終端付近で赤味を帯びた光を放つ。',
-        featured: false
+        featured: false,
+        sp_type: 'K2-IIIFe-0.5'
     },
 
     {
@@ -3130,7 +3338,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         info: 'てんびん座α星。かつてさそり座の爪とされた名を持ち、肉眼でも分かれる二重星が天秤の南皿を形作る。',
         glowColor: 0xdfefff,
-        featured: false
+        featured: false,
+        sp_type: 'kA2hA5mA4IV-V'
     },
 
     {
@@ -3145,7 +3354,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         info: 'てんびん座β星。名は「北の爪」を意味し、淡い青緑色が印象的な星で天秤の北皿を示す。',
         glowColor: 0xa8c8ff,
-        featured: false
+        featured: false,
+        sp_type: 'B8Vn'
     },
 
     {
@@ -3160,7 +3370,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         info: 'てんびん座σ星。淡いオレンジ色の巨星で、南側の皿を支える腕の位置。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'M2.5III'
     },
 
     {
@@ -3175,7 +3386,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         info: 'てんびん座γ星。かつてさそり座の爪とされた星で、北東側の皿を形作る。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'G8.5III'
     },
 
     {
@@ -3190,7 +3402,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         info: 'てんびん座γ星。かつてさそり座の爪とされた星で、北東側の皿を形作る。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'K3.5III'
     },
 
     {
@@ -3205,7 +3418,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff2c6,
         info: 'やぎ座α星。アラビア語で「子ヤギ」を意味し、見かけの二重星が角の付け根を黄色く照らす。',
         glowColor: 0xfff2c6,
-        featured: false
+        featured: false,
+        sp_type: 'G9III'
     },
 
     {
@@ -3220,7 +3434,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         info: 'やぎ座β星。「供物をささげる者」の名を持つ橙色の巨星で、複数の伴星とともにアルゲディの南に並ぶ。',
         glowColor: 0xfff4e8,
-        featured: false
+        featured: false,
+        sp_type: 'G9II:+B8p:Si:'
     },
 
     {
@@ -3235,7 +3450,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff2c6,
         info: 'やぎ座γ星。白っぽい巨星で「幸運をもたらす者」の名を持ち、尾の付け根を示す。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'kF0hF1VmF2'
     },
 
     {
@@ -3250,7 +3466,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         info: 'やぎ座δ星。山羊の尾にあたる位置で白く輝く星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'kA5hF0mF2III'
     },
 
     {
@@ -3265,7 +3482,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         info: 'やぎ座δ星。山羊の尾にあたる位置で白く輝く星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'A1V'
     },
 
     {
@@ -3280,7 +3498,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         info: 'やぎ座δ星。山羊の尾にあたる位置で白く輝く星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'M0IIIBa0.5'
     },
 
     {
@@ -3295,7 +3514,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         info: 'やぎ座δ星。山羊の尾にあたる位置で白く輝く星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'G4Ib:Ba2'
     },
 
     {
@@ -3310,7 +3530,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff2c6,
         info: 'みずがめ座β星。名前は「最も幸運な星」の意で、黄白色の超巨星が水瓶の肩口を明るくする。',
         glowColor: 0xfff2c6,
-        featured: false
+        featured: false,
+        sp_type: 'G0Ib'
     },
 
     {
@@ -3325,7 +3546,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff2c6,
         info: 'みずがめ座β星。名前は「最も幸運な星」の意で、黄白色の超巨星が水瓶の肩口を明るくする。',
         glowColor: 0xfff2c6,
-        featured: false
+        featured: false,
+        sp_type: 'B9.5V'
     },
 
     {
@@ -3340,7 +3562,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff2c6,
         info: 'みずがめ座α星。アラビア語で「王の幸運な星」を意味し、黄白色の超巨星が水瓶の胴を照らす。',
         glowColor: 0xfff2c6,
-        featured: false
+        featured: false,
+        sp_type: 'G2Ib'
     },
 
     {
@@ -3355,7 +3578,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         info: 'みずがめ座γ星。アラビア語で「幕屋の幸運」を意味し、水瓶の縁で青白く輝く。',
         glowColor: 0xb5d0ff,
-        featured: false
+        featured: false,
+        sp_type: 'A0V'
     },
 
     {
@@ -3370,7 +3594,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         info: 'みずがめ座δ星。水瓶を担ぐ足元にある青白い星で、ギリシャ語で脚を意味する。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'A3Vp'
     },
 
     {
@@ -3385,7 +3610,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         info: 'みずがめ座κ星。水瓶の取っ手付近に位置する淡い星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'K1.5IIIbCN0.5'
     },
 
     {
@@ -3400,7 +3626,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff2c6,
         info: 'みずがめ座θ星。水瓶の腰回りを形作る黄白色の星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'G9II'
     },
 
     {
@@ -3415,7 +3642,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff2c6,
         info: 'みずがめ座θ星。水瓶の腰回りを形作る黄白色の星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'F2V++F2.5IV-V'
     },
 
     {
@@ -3430,7 +3658,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff2c6,
         info: 'みずがめ座θ星。水瓶の腰回りを形作る黄白色の星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'B1III-IVe'
     },
 
     {
@@ -3445,7 +3674,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff2c6,
         info: 'みずがめ座θ星。水瓶の腰回りを形作る黄白色の星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'M2.5IIIFe-0.5'
     },
 
     {
@@ -3460,7 +3690,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         info: 'うお座α星。名が「綱」を意味し、二匹の魚を結ぶ結び目に位置する青白い多重連星。',
         glowColor: 0xb5d0ff,
-        featured: false
+        featured: false,
+        sp_type: 'kA0hA7Sr+kA2hF2mF2(IV)'
     },
 
     {
@@ -3475,7 +3706,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff2c6,
         info: 'うお座ο星。二匹の魚を結ぶ綱が合流する部分に位置する黄白色の星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'G8III'
     },
 
     {
@@ -3490,7 +3722,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         info: 'うお座β星。東の魚の口元にあたり、青白い光を放つ主系列星。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'B6Ve'
     },
 
     {
@@ -3505,7 +3738,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         info: 'うお座η星。北側の魚を形作る黄白色の巨星で、変光星としても知られる。',
         glowColor: 0x8bb5ff,
-        featured: false
+        featured: false,
+        sp_type: 'G7IIIa'
     },
 
     {
@@ -3520,7 +3754,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffa260,
         glowColor: 0xff6030,
         info: 'ヘラクレス座α星。脈動する赤色超巨星で、英雄の頭部を朱色に染める。',
-        featured: false
+        featured: false,
+        sp_type: 'M5Ib-II+G5III+F2V:'
     },
 
     {
@@ -3535,7 +3770,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'ヘラクレス座β星。「棍棒を持つ者」を意味する名で、肩口の黄白色巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'G7IIIaFe-0.5'
     },
 
     {
@@ -3550,7 +3786,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffffff,
         glowColor: 0xccccff,
         info: 'ヘラクレス座δ星。胸元に位置する白い巨星で、夏の大三角の北で星座線をつなぐ。',
-        featured: false
+        featured: false,
+        sp_type: 'A1IVn'
     },
 
     {
@@ -3565,7 +3802,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'ヘラクレス座ζ星。ラテン語で「短い足」を意味し、北側の膝を描く黄白色の恒星。',
-        featured: false
+        featured: false,
+        sp_type: 'G0IV'
     },
 
     {
@@ -3580,7 +3818,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'ヘラクレス座η星。英雄の腕を担う黄色味を帯びた巨星で、北天の弧を補う。',
-        featured: false
+        featured: false,
+        sp_type: 'G7IIIFe-1'
     },
 
     {
@@ -3595,7 +3834,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'ケンタウルス座α星。太陽系に最も近い恒星系で、南天でもっとも明るい星の一つ。',
-        featured: true
+        featured: true,
+        sp_type: 'G2V'
     },
 
     {
@@ -3610,7 +3850,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ケンタウルス座β星。青白い巨星で、リギル・ケンタウルスと南十字を指し示す。',
-        featured: false
+        featured: false,
+        sp_type: 'B1III'
     },
 
     {
@@ -3625,7 +3866,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffffff,
         glowColor: 0xccccff,
         info: 'ケンタウルス座γ星。二つの槍を意味する名を持ち、胴体の西側で白く光る。',
-        featured: false
+        featured: false,
+        sp_type: 'A1IV+A0IV'
     },
 
     {
@@ -3640,7 +3882,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ケンタウルス座ε星。青白い巨星で、南の胴体を描く。',
-        featured: false
+        featured: false,
+        sp_type: 'B1III'
     },
 
     {
@@ -3655,7 +3898,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ケンタウルス座δ星。青白い速い自転星で、後脚の付け根に位置する。',
-        featured: false
+        featured: false,
+        sp_type: 'B2Vne'
     },
 
     {
@@ -3670,7 +3914,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'ケンタウルス座θ星。橙色巨星で、ケンタウロスの頭部を温かく描く。',
-        featured: false
+        featured: false,
+        sp_type: 'K0-IIIb'
     },
 
     {
@@ -3685,7 +3930,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'りゅうこつ座α星。シリウスに次ぐ明るさで、南の地平線近くに黄白色の光柱を立てる。',
-        featured: true
+        featured: true,
+        sp_type: 'A9II'
     },
 
     {
@@ -3700,7 +3946,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'りゅうこつ座β星。カノープスとともに船底をかたどる青白い巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'A1III-'
     },
 
     {
@@ -3715,7 +3962,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'りゅうこつ座ε星。橙色の巨星が船尾を温かな光で照らす。',
-        featured: false
+        featured: false,
+        sp_type: 'K3:III+B2:V'
     },
 
     {
@@ -3730,7 +3978,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'りゅうこつ座ι星。盾を意味する名を持ち、帆柱付近を白っぽく縁取る。',
-        featured: false
+        featured: false,
+        sp_type: 'A7Ib'
     },
 
     {
@@ -3745,7 +3994,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: '若い散開星団IC2602の中心で青白く輝き、帆の張りを強調する星。',
-        featured: false
+        featured: false,
+        sp_type: 'B0Vp'
     },
 
     {
@@ -3760,7 +4010,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'みなみじゅうじ座α星。十字架の足元で鋭い青白い光を放つ。',
-        featured: true
+        featured: true,
+        sp_type: 'B0.5IV+B1V'
     },
 
     {
@@ -3775,7 +4026,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'みなみじゅうじ座β星。細い翼を思わせる青白い巨星で、十字の右腕を描く。',
-        featured: false
+        featured: false,
+        sp_type: 'B1IV'
     },
 
     {
@@ -3790,7 +4042,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'みなみじゅうじ座γ星。十字の頭部に位置する赤みの巨星で、色の対比が美しい。',
-        featured: false
+        featured: false,
+        sp_type: 'M3.5III'
     },
 
     {
@@ -3805,7 +4058,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'みなみじゅうじ座δ星。南太平洋の航海星として親しまれた白色主系列星。',
-        featured: false
+        featured: false,
+        sp_type: 'B2IV'
     },
 
     {
@@ -3820,7 +4074,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffa260,
         glowColor: 0xff6030,
         info: 'みなみじゅうじ座ε星。赤味を帯びた巨星で、十字の左腕を落ち着いた光で結ぶ。',
-        featured: false
+        featured: false,
+        sp_type: 'K3III'
     },
 
     {
@@ -3835,7 +4090,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'かんむり座α星。ギリシャ神話の冠の宝石「ジェンマ」として白く輝く。',
-        featured: true
+        featured: true,
+        sp_type: 'A1IV'
     },
 
     {
@@ -3850,7 +4106,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'かんむり座β星。冠の西端で黄白色に光る磁気変光星。',
-        featured: false
+        featured: false,
+        sp_type: 'F2VpSrCrEuSi'
     },
 
     {
@@ -3865,7 +4122,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: '冠の北側を飾る青白い連星で、弧を繊細につなぐ。',
-        featured: false
+        featured: false,
+        sp_type: 'B6Vnne'
     },
 
     {
@@ -3880,7 +4138,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: '冠の南側で黄白い光を放つ巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'K2IIIab'
     },
 
     {
@@ -3895,7 +4154,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: '王冠の弧の中央を支える白い連星で、アルフェッカへ滑らかに続く。',
-        featured: false
+        featured: false,
+        sp_type: 'A0V'
     },
 
     {
@@ -3910,7 +4170,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'へびつかい座α星。蛇使いの頭部で白く輝き、黄道に近い明るい恒星。',
-        featured: true
+        featured: true,
+        sp_type: 'A5IVnn'
     },
 
     {
@@ -3925,7 +4186,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'へびつかい座β星。蛇使いの肩口に位置する橙色巨星。',
-        featured: false
+        featured: false,
+        sp_type: 'K2IIICN0.5'
     },
 
     {
@@ -3940,7 +4202,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'へびつかい座η星。蛇を支える腕の先で青白く輝く多重星系。',
-        featured: false
+        featured: false,
+        sp_type: 'A2IV-V'
     },
 
     {
@@ -3955,7 +4218,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'へびつかい座δ星。アラビア語で「前の手」を意味し、蛇を掴む手の甲を彩る。',
-        featured: false
+        featured: false,
+        sp_type: 'M0.5III'
     },
 
     {
@@ -3970,7 +4234,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffd2a1,
         glowColor: 0xffb870,
         info: 'へびつかい座ε星。後ろの手を意味する名の黄白色巨星で、デルタ星と対になって蛇を押さえる。',
-        featured: false
+        featured: false,
+        sp_type: 'G9.5IIIbFe-0.5'
     },
 
     {
@@ -3985,7 +4250,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: '高速で銀河を横切るランアウェイスターとして知られ、蛇の胴を青白く縁取る。',
-        featured: false
+        featured: false,
+        sp_type: 'O9.2IVnn'
     },
 
     {
@@ -4000,7 +4266,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'いるか座α星。航海士ヴェナトルの名を逆から綴った呼び名で、いるかの頭を青白く照らす。',
-        featured: false
+        featured: false,
+        sp_type: 'B9IV'
     },
 
     {
@@ -4015,7 +4282,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'いるか座β星。「ヴェナトル」を逆に綴った名で、スアルオシンと対になり背びれを描く黄白色星。',
-        featured: false
+        featured: false,
+        sp_type: 'F5IV'
     },
 
     {
@@ -4030,7 +4298,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'いるか座γ星。連星が寄り添う胸元で、コンパクトな菱形の側面を築く。',
-        featured: false
+        featured: false,
+        sp_type: ''
     },
 
     {
@@ -4045,7 +4314,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'いるか座δ星。淡い光ながら尾びれの付け根を結び、菱形を閉じる。',
-        featured: false
+        featured: false,
+        sp_type: 'kA7hF1VmF1pSrEuCr:'
     },
 
     {
@@ -4060,7 +4330,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'いるか座ε星アルダルフィン。イルカの尾の先で青白く瞬き、星座全体の中心にも近い。',
-        featured: false
+        featured: false,
+        sp_type: 'B6IV'
     },
 
     {
@@ -4075,7 +4346,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'からす座γ星。翼の先端を飾る青白い巨星で、春の南空の目印となる。',
-        featured: false
+        featured: false,
+        sp_type: 'B8III'
     },
 
     {
@@ -4090,7 +4362,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'からす座β星。「かご」を意味する名を持ち、背中側で落ち着いた黄白色に輝く。',
-        featured: false
+        featured: false,
+        sp_type: 'G5IIBa0.3'
     },
 
     {
@@ -4105,7 +4378,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'からす座δ星。翼から尾へ繋がる位置で青白い光を放つ連星系。',
-        featured: false
+        featured: false,
+        sp_type: 'A0IV(n)kB9'
     },
 
     {
@@ -4120,7 +4394,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'からす座ε星。胸元にあたる橙色巨星で、四辺形の一角を支える。',
-        featured: false
+        featured: false,
+        sp_type: 'K2+IIIa'
     },
 
     {
@@ -4135,7 +4410,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'からす座α星。くちばしの先にあたり、南へ伸びる脚線を描く。',
-        featured: false
+        featured: false,
+        sp_type: 'F1V'
     },
 
     {
@@ -4150,7 +4426,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: 'エリダヌス座α星。極端に扁平な高速自転星で、天の川の河口を青く照らす。',
-        featured: false
+        featured: false,
+        sp_type: 'B6Vpe'
     },
 
     {
@@ -4165,7 +4442,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'エリダヌス座θ星。川が南へ折れる地点を示す白い連星で、南半球では双眼鏡でも楽しめる。',
-        featured: false
+        featured: false,
+        sp_type: 'A2V'
     },
 
     {
@@ -4180,7 +4458,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffa260,
         glowColor: 0xff6030,
         info: 'エリダヌス座γ星。アラビア語で「小舟」を意味し、橙色の光で川筋を温める。',
-        featured: false
+        featured: false,
+        sp_type: 'M0III-IIIb'
     },
 
     {
@@ -4195,7 +4474,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'エリダヌス座δ星。「カエル」を意味する名で、オリオンの南で川の上流を示す。',
-        featured: false
+        featured: false,
+        sp_type: 'K0+IV'
     },
 
     {
@@ -4210,7 +4490,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'エリダヌス座β星。オリオンの膝の下で白く輝き、川の源流の目印となる。',
-        featured: false
+        featured: false,
+        sp_type: 'A3IV'
     },
 
     {
@@ -4225,7 +4506,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'へび座α星。アラビア語で「蛇の首」を意味し、星座の頭部を橙色に照らす。',
-        featured: false
+        featured: false,
+        sp_type: 'K2IIIbCN1'
     },
 
     {
@@ -4240,7 +4522,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'へび座β星。静かな黄白色の光で頭部の背を形作る。',
-        featured: false
+        featured: false,
+        sp_type: 'A2IV'
     },
 
     {
@@ -4255,7 +4538,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'へび座γ星。頭の背中側で橙色に輝き、ウヌカラクハイと三角形を結ぶ。',
-        featured: false
+        featured: false,
+        sp_type: 'F6V'
     },
 
     {
@@ -4270,7 +4554,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'へび座ε星。青白い連星が頭部から胴へ流れる線を強調する。',
-        featured: false
+        featured: false,
+        sp_type: 'kA2hA5mA7V'
     },
 
     {
@@ -4285,7 +4570,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'へび座η星。尾側に位置する黄橙色の巨星で、へびつかい座へと伸びる胴を描く。',
-        featured: false
+        featured: false,
+        sp_type: 'K0III-IV'
     },
 
     {
@@ -4300,7 +4586,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'へび座θ星。尾の先端で白く輝き、二重星が淡い曲線を締めくくる。',
-        featured: false
+        featured: false,
+        sp_type: 'A5V'
     },
 
     {
@@ -4315,7 +4602,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'うさぎ座α星。アラビア語で「野うさぎ」を意味し、背中を黄白く照らす。',
-        featured: false
+        featured: false,
+        sp_type: 'F0Ib'
     },
 
     {
@@ -4330,7 +4618,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'うさぎ座β星。南側の脚に位置し、太陽に似た光で跳ねる姿を描く。',
-        featured: false
+        featured: false,
+        sp_type: 'G5II-IIIa:'
     },
 
     {
@@ -4345,7 +4634,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'うさぎ座ε星。橙色の光で尾の付け根を示し、南天の低空に暖かみを添える。',
-        featured: false
+        featured: false,
+        sp_type: 'K4III'
     },
 
     {
@@ -4360,7 +4650,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'うさぎ座μ星。青白い主系列星で前脚を伸ばす先端を示す。',
-        featured: false
+        featured: false,
+        sp_type: 'B9IV:HgMn'
     },
 
     {
@@ -4375,7 +4666,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'うさぎ座κ星。北東側にある青白い星で首筋を補強する。',
-        featured: false
+        featured: false,
+        sp_type: 'B7V'
     },
 
     {
@@ -4390,7 +4682,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'さんかく座α星。細い星列の頂点で黄金色に光り、星座全体の向きを示す。',
-        featured: false
+        featured: false,
+        sp_type: 'F5III'
     },
 
     {
@@ -4405,7 +4698,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'さんかく座β星。青白い光で北辺を伸ばし、三角形の角を尖らせる。',
-        featured: false
+        featured: false,
+        sp_type: 'A5III'
     },
 
     {
@@ -4420,7 +4714,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
         info: 'さんかく座γ星。やや離れた位置から南辺を引き、細身の星座を締めくくる。',
-        featured: false
+        featured: false,
+        sp_type: 'A1Vnn'
     },
 
     {
@@ -4435,7 +4730,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'や座α星。矢じりにあたる黄白色の星で、矢全体の進行方向を定める。',
-        featured: false
+        featured: false,
+        sp_type: 'G1II'
     },
 
     {
@@ -4450,7 +4746,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'や座β星。矢筒側の星で、細い矢身をたどる中間点となる。',
-        featured: false
+        featured: false,
+        sp_type: 'G8IIIaCN0.5'
     },
 
     {
@@ -4465,7 +4762,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'や座γ星。赤みを帯びた巨星で、矢羽根の境目を温かい光で縁取る。',
-        featured: false
+        featured: false,
+        sp_type: 'M0-III'
     },
 
     {
@@ -4480,7 +4778,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'や座δ星。矢じりの付け根に位置し、青白い光で矢身を強調する。',
-        featured: false
+        featured: false,
+        sp_type: 'M2II+B0V'
     },
 
     {
@@ -4495,7 +4794,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'や座ε星。矢の羽根にある控えめな連星で、全体の輪郭を仕上げる。',
-        featured: false
+        featured: false,
+        sp_type: 'G8IIIv'
     },
 
     {
@@ -4510,7 +4810,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: 'ほ座γ星。熱い青白い光で帆の基部を示し、南天で目立つ連星。',
-        featured: false
+        featured: false,
+        sp_type: 'WC8+O7.5III-V'
     },
 
     {
@@ -4525,7 +4826,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ほ座δ星。帆の一辺で白く輝き、アルゴ船の帆布を張る。',
-        featured: false
+        featured: false,
+        sp_type: 'A2IV+A4V'
     },
 
     {
@@ -4540,7 +4842,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xffc58f,
         glowColor: 0xff9050,
         info: 'ほ座λ星。橙色の超巨星で、帆柱の高い位置から甲板を照らす。',
-        featured: false
+        featured: false,
+        sp_type: 'K4Ib'
     },
 
     {
@@ -4555,7 +4858,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'ほ座κ星。帆の南側を青白くなぞり、航海する船の輪郭を引く。',
-        featured: false
+        featured: false,
+        sp_type: 'B2IV'
     },
 
     {
@@ -4570,7 +4874,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'ほ座μ星。帆の後縁に位置する巨星で、アルゴ船のしなやかな曲線を完成させる。',
-        featured: false
+        featured: false,
+        sp_type: ''
     },
 
     {
@@ -4585,7 +4890,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
         info: 'とも座ζ星。極めて高温な青色超巨星で、アルゴ船の船首を蒼白く照らす。',
-        featured: false
+        featured: false,
+        sp_type: 'O4I(n)fp'
     },
 
     {
@@ -4600,7 +4906,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'とも座π星。黄白い光で船体中央を彩り、穏やかな航跡を描く。',
-        featured: false
+        featured: false,
+        sp_type: 'K4III'
     },
 
     {
@@ -4615,7 +4922,8 @@ export const BASE_STAR_DATA = [    {
         color: 0xfff4da,
         glowColor: 0xffe8b5,
         info: 'とも座ρ星。舵を意味する名を持ち、船尾の方向を落ち着いた光で示す。',
-        featured: false
+        featured: false,
+        sp_type: 'F5IIkF2IImF5II'
     },
 
     {
@@ -4630,6 +4938,7 @@ export const BASE_STAR_DATA = [    {
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
         info: 'とも座ξ星。かつて帆座と共有された名で、甲板中央を結ぶ。',
-        featured: false
+        featured: false,
+        sp_type: 'G6Ib'
     }
 ];

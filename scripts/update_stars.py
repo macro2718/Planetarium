@@ -5,7 +5,7 @@ import numpy as np
 from astroquery.simbad import Simbad
 
 Simbad.reset_votable_fields()
-Simbad.add_votable_fields("flux(V)")
+Simbad.add_votable_fields("flux(V)", "sptype")
 
 
 def _extract_field(table, column: str):
@@ -23,9 +23,10 @@ def get_star_info(name: str):
     ra = _extract_field(table, "ra")
     dec = _extract_field(table, "dec")
     vmag = _extract_field(table, "V")
+    sp_type = _extract_field(table, "sp_type")
     if ra is None or dec is None:
         return None
-    return ra, dec, vmag
+    return ra, dec, vmag, sp_type
 
 STARS_PATH = Path(__file__).resolve().parents[1] / "data" / "stars.js"
 MISSING_PATH = Path(__file__).resolve().parents[1] / "missing-stars.txt"
@@ -107,7 +108,7 @@ def _update_star(fields: OrderedDict[str, str]) -> tuple[OrderedDict[str, str], 
     if star_info is None:
         return fields, False, name
 
-    ra_str, dec_str, magnitude = star_info
+    ra_str, dec_str, magnitude, sp_type = star_info
     ra = _sexagesimal_to_decimal(ra_str, is_ra=True)
     dec = _sexagesimal_to_decimal(dec_str, is_ra=False)
     fields["ra"] = f"{ra:.6f}"
@@ -121,6 +122,8 @@ def _update_star(fields: OrderedDict[str, str]) -> tuple[OrderedDict[str, str], 
             mag_value = None
     if mag_value is not None:
         fields["magnitude"] = f"{mag_value:.2f}"
+    if sp_type is not None:
+        fields["sp_type"] = f"'{sp_type}'"
     return fields, True, None
 
 
