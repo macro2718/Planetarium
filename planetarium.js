@@ -15,6 +15,7 @@ import { createShootingStarSystem } from './systems/shootingStarSystem.js';
 import { createHourCircleSystem, createDeclinationCircleSystem, createCelestialEquatorSystem, createEclipticSystem } from './systems/hourCircleSystem.js';
 import { createCardinalDirectionSystem } from './systems/cardinalDirectionSystem.js';
 import { createStarTrailSystem } from './systems/starTrailSystem.js';
+import { createLensFlareSystem } from './systems/lensFlareSystem.js';
 import { attachUIInteractions } from './ui/interactionController.js';
 import { setupTimeDisplay } from './ui/timeDisplay.js';
 import { calculateLocalSiderealTime } from './utils/astronomy.js';
@@ -44,7 +45,8 @@ class Planetarium {
             showCardinalDirections: false,
             showStarTrails: false,
             autoRotate: false,
-            playMusic: false
+            playMusic: false,
+            showLensFlare: true
         };
         this.bgmAudio = null;
         this.bgmPlaylist = [];
@@ -110,6 +112,8 @@ class Planetarium {
         this.registerUpdater(this.starTrailSystem);
         this.registerUpdater(this.celestialEquatorSystem);
         this.registerUpdater(this.eclipticSystem);
+        this.lensFlareSystem = createLensFlareSystem(this);
+        this.registerUpdater(this.lensFlareSystem);
 
         attachUIInteractions(this);
         setupTimeDisplay(this, this.moonSystem);

@@ -90,6 +90,11 @@ function setupControlButtons(ctx) {
     toggleButton('btn-aurora', 'showAurora', (visible) => {
         if (ctx.auroraGroup) ctx.auroraGroup.visible = visible;
     });
+    toggleButton('btn-lensflare', 'showLensFlare', (visible) => {
+        if (ctx.lensFlareSystem?.setEnabled) {
+            ctx.lensFlareSystem.setEnabled(visible);
+        }
+    });
     toggleButton('btn-star-trails', 'showStarTrails', (visible) => {
         if (ctx.starTrailSystem) {
             ctx.starTrailSystem.setEnabled(visible);
