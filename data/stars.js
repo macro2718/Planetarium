@@ -137,7 +137,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.19,
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
-        info: 'オリオン座π星の列の3番目。太陽より少し大きいF型準巨星。',
+        info: 'オリオン座π星の列の3番目。太陽より少し大きいF型主系列星。',
         featured: false,
         sp_type: 'F6V'
     },
@@ -217,7 +217,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 2.68,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'W字の折れ曲がりを形成する青白い巨星。',
+        info: 'W字の折れ曲がりを形成する青白い準巨星。',
         featured: false,
         sp_type: 'A5IV'
     },
@@ -553,7 +553,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 1.40,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: '獅子の心臓を表す青白い主系列星。高速自転している。',
+        info: '獅子の心臓を表す青白い準巨星。高速自転している。',
         featured: true,
         sp_type: 'B8IVn'
     },
@@ -601,7 +601,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 2.53,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'しし座の背中に位置する青白い主系列星。',
+        info: 'しし座の背中に位置する青白い準巨星。',
         featured: false,
         sp_type: 'A5IV(n)'
     },
@@ -617,7 +617,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.35,
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
-        info: '後ろ足を形作るA型主系列星。',
+        info: '後ろ足を形作るA型準巨星。',
         featured: false,
         sp_type: 'A2IV'
     },
@@ -1241,7 +1241,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 2.68,
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
-        info: 'アークトゥルスの近くに位置する黄白色の巨星。',
+        info: 'アークトゥルスの近くに位置する黄白色の準巨星。',
         featured: false,
         sp_type: 'G0IV'
     },
@@ -1497,7 +1497,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 2.62,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'ぎょしゃ座の腕に位置する青白い巨星。',
+        info: 'ぎょしゃ座の腕に位置する青白い主系列星（特異星）。',
         featured: false,
         sp_type: 'A0VpSi'
     },
@@ -1881,7 +1881,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 2.46,
         color: 0xfff4e8,
         glowColor: 0xffe8b5,
-        info: 'ケフェウス座α星。高速自転する白色巨星で王の肩口を明るく照らす。',
+        info: 'ケフェウス座α星。高速自転する白色主系列星で王の肩口を明るく照らす。',
         featured: false,
         sp_type: 'A8Vn'
     },
@@ -4057,7 +4057,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 2.73,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'ケンタウルス座ι星。「賢者」を意味し、白色の準巨星がケンタウロスの人体部分に輝く。',
+        info: 'ケンタウルス座ι星。「賢者」を意味し、白色の主系列星がケンタウロスの人体部分に輝く。',
         featured: false,
         sp_type: 'kA1.5hA3mA3Va'
     },
@@ -4249,7 +4249,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 2.75,
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
-        info: 'みなみじゅうじ座δ星。南太平洋の航海星として親しまれた白色主系列星。',
+        info: 'みなみじゅうじ座δ星。南太平洋の航海星として親しまれた白色準巨星。',
         featured: false,
         sp_type: 'B2IV'
     },
@@ -4393,7 +4393,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.13,
         color: 0xffffff,
         glowColor: 0xccccff,
-        info: 'ヘラクレス座δ星。胸元に位置する白い巨星で、夏の大三角の北で星座線をつなぐ。',
+        info: 'ヘラクレス座δ星。胸元に位置する白い準巨星で、夏の大三角の北で星座線をつなぐ。',
         featured: false,
         sp_type: 'A1IVn'
     },
@@ -5321,7 +5321,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.29,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'うさぎ座μ星。青白い主系列星で前脚を伸ばす先端を示す。',
+        info: 'うさぎ座μ星。青白い準巨星で前脚を伸ばす先端を示す。',
         featured: false,
         sp_type: 'B9IV:HgMn'
     },

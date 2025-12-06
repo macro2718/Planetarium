@@ -35,7 +35,7 @@ function setupEventList() {
 
         card.innerHTML = `
             <div class="archive-card-head">
-                <div class="archive-badge">STARSHADOW ARCHIVE</div>
+                <div class="archive-badge">STELLAR ARCHIVE</div>
                 <div class="archive-date">${localDate}</div>
             </div>
             <h3 class="archive-title">${event.title}</h3>
