@@ -156,40 +156,45 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'bootes',
         name: 'うしかい座',
         description: '春の大曲線の先に見える羊飼い。',
-        starIds: ['nekkar', 'seginus', 'izar', 'arcturus', 'muphrid'],
+        starIds: ['nekkar', 'deltaBoo', 'rhoBoo', 'seginus', 'izar', 'arcturus', 'muphrid'],
         lines: [
-            ['nekkar', 'seginus'],
-            ['seginus', 'izar'],
             ['izar', 'arcturus'],
             ['arcturus', 'muphrid'],
-            ['seginus', 'arcturus']
+            ['izar', 'deltaBoo'],
+            ['deltaBoo', 'nekkar'],
+            ['nekkar', 'seginus'],
+            ['seginus', 'rhoBoo'],
+            ['rhoBoo', 'arcturus']
         ]
     },
     {
         id: 'taurus',
         name: 'おうし座',
         description: 'ヒヤデスとプレアデスが形作る雄牛の顔。',
-        starIds: ['elnath', 'ain', 'aldebaran', 'alcyone', 'tianguan'],
+        starIds: ['elnath', 'ain', 'primahyadum', 'aldebaran', 'alcyone', 'lambdaTau', 'xiTau', 'nuTau', 'tianguan'],
         lines: [
             ['elnath', 'ain'],
-            ['ain', 'aldebaran'],
-            ['ain', 'alcyone'],
-            ['elnath', 'tianguan'],
-            ['tianguan', 'ain']
+            ['ain', 'primahyadum'],
+            ['primahyadum', 'aldebaran'],
+            ['aldebaran', 'tianguan'],
+            ['primahyadum', 'lambdaTau'],
+            ['lambdaTau', 'xiTau'],
+            ['xiTau', 'nuTau']
         ]
     },
     {
         id: 'auriga',
         name: 'ぎょしゃ座',
         description: 'カペラを頂点とした五角形が特徴。',
-        starIds: ['capella', 'menkalinan', 'elnath', 'mahasim', 'hassaleh'],
+        starIds: ['capella', 'menkalinan', 'elnath', 'mahasim', 'hassaleh', 'prijipati'],
         lines: [
             ['capella', 'menkalinan'],
-            ['menkalinan', 'elnath'],
-            ['elnath', 'mahasim'],
-            ['mahasim', 'hassaleh'],
+            ['menkalinan', 'mahasim'],
+            ['mahasim', 'elnath'],
+            ['elnath', 'hassaleh'],
             ['hassaleh', 'capella'],
-            
+            ['prijipati', 'capella'],
+            ['prijipati', 'menkalinan']
         ]
     },
     {
@@ -208,24 +213,24 @@ export const BASE_CONSTELLATION_DATA = [
         starIds: ['sirius', 'mirzam', 'muliphein', 'wezen', 'adhara', 'furud', 'aludra'],
         lines: [
             ['mirzam', 'sirius'],
-            ['sirius', 'muliphein'],
             ['sirius', 'wezen'],
             ['wezen', 'adhara'],
-            ['adhara', 'furud'],
-            ['furud', 'aludra']
+            ['adhara', 'mirzam'],
+            ['wezen', 'aludra'],
         ]
     },
     {
         id: 'pegasus',
         name: 'ペガスス座',
         description: '秋の夜空に大きな四角形「ペガススの大四辺形」を形作る天馬の星座。',
-        starIds: ['markab', 'scheat', 'algenib', 'alpheratz', 'enif', 'biham', 'homam'],
+        starIds: ['markab', 'scheat', 'algenib', 'alpheratz', 'enif', 'biham', 'homam', 'matar', 'sadalbari'],
         lines: [
             ['markab', 'scheat'],
             ['scheat', 'alpheratz'],
             ['alpheratz', 'algenib'],
             ['algenib', 'markab'],
-            ['scheat', 'enif'],     // 首から鼻先へ
+            ['scheat', 'matar'],
+            ['scheat', 'sadalbari'],
             ['enif', 'biham'],      // 鼻先から胴体へ
             ['biham', 'homam'],     // 胴体をたどる
             ['homam', 'markab']     // 背中側で大四辺形に接続
@@ -246,44 +251,54 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'cepheus',
         name: 'ケフェウス座',
         description: '北極星付近で家のような五角形を描く王の星座。',
-        starIds: ['errai', 'alfirk', 'alderamin', 'zetaCep', 'deltaCep'],
+        starIds: ['errai', 'alfirk', 'alderamin', 'garnetstar', 'zetaCep', 'iotaCep', 'deltaCep'],
         lines: [
             ['errai', 'alfirk'],        // 王冠から肩
             ['alfirk', 'alderamin'],    // 肩から腰
-            ['alderamin', 'zetaCep'],   // 腰回り
+            ['alderamin', 'garnetstar'],   // 腰回り
+            ['garnetstar', 'zetaCep'],
             ['zetaCep', 'deltaCep'],    // 裾
-            ['deltaCep', 'errai'],      // 王の胸で閉じる
-            ['deltaCep', 'alfirk']      // 背中を補強
+            ['deltaCep', 'iotaCep'],      // 王の胸で閉じる
+            ['iotaCep', 'alfirk'],      // 背中を補強
+            ['iotaCep', 'errai']
         ]
     },
     {
         id: 'draco',
         name: 'りゅう座',
         description: '北極星を取り囲む長い竜がとぐろを巻く星座。',
-        starIds: ['thuban', 'edasich', 'rastaban', 'kuma', 'eltanin', 'grumium', 'aldhibah'],
+        starIds: ['thuban', 'edasich', 'rastaban', 'kuma', 'altais', 'giausar', 'eltanin', 'grumium', 'chiDra', 'athebyne', 'aldhibah'],
         lines: [
+            ['giausar', 'thuban'],      // 尾根元
             ['thuban', 'edasich'],      // 尾根元
-            ['edasich', 'rastaban'],    // 背をたどる
+            ['edasich', 'athebyne'],    // 背をたどる
+            ['athebyne', 'aldhibah'],     // 背から首筋への補強
+            ['aldhibah', 'chiDra'],   // 頭部を閉じる
+            ['chiDra', 'altais'],   // 頭部を閉じる
+            ['altais', 'grumium'],      // 背中へ戻る
+            ['grumium', 'eltanin'],     // 顎先
+            ['eltanin', 'rastaban'],     // 顎先
             ['rastaban', 'kuma'],       // 頭部へ
-            ['kuma', 'eltanin'],        // 竜の額
-            ['eltanin', 'grumium'],     // 顎先
-            ['grumium', 'aldhibah'],    // 下顎
-            ['aldhibah', 'rastaban'],   // 頭部を閉じる
-            ['edasich', 'aldhibah']     // 背から首筋への補強
+            ['kuma', 'grumium']       // 頭部へ
         ]
     },
     {
         id: 'perseus',
         name: 'ペルセウス座',
         description: 'アンドロメダ姫を救う英雄が剣とメデューサの首を掲げる星座。',
-        starIds: ['mirfak', 'algol', 'miram', 'atik', 'menkib'],
+        starIds: ['mirfak', 'algol', 'miram', 'atik', 'menkib', 'alfakhir', 'adidAustralis', 'misam', 'iotaPer', 'deltaPer', 'zetaPer'],
         lines: [
-            ['algol', 'mirfak'],        // 首を掲げる腕
-            ['mirfak', 'miram'],        // 胸から肩
-            ['miram', 'atik'],          // 腕から剣
-            ['atik', 'menkib'],         // 剣先
-            ['menkib', 'algol'],        // 剣から首へ戻る
-            ['mirfak', 'atik']          // 脚線美を補う
+            ['atik', 'zetaPer'],         // 剣先
+            ['zetaPer', 'menkib'],          // 腕から剣
+            ['menkib', 'adidAustralis'],        // 剣から首へ戻る
+            ['adidAustralis', 'algol'],        // 首を掲げる腕
+            ['algol', 'misam'],          // 首から胸へ
+            ['misam', 'iotaPer'],          // 首から胸へ
+            ['iotaPer', 'mirfak'],        // 胸から肩
+            ['mirfak', 'deltaPer'],
+            ['deltaPer', 'adidAustralis'],
+            ['mirfak', 'alfakhir'],
+            ['alfakhir', 'miram']
         ]
     },
     {

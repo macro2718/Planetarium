@@ -26,9 +26,7 @@
 
         body {
             overflow: hidden;
-            background: radial-gradient(circle at 15% 20%, rgba(35, 65, 140, 0.3), transparent 35%),
-                        radial-gradient(circle at 85% 10%, rgba(120, 50, 150, 0.28), transparent 35%),
-                        linear-gradient(135deg, #050814, #04030c 50%, #010101);
+            background: radial-gradient(circle at 50% 40%, #1c2540 0%, #0b1020 60%, #000000 100%);
             color: var(--text-main);
             font-family: 'Zen Kaku Gothic New', 'Space Grotesk', 'Hiragino Sans', 'Yu Gothic', sans-serif;
             letter-spacing: 0.3px;
@@ -40,37 +38,28 @@
             left: 0;
             width: 100%;
             height: 100%;
+            z-index: 0;
         }
 
         #canvas-overlay,
         #bokeh-layer,
         #beam-layer,
-        #grid-layer,
-        #vignette {
+        #grid-layer {
             position: fixed;
             inset: 0;
             pointer-events: none;
         }
 
-        #canvas-overlay {
-            background:
-                radial-gradient(120% 80% at 10% 20%, rgba(72, 120, 255, 0.18), transparent 55%),
-                radial-gradient(120% 90% at 85% 10%, rgba(255, 125, 200, 0.16), transparent 60%),
-                radial-gradient(100% 80% at 50% 100%, rgba(70, 200, 180, 0.16), transparent 55%);
-            mix-blend-mode: screen;
-            filter: blur(12px) saturate(130%);
-            opacity: 0.8;
-            animation: drift 24s ease-in-out infinite alternate;
-        }
-
+        /* 神秘的な光の筋 */
         #beam-layer {
-            inset: -12% -6%;
+            z-index: 5;
+            inset: -20%;
             background:
-                radial-gradient(50% 60% at 30% 60%, rgba(140, 220, 255, 0.22), transparent 55%),
-                radial-gradient(45% 70% at 70% 70%, rgba(220, 160, 255, 0.18), transparent 60%);
+                conic-gradient(from 225deg at 50% -50%, transparent 0deg, rgba(200, 230, 255, 0.05) 20deg, transparent 40deg, rgba(200, 230, 255, 0.03) 60deg, transparent 90deg);
             mix-blend-mode: screen;
-            filter: blur(22px) saturate(125%);
-            opacity: 0.65;
+            filter: blur(30px);
+            opacity: 0.7;
+            animation: lightShift 20s ease-in-out infinite alternate;
         }
 
         #beam-layer::after {
@@ -78,10 +67,9 @@
             position: absolute;
             inset: 0;
             background:
-                linear-gradient(120deg, rgba(255, 255, 255, 0.03), rgba(120, 190, 255, 0.08) 40%, rgba(255, 180, 255, 0.05) 70%, rgba(255, 255, 255, 0.02));
+                radial-gradient(circle at 50% 30%, rgba(100, 150, 255, 0.1), transparent 60%);
             mix-blend-mode: screen;
-            animation: curtain 18s ease-in-out infinite alternate;
-            opacity: 0.55;
+            opacity: 0.5;
         }
 
         #bokeh-layer {
@@ -120,10 +108,7 @@
             mix-blend-mode: soft-light;
         }
 
-        #vignette {
-            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.7) 100%);
-            mix-blend-mode: multiply;
-        }
+
 
         #info-panel {
             position: fixed;
@@ -149,11 +134,11 @@
             font-size: 24px;
             letter-spacing: 12px;
             pointer-events: none;
-            text-shadow: 0 10px 40px rgba(100, 150, 255, 0.7);
+            text-shadow: 0 10px 40px rgba(100, 150, 255, 0.5);
             animation: fadeIn 3s ease-out;
             font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
             font-weight: 700;
-            background: linear-gradient(120deg, #b7e8ff 0%, #f4d5ff 40%, #9dd0ff 80%);
+            background: linear-gradient(120deg, #e0eaff 0%, #ffffff 50%, #c0d4ff 100%);
             -webkit-background-clip: text;
         }
 
@@ -181,6 +166,11 @@
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
+        }
+
+        @keyframes lightShift {
+            from { transform: rotate(0deg) scale(1); opacity: 0.6; }
+            to { transform: rotate(1deg) scale(1.02); opacity: 0.8; }
         }
 
         @keyframes drift {
@@ -1465,11 +1455,9 @@
     </div>
     
     <div id="canvas-container"></div>
-    <div id="canvas-overlay"></div>
     <div id="beam-layer"></div>
     <div id="bokeh-layer"></div>
     <div id="grid-layer"></div>
-    <div id="vignette"></div>
     
     <div id="title">P L A N E T A R I U M</div>
     <div id="subtitle">Aurora Voyage</div>

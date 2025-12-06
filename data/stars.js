@@ -692,7 +692,7 @@ export const BASE_STAR_DATA = [    {
         id: 'zetaSco',
         name: 'ゼータ・スコルピイ',
         nameEn: 'Zeta Scorpii',
-        nameSIMBAD: 'Zeta02 Sco',   // 二重星ゆえ02を付与
+        nameSIMBAD: 'Zeta02 Sco',
         constellation: 'さそり座',
         ra: 253.645854,
         dec: -42.361316,
@@ -763,7 +763,6 @@ export const BASE_STAR_DATA = [    {
         featured: false
     },
 
-    // こと座
     {
         id: 'vega',
         name: 'ベガ',
@@ -783,7 +782,7 @@ export const BASE_STAR_DATA = [    {
         id: 'epsilonLyr',
         name: 'イプシロン・ライラ',
         nameEn: 'Epsilon Lyrae',
-        nameSIMBAD: 'Epsilon01 Lyrae',   // 4重星ゆえ01を付与
+        nameSIMBAD: 'Epsilon01 Lyrae',
         constellation: 'こと座',
         ra: 281.084775,
         dec: 39.670126,
@@ -798,7 +797,7 @@ export const BASE_STAR_DATA = [    {
         id: 'zetalyr',
         name: 'ゼータ・ライラ',
         nameEn: 'Zeta Lyrae',
-        nameSIMBAD: 'Zeta01 Lyrae',   // 二重星ゆえ01を付与
+        nameSIMBAD: 'Zeta01 Lyrae',
         constellation: 'こと座',
         ra: 281.193155,
         dec: 37.605122,
@@ -854,7 +853,6 @@ export const BASE_STAR_DATA = [    {
         featured: false
     },
 
-    // わし座
     {
         id: 'altair',
         name: 'アルタイル',
@@ -960,7 +958,6 @@ export const BASE_STAR_DATA = [    {
         featured: false
     },
 
-    // おとめ座
     {
         id: 'spica',
         name: 'スピカ',
@@ -1088,7 +1085,7 @@ export const BASE_STAR_DATA = [    {
         nameSIMBAD: 'Zavijava',
         constellation: 'おとめ座',
         ra: 177.673827,
-        dec: 1.7647226,
+        dec: 1.764723,
         magnitude: 3.60,
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
@@ -1123,6 +1120,351 @@ export const BASE_STAR_DATA = [    {
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
         info: 'おとめ座オミクロン星。白く輝く若い恒星。',
+        featured: false
+    },
+
+    {
+        id: 'arcturus',
+        name: 'アルクトゥルス',
+        nameEn: 'Arcturus',
+        nameSIMBAD: 'Arcturus',
+        constellation: 'うしかい座',
+        ra: 213.915300,
+        dec: 19.182409,
+        magnitude: -0.05,
+        color: 0xffc966,
+        glowColor: 0xff9030,
+        info: '地球から36.7光年の橙色巨星で、春の大曲線を辿る目印。',
+        featured: true
+    },
+
+    {
+        id: 'izar',
+        name: 'イザール',
+        nameEn: 'Izar',
+        nameSIMBAD: 'Izar',
+        constellation: 'うしかい座',
+        ra: 221.246740,
+        dec: 27.074222,
+        magnitude: 2.45,
+        color: 0xffc58f,
+        glowColor: 0xff9050,
+        info: '美しい色の対比で知られる連星系で、ボイエテスの腰帯を飾る。',
+        featured: false
+    },
+
+    {
+        id: 'muphrid',
+        name: 'ムフリド',
+        nameEn: 'Muphrid',
+        nameSIMBAD: 'Muphrid',
+        constellation: 'うしかい座',
+        ra: 208.671162,
+        dec: 18.397721,
+        magnitude: 2.68,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: 'アークトゥルスの近くに位置する黄白色の巨星。',
+        featured: false
+    },
+
+    {
+        id: 'seginus',
+        name: 'セギヌス',
+        nameEn: 'Seginus',
+        nameSIMBAD: 'Seginus',
+        constellation: 'うしかい座',
+        ra: 218.019465,
+        dec: 38.308248,
+        magnitude: 3.02,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'うしかい座γ星。ボイエテスの左肩を形作る変光星。',
+        featured: false
+    },
+
+    {
+        id: 'nekkar',
+        name: 'ネカル',
+        nameEn: 'Nekkar',
+        nameSIMBAD: 'Nekkar',
+        constellation: 'うしかい座',
+        ra: 225.486510,
+        dec: 40.390569,
+        magnitude: 3.52,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: 'うしかい座β星。頭部に位置する黄白色の巨星。',
+        featured: false
+    },
+
+    {
+        id: 'rhoBoo',
+        name: 'ロー・ブーティス',
+        nameEn: 'Rho Bootis',
+        nameSIMBAD: 'rho Boo',
+        constellation: 'うしかい座',
+        ra: 217.957456,
+        dec: 30.371437,
+        magnitude: 3.59,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: 'うしかい座β星。頭部に位置する黄白色の巨星。',
+        featured: false
+    },
+
+    {
+        id: 'deltaBoo',
+        name: 'デルタ・ブーティス',
+        nameEn: 'Delta Bootis',
+        nameSIMBAD: 'delta Boo',
+        constellation: 'うしかい座',
+        ra: 228.875678,
+        dec: 33.314831,
+        magnitude: 3.49,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: 'うしかい座β星。頭部に位置する黄白色の巨星。',
+        featured: false
+    },
+
+    {
+        id: 'aldebaran',
+        name: 'アルデバラン',
+        nameEn: 'Aldebaran',
+        nameSIMBAD: 'Aldebaran',
+        constellation: 'おうし座',
+        ra: 68.980163,
+        dec: 16.509302,
+        magnitude: 0.86,
+        color: 0xffc58f,
+        glowColor: 0xff9050,
+        info: 'おうし座の赤色巨星。ヒヤデス星団の前を通るように見えることで有名。',
+        featured: true
+    },
+
+    {
+        id: 'elnath',
+        name: 'エルナト',
+        nameEn: 'Elnath',
+        nameSIMBAD: 'Elnath',
+        constellation: 'おうし座 / ぎょしゃ座',
+        ra: 81.572971,
+        dec: 28.607452,
+        magnitude: 1.65,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: '角の先端に位置する青白い巨星で、おうし座の角とぎょしゃ座の肩を共有する。',
+        featured: false
+    },
+
+    {
+        id: 'ain',
+        name: 'アイン',
+        nameEn: 'Ain',
+        nameSIMBAD: 'Ain',
+        constellation: 'おうし座',
+        ra: 67.154168,
+        dec: 19.180434,
+        magnitude: 3.53,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: 'おうしの右目にあたる恒星で、ヒヤデス星団の一員。',
+        featured: false
+    },
+
+    {
+        id: 'alcyone',
+        name: 'アルキオーネ',
+        nameEn: 'Alcyone',
+        nameSIMBAD: 'Alcyone',
+        constellation: 'おうし座',
+        ra: 56.871152,
+        dec: 24.105136,
+        magnitude: 2.87,
+        color: 0xa8c8ff,
+        glowColor: 0x70a0ff,
+        info: 'プレアデス星団で最も明るい星で、青い光が印象的。',
+        featured: false
+    },
+
+    {
+        id: 'tianguan',
+        name: '天関',
+        nameEn: 'Tianguan',
+        nameSIMBAD: 'Tianguan',
+        constellation: 'おうし座',
+        ra: 84.411189,
+        dec: 21.142544,
+        magnitude: 3.03,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'おうし座ζ星。カニ星雲の近くにある青白い巨星で、角の先端を形作る。中国の占星術で用いられる星官の一つである「天關」に由来',
+        featured: false
+    },
+
+    {
+        id: 'primahyadum',
+        name: 'プリマヒヤドゥム',
+        nameEn: 'Prima Hyadum',
+        nameSIMBAD: 'Prima Hyadum',
+        constellation: 'おうし座',
+        ra: 64.948350,
+        dec: 15.627642,
+        magnitude: 3.65,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'おうし座ζ星。カニ星雲の近くにある青白い巨星で、角の先端を形作る。中国の占星術で用いられる星官の一つである「天關」に由来',
+        featured: false
+    },
+
+    {
+        id: 'lambdaTau',
+        name: 'ラムダ・タウリ',
+        nameEn: 'Lambda Tauri',
+        nameSIMBAD: 'Lambda Tauri',
+        constellation: 'おうし座',
+        ra: 60.170070,
+        dec: 12.490344,
+        magnitude: 3.41,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'おうし座ζ星。カニ星雲の近くにある青白い巨星で、角の先端を形作る。中国の占星術で用いられる星官の一つである「天關」に由来',
+        featured: false
+    },
+
+    {
+        id: 'xiTau',
+        name: 'クシー・タウリ',
+        nameEn: 'Xi Tauri',
+        nameSIMBAD: 'Xi Tauri',
+        constellation: 'おうし座',
+        ra: 51.792252,
+        dec: 9.732742,
+        magnitude: 3.75,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'おうし座ζ星。カニ星雲の近くにある青白い巨星で、角の先端を形作る。中国の占星術で用いられる星官の一つである「天關」に由来',
+        featured: false
+    },
+
+    {
+        id: 'nuTau',
+        name: 'ニュー・タウリ',
+        nameEn: 'Nu Tauri',
+        nameSIMBAD: 'Nu Tauri',
+        constellation: 'おうし座',
+        ra: 56.199333,
+        dec: 24.214650,
+        magnitude: 3.03,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'おうし座ζ星。カニ星雲の近くにある青白い巨星で、角の先端を形作る。中国の占星術で用いられる星官の一つである「天關」に由来',
+        featured: false
+    },
+
+    {
+        id: 'capella',
+        name: 'カペラ',
+        nameEn: 'Capella',
+        nameSIMBAD: 'Capella',
+        constellation: 'ぎょしゃ座',
+        ra: 79.172328,
+        dec: 45.997991,
+        magnitude: 0.08,
+        color: 0xfff2c6,
+        glowColor: 0xffd580,
+        info: '太陽系から約42光年。冬の六角形の一角で、黄金色の光を放つ双子星。',
+        featured: true
+    },
+
+    {
+        id: 'menkalinan',
+        name: 'メンカリナン',
+        nameEn: 'Menkalinan',
+        nameSIMBAD: 'Menkalinan',
+        constellation: 'ぎょしゃ座',
+        ra: 89.882179,
+        dec: 44.947433,
+        magnitude: 1.90,
+        color: 0xffffff,
+        glowColor: 0xccccff,
+        info: 'カペラと並ぶ明るさを持つ食連星で、ぎょしゃ座β星。',
+        featured: false
+    },
+
+    {
+        id: 'mahasim',
+        name: 'マハシム',
+        nameEn: 'Mahasim',
+        nameSIMBAD: 'Mahasim',
+        constellation: 'ぎょしゃ座',
+        ra: 89.930292,
+        dec: 37.212585,
+        magnitude: 2.62,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'ぎょしゃ座の腕に位置する青白い巨星。',
+        featured: false
+    },
+
+    {
+        id: 'hassaleh',
+        name: 'ハッサレー',
+        nameEn: 'Hassaleh',
+        nameSIMBAD: 'Hassaleh',
+        constellation: 'ぎょしゃ座',
+        ra: 74.248417,
+        dec: 33.166094,
+        magnitude: 2.69,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: 'ぎょしゃ座ι星。ぎょしゃ座の南側に位置する変光星。',
+        featured: false
+    },
+
+    {
+        id: 'prijipati',
+        name: 'プリジパティ',
+        nameEn: 'Prijipati',
+        nameSIMBAD: 'Delta Aurigae',
+        constellation: 'ぎょしゃ座',
+        ra: 89.881743,
+        dec: 54.284738,
+        magnitude: 3.72,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: 'ぎょしゃ座ι星。ぎょしゃ座の南側に位置する変光星。',
+        featured: false
+    },
+
+    {
+        id: 'procyon',
+        name: 'プロキオン',
+        nameEn: 'Procyon',
+        nameSIMBAD: 'Procyon',
+        constellation: 'こいぬ座',
+        ra: 114.825498,
+        dec: 5.224988,
+        magnitude: 0.37,
+        color: 0xfff4da,
+        glowColor: 0xffe8b5,
+        info: '地球から11.5光年。冬の大三角を形作る一角で、淡い黄白色に輝く。',
+        featured: true
+    },
+
+    {
+        id: 'gomeisa',
+        name: 'ゴメイサ',
+        nameEn: 'Gomeisa',
+        nameSIMBAD: 'Gomeisa',
+        constellation: 'こいぬ座',
+        ra: 111.787674,
+        dec: 8.289316,
+        magnitude: 2.89,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'こいぬ座のβ星で、青白い主系列星。',
         featured: false
     },
 
@@ -1232,167 +1574,617 @@ export const BASE_STAR_DATA = [    {
     },
 
     {
-        id: 'procyon',
-        name: 'プロキオン',
-        nameEn: 'Procyon',
-        nameSIMBAD: 'Procyon',
-        constellation: 'こいぬ座',
-        ra: 114.825498,
-        dec: 5.224988,
-        magnitude: 0.37,
-        color: 0xfff4da,
+        id: 'markab',
+        name: 'マルカブ',
+        nameEn: 'Markab',
+        nameSIMBAD: 'Markab',
+        constellation: 'ペガスス座',
+        ra: 346.190223,
+        dec: 15.205267,
+        magnitude: 2.48,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'ペガスス座α星。ペガススの大四辺形の一角を成す青白い星。',
+        featured: false
+    },
+
+    {
+        id: 'scheat',
+        name: 'シェアト',
+        nameEn: 'Scheat',
+        nameSIMBAD: 'Scheat',
+        constellation: 'ペガスス座',
+        ra: 345.943573,
+        dec: 28.082787,
+        magnitude: 2.42,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: 'ペガスス座β星。大四辺形の一角で、赤みを帯びた巨星。',
+        featured: false
+    },
+
+    {
+        id: 'enif',
+        name: 'エニフ',
+        nameEn: 'Enif',
+        nameSIMBAD: 'Enif',
+        constellation: 'ペガスス座',
+        ra: 326.046484,
+        dec: 9.875009,
+        magnitude: 2.39,
+        color: 0xffc966,
+        glowColor: 0xff9030,
+        info: 'ペガスス座ε星。鼻先にあたる橙色の超巨星で、変光星としても知られる。',
+        featured: false
+    },
+
+    {
+        id: 'biham',
+        name: 'ビハム',
+        nameEn: 'Biham',
+        nameSIMBAD: 'Biham',
+        constellation: 'ペガスス座',
+        ra: 332.549953,
+        dec: 6.197922,
+        magnitude: 3.55,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'ペガスス座θ星。エニフから胴体へ伸びる位置で淡く青白く輝く星。',
+        featured: false
+    },
+
+    {
+        id: 'homam',
+        name: 'ホーマム',
+        nameEn: 'Homam',
+        nameSIMBAD: 'Homam',
+        constellation: 'ペガスス座',
+        ra: 340.365503,
+        dec: 10.831363,
+        magnitude: 3.41,
+        color: 0xfff4e8,
         glowColor: 0xffe8b5,
-        info: '地球から11.5光年。冬の大三角を形作る一角で、淡い黄白色に輝く。',
+        info: 'ペガスス座ζ星。背中付近に位置する白っぽい星で、スクエアから首をつなぐ。',
+        featured: false
+    },
+
+    {
+        id: 'algenib',
+        name: 'アルゲニブ',
+        nameEn: 'Algenib',
+        nameSIMBAD: 'Algenib',
+        constellation: 'ペガスス座',
+        ra: 3.308968,
+        dec: 15.183598,
+        magnitude: 2.84,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'ペガスス座γ星。大四辺形の南東端に位置する青白い星。',
+        featured: false
+    },
+
+    {
+        id: 'matar',
+        name: 'マタル',
+        nameEn: 'Matar',
+        nameSIMBAD: 'Matar',
+        constellation: 'ペガスス座',
+        ra: 340.750537,
+        dec: 30.221215,
+        magnitude: 2.95,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'ペガスス座γ星。大四辺形の南東端に位置する青白い星。',
+        featured: false
+    },
+
+    {
+        id: 'sadalbari',
+        name: 'サダルバリ',
+        nameEn: 'Sadalbari',
+        nameSIMBAD: 'Sadalbari',
+        constellation: 'ペガスス座',
+        ra: 342.500804,
+        dec: 24.601581,
+        magnitude: 3.48,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'ペガスス座γ星。大四辺形の南東端に位置する青白い星。',
+        featured: false
+    },
+
+    {
+        id: 'alpheratz',
+        name: 'アルフェラツ',
+        nameEn: 'Alpheratz',
+        nameSIMBAD: 'Alpheratz',
+        constellation: 'アンドロメダ座 / ペガスス座',
+        ra: 2.096916,
+        dec: 29.090431,
+        magnitude: 2.06,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'アンドロメダ座α星であり、ペガススの大四辺形の一角も担う青白い星。',
         featured: true
     },
 
     {
-        id: 'gomeisa',
-        name: 'ゴメイサ',
-        nameEn: 'Gomeisa',
-        nameSIMBAD: 'Gomeisa',
-        constellation: 'こいぬ座',
-        ra: 111.787674,
-        dec: 8.289316,
+        id: 'deltaAnd',
+        name: 'デルタ・アンドロメダ',
+        nameEn: 'Delta Andromedae',
+        nameSIMBAD: 'Delta Andromedae',
+        constellation: 'アンドロメダ座',
+        ra: 9.831680,
+        dec: 30.860984,
+        magnitude: 3.28,
+        color: 0xffc58f,
+        glowColor: 0xff9050,
+        info: 'アンドロメダ座δ星。アルフェラツとミラクの間に並ぶ橙色の巨星で、鎖をたどる目印になる。',
+        featured: false
+    },
+
+    {
+        id: 'mirach',
+        name: 'ミラク',
+        nameEn: 'Mirach',
+        nameSIMBAD: 'Mirach',
+        constellation: 'アンドロメダ座',
+        ra: 17.433016,
+        dec: 35.620558,
+        magnitude: 2.05,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: 'アンドロメダ座β星。赤みを帯びた巨星で、アンドロメダ銀河を探す目印にもなる。',
+        featured: true
+    },
+
+    {
+        id: 'almach',
+        name: 'アルマク',
+        nameEn: 'Almach',
+        nameSIMBAD: 'Almach',
+        constellation: 'アンドロメダ座',
+        ra: 30.974801,
+        dec: 42.329728,
+        magnitude: 2.10,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: 'アンドロメダ座γ星。色の対比が美しい多重連星として知られる。',
+        featured: false
+    },
+
+    {
+        id: 'alderamin',
+        name: 'アルデラミン',
+        nameEn: 'Alderamin',
+        nameSIMBAD: 'Alderamin',
+        constellation: 'ケフェウス座',
+        ra: 319.644885,
+        dec: 62.585574,
+        magnitude: 2.46,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: 'ケフェウス座α星。高速自転する白色巨星で王の肩口を明るく照らす。',
+        featured: false
+    },
+
+    {
+        id: 'alfirk',
+        name: 'アルフィルク',
+        nameEn: 'Alfirk',
+        nameSIMBAD: 'Alfirk',
+        constellation: 'ケフェウス座',
+        ra: 322.164987,
+        dec: 70.560715,
+        magnitude: 3.23,
+        color: 0xa8c8ff,
+        glowColor: 0x70a0ff,
+        info: 'ケフェウス座β星。青白い脈動変光星で王冠から伸びる背を形作る。',
+        featured: false
+    },
+
+    {
+        id: 'errai',
+        name: 'エライ',
+        nameEn: 'Errai',
+        nameSIMBAD: 'Errai',
+        constellation: 'ケフェウス座',
+        ra: 354.837127,
+        dec: 77.632364,
+        magnitude: 3.21,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: 'ケフェウス座γ星。将来の北極星候補とされる橙色巨星で王冠の頂を示す。',
+        featured: false
+    },
+
+    {
+        id: 'deltaCep',
+        name: 'デルタ・ケフェイ',
+        nameEn: 'Delta Cephei',
+        nameSIMBAD: 'Delta Cephei',
+        constellation: 'ケフェウス座',
+        ra: 337.292761,
+        dec: 58.415194,
+        magnitude: 3.75,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: 'セファイド変光星の原型。周期的に明るさを変えながら王の腰を形作る。',
+        featured: false
+    },
+
+    {
+        id: 'zetaCep',
+        name: 'ゼータ・ケフェイ',
+        nameEn: 'Zeta Cephei',
+        nameSIMBAD: 'Zeta Cephei',
+        constellation: 'ケフェウス座',
+        ra: 332.713657,
+        dec: 58.201262,
+        magnitude: 3.35,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: 'ケフェウス座ζ星。温かな橙色で王の腰帯を描く巨星。',
+        featured: false
+    },
+
+    {
+        id: 'iotaCep',
+        name: 'イオタ・ケフェイ',
+        nameEn: 'Iota Cephei',
+        nameSIMBAD: 'Iota Cephei',
+        constellation: 'ケフェウス座',
+        ra: 342.420073,
+        dec: 66.200405,
+        magnitude: 3.54,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: 'ケフェウス座ζ星。温かな橙色で王の腰帯を描く巨星。',
+        featured: false
+    },
+
+    {
+        id: 'garnetstar',
+        name: 'ガーネット・スター',
+        nameEn: 'Herschel\'s Garnet Star',
+        nameSIMBAD: 'mu Cephei',
+        constellation: 'ケフェウス座',
+        ra: 325.876915,
+        dec: 58.780046,
+        magnitude: 4.08,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: 'ケフェウス座ζ星。温かな橙色で王の腰帯を描く巨星。',
+        featured: false
+    },
+
+    {
+        id: 'thuban',
+        name: 'ツバーン',
+        nameEn: 'Thuban',
+        nameSIMBAD: 'Thuban',
+        constellation: 'りゅう座',
+        ra: 211.097323,
+        dec: 64.375870,
+        magnitude: 3.68,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'りゅう座α星。古代エジプト時代には北極星だった白色巨星で胴の付け根を成す。',
+        featured: false
+    },
+
+    {
+        id: 'edasich',
+        name: 'エダシク',
+        nameEn: 'Edasich',
+        nameSIMBAD: 'Edasich',
+        constellation: 'りゅう座',
+        ra: 231.232391,
+        dec: 58.966066,
+        magnitude: 3.29,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: 'りゅう座ι星。橙色に輝く巨星で竜の背をゆるやかに折り曲げる。',
+        featured: false
+    },
+
+    {
+        id: 'rastaban',
+        name: 'ラスタバン',
+        nameEn: 'Rastaban',
+        nameSIMBAD: 'Rastaban',
+        constellation: 'りゅう座',
+        ra: 262.608174,
+        dec: 52.301389,
+        magnitude: 2.81,
+        color: 0xffc966,
+        glowColor: 0xff9030,
+        info: 'りゅう座β星。竜の目を表す橙色巨星で首の付け根を照らす。',
+        featured: false
+    },
+
+    {
+        id: 'eltanin',
+        name: 'エタミン',
+        nameEn: 'Eltanin',
+        nameSIMBAD: 'Eltanin',
+        constellation: 'りゅう座',
+        ra: 269.151541,
+        dec: 51.488896,
+        magnitude: 2.23,
+        color: 0xffc966,
+        glowColor: 0xff9030,
+        info: 'りゅう座γ星。竜の頭頂に位置する赤みの巨星で夏の北天に目立つ。',
+        featured: false
+    },
+
+    {
+        id: 'aldhibah',
+        name: 'アルジバ',
+        nameEn: 'Aldhibah',
+        nameSIMBAD: 'Aldhibah',
+        constellation: 'りゅう座',
+        ra: 257.196616,
+        dec: 65.714645,
+        magnitude: 3.17,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'りゅう座ζ星。青白い光で首筋を描き、竜の鱗を連ねる。',
+        featured: false
+    },
+
+    {
+        id: 'athebyne',
+        name: 'アセビン',
+        nameEn: 'Athebyne',
+        nameSIMBAD: 'Athebyne',
+        constellation: 'りゅう座',
+        ra: 245.997860,
+        dec: 61.514210,
+        magnitude: 2.74,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'りゅう座ζ星。青白い光で首筋を描き、竜の鱗を連ねる。',
+        featured: false
+    },
+
+    {
+        id: 'chiDra',
+        name: 'カイ・ドラコニス',
+        nameEn: 'Chi Draconis',
+        nameSIMBAD: 'Chi Draconis',
+        constellation: 'りゅう座',
+        ra: 275.264094,
+        dec: 72.732848,
+        magnitude: 3.58,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'りゅう座ζ星。青白い光で首筋を描き、竜の鱗を連ねる。',
+        featured: false
+    },
+
+    {
+        id: 'altais',
+        name: 'アルタイス',
+        nameEn: 'Altais',
+        nameSIMBAD: 'Altais',
+        constellation: 'りゅう座',
+        ra: 288.138756,
+        dec: 67.661539,
+        magnitude: 3.07,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'りゅう座ζ星。青白い光で首筋を描き、竜の鱗を連ねる。',
+        featured: false
+    },
+
+    {
+        id: 'giausar',
+        name: 'ギャウサル',
+        nameEn: 'Giausar',
+        nameSIMBAD: 'Giausar',
+        constellation: 'りゅう座',
+        ra: 172.850924,
+        dec: 69.331076,
+        magnitude: 3.85,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'りゅう座ζ星。青白い光で首筋を描き、竜の鱗を連ねる。',
+        featured: false
+    },
+
+    {
+        id: 'grumium',
+        name: 'グルミウム',
+        nameEn: 'Grumium',
+        nameSIMBAD: 'Grumium',
+        constellation: 'りゅう座',
+        ra: 268.382206,
+        dec: 56.872642,
+        magnitude: 3.75,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: 'りゅう座ξ星。竜の顎を形作る橙色星で頭部全体を結ぶ要所。',
+        featured: false
+    },
+
+    {
+        id: 'kuma',
+        name: 'クーマ',
+        nameEn: 'Kuma',
+        nameSIMBAD: 'nu01 Dra',
+        constellation: 'りゅう座',
+        ra: 263.044034,
+        dec: 55.184245,
+        magnitude: 4.60,
+        color: 0xdfefff,
+        glowColor: 0xa0c8ff,
+        info: 'りゅう座ν星。竜の頭部を閉じる淡い白色連星でラスタバンとエタミンを結ぶ。',
+        featured: false
+    },
+
+    {
+        id: 'mirfak',
+        name: 'ミルファク',
+        nameEn: 'Mirfak',
+        nameSIMBAD: 'Mirfak',
+        constellation: 'ペルセウス座',
+        ra: 51.080709,
+        dec: 49.861179,
+        magnitude: 1.79,
+        color: 0xfff4e8,
+        glowColor: 0xffe8b5,
+        info: 'ペルセウス座α星。散開星団を率いる若い白色巨星で英雄の胸を示す。',
+        featured: true
+    },
+
+    {
+        id: 'algol',
+        name: 'アルゴル',
+        nameEn: 'Algol',
+        nameSIMBAD: 'Algol',
+        constellation: 'ペルセウス座',
+        ra: 47.042219,
+        dec: 40.955647,
+        magnitude: 2.12,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: '呪われた「悪魔の星」として知られる食変光星で、メデューサの頭を握る位置に輝く。',
+        featured: true
+    },
+
+    {
+        id: 'miram',
+        name: 'ミラム',
+        nameEn: 'Miram',
+        nameSIMBAD: 'Miram',
+        constellation: 'ペルセウス座',
+        ra: 42.674208,
+        dec: 55.895494,
+        magnitude: 3.79,
+        color: 0xffd2a1,
+        glowColor: 0xffb870,
+        info: 'ペルセウス座η星。橙色に輝き英雄の肩から腕へ滑らかな線を描く。',
+        featured: false
+    },
+
+    {
+        id: 'atik',
+        name: 'アティク',
+        nameEn: 'Atik',
+        nameSIMBAD: 'Atik',
+        constellation: 'ペルセウス座',
+        ra: 56.079724,
+        dec: 32.288246,
+        magnitude: 3.91,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'ペルセウス座ζ星。青白い巨星が足元を伸ばし、アンドロメダへ剣を向けるラインを強調する。',
+        featured: false
+    },
+
+    {
+        id: 'zetaPer',
+        name: 'ゼータ・ペルセウス',
+        nameEn: 'Zeta Persei',
+        nameSIMBAD: 'Zeta Persei',
+        constellation: 'ペルセウス座',
+        ra: 58.533010,
+        dec: 31.883634,
+        magnitude: 2.85,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'ペルセウス座ζ星。青白い巨星が足元を伸ばし、アンドロメダへ剣を向けるラインを強調する。',
+        featured: false
+    },
+
+    {
+        id: 'adidAustralis',
+        name: 'アディド・アウストラリス',
+        nameEn: 'Adid Australis',
+        nameSIMBAD: 'Epsilon Persei',
+        constellation: 'ペルセウス座',
+        ra: 59.463497,
+        dec: 40.010200,
         magnitude: 2.89,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'こいぬ座のβ星で、青白い主系列星。',
+        info: 'ペルセウス座ζ星。青白い巨星が足元を伸ばし、アンドロメダへ剣を向けるラインを強調する。',
         featured: false
     },
 
     {
-        id: 'capella',
-        name: 'カペラ',
-        nameEn: 'Capella',
-        nameSIMBAD: 'Capella',
-        constellation: 'ぎょしゃ座',
-        ra: 79.172328,
-        dec: 45.997991,
-        magnitude: 0.08,
-        color: 0xfff2c6,
-        glowColor: 0xffd580,
-        info: '太陽系から約42光年。冬の六角形の一角で、黄金色の光を放つ双子星。',
-        featured: true
-    },
-
-    {
-        id: 'menkalinan',
-        name: 'メンカリナン',
-        nameEn: 'Menkalinan',
-        nameSIMBAD: 'Menkalinan',
-        constellation: 'ぎょしゃ座',
-        ra: 89.882179,
-        dec: 44.947433,
-        magnitude: 1.90,
-        color: 0xffffff,
-        glowColor: 0xccccff,
-        info: 'カペラと並ぶ明るさを持つ食連星で、ぎょしゃ座β星。',
-        featured: false
-    },
-
-    {
-        id: 'mahasim',
-        name: 'マハシム',
-        nameEn: 'Mahasim',
-        nameSIMBAD: 'Mahasim',
-        constellation: 'ぎょしゃ座',
-        ra: 89.930292,
-        dec: 37.212585,
-        magnitude: 2.62,
+        id: 'misam',
+        name: 'ミサム',
+        nameEn: 'Misam',
+        nameSIMBAD: 'Misam',
+        constellation: 'ペルセウス座',
+        ra: 47.374182,
+        dec: 44.857458,
+        magnitude: 3.81,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'ぎょしゃ座の腕に位置する青白い巨星。',
+        info: 'ペルセウス座ζ星。青白い巨星が足元を伸ばし、アンドロメダへ剣を向けるラインを強調する。',
         featured: false
     },
 
     {
-        id: 'hassaleh',
-        name: 'ハッサレー',
-        nameEn: 'Hassaleh',
-        nameSIMBAD: 'Hassaleh',
-        constellation: 'ぎょしゃ座',
-        ra: 74.248417,
-        dec: 33.166094,
-        magnitude: 2.69,
-        color: 0xffd2a1,
-        glowColor: 0xffb870,
-        info: 'ぎょしゃ座ι星。ぎょしゃ座の南側に位置する変光星。',
-        featured: false
-    },
-
-    {
-        id: 'aldebaran',
-        name: 'アルデバラン',
-        nameEn: 'Aldebaran',
-        nameSIMBAD: 'Aldebaran',
-        constellation: 'おうし座',
-        ra: 68.980163,
-        dec: 16.509302,
-        magnitude: 0.86,
-        color: 0xffc58f,
-        glowColor: 0xff9050,
-        info: 'おうし座の赤色巨星。ヒヤデス星団の前を通るように見えることで有名。',
-        featured: true
-    },
-
-    {
-        id: 'elnath',
-        name: 'エルナト',
-        nameEn: 'Elnath',
-        nameSIMBAD: 'Elnath',
-        constellation: 'おうし座 / ぎょしゃ座',
-        ra: 81.572971,
-        dec: 28.607452,
-        magnitude: 1.65,
+        id: 'iotaPer',
+        name: 'イオタ・ペルセウス',
+        nameEn: 'Iota Persei',
+        nameSIMBAD: 'Iota Persei',
+        constellation: 'ペルセウス座',
+        ra: 47.266747,
+        dec: 49.613278,
+        magnitude: 3.91,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: '角の先端に位置する青白い巨星で、おうし座の角とぎょしゃ座の肩を共有する。',
+        info: 'ペルセウス座ζ星。青白い巨星が足元を伸ばし、アンドロメダへ剣を向けるラインを強調する。',
         featured: false
     },
 
     {
-        id: 'ain',
-        name: 'アイン',
-        nameEn: 'Ain',
-        nameSIMBAD: 'Ain',
-        constellation: 'おうし座',
-        ra: 67.154168,
-        dec: 19.180434,
-        magnitude: 3.53,
-        color: 0xffd2a1,
-        glowColor: 0xffb870,
-        info: 'おうしの右目にあたる恒星で、ヒヤデス星団の一員。',
-        featured: false
-    },
-
-    {
-        id: 'alcyone',
-        name: 'アルキオーネ',
-        nameEn: 'Alcyone',
-        nameSIMBAD: 'Alcyone',
-        constellation: 'おうし座',
-        ra: 56.871152,
-        dec: 24.105136,
-        magnitude: 2.87,
-        color: 0xa8c8ff,
-        glowColor: 0x70a0ff,
-        info: 'プレアデス星団で最も明るい星で、青い光が印象的。',
-        featured: false
-    },
-
-    {
-        id: 'tianguan',
-        name: '天関',
-        nameEn: 'Tianguan',
-        nameSIMBAD: 'Tianguan',
-        constellation: 'おうし座',
-        ra: 84.411189,
-        dec: 21.142544,
-        magnitude: 3.03,
+        id: 'deltaPer',
+        name: 'デルタ・ペルセウス',
+        nameEn: 'Delta Persei',
+        nameSIMBAD: 'Delta Persei',
+        constellation: 'ペルセウス座',
+        ra: 55.731220,
+        dec: 47.787497,
+        magnitude: 3.01,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'おうし座ζ星。カニ星雲の近くにある青白い巨星で、角の先端を形作る。中国の占星術で用いられる星官の一つである「天關」に由来',
+        info: 'ペルセウス座ζ星。青白い巨星が足元を伸ばし、アンドロメダへ剣を向けるラインを強調する。',
+        featured: false
+    },
+
+    {
+        id: 'alfakhir',
+        name: 'アル・ファキル',
+        nameEn: 'Al Fakhir',
+        nameSIMBAD: 'Gamma Persei',
+        constellation: 'ペルセウス座',
+        ra: 46.199250,
+        dec: 53.506462,
+        magnitude: 2.93,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'ペルセウス座ζ星。青白い巨星が足元を伸ばし、アンドロメダへ剣を向けるラインを強調する。',
+        featured: false
+    },
+
+    {
+        id: 'menkib',
+        name: 'メンキブ',
+        nameEn: 'Menkib',
+        nameSIMBAD: 'Menkib',
+        constellation: 'ペルセウス座',
+        ra: 59.741260,
+        dec: 35.791030,
+        magnitude: 4.06,
+        color: 0xb5d0ff,
+        glowColor: 0x8bb5ff,
+        info: 'ペルセウス座ξ星。熱い青色超巨星で剣先を鋭く描き出す。',
         featured: false
     },
 
@@ -1652,81 +2444,6 @@ export const BASE_STAR_DATA = [    {
     },
 
     {
-        id: 'arcturus',
-        name: 'アルクトゥルス',
-        nameEn: 'Arcturus',
-        nameSIMBAD: 'Arcturus',
-        constellation: 'うしかい座',
-        ra: 213.915300,
-        dec: 19.182409,
-        magnitude: -0.05,
-        color: 0xffc966,
-        glowColor: 0xff9030,
-        info: '地球から36.7光年の橙色巨星で、春の大曲線を辿る目印。',
-        featured: true
-    },
-
-    {
-        id: 'izar',
-        name: 'イザール',
-        nameEn: 'Izar',
-        nameSIMBAD: 'Izar',
-        constellation: 'うしかい座',
-        ra: 221.246740,
-        dec: 27.074222,
-        magnitude: 2.45,
-        color: 0xffc58f,
-        glowColor: 0xff9050,
-        info: '美しい色の対比で知られる連星系で、ボイエテスの腰帯を飾る。',
-        featured: false
-    },
-
-    {
-        id: 'muphrid',
-        name: 'ムフリド',
-        nameEn: 'Muphrid',
-        nameSIMBAD: 'Muphrid',
-        constellation: 'うしかい座',
-        ra: 208.671162,
-        dec: 18.397721,
-        magnitude: 2.68,
-        color: 0xfff4e8,
-        glowColor: 0xffe8b5,
-        info: 'アークトゥルスの近くに位置する黄白色の巨星。',
-        featured: false
-    },
-
-    {
-        id: 'seginus',
-        name: 'セギヌス',
-        nameEn: 'Seginus',
-        nameSIMBAD: 'Seginus',
-        constellation: 'うしかい座',
-        ra: 218.019465,
-        dec: 38.308248,
-        magnitude: 3.02,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: 'ボイエテスの左肩を形作る変光星。',
-        featured: false
-    },
-
-    {
-        id: 'nekkar',
-        name: 'ネッカル',
-        nameEn: 'Nekkar',
-        nameSIMBAD: 'Nekkar',
-        constellation: 'うしかい座',
-        ra: 225.486510,
-        dec: 40.390569,
-        magnitude: 3.52,
-        color: 0xfff4e8,
-        glowColor: 0xffe8b5,
-        info: '頭部に位置する黄白色の巨星。',
-        featured: false
-    },
-
-    {
         id: 'pollux',
         name: 'ポルックス',
         nameEn: 'Pollux',
@@ -1847,156 +2564,6 @@ export const BASE_STAR_DATA = [    {
     },
 
     {
-        id: 'markab',
-        name: 'マルカブ',
-        nameEn: 'Markab',
-        nameSIMBAD: 'Markab',
-        constellation: 'ペガスス座',
-        ra: 346.190223,
-        dec: 15.205267,
-        magnitude: 2.48,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: 'ペガスス座α星。ペガススの大四辺形の一角を成す青白い星。',
-        featured: false
-    },
-
-    {
-        id: 'scheat',
-        name: 'シェアト',
-        nameEn: 'Scheat',
-        nameSIMBAD: 'Scheat',
-        constellation: 'ペガスス座',
-        ra: 345.943573,
-        dec: 28.082787,
-        magnitude: 2.42,
-        color: 0xffd2a1,
-        glowColor: 0xffb870,
-        info: 'ペガスス座β星。大四辺形の一角で、赤みを帯びた巨星。',
-        featured: false
-    },
-
-    {
-        id: 'enif',
-        name: 'エニフ',
-        nameEn: 'Enif',
-        nameSIMBAD: 'Enif',
-        constellation: 'ペガスス座',
-        ra: 326.046484,
-        dec: 9.875009,
-        magnitude: 2.39,
-        color: 0xffc966,
-        glowColor: 0xff9030,
-        info: 'ペガスス座ε星。鼻先にあたる橙色の超巨星で、変光星としても知られる。',
-        featured: false
-    },
-
-    {
-        id: 'biham',
-        name: 'ビハム',
-        nameEn: 'Biham',
-        nameSIMBAD: 'Biham',
-        constellation: 'ペガスス座',
-        ra: 332.549953,
-        dec: 6.197922,
-        magnitude: 3.55,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: 'ペガスス座θ星。エニフから胴体へ伸びる位置で淡く青白く輝く星。',
-        featured: false
-    },
-
-    {
-        id: 'homam',
-        name: 'ホーマム',
-        nameEn: 'Homam',
-        nameSIMBAD: 'Homam',
-        constellation: 'ペガスス座',
-        ra: 340.365503,
-        dec: 10.831363,
-        magnitude: 3.41,
-        color: 0xfff4e8,
-        glowColor: 0xffe8b5,
-        info: 'ペガスス座ζ星。背中付近に位置する白っぽい星で、スクエアから首をつなぐ。',
-        featured: false
-    },
-
-    {
-        id: 'algenib',
-        name: 'アルゲニブ',
-        nameEn: 'Algenib',
-        nameSIMBAD: 'Algenib',
-        constellation: 'ペガスス座',
-        ra: 3.308968,
-        dec: 15.183598,
-        magnitude: 2.84,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: 'ペガスス座γ星。大四辺形の南東端に位置する青白い星。',
-        featured: false
-    },
-
-    {
-        id: 'alpheratz',
-        name: 'アルフェラツ',
-        nameEn: 'Alpheratz',
-        nameSIMBAD: 'Alpheratz',
-        constellation: 'アンドロメダ座 / ペガスス座',
-        ra: 2.096916,
-        dec: 29.090431,
-        magnitude: 2.06,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: 'アンドロメダ座α星であり、ペガススの大四辺形の一角も担う青白い星。',
-        featured: true
-    },
-
-    {
-        id: 'deltaAnd',
-        name: 'デルタ・アンドロメダ',
-        nameEn: 'Delta Andromedae',
-        nameSIMBAD: 'Delta Andromedae',
-        constellation: 'アンドロメダ座',
-        ra: 9.831680,
-        dec: 30.860984,
-        magnitude: 3.28,
-        color: 0xffc58f,
-        glowColor: 0xff9050,
-        info: 'アンドロメダ座δ星。アルフェラツとミラクの間に並ぶ橙色の巨星で、鎖をたどる目印になる。',
-        featured: false
-    },
-
-    {
-        id: 'mirach',
-        name: 'ミラク',
-        nameEn: 'Mirach',
-        nameSIMBAD: 'Mirach',
-        constellation: 'アンドロメダ座',
-        ra: 17.433016,
-        dec: 35.620558,
-        magnitude: 2.05,
-        color: 0xffd2a1,
-        glowColor: 0xffb870,
-        info: 'アンドロメダ座β星。赤みを帯びた巨星で、アンドロメダ銀河を探す目印にもなる。',
-        featured: true
-    },
-
-    {
-        id: 'almach',
-        name: 'アルマク',
-        nameEn: 'Almach',
-        nameSIMBAD: 'Almach',
-        constellation: 'アンドロメダ座',
-        ra: 30.974801,
-        dec: 42.329728,
-        magnitude: 2.10,
-        color: 0xffd2a1,
-        glowColor: 0xffb870,
-        info: 'アンドロメダ座γ星。色の対比が美しい多重連星として知られる。',
-        featured: false
-    },
-
-    {
         id: 'kausAustralis',
         name: 'カウス・アウストラリス',
         nameEn: 'Kaus Australis',
@@ -2024,261 +2591,6 @@ export const BASE_STAR_DATA = [    {
         glowColor: 0x8bb5ff,
         info: 'いて座σ星。ティーポットの柄の付け根付近に位置する青白い星。',
         featured: true
-    },
-
-    {
-        id: 'alderamin',
-        name: 'アルデラミン',
-        nameEn: 'Alderamin',
-        nameSIMBAD: 'Alderamin',
-        constellation: 'ケフェウス座',
-        ra: 319.644885,
-        dec: 62.585574,
-        magnitude: 2.46,
-        color: 0xfff4e8,
-        glowColor: 0xffe8b5,
-        info: 'ケフェウス座α星。高速自転する白色巨星で王の肩口を明るく照らす。',
-        featured: false
-    },
-
-    {
-        id: 'alfirk',
-        name: 'アルフィルク',
-        nameEn: 'Alfirk',
-        nameSIMBAD: 'Alfirk',
-        constellation: 'ケフェウス座',
-        ra: 322.164987,
-        dec: 70.560715,
-        magnitude: 3.23,
-        color: 0xa8c8ff,
-        glowColor: 0x70a0ff,
-        info: 'ケフェウス座β星。青白い脈動変光星で王冠から伸びる背を形作る。',
-        featured: false
-    },
-
-    {
-        id: 'errai',
-        name: 'エライ',
-        nameEn: 'Errai',
-        nameSIMBAD: 'Errai',
-        constellation: 'ケフェウス座',
-        ra: 354.837127,
-        dec: 77.632364,
-        magnitude: 3.21,
-        color: 0xffd2a1,
-        glowColor: 0xffb870,
-        info: 'ケフェウス座γ星。将来の北極星候補とされる橙色巨星で王冠の頂を示す。',
-        featured: false
-    },
-
-    {
-        id: 'deltaCep',
-        name: 'デルタ・ケフェイ',
-        nameEn: 'Delta Cephei',
-        nameSIMBAD: 'Delta Cephei',
-        constellation: 'ケフェウス座',
-        ra: 337.292761,
-        dec: 58.415194,
-        magnitude: 3.75,
-        color: 0xfff4e8,
-        glowColor: 0xffe8b5,
-        info: 'セファイド変光星の原型。周期的に明るさを変えながら王の腰を形作る。',
-        featured: false
-    },
-
-    {
-        id: 'zetaCep',
-        name: 'ゼータ・ケフェイ',
-        nameEn: 'Zeta Cephei',
-        nameSIMBAD: 'Zeta Cephei',
-        constellation: 'ケフェウス座',
-        ra: 332.713657,
-        dec: 58.201262,
-        magnitude: 3.35,
-        color: 0xffd2a1,
-        glowColor: 0xffb870,
-        info: 'ケフェウス座ζ星。温かな橙色で王の腰帯を描く巨星。',
-        featured: false
-    },
-
-    {
-        id: 'thuban',
-        name: 'ツバーン',
-        nameEn: 'Thuban',
-        nameSIMBAD: 'Thuban',
-        constellation: 'りゅう座',
-        ra: 211.097323,
-        dec: 64.375870,
-        magnitude: 3.68,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: 'りゅう座α星。古代エジプト時代には北極星だった白色巨星で胴の付け根を成す。',
-        featured: false
-    },
-
-    {
-        id: 'edasich',
-        name: 'エダシク',
-        nameEn: 'Edasich',
-        nameSIMBAD: 'Edasich',
-        constellation: 'りゅう座',
-        ra: 231.232391,
-        dec: 58.966066,
-        magnitude: 3.29,
-        color: 0xffd2a1,
-        glowColor: 0xffb870,
-        info: 'りゅう座ι星。橙色に輝く巨星で竜の背をゆるやかに折り曲げる。',
-        featured: false
-    },
-
-    {
-        id: 'rastaban',
-        name: 'ラスタバン',
-        nameEn: 'Rastaban',
-        nameSIMBAD: 'Rastaban',
-        constellation: 'りゅう座',
-        ra: 262.608174,
-        dec: 52.301389,
-        magnitude: 2.81,
-        color: 0xffc966,
-        glowColor: 0xff9030,
-        info: 'りゅう座β星。竜の目を表す橙色巨星で首の付け根を照らす。',
-        featured: false
-    },
-
-    {
-        id: 'eltanin',
-        name: 'エタミン',
-        nameEn: 'Eltanin',
-        nameSIMBAD: 'Eltanin',
-        constellation: 'りゅう座',
-        ra: 269.151541,
-        dec: 51.488896,
-        magnitude: 2.23,
-        color: 0xffc966,
-        glowColor: 0xff9030,
-        info: 'りゅう座γ星。竜の頭頂に位置する赤みの巨星で夏の北天に目立つ。',
-        featured: false
-    },
-
-    {
-        id: 'aldhibah',
-        name: 'アルジバ',
-        nameEn: 'Aldhibah',
-        nameSIMBAD: 'Aldhibah',
-        constellation: 'りゅう座',
-        ra: 257.196616,
-        dec: 65.714645,
-        magnitude: 3.17,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: 'りゅう座ζ星。青白い光で首筋を描き、竜の鱗を連ねる。',
-        featured: false
-    },
-
-    {
-        id: 'grumium',
-        name: 'グルミウム',
-        nameEn: 'Grumium',
-        nameSIMBAD: 'Grumium',
-        constellation: 'りゅう座',
-        ra: 268.382206,
-        dec: 56.872642,
-        magnitude: 3.75,
-        color: 0xffd2a1,
-        glowColor: 0xffb870,
-        info: 'りゅう座ξ星。竜の顎を形作る橙色星で頭部全体を結ぶ要所。',
-        featured: false
-    },
-
-    {
-        id: 'kuma',
-        name: 'クーマ',
-        nameEn: 'Kuma',
-        nameSIMBAD: 'nu01 Dra',
-        constellation: 'りゅう座',
-        ra: 263.044034,
-        dec: 55.184245,
-        magnitude: 4.60,
-        color: 0xdfefff,
-        glowColor: 0xa0c8ff,
-        info: 'りゅう座ν星。竜の頭部を閉じる淡い白色連星でラスタバンとエタミンを結ぶ。',
-        featured: false
-    },
-
-    {
-        id: 'mirfak',
-        name: 'ミルファク',
-        nameEn: 'Mirfak',
-        nameSIMBAD: 'Mirfak',
-        constellation: 'ペルセウス座',
-        ra: 51.080709,
-        dec: 49.861179,
-        magnitude: 1.79,
-        color: 0xfff4e8,
-        glowColor: 0xffe8b5,
-        info: 'ペルセウス座α星。散開星団を率いる若い白色巨星で英雄の胸を示す。',
-        featured: true
-    },
-
-    {
-        id: 'algol',
-        name: 'アルゴル',
-        nameEn: 'Algol',
-        nameSIMBAD: 'Algol',
-        constellation: 'ペルセウス座',
-        ra: 47.042219,
-        dec: 40.955647,
-        magnitude: 2.12,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: '呪われた「悪魔の星」として知られる食変光星で、メデューサの頭を握る位置に輝く。',
-        featured: true
-    },
-
-    {
-        id: 'miram',
-        name: 'ミラム',
-        nameEn: 'Miram',
-        nameSIMBAD: 'Miram',
-        constellation: 'ペルセウス座',
-        ra: 42.674208,
-        dec: 55.895494,
-        magnitude: 3.79,
-        color: 0xffd2a1,
-        glowColor: 0xffb870,
-        info: 'ペルセウス座η星。橙色に輝き英雄の肩から腕へ滑らかな線を描く。',
-        featured: false
-    },
-
-    {
-        id: 'atik',
-        name: 'アティク',
-        nameEn: 'Atik',
-        nameSIMBAD: 'Atik',
-        constellation: 'ペルセウス座',
-        ra: 56.079724,
-        dec: 32.288246,
-        magnitude: 3.91,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: 'ペルセウス座ζ星。青白い巨星が足元を伸ばし、アンドロメダへ剣を向けるラインを強調する。',
-        featured: false
-    },
-
-    {
-        id: 'menkib',
-        name: 'メンキブ',
-        nameEn: 'Menkib',
-        nameSIMBAD: 'Menkib',
-        constellation: 'ペルセウス座',
-        ra: 59.741260,
-        dec: 35.791030,
-        magnitude: 4.06,
-        color: 0xb5d0ff,
-        glowColor: 0x8bb5ff,
-        info: 'ペルセウス座ξ星。熱い青色超巨星で剣先を鋭く描き出す。',
-        featured: false
     },
 
     {
