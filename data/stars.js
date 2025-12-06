@@ -2873,7 +2873,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.36,
         color: 0xdfefff,
         glowColor: 0xa0c8ff,
-        info: 'ふたご座γ星。青白い光でポルックスの足元を飾る明るい主系列星。',
+        info: 'ふたご座ξ星。黄白色の準主系列星で、ポルックスの足元近くで穏やかに光る。',
         featured: false,
         sp_type: 'F5IV-V'
     },
@@ -3112,7 +3112,7 @@ export const BASE_STAR_DATA = [    {
         dec: 28.759893,
         magnitude: 4.02,
         color: 0xffd2a1,
-        info: 'かに座δ星。プレセペ星団の南で穏やかに光る黄白色の巨星で、「南のろば星」を意味する伝承名を持つ。',
+        info: 'かに座ι星。色の対比が美しい広い二重星として知られ、プレセペの北側に位置する黄白色の巨星。',
         glowColor: 0xffd2a1,
         featured: false,
         sp_type: 'G8IIIaBa0.2'
@@ -4441,7 +4441,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.18,
         color: 0xfff4da,
         glowColor: 0xffe8b5,
-        info: 'ヘラクレス座η星。英雄の腕を担う黄色味を帯びた巨星で、北天の弧を補う。',
+        info: 'ヘラクレス座π星。橙色の輝巨星で、英雄の肩口付近を飾る。',
         featured: false,
         sp_type: 'K3II'
     },
@@ -4457,7 +4457,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.92,
         color: 0xfff4da,
         glowColor: 0xffe8b5,
-        info: 'ヘラクレス座η星。英雄の腕を担う黄色味を帯びた巨星で、北天の弧を補う。',
+        info: 'ヘラクレス座ε星。白色の主系列星で、北側の膝から腕へ続く線上に輝く。',
         featured: false,
         sp_type: 'A0V'
     },
@@ -4473,7 +4473,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.87,
         color: 0xfff4da,
         glowColor: 0xffe8b5,
-        info: 'ヘラクレス座η星。英雄の腕を担う黄色味を帯びた巨星で、北天の弧を補う。',
+        info: 'ヘラクレス座τ星。青白いB型星で、りゅう座との境界近くに位置する。',
         featured: false,
         sp_type: 'B5V'
     },
@@ -4489,7 +4489,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.88,
         color: 0xfff4da,
         glowColor: 0xffe8b5,
-        info: 'ヘラクレス座η星。英雄の腕を担う黄色味を帯びた巨星で、北天の弧を補う。',
+        info: 'ヘラクレス座θ星。黄橙色の巨星で、英雄の胸元付近を彩る。',
         featured: false,
         sp_type: 'K1IIaCN2'
     },
@@ -4505,7 +4505,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.80,
         color: 0xfff4da,
         glowColor: 0xffe8b5,
-        info: 'ヘラクレス座η星。英雄の腕を担う黄色味を帯びた巨星で、北天の弧を補う。',
+        info: 'ヘラクレス座ι星。青白い準巨星で、北側に伸びる腕の途中で鋭く光る。',
         featured: false,
         sp_type: 'B3IV'
     },
@@ -4521,7 +4521,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 10.76,
         color: 0xfff4da,
         glowColor: 0xffe8b5,
-        info: 'ヘラクレス座η星。英雄の腕を担う黄色味を帯びた巨星で、北天の弧を補う。',
+        info: 'ヘラクレス座μ星。太陽に近い性質の多重星で、英雄の腰のあたりに位置する。',
         featured: false,
         sp_type: 'M2e'
     },
@@ -4537,7 +4537,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.76,
         color: 0xfff4da,
         glowColor: 0xffe8b5,
-        info: 'ヘラクレス座η星。英雄の腕を担う黄色味を帯びた巨星で、北天の弧を補う。',
+        info: 'ヘラクレス座γ星。白っぽい巨星で、へびつかい座寄りの胴体を照らす。',
         featured: false,
         sp_type: 'A9IIIbn'
     },
@@ -4617,7 +4617,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.90,
         color: 0xffc58f,
         glowColor: 0xff9050,
-        info: 'へびつかい座δ星。アラビア語で「前の手」を意味し、蛇を掴む手の甲を彩る。',
+        info: 'へびつかい座λ星。名は「肘」を意味し、蛇を押さえる腕の曲がりを示す連星系。',
         featured: false,
         sp_type: 'A1IV'
     },
@@ -4633,7 +4633,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 2.75,
         color: 0xffc58f,
         glowColor: 0xff9050,
-        info: 'へびつかい座δ星。アラビア語で「前の手」を意味し、蛇を掴む手の甲を彩る。',
+        info: 'へびつかい座ν星。左手を意味する名を持つ橙色巨星で、南側の腕を支える。',
         featured: false,
         sp_type: ''
     },
@@ -4649,7 +4649,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.75,
         color: 0xffc58f,
         glowColor: 0xff9050,
-        info: 'へびつかい座δ星。アラビア語で「前の手」を意味し、蛇を掴む手の甲を彩る。',
+        info: 'へびつかい座γ星。白色のA型主系列星で、蛇を押さえる腕に沿って光る。',
         featured: false,
         sp_type: 'A1VnkA0mA0'
     },
@@ -4665,7 +4665,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.26,
         color: 0xffc58f,
         glowColor: 0xff9050,
-        info: 'へびつかい座δ星。アラビア語で「前の手」を意味し、蛇を掴む手の甲を彩る。',
+        info: 'へびつかい座θ星。青白いB型の多重星で、南の足元に位置する。',
         featured: false,
         sp_type: 'OB'
     },
@@ -4713,7 +4713,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.20,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: '高速で銀河を横切るランアウェイスターとして知られ、蛇の胴を青白く縁取る。',
+        info: 'へびつかい座κ星。赤みを帯びた巨星で、蛇の胴の北側に位置する。',
         featured: false,
         sp_type: 'K2III'
     },
@@ -4905,7 +4905,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.71,
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
-        info: 'エリダヌス座α星。極端に扁平な高速自転星で、天の川の河口を青く照らす。',
+        info: 'エリダヌス座χ星。橙色の巨星で、川の下流域をゆったり流れる光で示す。',
         featured: false,
         sp_type: 'G8IIIbCNIV'
     },
@@ -4921,7 +4921,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 4.25,
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
-        info: 'エリダヌス座α星。極端に扁平な高速自転星で、天の川の河口を青く照らす。',
+        info: 'エリダヌス座κ星。青白いB型準巨星で、川の中流をたどる。',
         featured: false,
         sp_type: 'B7IV'
     },
@@ -4937,7 +4937,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 4.12,
         color: 0xa8c8ff,
         glowColor: 0x70a0ff,
-        info: 'エリダヌス座α星。極端に扁平な高速自転星で、天の川の河口を青く照らす。',
+        info: 'エリダヌス座ι星。黄橙色の巨星で、川が南へ折れるあたりに位置する。',
         featured: false,
         sp_type: 'K0IIIb'
     },
@@ -4969,7 +4969,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.82,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'エリダヌス座θ星。川が南へ折れる地点を示す白い連星で、南半球では双眼鏡でも楽しめる。',
+        info: 'エリダヌス座υ2星。Theeminの固有名で知られる黄白色の巨星で、川の中流を示す。',
         featured: false,
         sp_type: 'G8+III'
     },
@@ -4985,7 +4985,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.70,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'エリダヌス座θ星。川が南へ折れる地点を示す白い連星で、南半球では双眼鏡でも楽しめる。',
+        info: 'エリダヌス座τ4星。赤色巨星で、蛇行する川筋の一角を温かく照らす。',
         featured: false,
         sp_type: 'M3III-IIIaCa-1'
     },
@@ -5001,7 +5001,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 4.77,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'エリダヌス座θ星。川が南へ折れる地点を示す白い連星で、南半球では双眼鏡でも楽しめる。',
+        info: 'エリダヌス座τ2星。川が最初に曲がる位置を示す黄白色の巨星。',
         featured: false,
         sp_type: 'K0III'
     },
@@ -5017,7 +5017,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.87,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'エリダヌス座θ星。川が南へ折れる地点を示す白い連星で、南半球では双眼鏡でも楽しめる。',
+        info: 'エリダヌス座η星。川の上流に位置する橙色の巨星で、流れの起点を示す。',
         featured: false,
         sp_type: 'K1+IIIb'
     },
@@ -5049,7 +5049,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 12.99,
         color: 0xffa260,
         glowColor: 0xff6030,
-        info: 'エリダヌス座γ星。アラビア語で「小舟」を意味し、橙色の光で川筋を温める。',
+        info: 'エリダヌス座ν星。青白いB型の脈動変光星で、川の上流側に位置する。',
         featured: false,
         sp_type: ''
     },
@@ -5145,7 +5145,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.69,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'へび座ε星。青白い連星が頭部から胴へ流れる線を強調する。',
+        info: 'へび座ε星。白く輝くA型星で、頭部から胴へ伸びる曲線上に並ぶ。',
         featured: false,
         sp_type: 'kA2hA5mA7V'
     },
@@ -5161,7 +5161,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.53,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'へび座ε星。青白い連星が頭部から胴へ流れる線を強調する。',
+        info: 'へび座μ星。青白いB型の連星で、胴体をたどる星列の中ほどに位置する。',
         featured: false,
         sp_type: 'B9.5III'
     },
@@ -5177,7 +5177,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.69,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'へび座ε星。青白い連星が頭部から胴へ流れる線を強調する。',
+        info: 'へび座δ星。二重星として知られるF型星で、頭部のすぐ後ろを飾る。',
         featured: false,
         sp_type: 'F0'
     },
@@ -5193,7 +5193,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 4.51,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'へび座ε星。青白い連星が頭部から胴へ流れる線を強調する。',
+        info: 'へび座ι星。白い主系列星で、蛇の胴の北側を縁取る。',
         featured: false,
         sp_type: 'A1V'
     },
@@ -5209,7 +5209,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 4.09,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'へび座ε星。青白い連星が頭部から胴へ流れる線を強調する。',
+        info: 'へび座の中ほどにある赤い巨星で、胴体を温かな色でなぞる。',
         featured: false,
         sp_type: 'M0.5IIIab'
     },
@@ -5257,7 +5257,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.52,
         color: 0xffc58f,
         glowColor: 0xff9050,
-        info: 'へび座η星。尾側に位置する黄橙色の巨星で、へびつかい座へと伸びる胴を描く。',
+        info: 'へび座ξ星。南側の尾に位置する白っぽい巨星で、へびつかい座へと伸びる胴を結ぶ。',
         featured: false,
         sp_type: 'A9IIIpSr:'
     },
@@ -5337,7 +5337,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 4.44,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'うさぎ座κ星。北東側にある青白い星で首筋を補強する。',
+        info: 'うさぎ座κ星。背中側にある青白い主系列星で、首筋を引き立てる。',
         featured: false,
         sp_type: 'B7V'
     },
@@ -5353,7 +5353,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 4.29,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'うさぎ座κ星。北東側にある青白い星で首筋を補強する。',
+        info: 'うさぎ座λ星。高温のB型星で、耳の付け根付近を青白く示す。',
         featured: false,
         sp_type: 'B0.5V'
     },
@@ -5369,7 +5369,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.53,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'うさぎ座κ星。北東側にある青白い星で首筋を補強する。',
+        info: 'うさぎ座ζ星。周囲に塵円盤を持つことで知られる白色の準巨星。',
         featured: false,
         sp_type: 'A2IV-V(n)'
     },
@@ -5385,7 +5385,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.72,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'うさぎ座κ星。北東側にある青白い星で首筋を補強する。',
+        info: 'うさぎ座η星。太陽に近い性質の恒星で、胴体付近を温かく照らす。',
         featured: false,
         sp_type: 'F2V'
     },
@@ -5401,7 +5401,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.85,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'うさぎ座κ星。北東側にある青白い星で首筋を補強する。',
+        info: 'うさぎ座δ星。橙色の巨星で、後ろ足の付け根を形作る。',
         featured: false,
         sp_type: 'K0IIIbFe-1.5CH0.5'
     },
@@ -5417,7 +5417,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 4.66,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'うさぎ座κ星。北東側にある青白い星で首筋を補強する。',
+        info: 'うさぎ座θ星。青白い主系列星で、尻尾に向かう星列の一員。',
         featured: false,
         sp_type: 'A0V'
     },
@@ -5529,7 +5529,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.81,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'や座δ星。矢じりの付け根に位置し、青白い光で矢身を強調する。',
+        info: 'や座δ星。赤い輝巨星が白い伴星を従え、矢じりの付け根を温かな色で彩る。',
         featured: false,
         sp_type: 'M2II+B0V'
     },
@@ -5641,7 +5641,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 3.60,
         color: 0xfff4da,
         glowColor: 0xffe8b5,
-        info: 'ほ座μ星。帆の後縁に位置する巨星で、アルゴ船のしなやかな曲線を完成させる。',
+        info: 'ほ座ψ星。帆の中央部に並ぶ白っぽい連星で、船体の輪郭を形作る。',
         featured: false,
         sp_type: 'F3VFe-0.7'
     },
@@ -5721,7 +5721,7 @@ export const BASE_STAR_DATA = [    {
         magnitude: 11.24,
         color: 0xb5d0ff,
         glowColor: 0x8bb5ff,
-        info: 'とも座ξ星。かつて帆座と共有された名で、甲板中央を結ぶ。',
+        info: 'とも座ν星。青白い巨星で、船尾側の甲板ラインを伸ばす。',
         featured: false,
         sp_type: 'S'
     }
