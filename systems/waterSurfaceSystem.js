@@ -327,9 +327,11 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
     });
     const water = new THREE.Mesh(waterGeometry, ctx.waterMaterial);
     const land = new THREE.Mesh(landGeometry, ctx.landMaterial);
+    const surfaces = { water, land };
     ctx.landMesh = land;
     ctx.waterSurfaceGroup.add(water);
-    createWaterMist(ctx);
+    ctx.waterSurfaceGroup.add(land);
+    const mist = createWaterMist(ctx);
     ctx.scene.add(ctx.waterSurfaceGroup);
     const system = {
         group: ctx.waterSurfaceGroup,
@@ -350,17 +352,15 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
             }
         },
         setSurfaceType(type = 'water') {
-            const isLand = type === 'land';
-            ctx.waterSurfaceGroup.children.forEach((child) => {
-                if (child === land) {
-                    child.visible = isLand;
-                } else {
-                    child.visible = !isLand;
-                }
+            const targetSurface = surfaces[type] ?? surfaces.water;
+            Object.values(surfaces).forEach((surface) => {
+                surface.visible = surface === targetSurface;
             });
+            if (mist) {
+                mist.visible = type === 'water';
+            }
         }
     };
-    ctx.waterSurfaceGroup.add(land);
     system.setSurfaceType(ctx.settings?.surfaceType ?? 'water');
     return system;
 }
@@ -428,4 +428,5 @@ function createWaterMist(ctx) {
     });
     const mist = new THREE.Mesh(mistGeometry, ctx.mistMaterial);
     ctx.waterSurfaceGroup.add(mist);
+    return mist;
 }

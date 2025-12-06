@@ -54,6 +54,7 @@ function pickObject(ctx, event) {
 }
 
 function setupControlButtons(ctx) {
+    setupSurfaceButtons(ctx);
     const toggleButton = (id, flag, apply) => {
         const btn = document.getElementById(id);
         if (!btn) return;
@@ -200,6 +201,31 @@ function setupControlButtons(ctx) {
             setImmersiveMode(false);
         });
     }
+}
+
+function setupSurfaceButtons(ctx) {
+    const surfaceButtons = Array.from(document.querySelectorAll('[data-surface-type]'));
+    if (!surfaceButtons.length) return;
+
+    const setActiveSurface = (type) => {
+        surfaceButtons.forEach((btn) => {
+            btn.classList.toggle('active', btn.dataset.surfaceType === type);
+        });
+    };
+
+    const applySurfaceType = (type) => {
+        ctx.settings.surfaceType = type;
+        ctx.waterSurfaceSystem?.setSurfaceType(type);
+        setActiveSurface(type);
+    };
+
+    surfaceButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            applySurfaceType(btn.dataset.surfaceType);
+        });
+    });
+
+    applySurfaceType(ctx.settings.surfaceType ?? 'water');
 }
 
 function setupTimeControls(ctx) {
