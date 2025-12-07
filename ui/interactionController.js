@@ -1,5 +1,6 @@
 import * as THREE from '../three.module.js';
 import { getPhotoAlbumSystem } from './photoAlbum.js';
+import { showLocationScreen } from './locationSelector.js';
 
 export function attachUIInteractions(getPlanetarium) {
     setupResizeHandler(getPlanetarium);
@@ -126,9 +127,17 @@ function setupControlButtons(getPlanetarium) {
     const homeBtn = document.getElementById('btn-home');
     if (homeBtn) {
         homeBtn.addEventListener('click', () => {
-        const albumSystem = getPhotoAlbumSystem();
-        albumSystem.showHomeFromPlanetarium();
-    });
+            const albumSystem = getPhotoAlbumSystem();
+            albumSystem.showHomeFromPlanetarium();
+        });
+    }
+
+    // 観測地点選択に戻るボタン
+    const locationBtn = document.getElementById('btn-location');
+    if (locationBtn) {
+        locationBtn.addEventListener('click', () => {
+            showLocationScreen();
+        });
     }
 
     const autoBtn = document.getElementById('btn-auto');
