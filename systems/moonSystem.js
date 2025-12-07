@@ -284,7 +284,8 @@ function calculateMoonState(ctx, date = new Date()) {
     const sunHorizontal = convertEquatorialToHorizontal(ctx, sunRaDec.ra, sunRaDec.dec, 1);
     const sunVector = sunHorizontal?.position ?? new THREE.Vector3(1, 0, 0);
 
-    const moonDistance = 2600;
+    // Place the Moon slightly in front of the Sun so it stays visible during overlaps
+    const moonDistance = 2200;
     const { position, altDeg, azDeg } = convertEquatorialToHorizontal(ctx, raDeg, decDeg, moonDistance);
 
     const phaseDifference = normalizeDegrees(lon - sunLon);
