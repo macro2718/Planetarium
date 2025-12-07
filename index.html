@@ -2003,6 +2003,21 @@
             letter-spacing: 1px;
         }
 
+        .album-item-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-width: calc(100% - 50px);
+        }
+
+        .album-item-location {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.5px;
+            display: block;
+            line-height: 1.4;
+        }
+
         .album-item-delete {
             width: 30px;
             height: 30px;
@@ -2068,6 +2083,14 @@
             max-height: 80vh;
             border-radius: 8px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .preview-meta {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.75);
+            letter-spacing: 1px;
+            text-align: center;
         }
 
         .preview-close {
@@ -2357,6 +2380,7 @@
     <div id="photo-preview" class="hidden">
         <button class="preview-close" id="preview-close">✕</button>
         <img id="preview-image" src="" alt="Preview">
+        <div class="preview-meta" id="preview-meta"></div>
         <div class="preview-actions">
             <button class="preview-btn" id="preview-download">📥 ダウンロード</button>
             <button class="preview-btn" id="preview-delete">🗑️ 削除</button>

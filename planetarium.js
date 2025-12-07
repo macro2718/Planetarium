@@ -319,7 +319,7 @@ class Planetarium {
         window.addEventListener('resize', this.resizeRenderer);
 
         // 写真撮影ボタンのセットアップ
-        setupPhotoCaptureButton(this.renderer);
+        setupPhotoCaptureButton(this.renderer, () => this);
     }
 
     resizeRenderer() {

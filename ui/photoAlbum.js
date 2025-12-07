@@ -2,6 +2,8 @@
 // Photo Album System - 写真撮影・アルバム管理
 // ========================================
 
+import { formatCoordinate } from '../data/locations.js';
+
 const ALBUM_STORAGE_KEY = 'planetarium_album';
 const SCREEN_FADE_MS = 600; // Keep in sync with CSS --screen-fade-duration
 
@@ -11,6 +13,7 @@ export class PhotoAlbumSystem {
         this.currentPreviewIndex = -1;
         this.onHomeScreen = true;
         this.initialized = false;
+        this.contextProvider = null;
     }
 
     init() {
@@ -46,9 +49,75 @@ export class PhotoAlbumSystem {
         }
     }
 
-    capturePhoto(renderer) {
+    setContextProvider(provider) {
+        this.contextProvider = provider;
+    }
+
+    resolveContext(ctxOrProvider = null) {
+        if (typeof ctxOrProvider === 'function') {
+            return ctxOrProvider();
+        }
+        if (ctxOrProvider) return ctxOrProvider;
+        if (typeof this.contextProvider === 'function') {
+            return this.contextProvider();
+        }
+        return this.contextProvider;
+    }
+
+    getSimulatedDate(ctx) {
+        const date = ctx?.getSimulatedDate?.();
+        return (date instanceof Date && !Number.isNaN(date.getTime())) ? date : null;
+    }
+
+    getLocationMetadata(ctx) {
+        const info = ctx?.observerLocationInfo || {};
+        const lat = Number.isFinite(ctx?.observer?.lat) ? ctx.observer.lat : info.lat;
+        const lon = Number.isFinite(ctx?.observer?.lon) ? ctx.observer.lon : info.lon;
+        return {
+            name: info.name || 'カスタム地点',
+            nameEn: info.nameEn,
+            icon: info.icon || '📍',
+            lat: Number.isFinite(lat) ? lat : null,
+            lon: Number.isFinite(lon) ? lon : null
+        };
+    }
+
+    formatLocationLabel(location) {
+        if (!location) return '📍 位置情報なし';
+        const name = location.name || 'カスタム地点';
+        const english = location.nameEn ? ` (${location.nameEn})` : '';
+        const hasCoords = Number.isFinite(location.lat) && Number.isFinite(location.lon);
+        const coords = hasCoords
+            ? `${formatCoordinate(location.lat, true)} / ${formatCoordinate(location.lon, false)}`
+            : '位置情報なし';
+        return `${location.icon || '📍'} ${name}${english} | ${coords}`;
+    }
+
+    getDisplayDate(photo) {
+        if (photo?.simulatedAt) {
+            const simDate = new Date(photo.simulatedAt);
+            if (!Number.isNaN(simDate.getTime())) {
+                return this.formatDate(simDate);
+            }
+        }
+        return photo?.date || '';
+    }
+
+    getLocationLabelFromPhoto(photo) {
+        if (!photo) return '📍 位置情報なし';
+        if (photo.locationLabel) return photo.locationLabel;
+        if (photo.location) return this.formatLocationLabel(photo.location);
+        return '📍 位置情報なし';
+    }
+
+    capturePhoto(renderer, ctxProvider = null) {
         return new Promise((resolve, reject) => {
             try {
+                const ctx = this.resolveContext(ctxProvider);
+                const now = new Date();
+                const simulatedDate = this.getSimulatedDate(ctx) || now;
+                const location = this.getLocationMetadata(ctx);
+
                 // キャンバスからデータを取得
                 const canvas = renderer.domElement;
                 const dataUrl = canvas.toDataURL('image/png');
@@ -56,8 +125,11 @@ export class PhotoAlbumSystem {
                 const photo = {
                     id: Date.now(),
                     dataUrl: dataUrl,
-                    timestamp: new Date().toISOString(),
-                    date: this.formatDate(new Date())
+                    timestamp: now.toISOString(),
+                    date: this.formatDate(simulatedDate),
+                    simulatedAt: simulatedDate.toISOString(),
+                    location,
+                    locationLabel: this.formatLocationLabel(location)
                 };
                 
                 this.photos.push(photo);
@@ -108,7 +180,8 @@ export class PhotoAlbumSystem {
         
         const link = document.createElement('a');
         link.href = photo.dataUrl;
-        link.download = `planetarium_${photo.date.replace(/[\/\s:]/g, '_')}.png`;
+        const dateLabel = this.getDisplayDate(photo) || photo.date || 'photo';
+        link.download = `planetarium_${dateLabel.replace(/[\/\s:]/g, '_')}.png`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -142,10 +215,15 @@ export class PhotoAlbumSystem {
         sortedPhotos.forEach((photo, idx) => {
             const item = document.createElement('div');
             item.className = 'album-item';
+            const dateLabel = this.getDisplayDate(photo);
+            const locationLabel = this.getLocationLabelFromPhoto(photo);
             item.innerHTML = `
                 <img src="${photo.dataUrl}" alt="Photo ${idx + 1}">
                 <div class="album-item-overlay">
-                    <span class="album-item-date">${photo.date}</span>
+                    <div class="album-item-meta">
+                        <span class="album-item-date">${dateLabel}</span>
+                        <span class="album-item-location">${locationLabel}</span>
+                    </div>
                     <button class="album-item-delete" data-id="${photo.id}">✕</button>
                 </div>
             `;
@@ -172,12 +250,17 @@ export class PhotoAlbumSystem {
         if (!photo) return;
         
         this.currentPreviewIndex = id;
-        
         const preview = document.getElementById('photo-preview');
         const image = document.getElementById('preview-image');
+        const meta = document.getElementById('preview-meta');
         
         if (preview && image) {
             image.src = photo.dataUrl;
+            if (meta) {
+                const dateLabel = this.getDisplayDate(photo);
+                const locationLabel = this.getLocationLabelFromPhoto(photo);
+                meta.textContent = `${dateLabel} | ${locationLabel}`;
+            }
             preview.classList.remove('hidden');
         }
     }
@@ -330,8 +413,9 @@ export function getPhotoAlbumSystem() {
     return instance;
 }
 
-export function setupPhotoCaptureButton(renderer) {
+export function setupPhotoCaptureButton(renderer, contextProvider = null) {
     const albumSystem = getPhotoAlbumSystem();
+    albumSystem.setContextProvider(contextProvider);
     
     // DOMが準備できてからイベントリスナーを設定
     albumSystem.init();
