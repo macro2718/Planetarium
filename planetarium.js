@@ -711,7 +711,7 @@ initLocationSelector({
 setArchivePlanetarium(getArchivePlanetarium());
 initEventArchive({
     onSelect: (event) => {
-        console.log(`星影アーカイブ: ${event.title} に移動`);
+        console.log(`クロノスカイ: ${event.title} に移動`);
     }
 });
 initCelestialLibrary();
