@@ -1,9 +1,10 @@
 import * as THREE from '../../three.module.js';
 
 export function createGrassSurface(ctx) {
-    const grassGeometry = new THREE.CircleGeometry(9500, 160);
+    const grassRadius = 10500;
+    const grassGeometry = new THREE.CircleGeometry(grassRadius, 180);
     grassGeometry.rotateX(-Math.PI / 2);
-    grassGeometry.translate(0, -38, 0);
+    grassGeometry.translate(0, -52, 0);
 
     const grassMaterial = new THREE.ShaderMaterial({
         uniforms: {
@@ -43,18 +44,22 @@ export function createGrassSurface(ctx) {
             }
             void main() {
                 vec3 pos = position;
-                float dist = clamp(length(pos.xz) / 9500.0, 0.0, 1.0);
-                float flowTime = time * 0.35;
-                float rollingHills = fbm(pos.xz * 0.0015 + flowTime * 0.02);
-                float softMounds = fbm(pos.xz * vec2(0.0009, 0.0012) - flowTime * 0.01);
-                float elevation = (rollingHills * 26.0 + softMounds * 20.0);
-                float nearMask = 1.0 - smoothstep(0.0, 0.22, dist);
-                elevation = mix(elevation, clamp(elevation, -10.0, 18.0), nearMask);
-                float wind = sin(dot(pos.xz, vec2(0.26, -0.34)) * 0.06 + flowTime * 0.8) * 0.6;
-                float breeze = fbm(pos.xz * 0.02 + flowTime * 0.6) * 0.8;
-                float bend = (wind + breeze) * smoothstep(0.1, 0.9, dist);
-                pos.y += elevation * smoothstep(0.12, 0.88, 1.0 - dist);
-                pos.xz += vec2(bend * 8.0, bend * -6.0) * (0.6 + dist * 0.6);
+                float dist = clamp(length(pos.xz) / ${grassRadius.toFixed(1)}, 0.0, 1.0);
+                float flowTime = time * 0.28;
+                float rollingHills = fbm(pos.xz * 0.0016 + flowTime * 0.016);
+                float softMounds = fbm(pos.xz * vec2(0.001, 0.0013) - flowTime * 0.012);
+                float elevation = (rollingHills * 28.0 + softMounds * 22.0);
+                float meadowMask = smoothstep(0.08, 0.85, 1.0 - dist);
+                float nearMask = 1.0 - smoothstep(0.0, 0.2, dist);
+                elevation = mix(elevation, clamp(elevation, -14.0, 22.0), nearMask);
+                float wind = sin(dot(pos.xz, vec2(0.24, -0.32)) * 0.06 + flowTime * 0.8) * 0.65;
+                float breeze = fbm(pos.xz * 0.02 + flowTime * 0.6) * 0.85;
+                float bend = (wind + breeze) * smoothstep(0.12, 0.92, dist);
+                float rimRise = pow(smoothstep(0.48, 0.96, dist), 1.2);
+                float rimHeight = mix(0.0, 210.0, rimRise);
+                pos.y += elevation * meadowMask;
+                pos.y += rimHeight;
+                pos.xz += vec2(bend * 7.5, bend * -6.0) * (0.55 + dist * 0.65);
                 vHeight = pos.y;
                 vRadial = dist;
                 vBend = bend;
@@ -97,10 +102,10 @@ export function createGrassSurface(ctx) {
             void main() {
                 vec3 viewDir = normalize(cameraPosition - vWorldPos);
                 float heightNorm = smoothstep(-48.0, 72.0, vHeight);
-                float meadowMask = smoothstep(0.08, 0.95, 1.0 - vRadial);
-                vec3 grassShadow = vec3(0.05, 0.08, 0.04);
-                vec3 grassMid = vec3(0.12, 0.22, 0.09);
-                vec3 grassHighlight = vec3(0.28, 0.42, 0.18);
+                float meadowMask = smoothstep(0.1, 0.9, 1.0 - vRadial);
+                vec3 grassShadow = vec3(0.04, 0.07, 0.04);
+                vec3 grassMid = vec3(0.12, 0.22, 0.11);
+                vec3 grassHighlight = vec3(0.3, 0.45, 0.2);
                 float patch = fbm(vWorldPos.xz * 0.02 + time * 0.15);
                 float dew = pow(max(noise(vWorldPos.xz * 0.35 + time * 0.6), 0.0), 6.0);
                 vec3 color = mix(grassShadow, grassMid, heightNorm);
@@ -112,12 +117,15 @@ export function createGrassSurface(ctx) {
                 float moonLight = pow(max(dot(normal, moonDir), 0.0), 1.4);
                 vec3 moonGlow = vec3(0.55, 0.62, 0.72) * moonLight * (0.6 + moonIntensity * 0.8);
                 float rim = pow(1.0 - max(dot(viewDir, normal), 0.0), 3.0);
-                vec3 rimColor = vec3(0.18, 0.28, 0.16) * rim;
-                float path = smoothstep(0.75, 0.3, vRadial);
-                vec3 horizonShade = mix(vec3(0.01, 0.02, 0.04), vec3(0.05, 0.08, 0.06), vRadial);
+                vec3 rimColor = vec3(0.14, 0.24, 0.14) * rim;
+                float path = smoothstep(0.7, 0.32, vRadial);
+                float horizonRidge = smoothstep(0.42, 0.9, vRadial);
+                vec3 horizonShade = mix(vec3(0.008, 0.012, 0.02), vec3(0.04, 0.075, 0.06), vRadial);
+                vec3 silhouette = mix(vec3(0.0, 0.0, 0.0), horizonShade, horizonRidge);
                 color += moonGlow * path * meadowMask;
                 color += rimColor * meadowMask;
-                color = mix(color, horizonShade, vRadial * 0.55);
+                color = mix(color, horizonShade, vRadial * 0.4);
+                color = mix(color, silhouette, horizonRidge);
                 gl_FragColor = vec4(color, 1.0);
             }
         `,
