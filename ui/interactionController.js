@@ -201,7 +201,21 @@ function setupControlButtons(getPlanetarium) {
             ctx.eclipticSystem.setVisible(visible);
         }
     });
-    
+
+    // 銀河赤道表示ボタン
+    toggleButton('btn-galactic-equator', 'showGalacticEquator', (ctx, visible) => {
+        if (ctx.galacticEquatorSystem) {
+            ctx.galacticEquatorSystem.setVisible(visible);
+        }
+    });
+
+    // 白道（月軌道面）表示ボタン
+    toggleButton('btn-lunar-orbit', 'showLunarOrbit', (ctx, visible) => {
+        if (ctx.lunarOrbitPlaneSystem) {
+            ctx.lunarOrbitPlaneSystem.setVisible(visible);
+        }
+    });
+
     // 方位表示ボタン
     toggleButton('btn-cardinal-directions', 'showCardinalDirections', (ctx, visible) => {
         if (ctx.cardinalDirectionSystem) {
