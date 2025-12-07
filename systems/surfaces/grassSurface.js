@@ -1,6 +1,10 @@
 import * as THREE from '../../three.module.js';
 
 export function createGrassSurface(ctx) {
+    const grassRadius = 10500;
+    const grassGeometry = new THREE.CircleGeometry(grassRadius, 180);
+    grassGeometry.rotateX(-Math.PI / 2);
+    grassGeometry.translate(0, -52, 0);
     const grassRadius = 16000;
     const grassGeometry = new THREE.CircleGeometry(grassRadius, 180);
     grassGeometry.rotateX(-Math.PI / 2);
@@ -46,6 +50,22 @@ export function createGrassSurface(ctx) {
             }
             void main() {
                 vec3 pos = position;
+                float dist = clamp(length(pos.xz) / ${grassRadius.toFixed(1)}, 0.0, 1.0);
+                float flowTime = time * 0.28;
+                float rollingHills = fbm(pos.xz * 0.0016 + flowTime * 0.016);
+                float softMounds = fbm(pos.xz * vec2(0.001, 0.0013) - flowTime * 0.012);
+                float elevation = (rollingHills * 28.0 + softMounds * 22.0);
+                float meadowMask = smoothstep(0.08, 0.85, 1.0 - dist);
+                float nearMask = 1.0 - smoothstep(0.0, 0.2, dist);
+                elevation = mix(elevation, clamp(elevation, -14.0, 22.0), nearMask);
+                float wind = sin(dot(pos.xz, vec2(0.24, -0.32)) * 0.06 + flowTime * 0.8) * 0.65;
+                float breeze = fbm(pos.xz * 0.02 + flowTime * 0.6) * 0.85;
+                float bend = (wind + breeze) * smoothstep(0.12, 0.92, dist);
+                float rimRise = pow(smoothstep(0.48, 0.96, dist), 1.2);
+                float rimHeight = mix(0.0, 210.0, rimRise);
+                pos.y += elevation * meadowMask;
+                pos.y += rimHeight;
+                pos.xz += vec2(bend * 7.5, bend * -6.0) * (0.55 + dist * 0.65);
                 float dist = clamp(length(pos.xz) / groundRadius, 0.0, 1.0);
                 float flowTime = time * 0.35;
                 float rollingHills = fbm(pos.xz * 0.0015 + flowTime * 0.02);
@@ -103,6 +123,7 @@ export function createGrassSurface(ctx) {
             void main() {
                 vec3 viewDir = normalize(cameraPosition - vWorldPos);
                 float heightNorm = smoothstep(-48.0, 72.0, vHeight);
+                float meadowMask = smoothstep(0.1, 0.9, 1.0 - vRadial);
                 float meadowMask = smoothstep(0.08, 0.95, 1.0 - vRadial);
                 vec3 grassShadow = vec3(0.04, 0.07, 0.04);
                 vec3 grassMid = vec3(0.12, 0.22, 0.11);
@@ -119,6 +140,9 @@ export function createGrassSurface(ctx) {
                 vec3 moonGlow = vec3(0.55, 0.62, 0.72) * moonLight * (0.6 + moonIntensity * 0.8);
                 float rim = pow(1.0 - max(dot(viewDir, normal), 0.0), 3.0);
                 vec3 rimColor = vec3(0.14, 0.24, 0.14) * rim;
+                float path = smoothstep(0.7, 0.32, vRadial);
+                float horizonRidge = smoothstep(0.42, 0.9, vRadial);
+                vec3 horizonShade = mix(vec3(0.008, 0.012, 0.02), vec3(0.04, 0.075, 0.06), vRadial);
                 float path = smoothstep(0.72, 0.28, vRadial);
                 float horizonRidge = smoothstep(0.45, 0.88, vRadial);
                 vec3 horizonShade = mix(vec3(0.009, 0.014, 0.028), vec3(0.05, 0.08, 0.06), vRadial);
@@ -126,6 +150,7 @@ export function createGrassSurface(ctx) {
                 color += moonGlow * path * meadowMask;
                 color += rimColor * meadowMask;
                 color = mix(color, horizonShade, vRadial * 0.4);
+                color = mix(color, silhouette, horizonRidge);
                 color = mix(color, silhouette, horizonRidge * 0.75);
                 gl_FragColor = vec4(color, 1.0);
             }
