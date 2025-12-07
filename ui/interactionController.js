@@ -259,9 +259,9 @@ function setupSurfaceButtons(getPlanetarium) {
         const ctx = getPlanetarium();
         if (!ctx) return;
         const normalizedType = type === 'land' ? 'desert' : type;
-        ctx.settings.surfaceType = normalizedType;
-        ctx.surfaceSystem?.setSurfaceType(normalizedType);
-        setActiveSurface(normalizedType);
+        const appliedType = ctx.surfaceSystem?.setSurfaceType(normalizedType) ?? normalizedType;
+        ctx.settings.surfaceType = appliedType;
+        setActiveSurface(appliedType);
     };
 
     surfaceButtons.forEach((btn) => {

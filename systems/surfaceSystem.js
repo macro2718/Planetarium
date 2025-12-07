@@ -28,11 +28,15 @@ export function createSurfaceSystem(ctx, moonStateProvider) {
 
     const setSurfaceType = (type = 'water') => {
         const normalizedType = type === 'land' ? 'desert' : type;
-        const nextSurface = surfaces.get(normalizedType) ?? surfaces.values().next().value ?? null;
+        const nextSurface = surfaces.get(normalizedType);
+
+        if (!nextSurface) return activeSurface?.type ?? null;
+
         activeSurface = nextSurface;
         surfaces.forEach((surface) => {
             surface.setActive?.(surface === activeSurface);
         });
+        return activeSurface.type;
     };
 
     const update = (time) => {
