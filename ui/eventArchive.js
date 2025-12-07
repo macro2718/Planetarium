@@ -3,6 +3,16 @@ import { HISTORICAL_EVENTS } from '../data/historicalEvents.js';
 let currentPlanetarium = null;
 let onEventSelected = null;
 
+function resetToRealtime() {
+    if (!currentPlanetarium) return;
+
+    const isCustomOrPaused = currentPlanetarium.timeMode !== 'realtime' || currentPlanetarium.isTimePaused;
+    if (isCustomOrPaused) {
+        currentPlanetarium.setTimeMode('realtime');
+        currentPlanetarium.toggleTimePause(false);
+    }
+}
+
 export function initEventArchive(options = {}) {
     onEventSelected = options.onSelect;
     setupEventList();
@@ -95,6 +105,10 @@ export function hideEventArchiveScreen() {
     if (archiveScreen) {
         archiveScreen.classList.add('hidden');
     }
+}
+
+export function resetArchiveTimeState() {
+    resetToRealtime();
 }
 
 function showModeScreen() {
