@@ -50,24 +50,40 @@ function setupEntryButton() {
 }
 
 function setupModeButtons({ onEnterLive, onEnterArchive }) {
+    const handleEnterLive = () => {
+        onEnterLive?.();
+        hideArchiveAndMode();
+        resetArchiveTimeState();
+        showLocationScreen();
+    };
+
+    const handleEnterArchive = () => {
+        onEnterArchive?.();
+        hideArchiveAndMode();
+        showEventArchiveScreen();
+    };
+
     const planetariumBtn = document.getElementById('mode-planetarium');
     if (planetariumBtn) {
-        planetariumBtn.addEventListener('click', () => {
-            onEnterLive?.();
-            hideArchiveAndMode();
-            resetArchiveTimeState();
-            showLocationScreen();
-        });
+        planetariumBtn.addEventListener('click', handleEnterLive);
     }
 
     const archiveBtn = document.getElementById('mode-archive');
     if (archiveBtn) {
-        archiveBtn.addEventListener('click', () => {
-            onEnterArchive?.();
-            hideArchiveAndMode();
-            showEventArchiveScreen();
-        });
+        archiveBtn.addEventListener('click', handleEnterArchive);
     }
+
+    // モード選択画面のDOMが差し替わっても動作するように、デリゲートでも拾う
+    document.addEventListener('click', (event) => {
+        if (event.target.closest('#mode-planetarium')) {
+            handleEnterLive();
+            return;
+        }
+
+        if (event.target.closest('#mode-archive')) {
+            handleEnterArchive();
+        }
+    });
 }
 
 function setupBackButton() {
