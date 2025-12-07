@@ -5,6 +5,7 @@ import {
     radToDeg,
     normalizeDegrees
 } from '../utils/astronomy.js';
+import { calculateGalacticBasis } from './milkyWaySystem.js';
 
 /**
  * 時圏（天球上の経線）システム
@@ -287,6 +288,194 @@ export function createEclipticSystem(ctx) {
             updateGeometry();
         }
     };
+}
+
+/**
+ * 銀河赤道システム
+ * 天球上に銀河座標の赤道面を描画する
+ */
+export function createGalacticEquatorSystem(ctx) {
+    const group = new THREE.Group();
+    const radius = 4800;
+    const segments = 240;
+    const positions = new Float32Array((segments + 1) * 3);
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const material = new THREE.LineBasicMaterial({
+        color: 0x88ccff,
+        transparent: true,
+        opacity: 0.75,
+        blending: THREE.AdditiveBlending
+    });
+    const line = new THREE.Line(geometry, material);
+    group.add(line);
+    const label = createTextSprite('銀河赤道', 0x88ccff);
+    group.add(label);
+
+    const updateGeometry = () => {
+        const basis = calculateGalacticBasis(ctx);
+        if (!basis) return;
+
+        for (let i = 0; i <= segments; i++) {
+            const angle = (i / segments) * Math.PI * 2;
+            const dir = basis.axis.clone().multiplyScalar(Math.cos(angle))
+                .add(basis.tangent.clone().multiplyScalar(Math.sin(angle)))
+                .normalize()
+                .multiplyScalar(radius);
+            const offset = i * 3;
+            positions[offset] = dir.x;
+            positions[offset + 1] = dir.y;
+            positions[offset + 2] = dir.z;
+        }
+        geometry.attributes.position.needsUpdate = true;
+        geometry.computeBoundingSphere();
+
+        if (basis.centerDir) {
+            label.position.copy(basis.centerDir.clone().multiplyScalar(radius * 1.02));
+        }
+    };
+
+    updateGeometry();
+
+    group.visible = false;
+    ctx.scene.add(group);
+    ctx.galacticEquatorGroup = group;
+
+    return {
+        group,
+        setVisible(visible) {
+            group.visible = visible;
+        },
+        update() {
+            updateGeometry();
+        }
+    };
+}
+
+/**
+ * 白道システム（月軌道面）
+ * 天球上に白道（黄道に対して約5度傾いた月の軌道面）を描画する
+ */
+export function createLunarOrbitPlaneSystem(ctx) {
+    const group = new THREE.Group();
+    const radius = 4800;
+    const segments = 240;
+    const positions = new Float32Array((segments + 1) * 3);
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const material = new THREE.LineBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.65,
+        blending: THREE.AdditiveBlending
+    });
+    const line = new THREE.Line(geometry, material);
+    group.add(line);
+    const label = createTextSprite('白道', 0xffffff);
+    group.add(label);
+
+    const updateGeometry = () => {
+        const basis = calculateLunarOrbitBasis(ctx);
+        if (!basis) return;
+
+        for (let i = 0; i <= segments; i++) {
+            const angle = (i / segments) * Math.PI * 2;
+            const dir = basis.axis.clone().multiplyScalar(Math.cos(angle))
+                .add(basis.tangent.clone().multiplyScalar(Math.sin(angle)))
+                .normalize()
+                .multiplyScalar(radius);
+            const offset = i * 3;
+            positions[offset] = dir.x;
+            positions[offset + 1] = dir.y;
+            positions[offset + 2] = dir.z;
+        }
+        geometry.attributes.position.needsUpdate = true;
+        geometry.computeBoundingSphere();
+
+        label.position.copy(basis.axis.clone().multiplyScalar(radius * 1.05));
+    };
+
+    updateGeometry();
+
+    group.visible = false;
+    ctx.scene.add(group);
+    ctx.lunarOrbitGroup = group;
+
+    return {
+        group,
+        setVisible(visible) {
+            group.visible = visible;
+        },
+        update() {
+            updateGeometry();
+        }
+    };
+}
+
+function calculateLunarOrbitBasis(ctx) {
+    const date = typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date();
+    const jd = date.getTime() / 86400000 + 2440587.5;
+    const T = (jd - 2451545.0) / 36525;
+    const inclinationRad = degToRad(5.145);
+    const ascendingNode = degToRad(normalizeDegrees(125.04452 - 1934.136261 * T + 0.0020708 * T * T + (T * T * T) / 450000));
+
+    const daysSinceJ2000 = (date - new Date('2000-01-01T12:00:00Z')) / (1000 * 60 * 60 * 24);
+    const obliquityRad = degToRad(23.439291 - 0.0000137 * daysSinceJ2000);
+
+    const sinI = Math.sin(inclinationRad);
+    const cosI = Math.cos(inclinationRad);
+    const sinOmega = Math.sin(ascendingNode);
+    const cosOmega = Math.cos(ascendingNode);
+
+    const normalEcl = new THREE.Vector3(
+        sinI * sinOmega,
+        -sinI * cosOmega,
+        cosI
+    ).normalize();
+
+    const cosOb = Math.cos(obliquityRad);
+    const sinOb = Math.sin(obliquityRad);
+    const normalEq = new THREE.Vector3(
+        normalEcl.x,
+        normalEcl.y * cosOb - normalEcl.z * sinOb,
+        normalEcl.y * sinOb + normalEcl.z * cosOb
+    ).normalize();
+
+    const nodeEcl = new THREE.Vector3(cosOmega, sinOmega, 0);
+    const nodeEq = new THREE.Vector3(
+        nodeEcl.x,
+        nodeEcl.y * cosOb - nodeEcl.z * sinOb,
+        nodeEcl.y * sinOb + nodeEcl.z * cosOb
+    ).normalize();
+
+    const axisEq = nodeEq.lengthSq() > 1e-6 ? nodeEq : new THREE.Vector3(1, 0, 0);
+    const tangentEq = new THREE.Vector3().crossVectors(normalEq, axisEq).normalize();
+    if (tangentEq.lengthSq() < 1e-6) {
+        return null;
+    }
+
+    const axis = convertEquatorialDirectionToHorizontal(axisEq, ctx, 1);
+    const tangent = convertEquatorialDirectionToHorizontal(tangentEq, ctx, 1);
+    if (!axis || !tangent) return null;
+
+    return { axis, tangent, normal: convertEquatorialDirectionToHorizontal(normalEq, ctx, 1) };
+}
+
+function convertEquatorialDirectionToHorizontal(dirEq, ctx, radius = 1) {
+    const ra = Math.atan2(dirEq.y, dirEq.x);
+    const dec = Math.asin(clamp(dirEq.z, -1, 1));
+    const result = equatorialToHorizontalVector(
+        normalizeDegrees(radToDeg(ra)),
+        radToDeg(dec),
+        ctx.localSiderealTime ?? 0,
+        ctx.observer?.lat ?? 0,
+        radius
+    );
+    return result?.vector ?? null;
+}
+
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
 }
 
 function eclipticToEquatorial(lonDeg) {

@@ -14,7 +14,7 @@ import { createSurfaceSystem } from './systems/surfaceSystem.js';
 import { createShootingStarSystem } from './systems/shootingStarSystem.js';
 import { createCometTailSystem } from './systems/cometTailSystem.js';
 import { createMeteorShowerSystem } from './systems/meteorShowerSystem.js';
-import { createHourCircleSystem, createDeclinationCircleSystem, createCelestialEquatorSystem, createEclipticSystem } from './systems/hourCircleSystem.js';
+import { createHourCircleSystem, createDeclinationCircleSystem, createCelestialEquatorSystem, createEclipticSystem, createGalacticEquatorSystem, createLunarOrbitPlaneSystem } from './systems/hourCircleSystem.js';
 import { createCardinalDirectionSystem } from './systems/cardinalDirectionSystem.js';
 import { createStarTrailSystem } from './systems/starTrailSystem.js';
 import { createLensFlareSystem } from './systems/lensFlareSystem.js';
@@ -45,6 +45,8 @@ function createDefaultSettings() {
         showDeclinationCircles: false,
         showCelestialEquator: false,
         showEcliptic: false,
+        showGalacticEquator: false,
+        showLunarOrbit: false,
         showCardinalDirections: false,
         showStarTrails: false,
         autoRotate: false,
@@ -159,11 +161,15 @@ class Planetarium {
         this.declinationCircleSystem = createDeclinationCircleSystem(this);
         this.celestialEquatorSystem = createCelestialEquatorSystem(this);
         this.eclipticSystem = createEclipticSystem(this);
+        this.galacticEquatorSystem = createGalacticEquatorSystem(this);
+        this.lunarOrbitPlaneSystem = createLunarOrbitPlaneSystem(this);
         this.cardinalDirectionSystem = createCardinalDirectionSystem(this);
         this.starTrailSystem = createStarTrailSystem(this);
         this.registerUpdater(this.starTrailSystem);
         this.registerUpdater(this.celestialEquatorSystem);
         this.registerUpdater(this.eclipticSystem);
+        this.registerUpdater(this.galacticEquatorSystem);
+        this.registerUpdater(this.lunarOrbitPlaneSystem);
         this.lensFlareSystem = createLensFlareSystem(this);
         this.registerUpdater(this.lensFlareSystem);
 
@@ -243,6 +249,8 @@ class Planetarium {
         if (this.declinationCircleSystem) this.declinationCircleSystem.setVisible(!!settings.showDeclinationCircles);
         if (this.celestialEquatorSystem) this.celestialEquatorSystem.setVisible(!!settings.showCelestialEquator);
         if (this.eclipticSystem) this.eclipticSystem.setVisible(!!settings.showEcliptic);
+        if (this.galacticEquatorSystem) this.galacticEquatorSystem.setVisible(!!settings.showGalacticEquator);
+        if (this.lunarOrbitPlaneSystem) this.lunarOrbitPlaneSystem.setVisible(!!settings.showLunarOrbit);
         if (this.cardinalDirectionSystem) this.cardinalDirectionSystem.setVisible(!!settings.showCardinalDirections);
         if (this.starTrailSystem) this.starTrailSystem.setEnabled(!!settings.showStarTrails);
         if (this.lensFlareSystem?.setEnabled) this.lensFlareSystem.setEnabled(!!settings.showLensFlare);
@@ -277,6 +285,8 @@ class Planetarium {
             { id: 'btn-declination-circles', flag: 'showDeclinationCircles' },
             { id: 'btn-celestial-equator', flag: 'showCelestialEquator' },
             { id: 'btn-ecliptic', flag: 'showEcliptic' },
+            { id: 'btn-galactic-equator', flag: 'showGalacticEquator' },
+            { id: 'btn-lunar-orbit', flag: 'showLunarOrbit' },
             { id: 'btn-cardinal-directions', flag: 'showCardinalDirections' },
             { id: 'btn-star-trails', flag: 'showStarTrails' },
             { id: 'btn-lensflare', flag: 'showLensFlare' },
