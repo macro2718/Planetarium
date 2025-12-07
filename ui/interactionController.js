@@ -225,12 +225,23 @@ function setupTimeControls(ctx) {
     const speedLabel = document.getElementById('speed-label-prefix');
     const speedHint = document.getElementById('time-speed-hint');
     const playbackBtn = document.getElementById('time-toggle-play');
+    let userEditedDate = false;
 
     if (!realtimeBtn && !customBtn && !fixedBtn && !dateInput && !speedInput) {
         return;
     }
 
     const timeSettingsContainer = document.getElementById('time-settings-container');
+
+    dateInput?.addEventListener('input', () => {
+        userEditedDate = true;
+    });
+
+    const setDateInputValue = (date) => {
+        if (!dateInput || !date) return;
+        dateInput.value = formatDatetimeLocal(date);
+        userEditedDate = false;
+    };
 
     const updateControlsVisibility = () => {
         const isRealtime = ctx.timeMode === 'realtime';
@@ -270,7 +281,7 @@ function setupTimeControls(ctx) {
     const syncInputsFromCtx = (forceDate = false) => {
         if (dateInput && (forceDate || ctx.timeMode === 'realtime')) {
             const current = typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date();
-            dateInput.value = formatDatetimeLocal(current);
+            setDateInputValue(current);
         }
         const isFixed = ctx.timeMode === 'fixed-time';
         if (speedInput) {
@@ -291,7 +302,11 @@ function setupTimeControls(ctx) {
     };
 
     const applyCustomSettings = (targetMode = ctx.timeMode === 'fixed-time' ? 'fixed-time' : 'custom') => {
-        const targetDate = readInputDate() ?? (typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date());
+        const ctxDate = typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date();
+        const inputDate = readInputDate();
+        const shouldPreferCtxDate = !inputDate
+            || (!userEditedDate && ctx.timeMode !== 'realtime' && Math.abs(inputDate.getTime() - ctxDate.getTime()) > 60000);
+        const targetDate = shouldPreferCtxDate ? ctxDate : inputDate;
         const rawScale = speedInput ? parseFloat(speedInput.value) : (targetMode === 'fixed-time' ? ctx.dayScale : ctx.timeScale);
         if (targetMode === 'fixed-time') {
             const nextScale = Number.isFinite(rawScale) ? rawScale : (Number.isFinite(ctx.dayScale) ? ctx.dayScale : 1);
@@ -317,6 +332,7 @@ function setupTimeControls(ctx) {
         if (speedInput && Number.isFinite(ctx.timeScale)) {
             speedInput.value = ctx.timeScale;
         }
+        setDateInputValue(typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date());
         applyCustomSettings('custom');
     });
 
@@ -324,6 +340,7 @@ function setupTimeControls(ctx) {
         if (speedInput && Number.isFinite(ctx.dayScale)) {
             speedInput.value = ctx.dayScale;
         }
+        setDateInputValue(typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date());
         applyCustomSettings('fixed-time');
     });
 

@@ -73,6 +73,7 @@ class Planetarium {
         const nowSeconds = performance.now() * 0.001;
         this.simulationStartPerf = nowSeconds;
         this.simulatedDate = new Date(this.simulationStartDate);
+        this.realtimeOffsetMs = 0;
         this.fixedTimeOfDayMs = this.simulationStartDate.getHours() * 3600000
             + this.simulationStartDate.getMinutes() * 60000
             + this.simulationStartDate.getSeconds() * 1000
@@ -200,7 +201,8 @@ class Planetarium {
 
     updateSimulationTime(nowSeconds) {
         if (this.timeMode === 'realtime') {
-            this.simulatedDate = new Date();
+            const offset = Number.isFinite(this.realtimeOffsetMs) ? this.realtimeOffsetMs : 0;
+            this.simulatedDate = new Date(Date.now() + offset);
         } else {
             const elapsed = nowSeconds - this.simulationStartPerf;
             if (this.timeMode === 'custom') {
@@ -244,9 +246,15 @@ class Planetarium {
         if (mode === 'realtime') {
             this.timeMode = 'realtime';
             this.isTimePaused = false;
-            this.simulationStartDate = new Date();
+            const providedDate = options.date instanceof Date
+                ? options.date
+                : (options.date ? new Date(options.date) : null);
+            const hasValidDate = providedDate && !Number.isNaN(providedDate.getTime());
+            const baseDate = hasValidDate ? providedDate : this.getSimulatedDate();
+            this.realtimeOffsetMs = baseDate.getTime() - Date.now();
+            this.simulationStartDate = new Date(baseDate);
             this.simulationStartPerf = this.getCurrentPerfSeconds();
-            this.simulatedDate = new Date(this.simulationStartDate);
+            this.simulatedDate = new Date(baseDate);
         } else if (mode === 'custom') {
             this.timeMode = 'custom';
             this.isTimePaused = false;
