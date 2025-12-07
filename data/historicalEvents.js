@@ -7,7 +7,8 @@ export const HISTORICAL_EVENTS = [
         location: {
             name: 'ヒューストン・ジョンソン宇宙センター',
             lat: 29.5593,
-            lon: -95.0892
+            lon: -95.0892,
+            surfaceType: 'grass'
         },
         tags: ['NASA', '月面着陸', 'アームストロング'],
         effects: [
@@ -30,7 +31,8 @@ export const HISTORICAL_EVENTS = [
         location: {
             name: 'ニュージーランド・テカポ湖',
             lat: -44.0033,
-            lon: 170.4830
+            lon: 170.4830,
+            surfaceType: 'grass'
         },
         tags: ['彗星', 'テカポ', '観測史'],
         effects: [
@@ -60,7 +62,8 @@ export const HISTORICAL_EVENTS = [
         location: {
             name: 'アメリカ・カリフォルニア州パームデール',
             lat: 34.5794,
-            lon: -118.1165
+            lon: -118.1165,
+            surfaceType: 'desert'
         },
         tags: ['流星群', '極大', 'しし座'],
         effects: [

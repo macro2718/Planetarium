@@ -40,7 +40,13 @@ const DEFAULT_OBSERVER_LOCATION = {
     nameEn: 'Tokyo',
     lat: 35.6895,
     lon: 139.6917,
-    icon: '🗼'
+    icon: '🗼',
+    surfaceType: 'grass'
+};
+
+const normalizeSurfaceType = (type) => {
+    if (!type) return 'water';
+    return type === 'land' ? 'desert' : type;
 };
 
 function createDefaultSettings() {
@@ -63,7 +69,7 @@ function createDefaultSettings() {
         autoRotate: false,
         playMusic: false,
         showLensFlare: true,
-        surfaceType: 'water',
+        surfaceType: normalizeSurfaceType(DEFAULT_OBSERVER_LOCATION.surfaceType) ?? 'water',
         showCometTail: false,
         cometTailTint: '#b7f0ff',
         cometTailIntensity: 1,
@@ -351,6 +357,26 @@ class Planetarium {
         this.controls.maxPolarAngle = Math.PI - 0.001;
     }
 
+    syncSurfaceButtons(type = this.settings?.surfaceType) {
+        const normalized = normalizeSurfaceType(type);
+        const surfaceButtons = document.querySelectorAll('[data-surface-type]');
+        surfaceButtons.forEach((btn) => {
+            btn.classList.toggle('active', btn.dataset.surfaceType === normalized);
+        });
+    }
+
+    setSurfaceType(type) {
+        const normalized = normalizeSurfaceType(type);
+        const applied = this.surfaceSystem?.setSurfaceType
+            ? this.surfaceSystem.setSurfaceType(normalized)
+            : normalized;
+        if (applied) {
+            this.settings.surfaceType = applied;
+            this.syncSurfaceButtons(applied);
+        }
+        return applied;
+    }
+
     applySettingsToSystems() {
         const settings = this.settings ?? {};
         if (this.milkyWayGroup) this.milkyWayGroup.visible = !!settings.showMilkyWay;
@@ -372,7 +398,7 @@ class Planetarium {
         if (this.cardinalDirectionSystem) this.cardinalDirectionSystem.setVisible(!!settings.showCardinalDirections);
         if (this.starTrailSystem) this.starTrailSystem.setEnabled(!!settings.showStarTrails);
         if (this.lensFlareSystem?.setEnabled) this.lensFlareSystem.setEnabled(!!settings.showLensFlare);
-        if (this.surfaceSystem?.setSurfaceType) this.surfaceSystem.setSurfaceType(settings.surfaceType ?? 'water');
+        this.setSurfaceType(settings.surfaceType ?? DEFAULT_OBSERVER_LOCATION.surfaceType ?? 'water');
         if (this.controls) this.controls.autoRotate = !!settings.autoRotate;
         if (this.cometTailSystem?.setEnabled) {
             this.cometTailSystem.setEnabled(!!settings.showCometTail, {
@@ -418,6 +444,8 @@ class Planetarium {
                 btn.classList.toggle('active', !!this.settings?.[flag]);
             }
         }
+
+        this.syncSurfaceButtons();
     }
 
     updateSimulationTime(nowSeconds) {
@@ -473,6 +501,9 @@ class Planetarium {
         }
         // 恒星時を再計算
         this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, this.observer.lon);
+        if (info?.surfaceType) {
+            this.setSurfaceType(info.surfaceType);
+        }
         console.log(`観測地を設定: 緯度 ${lat.toFixed(4)}, 経度 ${lon.toFixed(4)}`);
     }
 

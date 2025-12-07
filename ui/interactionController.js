@@ -251,19 +251,12 @@ function setupSurfaceButtons(getPlanetarium) {
     const surfaceButtons = Array.from(document.querySelectorAll('[data-surface-type]'));
     if (!surfaceButtons.length) return;
 
-    const setActiveSurface = (type) => {
-        surfaceButtons.forEach((btn) => {
-            btn.classList.toggle('active', btn.dataset.surfaceType === type);
-        });
-    };
-
     const applySurfaceType = (type) => {
         const ctx = getPlanetarium();
         if (!ctx) return;
-        const normalizedType = type === 'land' ? 'desert' : type;
-        const appliedType = ctx.surfaceSystem?.setSurfaceType(normalizedType) ?? normalizedType;
-        ctx.settings.surfaceType = appliedType;
-        setActiveSurface(appliedType);
+        if (typeof ctx.setSurfaceType === 'function') {
+            ctx.setSurfaceType(type);
+        }
     };
 
     surfaceButtons.forEach((btn) => {

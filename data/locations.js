@@ -9,6 +9,7 @@ export const LOCATIONS = [
         lat: 35.6895,
         lon: 139.6917,
         icon: '🗼',
+        surfaceType: 'grass',
         description: '日本の首都。光害は多いものの、都会の夜空にも星は輝いています。'
     },
     {
@@ -19,6 +20,7 @@ export const LOCATIONS = [
         lat: 24.3448,
         lon: 124.1572,
         icon: '🏝️',
+        surfaceType: 'water',
         description: '日本最南端の星空保護区。南十字星が見られる貴重な場所です。'
     },
     {
@@ -29,6 +31,7 @@ export const LOCATIONS = [
         lat: 43.5851,
         lon: 142.4686,
         icon: '❄️',
+        surfaceType: 'ice',
         description: '丘の街として知られる美瑛。冬の澄んだ空気の中で見る星空は格別です。'
     },
     // アジア
@@ -40,6 +43,7 @@ export const LOCATIONS = [
         lat: 39.9042,
         lon: 116.4074,
         icon: '🏯',
+        surfaceType: 'grass',
         description: '中国の首都。古代から天文観測が盛んに行われてきた歴史ある都市です。'
     },
     {
@@ -50,6 +54,7 @@ export const LOCATIONS = [
         lat: 1.3521,
         lon: 103.8198,
         icon: '🦁',
+        surfaceType: 'water',
         description: '赤道直下の都市国家。北半球と南半球の星座が両方見られます。'
     },
     {
@@ -60,6 +65,7 @@ export const LOCATIONS = [
         lat: 28.6139,
         lon: 77.2090,
         icon: '🕌',
+        surfaceType: 'grass',
         description: 'インドの首都。古代の天文台ジャンタル・マンタルがある歴史的な街です。'
     },
     // ヨーロッパ
@@ -71,6 +77,7 @@ export const LOCATIONS = [
         lat: 48.8566,
         lon: 2.3522,
         icon: '🗼',
+        surfaceType: 'grass',
         description: '光の都パリ。エッフェル塔の向こうに広がる星空をお楽しみください。'
     },
     {
@@ -81,6 +88,7 @@ export const LOCATIONS = [
         lat: 64.1466,
         lon: -21.9426,
         icon: '🌋',
+        surfaceType: 'ice',
         description: 'アイスランドの首都。オーロラと星空の絶景ポイントです。'
     },
     {
@@ -91,6 +99,7 @@ export const LOCATIONS = [
         lat: 37.9838,
         lon: 23.7275,
         icon: '🏛️',
+        surfaceType: 'grass',
         description: '古代ギリシャの天文学発祥の地。星座の物語が生まれた場所です。'
     },
     // アメリカ
@@ -102,6 +111,7 @@ export const LOCATIONS = [
         lat: 40.7128,
         lon: -74.0060,
         icon: '🗽',
+        surfaceType: 'grass',
         description: '眠らない街ニューヨーク。マンハッタンの夜空に浮かぶ星々を見上げましょう。'
     },
     {
@@ -112,6 +122,7 @@ export const LOCATIONS = [
         lat: 19.8207,
         lon: -155.4680,
         icon: '🌺',
+        surfaceType: 'water',
         description: '世界最高峰の天文台群がある聖なる山。最高の星空観測地の一つです。'
     },
     {
@@ -122,6 +133,7 @@ export const LOCATIONS = [
         lat: -23.8634,
         lon: -67.5249,
         icon: '🏜️',
+        surfaceType: 'desert',
         description: '世界で最も乾燥した場所。南半球最高の天体観測地として知られています。'
     },
     // オセアニア
@@ -133,6 +145,7 @@ export const LOCATIONS = [
         lat: -33.8688,
         lon: 151.2093,
         icon: '🦘',
+        surfaceType: 'water',
         description: 'オーストラリア最大の都市。南十字星やマゼラン雲が見られます。'
     },
     {
@@ -143,6 +156,7 @@ export const LOCATIONS = [
         lat: -43.8859,
         lon: 170.5100,
         icon: '⭐',
+        surfaceType: 'grass',
         description: '世界初の星空保護区。ニュージーランドの美しい星空を堪能できます。'
     },
     // アフリカ
@@ -154,6 +168,7 @@ export const LOCATIONS = [
         lat: 30.0444,
         lon: 31.2357,
         icon: '🏛️',
+        surfaceType: 'desert',
         description: 'ピラミッドの街。古代エジプト人が仰ぎ見た星空を体験できます。'
     },
     {
@@ -164,6 +179,7 @@ export const LOCATIONS = [
         lat: -33.9249,
         lon: 18.4241,
         icon: '🦓',
+        surfaceType: 'grass',
         description: '南アフリカの母なる都市。テーブルマウンテンの上に広がる南天の星空。'
     },
     {
@@ -174,6 +190,7 @@ export const LOCATIONS = [
         lat: -24.7456,
         lon: 15.3139,
         icon: '🏜️',
+        surfaceType: 'desert',
         description: '世界最古の砂漠。光害ゼロの環境で見る満天の星は圧巻です。'
     },
     // 極地
@@ -185,6 +202,7 @@ export const LOCATIONS = [
         lat: 78.2207,
         lon: 15.6354,
         icon: '🐻‍❄️',
+        surfaceType: 'ice',
         description: '北極圏の島々。極夜の時期には一日中星空とオーロラが見られます。'
     },
     {
@@ -195,6 +213,7 @@ export const LOCATIONS = [
         lat: -69.0067,
         lon: 39.5833,
         icon: '🐧',
+        surfaceType: 'ice',
         description: '日本の南極観測基地。南半球の星座とオーロラの絶景ポイント。'
     }
 ];
