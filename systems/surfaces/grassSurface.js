@@ -138,12 +138,12 @@ export function createGrassSurface(ctx) {
                 vec3 grassLight = vec3(0.08, 0.14, 0.07);       // 月光が当たる部分
                 
                 // パッチ状のテクスチャ
-                float patch = fbm(vWorldPos.xz * 0.015 + time * 0.1);
+                float patchPattern = fbm(vWorldPos.xz * 0.015 + time * 0.1);
                 float grassDetail = noise(vWorldPos.xz * 0.08);
                 
                 // 基本色の計算
                 vec3 color = mix(grassDark, grassMid, heightNorm);
-                color = mix(color, grassLight, patch * 0.4 + grassDetail * 0.2);
+                color = mix(color, grassLight, patchPattern * 0.4 + grassDetail * 0.2);
                 
                 // 法線計算（起伏から）
                 float slopeX = dFdx(vHeight);
