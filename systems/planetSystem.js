@@ -7,12 +7,20 @@ export function createPlanetSystem(ctx) {
 
     const meshes = new Map();
     const sprites = new Map();
+    const pickMeshes = new Map();
     const planetMaterial = (color) => new THREE.MeshStandardMaterial({
         color: new THREE.Color(color),
         roughness: 0.55,
         metalness: 0.1
     });
     const glowTexture = createDiscTexture();
+    const pickMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0,
+        depthWrite: false
+    });
+    const pickGeometry = new THREE.SphereGeometry(1, 16, 16);
 
     for (const planet of PLANET_DEFINITIONS) {
         const geometry = new THREE.SphereGeometry(planet.radius, 64, 64);
@@ -24,9 +32,13 @@ export function createPlanetSystem(ctx) {
             nameEn: planet.nameEn,
             id: planet.id
         };
+        const pickMesh = new THREE.Mesh(pickGeometry, pickMaterial.clone());
+        pickMesh.userData = mesh.userData;
+        pickMesh.visible = true;
+        pickMesh.frustumCulled = false;
         const spriteMat = new THREE.SpriteMaterial({
             map: glowTexture,
-            color: new THREE.Color(planet.color),
+            color: new THREE.Color(planet.color).lerp(new THREE.Color(0xffffff), 0.55),
             transparent: true,
             depthWrite: false,
             blending: THREE.AdditiveBlending
@@ -39,9 +51,12 @@ export function createPlanetSystem(ctx) {
         // 球は不可視のヒットボックスとして保持（将来の拡張用）
         mesh.visible = false;
         ctx.planetGroup.add(mesh);
+        ctx.planetGroup.add(pickMesh);
+        ctx.clickableObjects.push(pickMesh);
 
         meshes.set(planet.id, mesh);
         sprites.set(planet.id, sprite);
+        pickMeshes.set(planet.id, pickMesh);
     }
 
     const cache = { timestamp: null, states: null };
@@ -63,8 +78,9 @@ export function createPlanetSystem(ctx) {
         for (const planet of PLANET_DEFINITIONS) {
             const mesh = meshes.get(planet.id);
             const sprite = sprites.get(planet.id);
+            const pickMesh = pickMeshes.get(planet.id);
             const state = states?.[planet.id];
-            if (!mesh || !sprite || !state) continue;
+            if (!mesh || !sprite || !pickMesh || !state) continue;
 
             sprite.position.copy(state.position);
             sprite.lookAt(0, 0, 0);
@@ -74,12 +90,15 @@ export function createPlanetSystem(ctx) {
 
             // 視等級に応じてサイズと輝度を調整
             const mag = state.apparentMagnitude ?? 5;
-            const refMag = -2;
-            const brightness = Math.pow(10, -0.4 * (mag - refMag));
-            const size = THREE.MathUtils.clamp(14 + brightness * 65, 10, 180);
-            const opacity = THREE.MathUtils.clamp(0.25 + brightness * 0.18, 0.2, 1.0);
+            const brightness = THREE.MathUtils.clamp(2.6 - mag * 0.35, 0.45, 1.75);
+            const size = THREE.MathUtils.clamp(10 + brightness * 12, 10, 220);
+            const opacity = THREE.MathUtils.clamp(0.35 + brightness * 0.28, 0.35, 1.0);
             sprite.scale.set(size, size, 1);
             sprite.material.opacity = opacity;
+            pickMesh.position.copy(state.position);
+            pickMesh.visible = visible;
+            const pickScale = Math.max(planet.radius * 6, size * 0.5);
+            pickMesh.scale.setScalar(pickScale);
 
             const illumPct = Math.round(state.illumination * 100);
             const distanceAu = state.distanceAu?.toFixed(3) ?? '—';
