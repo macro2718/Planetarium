@@ -12,6 +12,8 @@ import { createAuroraSystem } from './systems/auroraSystem.js';
 import { createCosmicDustSystem } from './systems/cosmicDustSystem.js';
 import { createSurfaceSystem } from './systems/surfaceSystem.js';
 import { createShootingStarSystem } from './systems/shootingStarSystem.js';
+import { createCometTailSystem } from './systems/cometTailSystem.js';
+import { createMeteorShowerSystem } from './systems/meteorShowerSystem.js';
 import { createHourCircleSystem, createDeclinationCircleSystem, createCelestialEquatorSystem, createEclipticSystem } from './systems/hourCircleSystem.js';
 import { createCardinalDirectionSystem } from './systems/cardinalDirectionSystem.js';
 import { createStarTrailSystem } from './systems/starTrailSystem.js';
@@ -48,7 +50,11 @@ function createDefaultSettings() {
         autoRotate: false,
         playMusic: false,
         showLensFlare: true,
-        surfaceType: 'water'
+        surfaceType: 'water',
+        showCometTail: false,
+        cometTailTint: '#b7f0ff',
+        cometTailIntensity: 1,
+        meteorShowerIntensity: 0
     };
 }
 
@@ -145,6 +151,10 @@ class Planetarium {
         this.surfaceSystem = createSurfaceSystem(this, () => this.moonSystem.getCurrentState());
         this.registerUpdater(this.surfaceSystem);
         this.registerUpdater(createShootingStarSystem(this));
+        this.cometTailSystem = createCometTailSystem(this);
+        this.registerUpdater(this.cometTailSystem);
+        this.meteorShowerSystem = createMeteorShowerSystem(this);
+        this.registerUpdater(this.meteorShowerSystem);
         this.hourCircleSystem = createHourCircleSystem(this);
         this.declinationCircleSystem = createDeclinationCircleSystem(this);
         this.celestialEquatorSystem = createCelestialEquatorSystem(this);
@@ -238,6 +248,15 @@ class Planetarium {
         if (this.lensFlareSystem?.setEnabled) this.lensFlareSystem.setEnabled(!!settings.showLensFlare);
         if (this.surfaceSystem?.setSurfaceType) this.surfaceSystem.setSurfaceType(settings.surfaceType ?? 'water');
         if (this.controls) this.controls.autoRotate = !!settings.autoRotate;
+        if (this.cometTailSystem?.setEnabled) {
+            this.cometTailSystem.setEnabled(!!settings.showCometTail, {
+                intensity: settings.cometTailIntensity,
+                tint: settings.cometTailTint
+            });
+        }
+        if (this.meteorShowerSystem?.setIntensity) {
+            this.meteorShowerSystem.setIntensity(settings.meteorShowerIntensity ?? 0);
+        }
 
         if (settings.playMusic) {
             this.startAmbientSound();
