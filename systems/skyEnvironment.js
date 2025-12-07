@@ -30,16 +30,16 @@ function createSkyGradient(ctx) {
         void main() {
             float h = normalize(vWorldPosition).y;
             
-            // 地平線付近（大気がないので黒）
-            vec3 horizonGlow = vec3(0.0, 0.0, 0.0);
-            // 地平線少し上
-            vec3 lowSky = vec3(0.0, 0.0, 0.0);
-            // 中間の夜空
-            vec3 midSky = vec3(0.0, 0.0, 0.0);
-            // 天頂付近
-            vec3 zenith = vec3(0.0, 0.0, 0.0);
-            // 地面（暗い）
-            vec3 ground = vec3(0.01, 0.01, 0.015);
+            // Brightest near the horizon, fades to near-black at the zenith
+            vec3 horizonGlow = vec3(0.08, 0.12, 0.05);   // 緑が強い水平層（Airglowの緑557.7nm）
+            vec3 lowSky      = vec3(0.04, 0.08, 0.03);   // 緑＋赤混合の低空
+            vec3 midSky      = vec3(0.015, 0.03, 0.02);  // 薄い深緑。天頂に向かって減衰
+            vec3 zenith      = vec3(0.004, 0.008, 0.006); // 天頂は極めて暗いティール
+            vec3 ground      = vec3(0.001, 0.0015, 0.002); // 地表反射はほぼ黒
+
+            
+            // Slight atmospheric lift around the horizon to keep it brighter than the zenith
+            float horizonBoost = smoothstep(-0.1, 0.25, h);
             
             vec3 color;
             if (h < 0.0) {
@@ -55,6 +55,9 @@ function createSkyGradient(ctx) {
                 color = mix(horizonGlow, lowSky, t1);
                 color = mix(color, midSky, t2);
                 color = mix(color, zenith, t3);
+                
+                // Extra lift near the horizon so the zenith remains darkest
+                color += horizonGlow * (1.0 - t3) * 0.15 * horizonBoost;
             }
             gl_FragColor = vec4(color, 1.0);
         }
@@ -129,4 +132,3 @@ function createHorizonLights(ctx) {
     const lights = new THREE.Points(geometry, material);
     ctx.scene.add(lights);
 }
-
