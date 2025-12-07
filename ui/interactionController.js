@@ -3,6 +3,7 @@ import { getPhotoAlbumSystem } from './photoAlbum.js';
 import { showLocationScreen } from './locationSelector.js';
 import { destroyAllPlanetaria, getArchivePlanetarium, resetPlanetariumBgm } from './planetariumContext.js';
 import { showEventArchiveScreen } from './eventArchive.js';
+import { unlockConstellation } from './celestialLibrary.js';
 
 export function attachUIInteractions(getPlanetarium) {
     setupResizeHandler(getPlanetarium);
@@ -43,7 +44,7 @@ function setupResizeHandler(getPlanetarium) {
 function setupClickHandler(getPlanetarium) {
     window.addEventListener('click', (event) => {
         // UI要素上のクリックはスキップ
-        const uiOverlay = event.target.closest('#home-screen, #mode-screen, #archive-screen, #location-screen, #album-screen, #controls, .home-btn, .mode-card, .control-btn');
+        const uiOverlay = event.target.closest('#home-screen, #mode-screen, #archive-screen, #library-screen, #location-screen, #album-screen, #controls, .home-btn, .mode-card, .control-btn');
         if (uiOverlay) return;
 
         const ctx = getPlanetarium();
@@ -526,6 +527,9 @@ function showStarInfo(ctx, data) {
     detailLines.forEach(line => {
         html += `<p class="star-detail">${line}</p>`;
     });
+    if (data.constellation) {
+        unlockConstellation(data.constellation);
+    }
     if (data.info) {
         html += `<p>${data.info}</p>`;
     }

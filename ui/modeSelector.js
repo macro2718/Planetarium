@@ -1,11 +1,12 @@
 import { showLocationScreen, hideLocationScreen } from './locationSelector.js';
 import { showEventArchiveScreen, hideEventArchiveScreen, resetArchiveTimeState } from './eventArchive.js';
+import { hideCelestialLibraryScreen, showCelestialLibraryScreen } from './celestialLibrary.js';
 import { resetPlanetariumBgm } from './planetariumContext.js';
 
 export function initModeSelector(options = {}) {
-    const { onEnterLive, onEnterArchive } = options;
+    const { onEnterLive, onEnterArchive, onEnterLibrary } = options;
     setupEntryButton();
-    setupModeButtons({ onEnterLive, onEnterArchive });
+    setupModeButtons({ onEnterLive, onEnterArchive, onEnterLibrary });
     setupBackButton();
 }
 
@@ -27,6 +28,7 @@ function setupEntryButton() {
     const showModeSelector = () => {
         console.log('[modeSelector] showModeSelector called');
         resetPlanetariumBgm();
+        hideCelestialLibraryScreen();
         document.body.classList.remove('home-visible');
         modeScreen?.classList.remove('hidden');
         homeScreen?.classList.add('hidden');
@@ -49,7 +51,7 @@ function setupEntryButton() {
     });
 }
 
-function setupModeButtons({ onEnterLive, onEnterArchive }) {
+function setupModeButtons({ onEnterLive, onEnterArchive, onEnterLibrary }) {
     const handleEnterLive = () => {
         onEnterLive?.();
         hideArchiveAndMode();
@@ -63,6 +65,12 @@ function setupModeButtons({ onEnterLive, onEnterArchive }) {
         showEventArchiveScreen();
     };
 
+    const handleEnterLibrary = () => {
+        onEnterLibrary?.();
+        hideArchiveAndMode();
+        showCelestialLibraryScreen();
+    };
+
     const planetariumBtn = document.getElementById('mode-planetarium');
     if (planetariumBtn) {
         planetariumBtn.addEventListener('click', handleEnterLive);
@@ -71,6 +79,11 @@ function setupModeButtons({ onEnterLive, onEnterArchive }) {
     const archiveBtn = document.getElementById('mode-archive');
     if (archiveBtn) {
         archiveBtn.addEventListener('click', handleEnterArchive);
+    }
+
+    const libraryBtn = document.getElementById('mode-library');
+    if (libraryBtn) {
+        libraryBtn.addEventListener('click', handleEnterLibrary);
     }
 
     // モード選択画面のDOMが差し替わっても動作するように、デリゲートでも拾う
@@ -82,6 +95,11 @@ function setupModeButtons({ onEnterLive, onEnterArchive }) {
 
         if (event.target.closest('#mode-archive')) {
             handleEnterArchive();
+            return;
+        }
+
+        if (event.target.closest('#mode-library')) {
+            handleEnterLibrary();
         }
     });
 }
@@ -94,6 +112,7 @@ function setupBackButton() {
             homeScreen?.classList.remove('hidden');
             hideLocationScreen();
             hideEventArchiveScreen();
+            hideCelestialLibraryScreen();
             const modeScreen = document.getElementById('mode-screen');
             modeScreen?.classList.add('hidden');
             document.body.classList.add('home-visible');
@@ -105,5 +124,6 @@ function hideArchiveAndMode() {
     const modeScreen = document.getElementById('mode-screen');
     modeScreen?.classList.add('hidden');
     hideEventArchiveScreen();
+    hideCelestialLibraryScreen();
     document.body.classList.remove('home-visible');
 }

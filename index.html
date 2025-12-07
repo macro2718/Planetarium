@@ -1744,6 +1744,243 @@
             border-color: rgba(180, 200, 255, 0.6);
         }
 
+        /* 星譚ライブラリ画面 */
+        #library-screen {
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(140% 120% at 50% 0%, rgba(64, 88, 140, 0.8) 0%, transparent 45%),
+                radial-gradient(90% 90% at 16% 78%, rgba(120, 84, 164, 0.5), transparent 52%),
+                radial-gradient(90% 80% at 82% 70%, rgba(46, 140, 156, 0.46), transparent 55%),
+                linear-gradient(180deg, #030610 0%, #050814 42%, #03050c 100%);
+            z-index: 1740;
+            display: flex;
+            flex-direction: column;
+            transition: opacity var(--screen-fade-duration) var(--screen-fade-ease), visibility var(--screen-fade-duration) var(--screen-fade-ease);
+            overflow: hidden;
+            color: var(--text-main);
+            letter-spacing: 0.4px;
+        }
+
+        #library-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .library-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 28px 48px 12px;
+            max-width: 1260px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .library-hero {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .library-pill {
+            align-self: flex-start;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(130, 180, 255, 0.28), rgba(120, 220, 220, 0.28));
+            border: 1px solid rgba(160, 200, 255, 0.35);
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.82);
+            font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
+        }
+
+        .library-title {
+            font-size: 30px;
+            letter-spacing: 8px;
+            color: rgba(255, 255, 255, 0.94);
+            font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .library-subtitle {
+            font-size: 14px;
+            color: rgba(220, 235, 255, 0.78);
+            max-width: 760px;
+            line-height: 1.8;
+        }
+
+        .library-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(160, 200, 255, 0.2);
+            color: rgba(220, 235, 255, 0.9);
+            font-size: 13px;
+        }
+
+        .library-count {
+            font-size: 18px;
+            letter-spacing: 2px;
+            font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
+        }
+
+        .library-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .library-sigil {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid rgba(180, 210, 255, 0.35);
+            display: grid;
+            place-items: center;
+            color: rgba(200, 230, 255, 0.9);
+            font-size: 18px;
+            box-shadow: 0 0 18px rgba(120, 190, 255, 0.3);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .library-back-btn {
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: 1px solid rgba(180, 200, 255, 0.35);
+            background: rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.86);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            letter-spacing: 1px;
+        }
+
+        .library-back-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(180, 200, 255, 0.6);
+        }
+
+        .library-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 48px 48px;
+            gap: 16px;
+            overflow-y: auto;
+        }
+
+        .library-description {
+            max-width: 960px;
+            width: 100%;
+            padding: 18px 18px 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(160, 200, 255, 0.2);
+            background: rgba(255, 255, 255, 0.03);
+            font-size: 14px;
+            color: rgba(220, 235, 255, 0.82);
+            line-height: 1.8;
+        }
+
+        .library-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            width: 100%;
+            max-width: 1160px;
+        }
+
+        .library-card {
+            padding: 18px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(160, 200, 255, 0.18);
+            box-shadow: 0 16px 42px rgba(0, 0, 0, 0.32);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .library-card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .library-badge {
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(90, 150, 240, 0.45), rgba(140, 200, 255, 0.35));
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+
+        .library-status-chip {
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(220, 235, 255, 0.78);
+            font-size: 11px;
+            letter-spacing: 1px;
+            border: 1px solid rgba(180, 200, 255, 0.24);
+        }
+
+        .library-card h3 {
+            font-size: 18px;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.92);
+            font-family: 'Zen Kaku Gothic New', 'Space Grotesk', sans-serif;
+        }
+
+        .library-placeholder {
+            color: rgba(220, 235, 255, 0.7);
+            line-height: 1.7;
+            font-size: 13px;
+        }
+
+        .library-empty {
+            max-width: 960px;
+            width: 100%;
+            padding: 18px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px dashed rgba(160, 200, 255, 0.3);
+            color: rgba(220, 235, 255, 0.76);
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .library-empty.hidden {
+            display: none;
+        }
+
+        @media (max-width: 960px) {
+            .library-header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+                padding: 22px 24px 8px;
+            }
+            .library-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .library-content {
+                padding: 22px 24px 36px;
+            }
+            .library-grid {
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            }
+        }
+
         .archive-content {
             flex: 1;
             padding: 10px 40px 30px;
@@ -2321,6 +2558,12 @@
                     <p>歴史に刻まれた瞬間の星空へタイムトラベル。月面着陸や流星群の嵐など、あの夜の光景を呼び戻します。</p>
                     <button id="mode-archive">歴史的な夜空へ</button>
                 </div>
+                <div class="mode-card">
+                    <span class="mode-tagline">CELESTIAL LIBRARY</span>
+                    <h3>星譚ライブラリ</h3>
+                    <p>プラネタリウムや星影アーカイブで出会った星座の説明を集める読書室。気になった星座をクリックして、本棚を満たしていきましょう。</p>
+                    <button id="mode-library">本棚をひらく</button>
+                </div>
             </div>
         </div>
     </div>
@@ -2342,6 +2585,34 @@
             <div class="archive-grid" id="archive-grid">
                 <!-- 歴史イベントカードが挿入される -->
             </div>
+        </div>
+    </div>
+
+    <!-- 星譚ライブラリ画面 -->
+    <div id="library-screen" class="hidden">
+        <div class="library-header">
+            <div class="library-hero">
+                <div class="library-pill">CELESTIAL LIBRARY</div>
+                <h2 class="library-title">星譚ライブラリ</h2>
+                <p class="library-subtitle">夜空に散らばる星座譚を集める読書室。形の由来や伝説、代表星の素顔など、プラネタリウムで触れた星座から順に、本棚に並べていきましょう。</p>
+                <div class="library-status">
+                    <span>解放された星座</span>
+                    <span class="library-count" id="library-count">0</span>
+                </div>
+            </div>
+            <div class="library-actions">
+                <div class="library-sigil">✶</div>
+                <button class="library-back-btn" id="library-back">← モード選択へ戻る</button>
+            </div>
+        </div>
+        <div class="library-content">
+            <div class="library-description">
+                プラネタリウムや星影アーカイブで星座に触れると、ここに本棚が増えていきます。今日はどの物語をしまっておきますか。
+            </div>
+            <div class="library-empty" id="library-empty">
+                まだ収蔵された星座はありません。星座をクリックするとここに解放されていきます。
+            </div>
+            <div class="library-grid" id="library-grid"></div>
         </div>
     </div>
 

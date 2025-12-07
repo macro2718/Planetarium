@@ -26,6 +26,7 @@ import { getPhotoAlbumSystem, setupPhotoCaptureButton } from './ui/photoAlbum.js
 import { initLocationSelector, setPlanetarium } from './ui/locationSelector.js';
 import { initModeSelector } from './ui/modeSelector.js';
 import { initEventArchive, setArchivePlanetarium } from './ui/eventArchive.js';
+import { initCelestialLibrary } from './ui/celestialLibrary.js';
 import {
     registerPlanetaria,
     setActivePlanetarium,
@@ -682,10 +683,12 @@ initEventArchive({
         console.log(`星影アーカイブ: ${event.title} に移動`);
     }
 });
+initCelestialLibrary();
 
 initModeSelector({
     onEnterLive: () => setActivePlanetarium('live'),
-    onEnterArchive: () => setActivePlanetarium('archive')
+    onEnterArchive: () => setActivePlanetarium('archive'),
+    onEnterLibrary: () => setActivePlanetarium('live')
 });
 
 // 初期ロード時に選択画面へ進めるよう、星空の準備中オーバーレイを先に隠す
