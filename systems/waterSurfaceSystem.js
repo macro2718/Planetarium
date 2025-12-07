@@ -331,6 +331,8 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
                 vec3 viewDir = normalize(cameraPosition - vWorldPos);
                 // 地形を 20 下げたので正規化範囲も同じ分だけオフセット
                 float heightNorm = smoothstep(-55.0, 100.0, vHeight);
+                float horizonShade = smoothstep(0.65, 0.95, vRadial);
+                float horizonLightMask = 1.0 - horizonShade * 0.7;
                 vec3 sandShadow = vec3(0.25, 0.2, 0.18);
                 vec3 sandBase = vec3(0.52, 0.43, 0.34);
                 vec3 sandHighlight = vec3(0.92, 0.82, 0.62);
@@ -342,25 +344,18 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
                 vec3 normal = normalize(vec3(-slopeX, 1.6, -slopeZ));
                 vec3 moonDir = normalize(moonPosition - vWorldPos);
                 float moonLight = pow(max(dot(normal, moonDir), 0.0), 1.2);
-                float rim = pow(1.0 - max(dot(normal, viewDir), 0.0), 2.5);
                 float coolShade = 0.35 + heightNorm * 0.4;
                 vec3 color = mix(sandShadow, sandBase, heightNorm);
                 color = mix(color, sandHighlight, duneGrain * 0.7 + windRipple * 0.2);
                 color = mix(color, vec3(0.08, 0.1, 0.16), coolShade * 0.25);
-                color += sandHighlight * sparkle * 0.05 * vDuneMask;
+                color += sandHighlight * sparkle * 0.05 * vDuneMask * horizonLightMask;
                 vec3 moonGlow = mix(vec3(0.36, 0.32, 0.28), vec3(0.92, 0.82, 0.68), heightNorm);
-                color += moonGlow * (moonLight * (0.55 + moonIntensity) + rim * 0.25);
-                vec2 oasisCenter = vec2(2200.0, -1800.0);
-                float oasisDist = length(vWorldPos.xz - oasisCenter);
-                float oasis = 1.0 - smoothstep(1300.0, 2100.0, oasisDist);
-                float oasisRipples = fbm((vWorldPos.xz - oasisCenter) * 0.012 + time * 0.25);
-                vec3 oasisWater = mix(vec3(0.05, 0.09, 0.12), vec3(0.12, 0.28, 0.3), heightNorm);
-                color = mix(color, oasisWater + vec3(0.04, 0.1, 0.14) * moonIntensity, oasis * (0.55 + oasisRipples * 0.15));
-                color += vec3(0.12, 0.18, 0.26) * oasis * 0.18;
+                color += moonGlow * (moonLight * (0.55 + moonIntensity) * horizonLightMask);
                 float duneRim = smoothstep(0.45, 0.9, duneGrain + windRipple * 0.3);
                 color += vec3(0.26, 0.24, 0.2) * duneRim * 0.08;
                 float stardust = pow(max(noise(vWorldPos.xz * 0.08 + time * 0.6), 0.0), 4.0) * moonIntensity;
-                color += vec3(0.5, 0.65, 0.9) * stardust * 0.08;
+                color += vec3(0.5, 0.65, 0.9) * stardust * 0.08 * horizonLightMask;
+                color = mix(color, vec3(0.015, 0.018, 0.03), horizonShade * 0.85);
                 gl_FragColor = vec4(color, 1.0);
             }
         `,

@@ -546,7 +546,7 @@ export const BASE_CONSTELLATION_DATA = [
         id: 'hercules',
         name: 'ヘラクレス座',
         description: '夏の大三角の北側でうずくまる英雄の星座。赤く脈打つラス・アルゲティが頭部の目印。',
-        starIds: ['rasalgethi', 'kornephoros', 'sarin', 'rutilicus', 'gammaHer', 'muHer', 'iotaHer', 'thetaHer', 'tauHer', 'epsilonHer', 'piHer', 'etaHer'],
+        starIds: ['rasalgethi', 'kornephoros', 'sarin', 'rutilicus', 'gammaHer', 'xiHer', 'iotaHer', 'thetaHer', 'tauHer', 'epsilonHer', 'piHer', 'etaHer'],
         lines: [
             ['sarin', 'epsilonHer'],
             ['epsilonHer', 'piHer'],       // 腰から足へ
@@ -559,7 +559,7 @@ export const BASE_CONSTELLATION_DATA = [
             ['etaHer', 'tauHer'],
             ['piHer', 'thetaHer'],
             ['thetaHer', 'iotaHer'],
-            ['sarin', 'muHer'],
+            ['sarin', 'xiHer'],
             ['kornephoros', 'gammaHer']
         ]
     },

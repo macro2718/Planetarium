@@ -4511,19 +4511,19 @@ export const BASE_STAR_DATA = [    {
     },
 
     {
-        id: 'muHer',
-        name: 'ミュー・ヘラクレス',
-        nameEn: 'Mu Herculis',
-        nameSIMBAD: 'Mu Herculis',
+        id: 'xiHer',
+        name: 'クシー・ヘラクレス',
+        nameEn: 'Xi Herculis',
+        nameSIMBAD: 'Xi Herculis',
         constellation: 'ヘラクレス座',
-        ra: 249.245077,
-        dec: 42.747245,
-        magnitude: 10.76,
+        ra: 269.441190,
+        dec: 29.247879,
+        magnitude: 3.70,
         color: 0xfff4da,
         glowColor: 0xffe8b5,
-        info: 'ヘラクレス座μ星。太陽に近い性質の多重星で、英雄の腰のあたりに位置する。',
+        info: 'ヘラクレス座ξ星。太陽に近い性質の多重星で、英雄の腰のあたりに位置する。',
         featured: false,
-        sp_type: 'M2e'
+        sp_type: 'G8.5III'
     },
 
     {
