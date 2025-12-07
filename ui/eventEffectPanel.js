@@ -19,7 +19,7 @@ function ensurePanel() {
             .event-effect-panel {
                 position: fixed;
                 left: 24px;
-                bottom: 24px;
+                top: 24px;
                 max-width: 360px;
                 background: rgba(8, 12, 32, 0.75);
                 color: #e8f5ff;
@@ -35,7 +35,7 @@ function ensurePanel() {
             }
             .event-effect-panel.hidden {
                 opacity: 0;
-                transform: translateY(12px);
+                transform: translateY(-12px);
                 pointer-events: none;
             }
             .event-effect-content {
