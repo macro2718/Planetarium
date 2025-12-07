@@ -14,6 +14,7 @@ export class PhotoAlbumSystem {
         this.onHomeScreen = true;
         this.initialized = false;
         this.contextProvider = null;
+        this.rendererProvider = null;
         this.filters = this.createFilters();
         this.activeFilterId = 'none';
     }
@@ -97,6 +98,10 @@ export class PhotoAlbumSystem {
         this.contextProvider = provider;
     }
 
+    setRendererProvider(provider) {
+        this.rendererProvider = provider;
+    }
+
     resolveContext(ctxOrProvider = null) {
         if (typeof ctxOrProvider === 'function') {
             return ctxOrProvider();
@@ -106,6 +111,17 @@ export class PhotoAlbumSystem {
             return this.contextProvider();
         }
         return this.contextProvider;
+    }
+
+    resolveRenderer(rendererOrProvider = null, ctx = null) {
+        const candidate = typeof rendererOrProvider === 'function'
+            ? rendererOrProvider(ctx)
+            : rendererOrProvider;
+
+        if (!candidate) return null;
+        if (candidate.isWebGLRenderer) return candidate;
+        if (candidate.renderer?.isWebGLRenderer) return candidate.renderer;
+        return null;
     }
 
     getSimulatedDate(ctx) {
@@ -161,8 +177,12 @@ export class PhotoAlbumSystem {
         return filter ? `フィルター: ${filter.name}` : 'フィルター: なし';
     }
 
-    async capturePhoto(renderer, ctxProvider = null) {
+    async capturePhoto(rendererOrProvider = null, ctxProvider = null) {
         const ctx = this.resolveContext(ctxProvider);
+        const renderer = this.resolveRenderer(rendererOrProvider || this.rendererProvider, ctx);
+        if (!renderer?.domElement) {
+            throw new Error('Renderer is not available for photo capture.');
+        }
         const now = new Date();
         const simulatedDate = this.getSimulatedDate(ctx) || now;
         const location = this.getLocationMetadata(ctx);
@@ -566,9 +586,10 @@ export function getPhotoAlbumSystem() {
     return instance;
 }
 
-export function setupPhotoCaptureButton(renderer, contextProvider = null) {
+export function setupPhotoCaptureButton(rendererProvider, contextProvider = null) {
     const albumSystem = getPhotoAlbumSystem();
     albumSystem.setContextProvider(contextProvider);
+    albumSystem.setRendererProvider(rendererProvider);
     
     // DOMが準備できてからイベントリスナーを設定
     albumSystem.init();
@@ -579,7 +600,7 @@ export function setupPhotoCaptureButton(renderer, contextProvider = null) {
         captureBtn.dataset.listenerAttached = 'true';
         captureBtn.addEventListener('click', async () => {
             try {
-                await albumSystem.capturePhoto(renderer);
+                await albumSystem.capturePhoto();
             } catch (e) {
                 console.error('Failed to capture photo:', e);
             }
