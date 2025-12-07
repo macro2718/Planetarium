@@ -214,6 +214,71 @@ class Planetarium {
         }
     }
 
+    destroy() {
+        this.stop();
+        window.removeEventListener('resize', this.resizeRenderer);
+        if (this.controls?.dispose) {
+            this.controls.dispose();
+        }
+        if (this.renderer) {
+            this.renderer.dispose();
+            const dom = this.renderer.domElement;
+            if (dom?.parentElement) {
+                dom.parentElement.removeChild(dom);
+            }
+        }
+        this.disposeScene();
+        this.scene = null;
+        this.camera = null;
+        this.renderer = null;
+        this.controls = null;
+        this.constellationSystem = null;
+        this.sunSystem = null;
+        this.moonSystem = null;
+        this.auroraGroup = null;
+        this.milkyWayGroup = null;
+        this.shootingStarsGroup = null;
+        this.sunGroup = null;
+        this.moonGroup = null;
+        this.surfaceSystem = null;
+        this.cometTailSystem = null;
+        this.meteorShowerSystem = null;
+        this.hourCircleSystem = null;
+        this.declinationCircleSystem = null;
+        this.celestialEquatorSystem = null;
+        this.eclipticSystem = null;
+        this.galacticEquatorSystem = null;
+        this.lunarOrbitPlaneSystem = null;
+        this.cardinalDirectionSystem = null;
+        this.starTrailSystem = null;
+        this.lensFlareSystem = null;
+        this.updaters = [];
+        this.clickableObjects = [];
+        this.catalogPickables = [];
+        this.isInitialized = false;
+        this.isRunning = false;
+        this.animationFrameId = null;
+    }
+
+    disposeScene() {
+        if (!this.scene) return;
+        this.scene.traverse((obj) => {
+            if (obj.geometry?.dispose) {
+                obj.geometry.dispose();
+            }
+            const mat = obj.material;
+            if (Array.isArray(mat)) {
+                mat.forEach((m) => m?.dispose?.());
+            } else if (mat?.dispose) {
+                mat.dispose();
+            }
+            if (obj.texture?.dispose) {
+                obj.texture.dispose();
+            }
+        });
+        this.scene.clear();
+    }
+
     registerUpdater(system) {
         if (system?.update) {
             this.updaters.push(system.update);

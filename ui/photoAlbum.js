@@ -337,7 +337,8 @@ export function setupPhotoCaptureButton(renderer) {
     
     const captureBtn = document.getElementById('capture-photo-btn');
     
-    if (captureBtn) {
+    if (captureBtn && !captureBtn.dataset.listenerAttached) {
+        captureBtn.dataset.listenerAttached = 'true';
         captureBtn.addEventListener('click', async () => {
             try {
                 await albumSystem.capturePhoto(renderer);

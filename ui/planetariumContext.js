@@ -1,26 +1,35 @@
 let livePlanetarium = null;
 let archivePlanetarium = null;
 let activePlanetarium = null;
+let planetariumVisible = false;
 
-function toggleCanvasVisibility(mode) {
+function applyCanvasVisibility(mode) {
     const liveContainer = document.getElementById('canvas-container');
     const archiveContainer = document.getElementById('archive-canvas-container');
-    if (liveContainer) {
-        liveContainer.classList.toggle('hidden-canvas', mode === 'archive');
+    const targetMode = mode || (activePlanetarium === archivePlanetarium ? 'archive' : 'live');
+    const isArchive = targetMode === 'archive';
+
+    if (!planetariumVisible) {
+        liveContainer?.classList.add('hidden-canvas');
+        archiveContainer?.classList.add('hidden-canvas');
+        document.body.classList.remove('planetarium-active');
+        return;
     }
-    if (archiveContainer) {
-        archiveContainer.classList.toggle('hidden-canvas', mode !== 'archive');
-    }
+
+    document.body.classList.add('planetarium-active');
+    liveContainer?.classList.toggle('hidden-canvas', isArchive);
+    archiveContainer?.classList.toggle('hidden-canvas', !isArchive);
 }
 
 export function registerPlanetaria(planets = {}) {
     livePlanetarium = planets.live || null;
     archivePlanetarium = planets.archive || null;
+    applyCanvasVisibility('live');
 }
 
 export function setActivePlanetarium(mode = 'live') {
     activePlanetarium = mode === 'archive' ? archivePlanetarium : livePlanetarium;
-    toggleCanvasVisibility(mode);
+    applyCanvasVisibility(mode);
     if (activePlanetarium?.resizeRenderer) {
         activePlanetarium.resizeRenderer();
     }
@@ -37,6 +46,33 @@ export function getLivePlanetarium() {
 
 export function getArchivePlanetarium() {
     return archivePlanetarium;
+}
+
+export function showPlanetariumCanvas() {
+    planetariumVisible = true;
+    applyCanvasVisibility(activePlanetarium === archivePlanetarium ? 'archive' : 'live');
+}
+
+export function hidePlanetariumCanvas() {
+    planetariumVisible = false;
+    applyCanvasVisibility(activePlanetarium === archivePlanetarium ? 'archive' : 'live');
+}
+
+export function destroyPlanetarium(mode = 'active') {
+    const target = mode === 'archive'
+        ? archivePlanetarium
+        : mode === 'live'
+            ? livePlanetarium
+            : activePlanetarium;
+    if (target?.destroy) {
+        target.destroy();
+    }
+}
+
+export function destroyAllPlanetaria() {
+    destroyPlanetarium('live');
+    destroyPlanetarium('archive');
+    hidePlanetariumCanvas();
 }
 
 export function resetPlanetariumBgm() {

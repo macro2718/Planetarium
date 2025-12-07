@@ -55,6 +55,12 @@
             display: none;
         }
 
+        body:not(.planetarium-active) #beam-layer,
+        body:not(.planetarium-active) #bokeh-layer,
+        body:not(.planetarium-active) #grid-layer {
+            display: none;
+        }
+
         #canvas-overlay,
         #bokeh-layer,
         #beam-layer,
