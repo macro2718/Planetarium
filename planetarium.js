@@ -518,9 +518,10 @@ class Planetarium {
                 ? options.date
                 : (options.date ? new Date(options.date) : null);
             const hasValidDate = providedDate && !Number.isNaN(providedDate.getTime());
-            const baseDate = hasValidDate
-                ? providedDate
-                : (this.isArchive ? this.initialRealtimeDate : new Date());
+            const fallbackDate = this.isArchive
+                ? (this.simulatedDate || this.initialRealtimeDate)
+                : new Date();
+            const baseDate = hasValidDate ? providedDate : fallbackDate;
             this.realtimeOffsetMs = baseDate.getTime() - Date.now();
             this.simulationStartDate = new Date(baseDate);
             this.simulationStartPerf = this.getCurrentPerfSeconds();
