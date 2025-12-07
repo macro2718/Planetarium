@@ -120,6 +120,7 @@ class Planetarium {
         this.updaters = [];
         this.lastTime = nowSeconds;
         this.containerId = containerId;
+        this.resizeRenderer = this.resizeRenderer.bind(this);
         this.animate = this.animate.bind(this);
         this.init();
     }
@@ -221,15 +222,29 @@ class Planetarium {
             alpha: true,
             preserveDrawingBuffer: true  // 写真撮影のために必要
         });
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.resizeRenderer();
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
         this.renderer.toneMappingExposure = 1.2;
         const container = document.getElementById(this.containerId) || document.body;
         container.appendChild(this.renderer.domElement);
 
+        window.addEventListener('resize', this.resizeRenderer);
+
         // 写真撮影ボタンのセットアップ
         setupPhotoCaptureButton(this.renderer);
+    }
+
+    resizeRenderer() {
+        if (!this.renderer || !this.camera) return;
+
+        const container = document.getElementById(this.containerId);
+        const width = container?.clientWidth || window.innerWidth;
+        const height = container?.clientHeight || window.innerHeight || 1;
+
+        this.camera.aspect = width / height;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(width, height, false);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     }
 
     setupControls() {

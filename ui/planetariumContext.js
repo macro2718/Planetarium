@@ -21,6 +21,9 @@ export function registerPlanetaria(planets = {}) {
 export function setActivePlanetarium(mode = 'live') {
     activePlanetarium = mode === 'archive' ? archivePlanetarium : livePlanetarium;
     toggleCanvasVisibility(mode);
+    if (activePlanetarium?.resizeRenderer) {
+        activePlanetarium.resizeRenderer();
+    }
     return activePlanetarium;
 }
 
