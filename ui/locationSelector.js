@@ -10,6 +10,7 @@ import {
 
 let currentPlanetarium = null;
 let onLocationSelected = null;
+const SCREEN_FADE_MS = 600; // Keep in sync with CSS --screen-fade-duration
 
 /**
  * 場所選択システムを初期化
@@ -156,7 +157,7 @@ function backToModeFromLocation() {
             if (locationScreen) {
                 locationScreen.classList.add('hidden');
             }
-        }, 600);
+        }, SCREEN_FADE_MS);
         return;
     }
 
@@ -174,7 +175,7 @@ function backToModeFromLocation() {
         if (locationScreen) {
             locationScreen.classList.add('hidden');
         }
-    }, 600);
+    }, SCREEN_FADE_MS);
 }
 
 /**

@@ -3,6 +3,7 @@
 // ========================================
 
 const ALBUM_STORAGE_KEY = 'planetarium_album';
+const SCREEN_FADE_MS = 600; // Keep in sync with CSS --screen-fade-duration
 
 export class PhotoAlbumSystem {
     constructor() {
@@ -299,7 +300,7 @@ export class PhotoAlbumSystem {
             if (albumScreen) {
                 albumScreen.classList.add('hidden');
             }
-        }, 600); // ホーム画面のトランジション完了を待つ
+        }, SCREEN_FADE_MS); // ホーム画面のトランジション完了を待つ
 
         this.onHomeScreen = true;
         document.body.classList.add('home-visible');

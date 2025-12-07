@@ -16,6 +16,9 @@
             --accent-2: #f0b9ff;
             --glow: rgba(120, 200, 255, 0.28);
             --pale: rgba(255, 255, 255, 0.18);
+            --screen-fade-duration: 0.6s;
+            --screen-fade-ease: cubic-bezier(0.4, 0, 0.2, 1);
+            --screen-base-bg: #050814;
         }
 
         * {
@@ -27,9 +30,11 @@
         body {
             overflow: hidden;
             background: radial-gradient(circle at 50% 40%, #1c2540 0%, #0b1020 60%, #000000 100%);
+            background-color: var(--screen-base-bg);
             color: var(--text-main);
             font-family: 'Zen Kaku Gothic New', 'Space Grotesk', 'Hiragino Sans', 'Yu Gothic', sans-serif;
             letter-spacing: 0.3px;
+            color-scheme: dark;
         }
 
         #canvas-container,
@@ -40,6 +45,7 @@
             width: 100%;
             height: 100%;
             z-index: 0;
+            background-color: var(--screen-base-bg);
         }
 
         #canvas-container canvas,
@@ -49,6 +55,7 @@
             width: 100%;
             height: 100%;
             display: block;
+            background-color: var(--screen-base-bg);
         }
 
         .hidden-canvas {
@@ -173,6 +180,15 @@
             text-transform: uppercase;
             pointer-events: none;
             text-shadow: 0 0 18px rgba(140, 200, 255, 0.5);
+        }
+
+        /* 隠し画面中はタイトル群を消しておく（ホーム/モード/ロケーション/アーカイブなど） */
+        body:not(.planetarium-active) #title,
+        body:not(.planetarium-active) #subtitle {
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, 10px);
+            transition: opacity var(--screen-fade-duration) var(--screen-fade-ease), transform var(--screen-fade-duration) var(--screen-fade-ease);
         }
 
         #controls,
@@ -588,7 +604,7 @@
             justify-content: center;
             align-items: center;
             z-index: 2000;
-            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.2s ease;
+            transition: opacity var(--screen-fade-duration) var(--screen-fade-ease), visibility var(--screen-fade-duration) var(--screen-fade-ease);
             overflow: hidden;
         }
 
@@ -1090,7 +1106,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity var(--screen-fade-duration) var(--screen-fade-ease), visibility var(--screen-fade-duration) var(--screen-fade-ease);
             overflow: hidden;
             color: var(--text-main);
             letter-spacing: 0.4px;
@@ -1267,7 +1283,7 @@
             z-index: 1800;
             display: flex;
             flex-direction: column;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity var(--screen-fade-duration) var(--screen-fade-ease), visibility var(--screen-fade-duration) var(--screen-fade-ease);
             overflow: hidden;
             color: var(--text-main);
             letter-spacing: 0.4px;
@@ -1636,7 +1652,7 @@
             z-index: 1750;
             display: flex;
             flex-direction: column;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity var(--screen-fade-duration) var(--screen-fade-ease), visibility var(--screen-fade-duration) var(--screen-fade-ease);
             overflow: hidden;
             color: var(--text-main);
             letter-spacing: 0.4px;
@@ -1867,7 +1883,7 @@
             z-index: 1500;
             display: flex;
             flex-direction: column;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity var(--screen-fade-duration) var(--screen-fade-ease), visibility var(--screen-fade-duration) var(--screen-fade-ease);
             overflow: hidden;
         }
 
@@ -2038,7 +2054,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            transition: opacity var(--screen-fade-duration) var(--screen-fade-ease), visibility var(--screen-fade-duration) var(--screen-fade-ease);
         }
 
         #photo-preview.hidden {
