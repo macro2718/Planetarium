@@ -618,3 +618,9 @@ initModeSelector({
     onEnterLive: () => setActivePlanetarium('live'),
     onEnterArchive: () => setActivePlanetarium('archive')
 });
+
+// 初期ロード時に選択画面へ進めるよう、星空の準備中オーバーレイを先に隠す
+const loadingOverlay = document.getElementById('loading');
+if (loadingOverlay) {
+    loadingOverlay.classList.add('hidden');
+}
