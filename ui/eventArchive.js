@@ -1,5 +1,6 @@
 import { HISTORICAL_EVENTS } from '../data/historicalEvents.js';
 import { hideEventEffectPanel, showEventEffectPanel } from './eventEffectPanel.js';
+import { getArchivePlanetarium, getLivePlanetarium, resetPlanetariumBgm } from './planetariumContext.js';
 import { getLivePlanetarium, resetPlanetariumBgm } from './planetariumContext.js';
 
 let currentPlanetarium = null;
@@ -166,6 +167,8 @@ function applyEventEffects(event) {
 
 function showModeScreen() {
     const modeScreen = document.getElementById('mode-screen');
+    getArchivePlanetarium()?.stop();
+    getLivePlanetarium()?.stop();
     if (modeScreen) {
         modeScreen.classList.remove('hidden');
     }
