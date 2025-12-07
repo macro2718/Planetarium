@@ -1,9 +1,10 @@
 import { showLocationScreen, hideLocationScreen } from './locationSelector.js';
 import { showEventArchiveScreen, hideEventArchiveScreen, resetArchiveTimeState } from './eventArchive.js';
 
-export function initModeSelector() {
+export function initModeSelector(options = {}) {
+    const { onEnterLive, onEnterArchive } = options;
     setupEntryButton();
-    setupModeButtons();
+    setupModeButtons({ onEnterLive, onEnterArchive });
     setupBackButton();
 }
 
@@ -23,10 +24,11 @@ function setupEntryButton() {
     });
 }
 
-function setupModeButtons() {
+function setupModeButtons({ onEnterLive, onEnterArchive }) {
     const planetariumBtn = document.getElementById('mode-planetarium');
     if (planetariumBtn) {
         planetariumBtn.addEventListener('click', () => {
+            onEnterLive?.();
             hideArchiveAndMode();
             resetArchiveTimeState();
             showLocationScreen();
@@ -36,6 +38,7 @@ function setupModeButtons() {
     const archiveBtn = document.getElementById('mode-archive');
     if (archiveBtn) {
         archiveBtn.addEventListener('click', () => {
+            onEnterArchive?.();
             hideArchiveAndMode();
             showEventArchiveScreen();
         });

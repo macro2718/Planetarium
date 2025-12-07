@@ -1,5 +1,5 @@
-export function setupTimeDisplay(ctx, moonSystem) {
-    const update = () => updateTimeDisplay(ctx, moonSystem);
+export function setupTimeDisplay(getPlanetarium) {
+    const update = () => updateTimeDisplay(getPlanetarium);
     update();
     const handle = setInterval(update, 1000);
     return {
@@ -9,7 +9,11 @@ export function setupTimeDisplay(ctx, moonSystem) {
     };
 }
 
-function updateTimeDisplay(ctx, moonSystem) {
+function updateTimeDisplay(getPlanetarium) {
+    const ctx = typeof getPlanetarium === 'function' ? getPlanetarium() : null;
+    if (!ctx) return;
+    const moonSystem = ctx.moonSystem;
+    if (!moonSystem) return;
     const now = typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date();
     const dateStr = now.toLocaleDateString('ja-JP', {
         year: 'numeric',

@@ -23,12 +23,21 @@ import { getPhotoAlbumSystem, setupPhotoCaptureButton } from './ui/photoAlbum.js
 import { initLocationSelector, setPlanetarium } from './ui/locationSelector.js';
 import { initModeSelector } from './ui/modeSelector.js';
 import { initEventArchive, setArchivePlanetarium } from './ui/eventArchive.js';
+import {
+    registerPlanetaria,
+    setActivePlanetarium,
+    getActivePlanetarium,
+    getArchivePlanetarium,
+    getLivePlanetarium
+} from './ui/planetariumContext.js';
 
 // ========================================
 // プラネタリウム - 美しい星空シミュレーション
 // ========================================
 class Planetarium {
-    constructor() {
+    constructor(options = {}) {
+        const { containerId = 'canvas-container' } = options;
+
         this.scene = null;
         this.camera = null;
         this.renderer = null;
@@ -84,6 +93,7 @@ class Planetarium {
         this.currentMoonState = null;
         this.updaters = [];
         this.lastTime = nowSeconds;
+        this.containerId = containerId;
         this.animate = this.animate.bind(this);
         this.init();
     }
@@ -121,28 +131,6 @@ class Planetarium {
         this.lensFlareSystem = createLensFlareSystem(this);
         this.registerUpdater(this.lensFlareSystem);
 
-        attachUIInteractions(this);
-        setupTimeDisplay(this, this.moonSystem);
-
-        // 場所選択システムの初期化
-        setPlanetarium(this);
-        initLocationSelector({
-            onSelect: (location) => {
-                console.log(`観測地を変更: ${location.name}`);
-            }
-        });
-
-        // 星影アーカイブ（歴史イベント）
-        setArchivePlanetarium(this);
-        initEventArchive({
-            onSelect: (event) => {
-                console.log(`星影アーカイブ: ${event.title} に移動`);
-            }
-        });
-
-        // ホームからのモード選択
-        initModeSelector();
-
         this.hideLoading();
         this.animate();
     }
@@ -169,8 +157,8 @@ class Planetarium {
     }
 
     setupRenderer() {
-        this.renderer = new THREE.WebGLRenderer({ 
-            antialias: true, 
+        this.renderer = new THREE.WebGLRenderer({
+            antialias: true,
             alpha: true,
             preserveDrawingBuffer: true  // 写真撮影のために必要
         });
@@ -178,8 +166,9 @@ class Planetarium {
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
         this.renderer.toneMappingExposure = 1.2;
-        document.getElementById('canvas-container').appendChild(this.renderer.domElement);
-        
+        const container = document.getElementById(this.containerId) || document.body;
+        container.appendChild(this.renderer.domElement);
+
         // 写真撮影ボタンのセットアップ
         setupPhotoCaptureButton(this.renderer);
     }
@@ -420,4 +409,31 @@ class Planetarium {
     }
 }
 
-new Planetarium();
+const livePlanetarium = new Planetarium({ containerId: 'canvas-container' });
+const archivePlanetarium = new Planetarium({ containerId: 'archive-canvas-container' });
+
+registerPlanetaria({ live: livePlanetarium, archive: archivePlanetarium });
+
+setActivePlanetarium('live');
+
+attachUIInteractions(getActivePlanetarium);
+setupTimeDisplay(getActivePlanetarium);
+
+setPlanetarium(getLivePlanetarium());
+initLocationSelector({
+    onSelect: (location) => {
+        console.log(`観測地を変更: ${location.name}`);
+    }
+});
+
+setArchivePlanetarium(getArchivePlanetarium());
+initEventArchive({
+    onSelect: (event) => {
+        console.log(`星影アーカイブ: ${event.title} に移動`);
+    }
+});
+
+initModeSelector({
+    onEnterLive: () => setActivePlanetarium('live'),
+    onEnterArchive: () => setActivePlanetarium('archive')
+});
