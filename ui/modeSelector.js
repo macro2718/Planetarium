@@ -14,13 +14,19 @@ function setupEntryButton() {
     const homeScreen = document.getElementById('home-screen');
     if (!enterBtn) return;
 
-    const newBtn = enterBtn.cloneNode(true);
-    enterBtn.parentNode.replaceChild(newBtn, enterBtn);
-
-    newBtn.addEventListener('click', () => {
+    const showModeSelector = () => {
         document.body.classList.remove('home-visible');
         modeScreen?.classList.remove('hidden');
         homeScreen?.classList.add('hidden');
+    };
+
+    enterBtn.addEventListener('click', showModeSelector);
+
+    // デリゲートで保険をかけ、DOM が差し替わっても「星空を見る」から入れるようにする
+    document.addEventListener('click', (event) => {
+        if (event.target.closest('#enter-planetarium')) {
+            showModeSelector();
+        }
     });
 }
 
