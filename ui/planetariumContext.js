@@ -35,3 +35,18 @@ export function getLivePlanetarium() {
 export function getArchivePlanetarium() {
     return archivePlanetarium;
 }
+
+export function resetPlanetariumBgm() {
+    [livePlanetarium, archivePlanetarium].forEach((planetarium) => {
+        if (!planetarium) return;
+        if (planetarium.settings) {
+            planetarium.settings.playMusic = false;
+        }
+        if (typeof planetarium.stopAmbientSound === 'function') {
+            planetarium.stopAmbientSound();
+        }
+        if (typeof planetarium.syncControlButtons === 'function') {
+            planetarium.syncControlButtons();
+        }
+    });
+}

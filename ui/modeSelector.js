@@ -1,5 +1,6 @@
 import { showLocationScreen, hideLocationScreen } from './locationSelector.js';
 import { showEventArchiveScreen, hideEventArchiveScreen, resetArchiveTimeState } from './eventArchive.js';
+import { resetPlanetariumBgm } from './planetariumContext.js';
 
 export function initModeSelector(options = {}) {
     const { onEnterLive, onEnterArchive } = options;
@@ -25,6 +26,7 @@ function setupEntryButton() {
 
     const showModeSelector = () => {
         console.log('[modeSelector] showModeSelector called');
+        resetPlanetariumBgm();
         document.body.classList.remove('home-visible');
         modeScreen?.classList.remove('hidden');
         homeScreen?.classList.add('hidden');

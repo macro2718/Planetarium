@@ -53,19 +53,6 @@ function updateTimeDisplay(getPlanetarium) {
             modeEl.textContent = `倍速再生 (${label})`;
         }
     }
-    const locationEl = document.getElementById('location-info');
-    if (locationEl) {
-        const lat = ctx.observer?.lat;
-        const lon = ctx.observer?.lon;
-        const locationInfo = ctx.observerLocationInfo || {};
-        const icon = locationInfo.icon || '📍';
-        const name = locationInfo.name || 'カスタム地点';
-        const englishName = locationInfo.nameEn ? ` (${locationInfo.nameEn})` : '';
-        const latText = Number.isFinite(lat) ? formatCoordinate(lat, true) : '---';
-        const lonText = Number.isFinite(lon) ? formatCoordinate(lon, false) : '---';
-        locationEl.textContent = `${icon} 観測地点: ${name}${englishName} | ${latText} / ${lonText}`;
-    }
-
     const moonSystem = ctx.moonSystem;
     if (moonSystem) {
         const moonState = typeof moonSystem.syncWithContextTime === 'function'
@@ -92,7 +79,6 @@ function updateTimeDisplay(getPlanetarium) {
         const englishName = locationInfo.nameEn ? ` (${locationInfo.nameEn})` : '';
         const latText = Number.isFinite(lat) ? formatCoordinate(lat, true) : '---';
         const lonText = Number.isFinite(lon) ? formatCoordinate(lon, false) : '---';
-        locationEl.textContent = `${icon} ${name}${englishName} | ${latText} / ${lonText}`;
+        locationEl.textContent = `${icon} 観測地点: ${name}${englishName} | ${latText} / ${lonText}`;
     }
-}
 }

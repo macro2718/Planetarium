@@ -1,5 +1,6 @@
 import { HISTORICAL_EVENTS } from '../data/historicalEvents.js';
 import { hideEventEffectPanel, showEventEffectPanel } from './eventEffectPanel.js';
+import { resetPlanetariumBgm } from './planetariumContext.js';
 
 let currentPlanetarium = null;
 let onEventSelected = null;
@@ -99,6 +100,7 @@ function setupBackButton() {
 
 export function showEventArchiveScreen() {
     const archiveScreen = document.getElementById('archive-screen');
+    resetPlanetariumBgm();
     if (archiveScreen) {
         archiveScreen.classList.remove('hidden');
     }

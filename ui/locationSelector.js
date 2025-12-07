@@ -1,5 +1,6 @@
 // 場所選択画面のUI制御
 import { LOCATIONS, REGION_LABELS, formatCoordinate } from '../data/locations.js';
+import { resetPlanetariumBgm } from './planetariumContext.js';
 
 let currentPlanetarium = null;
 let onLocationSelected = null;
@@ -173,6 +174,7 @@ function backToModeFromLocation() {
 export function showLocationScreen() {
     const locationScreen = document.getElementById('location-screen');
     const homeScreen = document.getElementById('home-screen');
+    resetPlanetariumBgm();
 
     document.body.classList.remove('home-visible');
 
