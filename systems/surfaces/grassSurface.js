@@ -13,7 +13,9 @@ export function createGrassSurface(ctx) {
             time: { value: 0 },
             moonPosition: { value: new THREE.Vector3(2000, 1500, -2000) },
             moonIntensity: { value: 0.5 },
-            groundRadius: { value: grassRadius }
+            groundRadius: { value: grassRadius },
+            milkyWayDirection: { value: new THREE.Vector3(0, 1, 0) },
+            milkyWayIntensity: { value: 0 }
         },
         vertexShader: `
             uniform float time;
@@ -96,6 +98,8 @@ export function createGrassSurface(ctx) {
             uniform float time;
             uniform vec3 moonPosition;
             uniform float moonIntensity;
+            uniform vec3 milkyWayDirection;
+            uniform float milkyWayIntensity;
             varying float vHeight;
             varying float vRadial;
             varying vec3 vWorldPos;
@@ -133,10 +137,10 @@ export function createGrassSurface(ctx) {
                 float meadowMask = smoothstep(0.05, 0.92, 1.0 - vRadial);
 
                 // 草原の基調色 - 深い森の緑をベースに、湿った苔のハイライトを追加
-                vec3 grassShadow = vec3(0.012, 0.02, 0.013);    // 影の深い緑
-                vec3 grassMid = vec3(0.035, 0.075, 0.042);      // 中間色
-                vec3 grassLight = vec3(0.09, 0.16, 0.08);       // ハイライト
-                vec3 mossHighlight = vec3(0.12, 0.21, 0.15);    // 湿った苔の輝き
+                vec3 grassShadow = vec3(0.006, 0.012, 0.007);   // 影の深い緑
+                vec3 grassMid = vec3(0.024, 0.052, 0.03);       // 中間色
+                vec3 grassLight = vec3(0.06, 0.12, 0.065);      // ハイライト
+                vec3 mossHighlight = vec3(0.08, 0.14, 0.1);     // 湿った苔の輝き
 
                 // パッチ状のテクスチャと微細な色変化
                 float patchPattern = fbm(vWorldPos.xz * 0.015 + time * 0.1);
@@ -156,16 +160,21 @@ export function createGrassSurface(ctx) {
                 // 月光の計算（やわらかなディフューズ + しっとりしたグレア）
                 vec3 moonDir = normalize(moonPosition - vWorldPos);
                 float moonLight = pow(max(dot(normal, moonDir), 0.0), 1.2);
-                vec3 moonGlow = vec3(0.42, 0.47, 0.58) * moonLight * (0.35 + moonIntensity * 0.7);
+                vec3 moonGlow = vec3(0.32, 0.36, 0.44) * moonLight * (0.28 + moonIntensity * 0.65);
 
                 // 湿った草のハイライト（フェイクなマイクロファイバー反射）
                 float microSheen = pow(max(dot(normalize(moonDir + viewDir), normal), 0.0), 18.0);
                 vec3 dewSheen = vec3(0.25, 0.32, 0.38) * microSheen * (0.15 + moonIntensity * 0.45) * (1.2 - vRadial * 0.6);
+                vec3 milkyDir = normalize(milkyWayDirection);
+                float milkyFacing = pow(max(dot(normal, milkyDir), 0.0), 1.05);
+                float milkyAltitude = smoothstep(0.0, 0.35, milkyDir.y);
+                vec3 milkyGlow = vec3(0.06, 0.1, 0.14);
+                float milkyMask = milkyWayIntensity * (0.35 + milkyAltitude * 0.65);
 
                 // 空からの環境光 - 深い青緑の霧を混ぜる
                 float skyWrap = 0.5 + 0.5 * pow(max(dot(normal, vec3(0.0, 1.0, 0.0)), 0.0), 2.0);
-                vec3 skyTint = vec3(0.04, 0.07, 0.1);
-                color += skyTint * skyWrap * (0.28 + heightNorm * 0.2) * meadowMask;
+                vec3 skyTint = vec3(0.03, 0.05, 0.08);
+                color += skyTint * skyWrap * (0.2 + heightNorm * 0.18) * meadowMask;
 
                 // リムライトで葉先を際立たせる
                 float rim = pow(1.0 - max(dot(viewDir, normal), 0.0), 2.5);
@@ -180,11 +189,15 @@ export function createGrassSurface(ctx) {
                 float lightMask = smoothstep(0.8, 0.3, vRadial) * meadowMask;
                 color += moonGlow * lightMask;
                 color += dewSheen * lightMask;
+                color += milkyGlow * milkyFacing * milkyMask * meadowMask;
                 color += rimColor * meadowMask * (1.0 - horizonFade);
 
                 // しなりによる陰影（草が風で傾いて密集する部分を暗く）
                 float occlusion = mix(1.0, 0.7, smoothstep(0.0, 0.9, abs(vBend)));
                 color *= occlusion;
+
+                // 全体をさらに夜色に寄せる
+                color = mix(color, vec3(0.0, 0.0, 0.0), 0.18 + vRadial * 0.12);
 
                 // 地平線に向かって暗くし、外縁をシルエットに
                 color = mix(color, horizonColor, vRadial * 0.55);
@@ -274,12 +287,16 @@ export function createGrassSurface(ctx) {
     const surface = {
         type: 'grass',
         meshes: [grassMesh, skirtMesh, horizonRingMesh],
-        update(time, moonState) {
+        update(time, moonState, milkyWayLight) {
             grassMaterial.uniforms.time.value = time;
             horizonRingMaterial.uniforms.time.value = time;
             if (moonState) {
                 grassMaterial.uniforms.moonPosition.value.copy(moonState.position);
                 grassMaterial.uniforms.moonIntensity.value = moonState.illumination;
+            }
+            if (milkyWayLight?.direction) {
+                grassMaterial.uniforms.milkyWayDirection.value.copy(milkyWayLight.direction);
+                grassMaterial.uniforms.milkyWayIntensity.value = milkyWayLight.intensity ?? 0;
             }
         },
         setActive(active) {

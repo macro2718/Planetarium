@@ -11,9 +11,11 @@ export function createIceSurface(ctx) {
             moonPosition: { value: new THREE.Vector3(2000, 1500, -2000) },
             moonIntensity: { value: 0.55 },
             frostDepth: { value: 18.0 },
-            auroraTint: { value: new THREE.Color(0.22, 0.45, 0.65) },
-            iceBase: { value: new THREE.Color(0.07, 0.11, 0.17) },
-            iceHighlight: { value: new THREE.Color(0.78, 0.9, 1.0) }
+            auroraTint: { value: new THREE.Color(0.16, 0.32, 0.48) },
+            iceBase: { value: new THREE.Color(0.045, 0.07, 0.11) },
+            iceHighlight: { value: new THREE.Color(0.5, 0.65, 0.78) },
+            milkyWayDirection: { value: new THREE.Vector3(0, 1, 0) },
+            milkyWayIntensity: { value: 0 }
         },
         vertexShader: `
             uniform float time;
@@ -70,6 +72,8 @@ export function createIceSurface(ctx) {
             uniform float time;
             uniform vec3 moonPosition;
             uniform float moonIntensity;
+            uniform vec3 milkyWayDirection;
+            uniform float milkyWayIntensity;
             uniform vec3 auroraTint;
             uniform vec3 iceBase;
             uniform vec3 iceHighlight;
@@ -108,17 +112,23 @@ export function createIceSurface(ctx) {
                 float glaze = fbm(vWorldPos.xz * 0.05 - time * 0.05);
                 float depthShade = smoothstep(-65.0, 40.0, vHeight);
                 float horizonGlow = smoothstep(0.65, 0.95, vRadial);
-                vec3 base = mix(iceBase, auroraTint * 0.6 + iceBase * 0.4, depthShade);
-                vec3 caustic = mix(base, iceHighlight, glaze * 0.35 + fresnel * 0.4);
-                caustic += iceHighlight * frost * 0.25 * (1.0 - horizonGlow);
+                vec3 base = mix(iceBase, auroraTint * 0.55 + iceBase * 0.45, depthShade);
+                vec3 caustic = mix(base, iceHighlight, glaze * 0.22 + fresnel * 0.32);
+                caustic += iceHighlight * frost * 0.18 * (1.0 - horizonGlow);
                 float crackPulse = sin(time * 0.8 + vHeight * 0.05) * 0.5 + 0.5;
-                vec3 cracks = mix(vec3(0.08, 0.15, 0.24), iceHighlight, crackPulse) * vCrackMask * 0.85;
-                vec3 moonGlow = vec3(0.85, 0.92, 1.0) * pow(max(dot(vec3(0.0, 1.0, 0.0), moonDir), 0.0), 4.0) * moonIntensity;
+                vec3 cracks = mix(vec3(0.06, 0.11, 0.18), iceHighlight, crackPulse) * vCrackMask * 0.72;
+                vec3 moonGlow = vec3(0.6, 0.68, 0.78) * pow(max(dot(vec3(0.0, 1.0, 0.0), moonDir), 0.0), 4.0) * (moonIntensity * 0.9);
+                vec3 milkyDir = normalize(milkyWayDirection);
+                float milkyFacing = pow(max(dot(vec3(0.0, 1.0, 0.0), milkyDir), 0.0), 2.0);
+                float milkyAltitude = smoothstep(0.0, 0.35, milkyDir.y);
+                vec3 milkyGlow = vec3(0.08, 0.12, 0.18);
+                float milkyMask = milkyWayIntensity * (0.45 + milkyAltitude * 0.55);
                 vec3 color = base;
                 color = mix(color, caustic, 0.85);
                 color += cracks;
-                color += moonGlow * (0.4 + fresnel * 0.6);
-                color = mix(color, vec3(0.01, 0.015, 0.03), horizonGlow * 0.75);
+                color += milkyGlow * milkyFacing * milkyMask;
+                color += moonGlow * (0.32 + fresnel * 0.48);
+                color = mix(color, vec3(0.006, 0.01, 0.02), 0.4 + horizonGlow * 0.45);
                 gl_FragColor = vec4(color, 1.0);
             }
         `,
@@ -131,11 +141,15 @@ export function createIceSurface(ctx) {
     const surface = {
         type: 'ice',
         meshes: [iceMesh],
-        update(time, moonState) {
+        update(time, moonState, milkyWayLight) {
             iceMaterial.uniforms.time.value = time;
             if (moonState) {
                 iceMaterial.uniforms.moonPosition.value.copy(moonState.position);
                 iceMaterial.uniforms.moonIntensity.value = moonState.illumination;
+            }
+            if (milkyWayLight?.direction) {
+                iceMaterial.uniforms.milkyWayDirection.value.copy(milkyWayLight.direction);
+                iceMaterial.uniforms.milkyWayIntensity.value = milkyWayLight.intensity ?? 0;
             }
         },
         setActive(active) {

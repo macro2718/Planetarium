@@ -42,7 +42,8 @@ export function createSurfaceSystem(ctx, moonStateProvider) {
     const update = (time) => {
         if (!activeSurface) return;
         const moonState = moonStateProvider?.();
-        activeSurface.update?.(time, moonState);
+        const milkyWayLight = ctx.milkyWayLight;
+        activeSurface.update?.(time, moonState, milkyWayLight);
     };
 
     const system = {

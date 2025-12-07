@@ -7,6 +7,10 @@ const GALACTIC_CENTER = { ra: 266.4051, dec: -28.936175 };
 export function createMilkyWaySystem(ctx) {
     ctx.milkyWayMaterials = [];
     ctx.milkyWayGroup = new THREE.Group();
+    ctx.milkyWayLight = {
+        direction: new THREE.Vector3(0, 1, 0),
+        intensity: 0
+    };
 
     const baseBasis = getBaseMilkyWayBasis();
     const baseMatrix = new THREE.Matrix4().makeBasis(baseBasis.axis, baseBasis.tangent, baseBasis.normal);
@@ -16,6 +20,7 @@ export function createMilkyWaySystem(ctx) {
     const rotationQuat = new THREE.Quaternion();
     let lastLst = null;
     let lastLat = ctx.observer?.lat;
+    let lastBasis = null;
 
     createMilkyWayBandDome(ctx, baseBasis.normal, baseBasis.axis);
     createMilkyWayClusters(ctx, baseBasis.normal, baseBasis.axis);
@@ -31,6 +36,8 @@ export function createMilkyWaySystem(ctx) {
         rotationQuat.setFromRotationMatrix(rotationMatrix);
         ctx.milkyWayGroup.setRotationFromQuaternion(rotationQuat);
         updateBandUniforms(ctx, galacticBasis);
+        updateMilkyWayLight(ctx, galacticBasis);
+        lastBasis = galacticBasis;
     };
 
     applyGalacticOrientation();
@@ -44,6 +51,8 @@ export function createMilkyWaySystem(ctx) {
                 lastLst = lst;
                 lastLat = lat;
                 applyGalacticOrientation();
+            } else if (lastBasis) {
+                updateMilkyWayLight(ctx, lastBasis);
             }
             ctx.milkyWayMaterials.forEach(material => {
                 if (material.uniforms?.time) {
@@ -455,6 +464,21 @@ function calculateCoreVisibility(centerDir) {
     const altitude = THREE.MathUtils.clamp(centerDir.y, -1, 1);
     const horizonFactor = THREE.MathUtils.clamp((altitude + 0.05) / 0.65, 0, 1);
     return Math.pow(horizonFactor, 0.6);
+}
+
+function updateMilkyWayLight(ctx, basis) {
+    if (!ctx?.milkyWayLight) return;
+    const direction = basis?.centerDir;
+    if (direction) {
+        ctx.milkyWayLight.direction.copy(direction).normalize();
+    }
+    const visibility = calculateCoreVisibility(direction);
+    const altitudeBoost = THREE.MathUtils.clamp((direction?.y ?? 0) * 0.65 + 0.45, 0.2, 1.0);
+    const enabled = ctx.settings?.showMilkyWay !== false;
+    const intensity = enabled
+        ? THREE.MathUtils.clamp((0.12 + visibility * 0.9) * altitudeBoost, 0, 1.1)
+        : 0;
+    ctx.milkyWayLight.intensity = intensity;
 }
 
 function updateBandUniforms(ctx, basis) {

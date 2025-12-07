@@ -10,7 +10,9 @@ export function createDesertSurface(ctx) {
         uniforms: {
             time: { value: 0 },
             moonPosition: { value: new THREE.Vector3(2000, 1500, -2000) },
-            moonIntensity: { value: 0.45 }
+            moonIntensity: { value: 0.45 },
+            milkyWayDirection: { value: new THREE.Vector3(0, 1, 0) },
+            milkyWayIntensity: { value: 0 }
         },
         vertexShader: `
             uniform float time;
@@ -74,6 +76,8 @@ export function createDesertSurface(ctx) {
             uniform float time;
             uniform vec3 moonPosition;
             uniform float moonIntensity;
+            uniform vec3 milkyWayDirection;
+            uniform float milkyWayIntensity;
             varying float vHeight;
             varying float vRadial;
             varying float vDuneMask;
@@ -107,9 +111,9 @@ export function createDesertSurface(ctx) {
                 float heightNorm = smoothstep(-55.0, 100.0, vHeight);
                 float horizonShade = smoothstep(0.65, 0.95, vRadial);
                 float horizonLightMask = 1.0 - horizonShade * 0.7;
-                vec3 sandShadow = vec3(0.25, 0.2, 0.18);
-                vec3 sandBase = vec3(0.52, 0.43, 0.34);
-                vec3 sandHighlight = vec3(0.92, 0.82, 0.62);
+                vec3 sandShadow = vec3(0.16, 0.12, 0.10);
+                vec3 sandBase = vec3(0.32, 0.27, 0.22);
+                vec3 sandHighlight = vec3(0.62, 0.55, 0.44);
                 float duneGrain = fbm(vec2(vHeight * 0.008, vRadial * 4.0));
                 float windRipple = fbm(vec2(vHeight * 0.02 + time * 0.15, vRadial * 3.0 + time * 0.05));
                 float sparkle = sin(vHeight * 0.06 + time * 0.5) * 0.5 + 0.5;
@@ -123,12 +127,20 @@ export function createDesertSurface(ctx) {
                 color = mix(color, sandHighlight, duneGrain * 0.7 + windRipple * 0.2);
                 color = mix(color, vec3(0.08, 0.1, 0.16), coolShade * 0.25);
                 color += sandHighlight * sparkle * 0.05 * vDuneMask * horizonLightMask;
-                vec3 moonGlow = mix(vec3(0.36, 0.32, 0.28), vec3(0.92, 0.82, 0.68), heightNorm);
-                color += moonGlow * (moonLight * (0.55 + moonIntensity) * horizonLightMask);
+                vec3 moonGlow = mix(vec3(0.24, 0.21, 0.18), vec3(0.65, 0.56, 0.48), heightNorm);
+                color += moonGlow * (moonLight * (0.45 + moonIntensity * 0.85) * horizonLightMask);
+                vec3 milkyDir = normalize(milkyWayDirection);
+                float milkyFacing = pow(max(dot(normal, milkyDir), 0.0), 1.05);
+                float milkyAltitude = smoothstep(0.0, 0.35, milkyDir.y);
+                vec3 milkyGlow = mix(vec3(0.07, 0.1, 0.15), vec3(0.12, 0.16, 0.22), heightNorm);
+                float milkyMask = milkyWayIntensity * (0.4 + milkyAltitude * 0.6) * horizonLightMask;
+                color += milkyGlow * milkyFacing * milkyMask;
                 float duneRim = smoothstep(0.45, 0.9, duneGrain + windRipple * 0.3);
                 color += vec3(0.26, 0.24, 0.2) * duneRim * 0.08;
                 float stardust = pow(max(noise(vWorldPos.xz * 0.08 + time * 0.6), 0.0), 4.0) * moonIntensity;
                 color += vec3(0.5, 0.65, 0.9) * stardust * 0.08 * horizonLightMask;
+                vec3 nightTint = vec3(0.02, 0.025, 0.035);
+                color = mix(color, nightTint, 0.38 + horizonShade * 0.3);
                 color = mix(color, vec3(0.015, 0.018, 0.03), horizonShade * 0.85);
                 gl_FragColor = vec4(color, 1.0);
             }
@@ -142,11 +154,15 @@ export function createDesertSurface(ctx) {
     const surface = {
         type: 'desert',
         meshes: [desertMesh],
-        update(time, moonState) {
+        update(time, moonState, milkyWayLight) {
             desertMaterial.uniforms.time.value = time;
             if (moonState) {
                 desertMaterial.uniforms.moonPosition.value.copy(moonState.position);
                 desertMaterial.uniforms.moonIntensity.value = moonState.illumination;
+            }
+            if (milkyWayLight?.direction) {
+                desertMaterial.uniforms.milkyWayDirection.value.copy(milkyWayLight.direction);
+                desertMaterial.uniforms.milkyWayIntensity.value = milkyWayLight.intensity ?? 0;
             }
         },
         setActive(active) {
