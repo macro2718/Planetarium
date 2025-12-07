@@ -34,9 +34,9 @@ function setupResizeHandler(getPlanetarium) {
     window.addEventListener('resize', () => {
         const ctx = getPlanetarium();
         if (!ctx) return;
-        ctx.camera.aspect = window.innerWidth / window.innerHeight;
-        ctx.camera.updateProjectionMatrix();
-        ctx.renderer.setSize(window.innerWidth, window.innerHeight);
+        if (ctx.resizeRenderer) {
+            ctx.resizeRenderer();
+        }
     });
 }
 
