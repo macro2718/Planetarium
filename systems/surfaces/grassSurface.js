@@ -128,10 +128,10 @@ export function createGrassSurface(ctx) {
                 vec3 grassShadow = vec3(0.04, 0.07, 0.04);
                 vec3 grassMid = vec3(0.12, 0.22, 0.11);
                 vec3 grassHighlight = vec3(0.3, 0.45, 0.2);
-                float patch = fbm(vWorldPos.xz * 0.02 + time * 0.15);
+                float patchTexture = fbm(vWorldPos.xz * 0.02 + time * 0.15);
                 float dew = pow(max(noise(vWorldPos.xz * 0.35 + time * 0.6), 0.0), 6.0);
                 vec3 color = mix(grassShadow, grassMid, heightNorm);
-                color = mix(color, grassHighlight, patch * 0.55 + dew * 0.35);
+                color = mix(color, grassHighlight, patchTexture * 0.55 + dew * 0.35);
                 float slopeX = dFdx(vHeight);
                 float slopeZ = dFdy(vHeight);
                 vec3 normal = normalize(vec3(-slopeX + vBend * 0.4, 1.6, -slopeZ - vBend * 0.3));
