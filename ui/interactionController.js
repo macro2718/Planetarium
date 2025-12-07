@@ -201,7 +201,7 @@ function setupSurfaceButtons(ctx) {
     const applySurfaceType = (type) => {
         const normalizedType = type === 'land' ? 'desert' : type;
         ctx.settings.surfaceType = normalizedType;
-        ctx.waterSurfaceSystem?.setSurfaceType(normalizedType);
+        ctx.surfaceSystem?.setSurfaceType(normalizedType);
         setActiveSurface(normalizedType);
     };
 
