@@ -7,7 +7,8 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
     waterGeometry.translate(0, -25, 0);
     const desertGeometry = new THREE.CircleGeometry(9500, 128);
     desertGeometry.rotateX(-Math.PI / 2);
-    desertGeometry.translate(0, -25, 0);
+    // 砂丘の頂点がカメラより上に来ないよう、ベースの高さを少し下げる
+    desertGeometry.translate(0, -45, 0);
     ctx.waterMaterial = new THREE.ShaderMaterial({
         uniforms: {
             time: { value: 0 },
@@ -233,13 +234,16 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
     });
     ctx.desertMaterial = new THREE.ShaderMaterial({
         uniforms: {
-            time: { value: 0 }
+            time: { value: 0 },
+            moonPosition: { value: new THREE.Vector3(2000, 1500, -2000) },
+            moonIntensity: { value: 0.45 }
         },
         vertexShader: `
             uniform float time;
             varying float vHeight;
             varying float vRadial;
             varying float vDuneMask;
+            varying vec3 vWorldPos;
             float hash(vec2 p) {
                 return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
             }
@@ -267,25 +271,39 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
             void main() {
                 vec3 pos = position;
                 float dist = clamp(length(pos.xz) / 9500.0, 0.0, 1.0);
-                float sweepingDunes = fbm(pos.xz * vec2(0.0009, 0.0016) - time * 0.006);
-                float crest = fbm(pos.xz * 0.0025 + time * 0.01);
-                float windRidges = sin(dot(pos.xz, vec2(0.42, 0.28)) * 0.04 + time * 0.015) * 0.5 + 0.5;
+                // 視点付近では地形アニメを止め、遠景のみ時間で流れるようにする
+                float timeBlend = smoothstep(0.35, 0.6, dist);
+                float animatedTime = time * timeBlend;
+                float sweepingDunes = fbm(pos.xz * vec2(0.0009, 0.0016) - animatedTime * 0.006);
+                float crest = fbm(pos.xz * 0.0025 + animatedTime * 0.01);
+                float windRidges = sin(dot(pos.xz, vec2(0.42, 0.28)) * 0.04 + animatedTime * 0.015) * 0.5 + 0.5;
                 float duneHeight = (sweepingDunes * 40.0) + (crest * 28.0) + (windRidges * 26.0 - 8.0);
-                float ripple = sin(dot(pos.xz, vec2(0.9, -0.4)) * 0.12 + time * 0.4) * 1.8;
+                float ripple = sin(dot(pos.xz, vec2(0.9, -0.4)) * 0.12 + animatedTime * 0.4) * 1.8;
                 duneHeight += ripple * (0.3 + (1.0 - dist) * 0.4);
+                // 視点付近は抑えつつ遠景で大きく盛り上げるスケール
+                float duneScale = mix(0.35, 1.4, smoothstep(0.2, 0.65, dist));
+                duneHeight *= duneScale;
+                // 視点周辺では高さを安全値でクランプして潜り込みを防ぐ
+                float nearMask = 1.0 - smoothstep(0.0, 0.25, dist);
+                duneHeight = mix(duneHeight, clamp(duneHeight, -16.0, 24.0), nearMask);
                 float desertMask = smoothstep(0.12, 0.8, 1.0 - dist) * smoothstep(1.0, 0.55, dist);
                 pos.y += duneHeight * desertMask;
                 vHeight = pos.y;
                 vRadial = dist;
                 vDuneMask = desertMask;
+                vec4 worldPos = modelMatrix * vec4(pos, 1.0);
+                vWorldPos = worldPos.xyz;
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
             }
         `,
         fragmentShader: `
             uniform float time;
+            uniform vec3 moonPosition;
+            uniform float moonIntensity;
             varying float vHeight;
             varying float vRadial;
             varying float vDuneMask;
+            varying vec3 vWorldPos;
             float hash(vec2 p) {
                 return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
             }
@@ -310,22 +328,39 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
                 return value;
             }
             void main() {
-                float heightNorm = smoothstep(-35.0, 120.0, vHeight);
-                vec3 sandShadow = vec3(0.58, 0.47, 0.34);
-                vec3 sandBase = vec3(0.82, 0.7, 0.55);
-                vec3 sandHighlight = vec3(0.95, 0.88, 0.73);
+                vec3 viewDir = normalize(cameraPosition - vWorldPos);
+                // 地形を 20 下げたので正規化範囲も同じ分だけオフセット
+                float heightNorm = smoothstep(-55.0, 100.0, vHeight);
+                vec3 sandShadow = vec3(0.25, 0.2, 0.18);
+                vec3 sandBase = vec3(0.52, 0.43, 0.34);
+                vec3 sandHighlight = vec3(0.92, 0.82, 0.62);
                 float duneGrain = fbm(vec2(vHeight * 0.008, vRadial * 4.0));
                 float windRipple = fbm(vec2(vHeight * 0.02 + time * 0.15, vRadial * 3.0 + time * 0.05));
                 float sparkle = sin(vHeight * 0.06 + time * 0.5) * 0.5 + 0.5;
+                float slopeX = dFdx(vHeight);
+                float slopeZ = dFdy(vHeight);
+                vec3 normal = normalize(vec3(-slopeX, 1.6, -slopeZ));
+                vec3 moonDir = normalize(moonPosition - vWorldPos);
+                float moonLight = pow(max(dot(normal, moonDir), 0.0), 1.2);
+                float rim = pow(1.0 - max(dot(normal, viewDir), 0.0), 2.5);
+                float coolShade = 0.35 + heightNorm * 0.4;
                 vec3 color = mix(sandShadow, sandBase, heightNorm);
-                color = mix(color, sandHighlight, duneGrain * 0.6 + windRipple * 0.2);
-                color += sandHighlight * sparkle * 0.04 * vDuneMask;
-                float dusk = smoothstep(0.65, 0.9, vRadial);
-                color = mix(color, vec3(0.93, 0.64, 0.42), dusk * 0.3);
-                float oasisGlow = smoothstep(0.0, 0.35, vRadial);
-                color = mix(vec3(0.97, 0.82, 0.65), color, clamp(oasisGlow + 0.15, 0.0, 1.0));
-                float shade = 0.9 + (1.0 - heightNorm) * 0.08;
-                color *= shade;
+                color = mix(color, sandHighlight, duneGrain * 0.7 + windRipple * 0.2);
+                color = mix(color, vec3(0.08, 0.1, 0.16), coolShade * 0.25);
+                color += sandHighlight * sparkle * 0.05 * vDuneMask;
+                vec3 moonGlow = mix(vec3(0.36, 0.32, 0.28), vec3(0.92, 0.82, 0.68), heightNorm);
+                color += moonGlow * (moonLight * (0.55 + moonIntensity) + rim * 0.25);
+                vec2 oasisCenter = vec2(2200.0, -1800.0);
+                float oasisDist = length(vWorldPos.xz - oasisCenter);
+                float oasis = 1.0 - smoothstep(1300.0, 2100.0, oasisDist);
+                float oasisRipples = fbm((vWorldPos.xz - oasisCenter) * 0.012 + time * 0.25);
+                vec3 oasisWater = mix(vec3(0.05, 0.09, 0.12), vec3(0.12, 0.28, 0.3), heightNorm);
+                color = mix(color, oasisWater + vec3(0.04, 0.1, 0.14) * moonIntensity, oasis * (0.55 + oasisRipples * 0.15));
+                color += vec3(0.12, 0.18, 0.26) * oasis * 0.18;
+                float duneRim = smoothstep(0.45, 0.9, duneGrain + windRipple * 0.3);
+                color += vec3(0.26, 0.24, 0.2) * duneRim * 0.08;
+                float stardust = pow(max(noise(vWorldPos.xz * 0.08 + time * 0.6), 0.0), 4.0) * moonIntensity;
+                color += vec3(0.5, 0.65, 0.9) * stardust * 0.08;
                 gl_FragColor = vec4(color, 1.0);
             }
         `,
@@ -356,6 +391,11 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
             }
             if (ctx.desertMaterial) {
                 ctx.desertMaterial.uniforms.time.value = time;
+                const moonState = moonStateProvider?.();
+                if (moonState) {
+                    ctx.desertMaterial.uniforms.moonPosition.value.copy(moonState.position);
+                    ctx.desertMaterial.uniforms.moonIntensity.value = moonState.illumination;
+                }
             }
         },
         setSurfaceType(type = 'water') {
