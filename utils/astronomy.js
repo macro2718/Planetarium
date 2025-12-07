@@ -68,9 +68,16 @@ export function precessEquatorialJ2000ToDate(raDeg, decDeg, date) {
     const jd = epochDate.getTime() / 86400000 + 2440587.5;
     const t = (jd - 2451545.0) / 36525;
 
-    const zetaArcsec = 2306.2181 * t + 0.30188 * t * t + 0.017998 * t * t * t;
-    const zArcsec = 2306.2181 * t + 1.09468 * t * t + 0.018203 * t * t * t;
-    const thetaArcsec = 2004.3109 * t - 0.42665 * t * t - 0.041833 * t * t * t;
+    // Laskar's long-term precession formula (IAU 1976 with extended terms)
+    // Valid to a few arcseconds over several millennia (Meeus 2nd ed., Chap. 21)
+    const t2 = t * t;
+    const t3 = t2 * t;
+    const t4 = t3 * t;
+    const t5 = t4 * t;
+
+    const zetaArcsec = 2306.083227 * t + 0.2988499 * t2 + 0.01801828 * t3 - 0.000005971 * t4 - 0.0000003173 * t5;
+    const zArcsec = 2306.083227 * t + 1.0927348 * t2 + 0.01826837 * t3 - 0.000028596 * t4 - 0.0000002904 * t5;
+    const thetaArcsec = 2004.191903 * t - 0.4294934 * t2 - 0.04182264 * t3 - 0.000007089 * t4 - 0.0000001274 * t5;
 
     const zeta = degToRad(zetaArcsec / 3600);
     const z = degToRad(zArcsec / 3600);
