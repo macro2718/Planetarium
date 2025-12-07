@@ -1,7 +1,6 @@
 import { HISTORICAL_EVENTS } from '../data/historicalEvents.js';
 import { hideEventEffectPanel, showEventEffectPanel } from './eventEffectPanel.js';
 import { getArchivePlanetarium, getLivePlanetarium, resetPlanetariumBgm } from './planetariumContext.js';
-import { getLivePlanetarium, resetPlanetariumBgm } from './planetariumContext.js';
 
 let currentPlanetarium = null;
 let onEventSelected = null;
