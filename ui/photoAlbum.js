@@ -14,12 +14,56 @@ export class PhotoAlbumSystem {
         this.onHomeScreen = true;
         this.initialized = false;
         this.contextProvider = null;
+        this.filters = this.createFilters();
+        this.activeFilterId = 'none';
     }
 
     init() {
         if (this.initialized) return;
         this.initialized = true;
         this.setupEventListeners();
+        this.setupFilterControls();
+    }
+
+    createFilters() {
+        return [
+            { id: 'none', name: 'フィルターなし', css: 'none' },
+            {
+                id: 'aurora',
+                name: 'オーロラ',
+                css: 'contrast(1.05) saturate(1.22) hue-rotate(18deg)',
+                overlay: { color: 'rgba(120, 210, 255, 0.16)', mode: 'screen' },
+                vignette: 0.2
+            },
+            {
+                id: 'twilight',
+                name: 'トワイライト',
+                css: 'contrast(1.15) saturate(1.32) brightness(1.05) hue-rotate(-8deg)',
+                overlay: { color: 'rgba(255, 170, 120, 0.12)', mode: 'soft-light' },
+                vignette: 0.18
+            },
+            {
+                id: 'noir',
+                name: 'モノクロ',
+                css: 'grayscale(1) contrast(1.25) brightness(0.94)',
+                vignette: 0.28
+            },
+            {
+                id: 'lunar',
+                name: 'ルナティック',
+                css: 'contrast(1.08) saturate(0.95) hue-rotate(155deg)',
+                overlay: { color: 'rgba(150, 180, 255, 0.12)', mode: 'screen' },
+                vignette: 0.16
+            }
+        ];
+    }
+
+    getActiveFilter() {
+        return this.filters.find(f => f.id === this.activeFilterId) || this.filters[0];
+    }
+
+    findFilterById(id) {
+        return this.filters.find(f => f.id === id);
     }
 
     loadPhotos() {
@@ -110,42 +154,102 @@ export class PhotoAlbumSystem {
         return '📍 位置情報なし';
     }
 
-    capturePhoto(renderer, ctxProvider = null) {
-        return new Promise((resolve, reject) => {
-            try {
-                const ctx = this.resolveContext(ctxProvider);
-                const now = new Date();
-                const simulatedDate = this.getSimulatedDate(ctx) || now;
-                const location = this.getLocationMetadata(ctx);
+    getFilterLabelFromPhoto(photo) {
+        if (!photo) return 'フィルターなし';
+        if (photo.filterName) return `フィルター: ${photo.filterName}`;
+        const filter = this.findFilterById(photo.filterId);
+        return filter ? `フィルター: ${filter.name}` : 'フィルター: なし';
+    }
 
-                // キャンバスからデータを取得
-                const canvas = renderer.domElement;
-                const dataUrl = canvas.toDataURL('image/png');
-                
-                const photo = {
-                    id: Date.now(),
-                    dataUrl: dataUrl,
-                    timestamp: now.toISOString(),
-                    date: this.formatDate(simulatedDate),
-                    simulatedAt: simulatedDate.toISOString(),
-                    location,
-                    locationLabel: this.formatLocationLabel(location)
-                };
-                
-                this.photos.push(photo);
-                this.savePhotos();
-                
-                // フラッシュエフェクト
-                this.showFlash();
-                
-                // 通知を表示
-                this.showNotification();
-                
-                resolve(photo);
-            } catch (e) {
-                reject(e);
-            }
+    async capturePhoto(renderer, ctxProvider = null) {
+        const ctx = this.resolveContext(ctxProvider);
+        const now = new Date();
+        const simulatedDate = this.getSimulatedDate(ctx) || now;
+        const location = this.getLocationMetadata(ctx);
+
+        // キャンバスからデータを取得
+        const canvas = renderer.domElement;
+        const baseDataUrl = canvas.toDataURL('image/png');
+        const { dataUrl, filter } = await this.applyFilterToDataUrl(baseDataUrl);
+        
+        const photo = {
+            id: Date.now(),
+            dataUrl,
+            timestamp: now.toISOString(),
+            date: this.formatDate(simulatedDate),
+            simulatedAt: simulatedDate.toISOString(),
+            location,
+            locationLabel: this.formatLocationLabel(location),
+            filterId: filter?.id || 'none',
+            filterName: filter?.name || 'フィルターなし'
+        };
+        
+        this.photos.push(photo);
+        this.savePhotos();
+        
+        // フラッシュエフェクト
+        this.showFlash();
+        
+        // 通知を表示
+        this.showNotification();
+        
+        return photo;
+    }
+
+    async applyFilterToDataUrl(baseDataUrl) {
+        const filter = this.getActiveFilter();
+        if (!filter || filter.id === 'none') {
+            return { dataUrl: baseDataUrl, filter: this.findFilterById('none') };
+        }
+
+        return new Promise((resolve) => {
+            const image = new Image();
+            image.onload = () => {
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = image.width;
+                    canvas.height = image.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.filter = filter.css || 'none';
+                    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+                    if (filter.overlay) {
+                        ctx.save();
+                        ctx.globalCompositeOperation = filter.overlay.mode || 'screen';
+                        ctx.globalAlpha = filter.overlay.opacity ?? 1;
+                        ctx.fillStyle = filter.overlay.color || 'rgba(255,255,255,0.1)';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.restore();
+                    }
+
+                    if (filter.vignette) {
+                        this.applyVignette(ctx, canvas.width, canvas.height, filter.vignette);
+                    }
+
+                    const filteredDataUrl = canvas.toDataURL('image/png');
+                    resolve({ dataUrl: filteredDataUrl, filter });
+                } catch (e) {
+                    console.error('Failed to apply filter. Falling back to original image.', e);
+                    resolve({ dataUrl: baseDataUrl, filter: this.findFilterById('none') });
+                }
+            };
+            image.onerror = () => resolve({ dataUrl: baseDataUrl, filter: this.findFilterById('none') });
+            image.src = baseDataUrl;
         });
+    }
+
+    applyVignette(ctx, width, height, strength = 0.2) {
+        const gradient = ctx.createRadialGradient(
+            width / 2, height / 2, Math.min(width, height) * (0.4 + strength * 0.2),
+            width / 2, height / 2, Math.max(width, height) * (0.7 + strength * 0.3)
+        );
+        gradient.addColorStop(0, 'rgba(0,0,0,0)');
+        gradient.addColorStop(1, `rgba(0,0,0,${0.45 * strength})`);
+        ctx.save();
+        ctx.globalCompositeOperation = 'multiply';
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+        ctx.restore();
     }
 
     showFlash() {
@@ -217,12 +321,14 @@ export class PhotoAlbumSystem {
             item.className = 'album-item';
             const dateLabel = this.getDisplayDate(photo);
             const locationLabel = this.getLocationLabelFromPhoto(photo);
+            const filterLabel = this.getFilterLabelFromPhoto(photo);
             item.innerHTML = `
                 <img src="${photo.dataUrl}" alt="Photo ${idx + 1}">
                 <div class="album-item-overlay">
                     <div class="album-item-meta">
                         <span class="album-item-date">${dateLabel}</span>
                         <span class="album-item-location">${locationLabel}</span>
+                        <span class="album-item-filter">${filterLabel}</span>
                     </div>
                     <button class="album-item-delete" data-id="${photo.id}">✕</button>
                 </div>
@@ -259,7 +365,8 @@ export class PhotoAlbumSystem {
             if (meta) {
                 const dateLabel = this.getDisplayDate(photo);
                 const locationLabel = this.getLocationLabelFromPhoto(photo);
-                meta.textContent = `${dateLabel} | ${locationLabel}`;
+                const filterLabel = this.getFilterLabelFromPhoto(photo);
+                meta.textContent = `${dateLabel} | ${locationLabel} | ${filterLabel}`;
             }
             preview.classList.remove('hidden');
         }
@@ -341,6 +448,52 @@ export class PhotoAlbumSystem {
                 }
             }
         });
+
+        // 初期フィルター反映
+        this.applyFilterPreview(this.getActiveFilter());
+    }
+
+    setupFilterControls() {
+        const filterButtons = Array.from(document.querySelectorAll('[data-photo-filter]'));
+        if (!filterButtons.length) return;
+
+        filterButtons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                this.setActiveFilter(btn.dataset.photoFilter);
+            });
+        });
+
+        this.updateFilterActiveState();
+    }
+
+    setActiveFilter(filterId) {
+        const valid = this.filters.some(f => f.id === filterId);
+        this.activeFilterId = valid ? filterId : 'none';
+        const filter = this.getActiveFilter();
+        this.updateFilterActiveState();
+        this.applyFilterPreview(filter);
+    }
+
+    updateFilterActiveState() {
+        const filterButtons = document.querySelectorAll('[data-photo-filter]');
+        filterButtons.forEach((btn) => {
+            const active = btn.dataset.photoFilter === this.activeFilterId;
+            btn.classList.toggle('active', active);
+            btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+    }
+
+    applyFilterPreview(filter) {
+        const rootStyle = document.documentElement.style;
+        const overlay = filter?.overlay || {};
+        const vignetteStrength = filter?.vignette || 0;
+        rootStyle.setProperty('--photo-filter-css', filter?.css || 'none');
+        rootStyle.setProperty('--photo-filter-overlay-color', overlay.color || 'rgba(0,0,0,0)');
+        rootStyle.setProperty('--photo-filter-overlay-blend', overlay.mode || 'screen');
+        const overlayOpacity = Number.isFinite(overlay.opacity) ? overlay.opacity : 1;
+        rootStyle.setProperty('--photo-filter-overlay-opacity', overlay.color ? overlayOpacity : 0);
+        rootStyle.setProperty('--photo-filter-vignette-strength', vignetteStrength);
+        rootStyle.setProperty('--photo-filter-vignette-alpha', (0.45 * vignetteStrength).toFixed(3));
     }
 
     openAlbum() {

@@ -19,6 +19,12 @@
             --screen-fade-duration: 0.6s;
             --screen-fade-ease: cubic-bezier(0.4, 0, 0.2, 1);
             --screen-base-bg: #050814;
+            --photo-filter-css: none;
+            --photo-filter-overlay-color: rgba(0, 0, 0, 0);
+            --photo-filter-overlay-blend: screen;
+            --photo-filter-overlay-opacity: 0;
+            --photo-filter-vignette-strength: 0;
+            --photo-filter-vignette-alpha: 0;
         }
 
         * {
@@ -56,6 +62,12 @@
             height: 100%;
             display: block;
             background-color: var(--screen-base-bg);
+            transition: filter 0.25s ease;
+        }
+
+        body.immersive-mode #canvas-container canvas,
+        body.immersive-mode #archive-canvas-container canvas {
+            filter: var(--photo-filter-css);
         }
 
         .hidden-canvas {
@@ -75,6 +87,39 @@
             position: fixed;
             inset: 0;
             pointer-events: none;
+        }
+
+        #photo-filter-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 6;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        body.immersive-mode #photo-filter-overlay {
+            opacity: 1;
+        }
+
+        #photo-filter-overlay .photo-filter-tint {
+            position: absolute;
+            inset: 0;
+            background: var(--photo-filter-overlay-color);
+            mix-blend-mode: var(--photo-filter-overlay-blend);
+            opacity: var(--photo-filter-overlay-opacity);
+        }
+
+        #photo-filter-overlay .photo-filter-vignette {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                circle at 50% 50%,
+                rgba(0, 0, 0, 0) calc(55% + 15% * var(--photo-filter-vignette-strength)),
+                rgba(0, 0, 0, var(--photo-filter-vignette-alpha)) 100%
+            );
+            mix-blend-mode: multiply;
+            opacity: 1;
         }
 
         /* 神秘的な光の筋 */
@@ -2399,6 +2444,18 @@
             line-height: 1.4;
         }
 
+        .album-item-filter {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.65);
+            letter-spacing: 0.4px;
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(136, 173, 255, 0.16);
+            border: 1px solid rgba(136, 173, 255, 0.3);
+            width: fit-content;
+        }
+
         .album-item-delete {
             width: 30px;
             height: 30px;
@@ -2558,6 +2615,66 @@
             opacity: 1;
             pointer-events: auto;
             transform: translateX(-50%) translateY(0);
+        }
+
+        /* フォトフィルター選択 */
+        #photo-filter-panel {
+            position: fixed;
+            bottom: 165px;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 2050;
+        }
+
+        body.immersive-mode #photo-filter-panel {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .filter-panel-title {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .filter-chip-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-chip {
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(136, 173, 255, 0.4);
+            background: rgba(12, 18, 42, 0.6);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 11px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        .filter-chip:hover {
+            border-color: rgba(136, 173, 255, 0.8);
+            transform: translateY(-1px);
+        }
+
+        .filter-chip.active {
+            background: linear-gradient(135deg, rgba(120, 180, 255, 0.4), rgba(220, 170, 255, 0.35));
+            color: #ffffff;
+            border-color: rgba(136, 173, 255, 0.9);
+            box-shadow: 0 10px 28px rgba(120, 180, 255, 0.35);
         }
 
         /* 撮影フラッシュエフェクト */
@@ -2817,12 +2934,26 @@
     <div id="beam-layer"></div>
     <div id="bokeh-layer"></div>
     <div id="grid-layer"></div>
+    <div id="photo-filter-overlay" aria-hidden="true">
+        <div class="photo-filter-tint"></div>
+        <div class="photo-filter-vignette"></div>
+    </div>
     
     <div id="title">P L A N E T A R I U M</div>
     <div id="subtitle">Aurora Voyage</div>
     <div id="immersion-indicator">Photo Mode</div>
     <button id="exit-immersive" aria-label="フォトモードを終了">フォトモードを終了</button>
     <button id="capture-photo-btn" aria-label="写真を撮影"></button>
+    <div id="photo-filter-panel" aria-label="フォトフィルター選択">
+        <div class="filter-panel-title">FILTER</div>
+        <div class="filter-chip-row">
+            <button class="filter-chip active" data-photo-filter="none" aria-pressed="true">なし</button>
+            <button class="filter-chip" data-photo-filter="aurora" aria-pressed="false">オーロラ</button>
+            <button class="filter-chip" data-photo-filter="twilight" aria-pressed="false">トワイライト</button>
+            <button class="filter-chip" data-photo-filter="noir" aria-pressed="false">モノクロ</button>
+            <button class="filter-chip" data-photo-filter="lunar" aria-pressed="false">ルナティック</button>
+        </div>
+    </div>
     
     <div id="controls">
         <div class="control-section" id="time-control-section">
