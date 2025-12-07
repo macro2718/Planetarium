@@ -2,6 +2,7 @@ import * as THREE from '../three.module.js';
 import { createWaterSurface } from './surfaces/waterSurface.js';
 import { createDesertSurface } from './surfaces/desertSurface.js';
 import { createIceSurface } from './surfaces/iceSurface.js';
+import { createGrassSurface } from './surfaces/grassSurface.js';
 
 export function createSurfaceSystem(ctx, moonStateProvider) {
     const group = new THREE.Group();
@@ -23,14 +24,19 @@ export function createSurfaceSystem(ctx, moonStateProvider) {
     registerSurface(createWaterSurface(ctx));
     registerSurface(createDesertSurface(ctx));
     registerSurface(createIceSurface(ctx));
+    registerSurface(createGrassSurface(ctx));
 
     const setSurfaceType = (type = 'water') => {
         const normalizedType = type === 'land' ? 'desert' : type;
-        const nextSurface = surfaces.get(normalizedType) ?? surfaces.values().next().value ?? null;
+        const nextSurface = surfaces.get(normalizedType);
+
+        if (!nextSurface) return activeSurface?.type ?? null;
+
         activeSurface = nextSurface;
         surfaces.forEach((surface) => {
             surface.setActive?.(surface === activeSurface);
         });
+        return activeSurface.type;
     };
 
     const update = (time) => {

@@ -1,0 +1,146 @@
+import * as THREE from '../../three.module.js';
+
+export function createGrassSurface(ctx) {
+    const grassGeometry = new THREE.CircleGeometry(9500, 160);
+    grassGeometry.rotateX(-Math.PI / 2);
+    grassGeometry.translate(0, -38, 0);
+
+    const grassMaterial = new THREE.ShaderMaterial({
+        uniforms: {
+            time: { value: 0 },
+            moonPosition: { value: new THREE.Vector3(2000, 1500, -2000) },
+            moonIntensity: { value: 0.5 }
+        },
+        vertexShader: `
+            uniform float time;
+            varying float vHeight;
+            varying float vRadial;
+            varying vec3 vWorldPos;
+            varying float vBend;
+            float hash(vec2 p) {
+                return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+            }
+            float noise(vec2 p) {
+                vec2 i = floor(p);
+                vec2 f = fract(p);
+                f = f * f * (3.0 - 2.0 * f);
+                float a = hash(i);
+                float b = hash(i + vec2(1.0, 0.0));
+                float c = hash(i + vec2(0.0, 1.0));
+                float d = hash(i + vec2(1.0, 1.0));
+                return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+            }
+            float fbm(vec2 p) {
+                float value = 0.0;
+                float amplitude = 0.5;
+                float frequency = 1.0;
+                for (int i = 0; i < 5; i++) {
+                    value += amplitude * noise(p * frequency);
+                    frequency *= 2.0;
+                    amplitude *= 0.55;
+                }
+                return value;
+            }
+            void main() {
+                vec3 pos = position;
+                float dist = clamp(length(pos.xz) / 9500.0, 0.0, 1.0);
+                float flowTime = time * 0.35;
+                float rollingHills = fbm(pos.xz * 0.0015 + flowTime * 0.02);
+                float softMounds = fbm(pos.xz * vec2(0.0009, 0.0012) - flowTime * 0.01);
+                float elevation = (rollingHills * 26.0 + softMounds * 20.0);
+                float nearMask = 1.0 - smoothstep(0.0, 0.22, dist);
+                elevation = mix(elevation, clamp(elevation, -10.0, 18.0), nearMask);
+                float wind = sin(dot(pos.xz, vec2(0.26, -0.34)) * 0.06 + flowTime * 0.8) * 0.6;
+                float breeze = fbm(pos.xz * 0.02 + flowTime * 0.6) * 0.8;
+                float bend = (wind + breeze) * smoothstep(0.1, 0.9, dist);
+                pos.y += elevation * smoothstep(0.12, 0.88, 1.0 - dist);
+                pos.xz += vec2(bend * 8.0, bend * -6.0) * (0.6 + dist * 0.6);
+                vHeight = pos.y;
+                vRadial = dist;
+                vBend = bend;
+                vec4 worldPos = modelMatrix * vec4(pos, 1.0);
+                vWorldPos = worldPos.xyz;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+            }
+        `,
+        fragmentShader: `
+            uniform float time;
+            uniform vec3 moonPosition;
+            uniform float moonIntensity;
+            varying float vHeight;
+            varying float vRadial;
+            varying vec3 vWorldPos;
+            varying float vBend;
+            float hash(vec2 p) {
+                return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+            }
+            float noise(vec2 p) {
+                vec2 i = floor(p);
+                vec2 f = fract(p);
+                f = f * f * (3.0 - 2.0 * f);
+                float a = hash(i);
+                float b = hash(i + vec2(1.0, 0.0));
+                float c = hash(i + vec2(0.0, 1.0));
+                float d = hash(i + vec2(1.0, 1.0));
+                return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+            }
+            float fbm(vec2 p) {
+                float value = 0.0;
+                float amplitude = 0.5;
+                for (int i = 0; i < 4; i++) {
+                    value += amplitude * noise(p);
+                    p *= 2.0;
+                    amplitude *= 0.55;
+                }
+                return value;
+            }
+            void main() {
+                vec3 viewDir = normalize(cameraPosition - vWorldPos);
+                float heightNorm = smoothstep(-48.0, 72.0, vHeight);
+                float meadowMask = smoothstep(0.08, 0.95, 1.0 - vRadial);
+                vec3 grassShadow = vec3(0.05, 0.08, 0.04);
+                vec3 grassMid = vec3(0.12, 0.22, 0.09);
+                vec3 grassHighlight = vec3(0.28, 0.42, 0.18);
+                float patch = fbm(vWorldPos.xz * 0.02 + time * 0.15);
+                float dew = pow(max(noise(vWorldPos.xz * 0.35 + time * 0.6), 0.0), 6.0);
+                vec3 color = mix(grassShadow, grassMid, heightNorm);
+                color = mix(color, grassHighlight, patch * 0.55 + dew * 0.35);
+                float slopeX = dFdx(vHeight);
+                float slopeZ = dFdy(vHeight);
+                vec3 normal = normalize(vec3(-slopeX + vBend * 0.4, 1.6, -slopeZ - vBend * 0.3));
+                vec3 moonDir = normalize(moonPosition - vWorldPos);
+                float moonLight = pow(max(dot(normal, moonDir), 0.0), 1.4);
+                vec3 moonGlow = vec3(0.55, 0.62, 0.72) * moonLight * (0.6 + moonIntensity * 0.8);
+                float rim = pow(1.0 - max(dot(viewDir, normal), 0.0), 3.0);
+                vec3 rimColor = vec3(0.18, 0.28, 0.16) * rim;
+                float path = smoothstep(0.75, 0.3, vRadial);
+                vec3 horizonShade = mix(vec3(0.01, 0.02, 0.04), vec3(0.05, 0.08, 0.06), vRadial);
+                color += moonGlow * path * meadowMask;
+                color += rimColor * meadowMask;
+                color = mix(color, horizonShade, vRadial * 0.55);
+                gl_FragColor = vec4(color, 1.0);
+            }
+        `,
+        side: THREE.DoubleSide,
+        transparent: false
+    });
+
+    const grassMesh = new THREE.Mesh(grassGeometry, grassMaterial);
+
+    const surface = {
+        type: 'grass',
+        meshes: [grassMesh],
+        update(time, moonState) {
+            grassMaterial.uniforms.time.value = time;
+            if (moonState) {
+                grassMaterial.uniforms.moonPosition.value.copy(moonState.position);
+                grassMaterial.uniforms.moonIntensity.value = moonState.illumination;
+            }
+        },
+        setActive(active) {
+            grassMesh.visible = active;
+        }
+    };
+
+    return surface;
+}
