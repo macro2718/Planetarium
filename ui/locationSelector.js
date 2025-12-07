@@ -1,6 +1,6 @@
 // 場所選択画面のUI制御
 import { LOCATIONS, REGION_LABELS, formatCoordinate } from '../data/locations.js';
-import { resetPlanetariumBgm } from './planetariumContext.js';
+import { getArchivePlanetarium, resetPlanetariumBgm } from './planetariumContext.js';
 
 let currentPlanetarium = null;
 let onLocationSelected = null;
@@ -89,6 +89,7 @@ function createLocationCard(location) {
 function selectLocation(location) {
     // Planetariumの観測地を更新
     if (currentPlanetarium) {
+        currentPlanetarium.start();
         currentPlanetarium.resetState();
         currentPlanetarium.setObserverLocation(location.lat, location.lon, location);
     }
@@ -175,6 +176,9 @@ export function showLocationScreen() {
     const locationScreen = document.getElementById('location-screen');
     const homeScreen = document.getElementById('home-screen');
     resetPlanetariumBgm();
+
+    currentPlanetarium?.stop();
+    getArchivePlanetarium()?.stop();
 
     document.body.classList.remove('home-visible');
 
