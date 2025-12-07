@@ -192,28 +192,3 @@ export function hideLocationScreen() {
         locationScreen.classList.add('hidden');
     }
 }
-
-/**
- * ホーム画面を表示
- */
-function showHomeScreen() {
-    const homeScreen = document.getElementById('home-screen');
-    if (homeScreen) {
-        homeScreen.classList.remove('hidden');
-    }
-    document.body.classList.add('home-visible');
-}
-
-/**
- * 現在選択可能な場所リストを取得
- */
-export function getLocations() {
-    return LOCATIONS;
-}
-
-/**
- * IDから場所を取得
- */
-export function getLocationById(id) {
-    return LOCATIONS.find(loc => loc.id === id);
-}
