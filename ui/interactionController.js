@@ -1,6 +1,8 @@
 import * as THREE from '../three.module.js';
 import { getPhotoAlbumSystem } from './photoAlbum.js';
 import { showLocationScreen } from './locationSelector.js';
+import { getArchivePlanetarium } from './planetariumContext.js';
+import { showEventArchiveScreen } from './eventArchive.js';
 
 export function attachUIInteractions(getPlanetarium) {
     setupResizeHandler(getPlanetarium);
@@ -136,6 +138,13 @@ function setupControlButtons(getPlanetarium) {
     const locationBtn = document.getElementById('btn-location');
     if (locationBtn) {
         locationBtn.addEventListener('click', () => {
+            const ctx = getPlanetarium();
+            const archivePlanetarium = getArchivePlanetarium();
+            if (archivePlanetarium && ctx === archivePlanetarium) {
+                showEventArchiveScreen();
+                return;
+            }
+
             showLocationScreen();
         });
     }
