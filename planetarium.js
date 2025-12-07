@@ -122,7 +122,9 @@ class Planetarium {
         this.containerId = containerId;
         this.resizeRenderer = this.resizeRenderer.bind(this);
         this.animate = this.animate.bind(this);
-        this.init();
+        this.isInitialized = false;
+        this.isRunning = false;
+        this.animationFrameId = null;
     }
 
     resetState() {
@@ -190,9 +192,26 @@ class Planetarium {
 
         this.applySettingsToSystems();
         this.syncControlButtons();
+        this.isInitialized = true;
+    }
 
+    start() {
+        if (!this.isInitialized) {
+            this.init();
+        }
+        if (this.isRunning) return;
+        this.isRunning = true;
+        this.lastTime = this.getCurrentPerfSeconds();
         this.hideLoading();
         this.animate();
+    }
+
+    stop() {
+        this.isRunning = false;
+        if (this.animationFrameId) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
+        }
     }
 
     registerUpdater(system) {
@@ -553,7 +572,8 @@ class Planetarium {
     }
 
     animate() {
-        requestAnimationFrame(this.animate);
+        if (!this.isRunning) return;
+        this.animationFrameId = requestAnimationFrame(this.animate);
         const now = performance.now() * 0.001;
         this.updateSimulationTime(now);
         const delta = now - this.lastTime;
@@ -598,3 +618,9 @@ initModeSelector({
     onEnterLive: () => setActivePlanetarium('live'),
     onEnterArchive: () => setActivePlanetarium('archive')
 });
+
+// 初期ロード時に選択画面へ進めるよう、星空の準備中オーバーレイを先に隠す
+const loadingOverlay = document.getElementById('loading');
+if (loadingOverlay) {
+    loadingOverlay.classList.add('hidden');
+}
