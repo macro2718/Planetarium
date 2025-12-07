@@ -1,3 +1,6 @@
+import { formatCoordinate } from '../data/locations.js';
+import { getCurrentLocation } from './locationState.js';
+
 export function setupTimeDisplay(getPlanetarium) {
     const update = () => updateTimeDisplay(getPlanetarium);
     update();
@@ -64,5 +67,18 @@ function updateTimeDisplay(getPlanetarium) {
     const infoEl = document.getElementById('celestial-info');
     if (infoEl) {
         infoEl.textContent = `${moonState.emoji} ${moonState.phaseName} | 輝面比 ${illuminationPct}%`;
+    }
+
+    const locationEl = document.getElementById('location-info');
+    if (locationEl) {
+        const location = getCurrentLocation();
+        if (location && Number.isFinite(location.lat) && Number.isFinite(location.lon)) {
+            const locationLabel = location.name || location.nameEn || '観測地点';
+            const latLabel = formatCoordinate(location.lat, true);
+            const lonLabel = formatCoordinate(location.lon, false);
+            locationEl.textContent = `${locationLabel} | ${latLabel} / ${lonLabel}`;
+        } else {
+            locationEl.textContent = '';
+        }
     }
 }

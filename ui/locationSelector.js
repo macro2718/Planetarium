@@ -1,5 +1,6 @@
 // 場所選択画面のUI制御
 import { LOCATIONS, REGION_LABELS, formatCoordinate } from '../data/locations.js';
+import { setCurrentLocation } from './locationState.js';
 
 let currentPlanetarium = null;
 let onLocationSelected = null;
@@ -91,6 +92,8 @@ function selectLocation(location) {
         currentPlanetarium.resetState();
         currentPlanetarium.setObserverLocation(location.lat, location.lon);
     }
+
+    setCurrentLocation(location);
 
     // 場所選択画面を非表示
     hideLocationScreen();

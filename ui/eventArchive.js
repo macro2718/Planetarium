@@ -1,5 +1,6 @@
 import { HISTORICAL_EVENTS } from '../data/historicalEvents.js';
 import { hideEventEffectPanel, showEventEffectPanel } from './eventEffectPanel.js';
+import { setCurrentLocation } from './locationState.js';
 
 let currentPlanetarium = null;
 let onEventSelected = null;
@@ -79,6 +80,8 @@ function activateEvent(event) {
         currentPlanetarium.toggleTimePause(true);
         applyEventEffects(event);
     }
+
+    setCurrentLocation(event.location);
 
     hideEventArchiveScreen();
     document.body.classList.remove('home-visible');
