@@ -5,9 +5,9 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
     const waterGeometry = new THREE.CircleGeometry(9500, 128);
     waterGeometry.rotateX(-Math.PI / 2);
     waterGeometry.translate(0, -25, 0);
-    const landGeometry = new THREE.CircleGeometry(9500, 128);
-    landGeometry.rotateX(-Math.PI / 2);
-    landGeometry.translate(0, -25, 0);
+    const desertGeometry = new THREE.CircleGeometry(9500, 128);
+    desertGeometry.rotateX(-Math.PI / 2);
+    desertGeometry.translate(0, -25, 0);
     ctx.waterMaterial = new THREE.ShaderMaterial({
         uniforms: {
             time: { value: 0 },
@@ -231,7 +231,7 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
         side: THREE.DoubleSide,
         depthWrite: true
     });
-    ctx.landMaterial = new THREE.ShaderMaterial({
+    ctx.desertMaterial = new THREE.ShaderMaterial({
         uniforms: {
             time: { value: 0 }
         },
@@ -239,6 +239,7 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
             uniform float time;
             varying float vHeight;
             varying float vRadial;
+            varying float vDuneMask;
             float hash(vec2 p) {
                 return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
             }
@@ -254,7 +255,7 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
             }
             float fbm(vec2 p) {
                 float value = 0.0;
-                float amplitude = 0.45;
+                float amplitude = 0.42;
                 float frequency = 1.0;
                 for (int i = 0; i < 5; i++) {
                     value += amplitude * noise(p * frequency);
@@ -266,14 +267,17 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
             void main() {
                 vec3 pos = position;
                 float dist = clamp(length(pos.xz) / 9500.0, 0.0, 1.0);
-                float terrain = fbm(pos.xz * 0.002 + time * 0.01);
-                float ridges = fbm(pos.xz * 0.004 - time * 0.008);
-                float hills = (terrain * 28.0) + (abs(ridges - 0.5) * 24.0 - 8.0);
-                float shoreline = smoothstep(0.15, 0.8, 1.0 - dist);
-                float fade = smoothstep(1.0, 0.6, dist);
-                pos.y += hills * shoreline * fade;
+                float sweepingDunes = fbm(pos.xz * vec2(0.0009, 0.0016) - time * 0.006);
+                float crest = fbm(pos.xz * 0.0025 + time * 0.01);
+                float windRidges = sin(dot(pos.xz, vec2(0.42, 0.28)) * 0.04 + time * 0.015) * 0.5 + 0.5;
+                float duneHeight = (sweepingDunes * 40.0) + (crest * 28.0) + (windRidges * 26.0 - 8.0);
+                float ripple = sin(dot(pos.xz, vec2(0.9, -0.4)) * 0.12 + time * 0.4) * 1.8;
+                duneHeight += ripple * (0.3 + (1.0 - dist) * 0.4);
+                float desertMask = smoothstep(0.12, 0.8, 1.0 - dist) * smoothstep(1.0, 0.55, dist);
+                pos.y += duneHeight * desertMask;
                 vHeight = pos.y;
                 vRadial = dist;
+                vDuneMask = desertMask;
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
             }
         `,
@@ -281,6 +285,7 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
             uniform float time;
             varying float vHeight;
             varying float vRadial;
+            varying float vDuneMask;
             float hash(vec2 p) {
                 return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
             }
@@ -305,32 +310,34 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
                 return value;
             }
             void main() {
-                float heightNorm = smoothstep(-35.0, 60.0, vHeight);
-                vec3 grass = vec3(0.12, 0.18, 0.09);
-                vec3 soil = vec3(0.24, 0.2, 0.15);
-                vec3 rock = vec3(0.18, 0.18, 0.18);
-                vec3 beach = vec3(0.32, 0.28, 0.2);
-                float shoreline = smoothstep(0.4, 0.15, vRadial);
-                vec3 base = mix(beach, soil, shoreline);
-                float rocky = smoothstep(0.55, 0.95, heightNorm) * (0.6 + fbm(vec2(vHeight * 0.005, vRadial * 2.0)) * 0.4);
-                vec3 mixed = mix(base, grass, heightNorm);
-                mixed = mix(mixed, rock, rocky);
-                float shadow = smoothstep(0.0, 1.0, heightNorm) * 0.2;
-                mixed *= 0.9 + shadow;
-                float fog = smoothstep(0.5, 1.05, vRadial);
-                mixed = mix(mixed, vec3(0.05, 0.07, 0.09), fog * 0.35);
-                gl_FragColor = vec4(mixed, 1.0);
+                float heightNorm = smoothstep(-35.0, 120.0, vHeight);
+                vec3 sandShadow = vec3(0.58, 0.47, 0.34);
+                vec3 sandBase = vec3(0.82, 0.7, 0.55);
+                vec3 sandHighlight = vec3(0.95, 0.88, 0.73);
+                float duneGrain = fbm(vec2(vHeight * 0.008, vRadial * 4.0));
+                float windRipple = fbm(vec2(vHeight * 0.02 + time * 0.15, vRadial * 3.0 + time * 0.05));
+                float sparkle = sin(vHeight * 0.06 + time * 0.5) * 0.5 + 0.5;
+                vec3 color = mix(sandShadow, sandBase, heightNorm);
+                color = mix(color, sandHighlight, duneGrain * 0.6 + windRipple * 0.2);
+                color += sandHighlight * sparkle * 0.04 * vDuneMask;
+                float dusk = smoothstep(0.65, 0.9, vRadial);
+                color = mix(color, vec3(0.93, 0.64, 0.42), dusk * 0.3);
+                float oasisGlow = smoothstep(0.0, 0.35, vRadial);
+                color = mix(vec3(0.97, 0.82, 0.65), color, clamp(oasisGlow + 0.15, 0.0, 1.0));
+                float shade = 0.9 + (1.0 - heightNorm) * 0.08;
+                color *= shade;
+                gl_FragColor = vec4(color, 1.0);
             }
         `,
         side: THREE.DoubleSide,
         transparent: false
     });
     const water = new THREE.Mesh(waterGeometry, ctx.waterMaterial);
-    const land = new THREE.Mesh(landGeometry, ctx.landMaterial);
-    const surfaces = { water, land };
-    ctx.landMesh = land;
+    const desert = new THREE.Mesh(desertGeometry, ctx.desertMaterial);
+    const surfaces = { water, desert };
+    ctx.desertMesh = desert;
     ctx.waterSurfaceGroup.add(water);
-    ctx.waterSurfaceGroup.add(land);
+    ctx.waterSurfaceGroup.add(desert);
     const mist = createWaterMist(ctx);
     ctx.scene.add(ctx.waterSurfaceGroup);
     const system = {
@@ -347,17 +354,18 @@ export function createWaterSurfaceSystem(ctx, moonStateProvider) {
             if (ctx.mistMaterial) {
                 ctx.mistMaterial.uniforms.time.value = time;
             }
-            if (ctx.landMaterial) {
-                ctx.landMaterial.uniforms.time.value = time;
+            if (ctx.desertMaterial) {
+                ctx.desertMaterial.uniforms.time.value = time;
             }
         },
         setSurfaceType(type = 'water') {
-            const targetSurface = surfaces[type] ?? surfaces.water;
+            const normalizedType = type === 'land' ? 'desert' : type;
+            const targetSurface = surfaces[normalizedType] ?? surfaces.water;
             Object.values(surfaces).forEach((surface) => {
                 surface.visible = surface === targetSurface;
             });
             if (mist) {
-                mist.visible = type === 'water';
+                mist.visible = normalizedType === 'water';
             }
         }
     };
