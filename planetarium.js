@@ -73,7 +73,7 @@ function createDefaultSettings() {
 // ========================================
 class Planetarium {
     constructor(options = {}) {
-        const { containerId = 'canvas-container' } = options;
+        const { containerId = 'canvas-container', isArchive = false } = options;
 
         this.scene = null;
         this.camera = null;
@@ -100,12 +100,14 @@ class Planetarium {
             lon: DEFAULT_OBSERVER_LOCATION.lon
         };
         this.timeMode = 'realtime';
+        this.isArchive = isArchive;
         this.timeScale = 240; // simulation seconds per real second (custom mode)
         this.dayScale = 1; // days per real second (fixed-time mode)
         this.simulationStartDate = new Date();
         const nowSeconds = performance.now() * 0.001;
         this.simulationStartPerf = nowSeconds;
         this.simulatedDate = new Date(this.simulationStartDate);
+        this.initialRealtimeDate = new Date(this.simulationStartDate);
         this.realtimeOffsetMs = 0;
         this.fixedTimeOfDayMs = this.simulationStartDate.getHours() * 3600000
             + this.simulationStartDate.getMinutes() * 60000
@@ -378,7 +380,9 @@ class Planetarium {
                 ? options.date
                 : (options.date ? new Date(options.date) : null);
             const hasValidDate = providedDate && !Number.isNaN(providedDate.getTime());
-            const baseDate = hasValidDate ? providedDate : this.getSimulatedDate();
+            const baseDate = hasValidDate
+                ? providedDate
+                : (this.isArchive ? this.initialRealtimeDate : new Date());
             this.realtimeOffsetMs = baseDate.getTime() - Date.now();
             this.simulationStartDate = new Date(baseDate);
             this.simulationStartPerf = this.getCurrentPerfSeconds();
@@ -549,7 +553,10 @@ class Planetarium {
 }
 
 const livePlanetarium = new Planetarium({ containerId: 'canvas-container' });
-const archivePlanetarium = new Planetarium({ containerId: 'archive-canvas-container' });
+const archivePlanetarium = new Planetarium({
+    containerId: 'archive-canvas-container',
+    isArchive: true
+});
 
 registerPlanetaria({ live: livePlanetarium, archive: archivePlanetarium });
 
