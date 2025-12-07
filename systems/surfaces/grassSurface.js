@@ -131,51 +131,66 @@ export function createGrassSurface(ctx) {
                 vec3 viewDir = normalize(cameraPosition - vWorldPos);
                 float heightNorm = smoothstep(-50.0, 80.0, vHeight);
                 float meadowMask = smoothstep(0.05, 0.92, 1.0 - vRadial);
-                
-                // 草原の色 - 夜の暗い緑
-                vec3 grassDark = vec3(0.015, 0.03, 0.018);      // 暗い影
-                vec3 grassMid = vec3(0.04, 0.08, 0.045);        // 中間色
-                vec3 grassLight = vec3(0.08, 0.14, 0.07);       // 月光が当たる部分
-                
-                // パッチ状のテクスチャ
+
+                // 草原の基調色 - 深い森の緑をベースに、湿った苔のハイライトを追加
+                vec3 grassShadow = vec3(0.012, 0.02, 0.013);    // 影の深い緑
+                vec3 grassMid = vec3(0.035, 0.075, 0.042);      // 中間色
+                vec3 grassLight = vec3(0.09, 0.16, 0.08);       // ハイライト
+                vec3 mossHighlight = vec3(0.12, 0.21, 0.15);    // 湿った苔の輝き
+
+                // パッチ状のテクスチャと微細な色変化
                 float patchPattern = fbm(vWorldPos.xz * 0.015 + time * 0.1);
                 float grassDetail = noise(vWorldPos.xz * 0.08);
-                
+                float cloverSpeckle = noise(vWorldPos.xz * 0.4 + time * 0.6);
+
                 // 基本色の計算
-                vec3 color = mix(grassDark, grassMid, heightNorm);
-                color = mix(color, grassLight, patchPattern * 0.4 + grassDetail * 0.2);
-                
-                // 法線計算（起伏から）
+                vec3 color = mix(grassShadow, grassMid, heightNorm * 0.8 + 0.1);
+                color = mix(color, grassLight, patchPattern * 0.45 + grassDetail * 0.25);
+                color = mix(color, mossHighlight, smoothstep(0.1, 0.7, heightNorm) * 0.25 + cloverSpeckle * 0.08);
+
+                // 法線計算（起伏と風によるしなりから推定）
                 float slopeX = dFdx(vHeight);
                 float slopeZ = dFdy(vHeight);
-                vec3 normal = normalize(vec3(-slopeX + vBend * 0.3, 1.5, -slopeZ - vBend * 0.25));
-                
-                // 月光の計算
+                vec3 normal = normalize(vec3(-slopeX + vBend * 0.35, 1.5, -slopeZ - vBend * 0.28));
+
+                // 月光の計算（やわらかなディフューズ + しっとりしたグレア）
                 vec3 moonDir = normalize(moonPosition - vWorldPos);
                 float moonLight = pow(max(dot(normal, moonDir), 0.0), 1.2);
-                vec3 moonGlow = vec3(0.4, 0.45, 0.55) * moonLight * (0.4 + moonIntensity * 0.6);
-                
-                // リムライト
+                vec3 moonGlow = vec3(0.42, 0.47, 0.58) * moonLight * (0.35 + moonIntensity * 0.7);
+
+                // 湿った草のハイライト（フェイクなマイクロファイバー反射）
+                float microSheen = pow(max(dot(normalize(moonDir + viewDir), normal), 0.0), 18.0);
+                vec3 dewSheen = vec3(0.25, 0.32, 0.38) * microSheen * (0.15 + moonIntensity * 0.45) * (1.2 - vRadial * 0.6);
+
+                // 空からの環境光 - 深い青緑の霧を混ぜる
+                float skyWrap = 0.5 + 0.5 * pow(max(dot(normal, vec3(0.0, 1.0, 0.0)), 0.0), 2.0);
+                vec3 skyTint = vec3(0.04, 0.07, 0.1);
+                color += skyTint * skyWrap * (0.28 + heightNorm * 0.2) * meadowMask;
+
+                // リムライトで葉先を際立たせる
                 float rim = pow(1.0 - max(dot(viewDir, normal), 0.0), 2.5);
-                vec3 rimColor = vec3(0.06, 0.1, 0.06) * rim;
-                
+                vec3 rimColor = vec3(0.06, 0.12, 0.08) * rim;
+
                 // 地平線のシルエット（完全に黒く）
                 float horizonFade = smoothstep(0.6, 0.95, vRadial);
                 vec3 horizonColor = vec3(0.005, 0.008, 0.012); // ほぼ黒
                 vec3 silhouette = vec3(0.0, 0.0, 0.0);
-                
-                // 月光の適用（中央付近のみ）
-                float lightMask = smoothstep(0.8, 0.3, vRadial);
-                color += moonGlow * lightMask * meadowMask;
+
+                // 月光と環境光の適用（中央付近のみ強調）
+                float lightMask = smoothstep(0.8, 0.3, vRadial) * meadowMask;
+                color += moonGlow * lightMask;
+                color += dewSheen * lightMask;
                 color += rimColor * meadowMask * (1.0 - horizonFade);
-                
-                // 地平線に向かって暗くする
-                color = mix(color, horizonColor, vRadial * 0.6);
-                
-                // 最外縁は完全なシルエット
+
+                // しなりによる陰影（草が風で傾いて密集する部分を暗く）
+                float occlusion = mix(1.0, 0.7, smoothstep(0.0, 0.9, abs(vBend)));
+                color *= occlusion;
+
+                // 地平線に向かって暗くし、外縁をシルエットに
+                color = mix(color, horizonColor, vRadial * 0.55);
                 float silhouetteMask = smoothstep(0.85, 0.98, vRadial);
                 color = mix(color, silhouette, silhouetteMask);
-                
+
                 gl_FragColor = vec4(color, 1.0);
             }
         `,
