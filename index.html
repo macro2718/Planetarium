@@ -2437,6 +2437,26 @@
         }
     }
     </script>
+    <script>
+    // フォールバック: モジュール読み込み前でも「星空を見る」ボタンが動作するように
+    document.addEventListener('DOMContentLoaded', () => {
+        const enterBtn = document.getElementById('enter-planetarium');
+        const modeScreen = document.getElementById('mode-screen');
+        const homeScreen = document.getElementById('home-screen');
+        
+        console.log('[fallback] DOMContentLoaded - enterBtn:', enterBtn);
+        
+        if (enterBtn) {
+            enterBtn.addEventListener('click', (e) => {
+                console.log('[fallback] enter-planetarium clicked');
+                e.stopPropagation();
+                document.body.classList.remove('home-visible');
+                if (modeScreen) modeScreen.classList.remove('hidden');
+                if (homeScreen) homeScreen.classList.add('hidden');
+            });
+        }
+    });
+    </script>
     <script type="module" src="planetarium.js"></script>
 </body>
 </html>

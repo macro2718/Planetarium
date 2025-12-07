@@ -39,6 +39,10 @@ function setupResizeHandler(getPlanetarium) {
 
 function setupClickHandler(getPlanetarium) {
     window.addEventListener('click', (event) => {
+        // UI要素上のクリックはスキップ
+        const uiOverlay = event.target.closest('#home-screen, #mode-screen, #archive-screen, #location-screen, #album-screen, #controls, .home-btn, .mode-card, .control-btn');
+        if (uiOverlay) return;
+
         const ctx = getPlanetarium();
         if (!ctx) return;
         const selection = pickObject(ctx, event);
