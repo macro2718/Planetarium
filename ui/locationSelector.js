@@ -89,7 +89,7 @@ function selectLocation(location) {
     // Planetariumの観測地を更新
     if (currentPlanetarium) {
         currentPlanetarium.resetState();
-        currentPlanetarium.setObserverLocation(location.lat, location.lon);
+        currentPlanetarium.setObserverLocation(location.lat, location.lon, location);
     }
 
     // 場所選択画面を非表示

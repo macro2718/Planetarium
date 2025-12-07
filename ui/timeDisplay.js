@@ -1,3 +1,5 @@
+import { formatCoordinate } from '../data/locations.js';
+
 export function setupTimeDisplay(getPlanetarium) {
     const update = () => updateTimeDisplay(getPlanetarium);
     update();
@@ -64,5 +66,18 @@ function updateTimeDisplay(getPlanetarium) {
     const infoEl = document.getElementById('celestial-info');
     if (infoEl) {
         infoEl.textContent = `${moonState.emoji} ${moonState.phaseName} | 輝面比 ${illuminationPct}%`;
+    }
+
+    const locationEl = document.getElementById('location-info');
+    if (locationEl) {
+        const lat = ctx.observer?.lat;
+        const lon = ctx.observer?.lon;
+        const locationInfo = ctx.observerLocationInfo || {};
+        const icon = locationInfo.icon || '📍';
+        const name = locationInfo.name || 'カスタム地点';
+        const englishName = locationInfo.nameEn ? ` (${locationInfo.nameEn})` : '';
+        const latText = Number.isFinite(lat) ? formatCoordinate(lat, true) : '---';
+        const lonText = Number.isFinite(lon) ? formatCoordinate(lon, false) : '---';
+        locationEl.textContent = `${icon} ${name}${englishName} | ${latText} / ${lonText}`;
     }
 }
