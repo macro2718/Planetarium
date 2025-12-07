@@ -199,9 +199,10 @@ function setupSurfaceButtons(ctx) {
     };
 
     const applySurfaceType = (type) => {
-        ctx.settings.surfaceType = type;
-        ctx.waterSurfaceSystem?.setSurfaceType(type);
-        setActiveSurface(type);
+        const normalizedType = type === 'land' ? 'desert' : type;
+        ctx.settings.surfaceType = normalizedType;
+        ctx.waterSurfaceSystem?.setSurfaceType(normalizedType);
+        setActiveSurface(normalizedType);
     };
 
     surfaceButtons.forEach((btn) => {
