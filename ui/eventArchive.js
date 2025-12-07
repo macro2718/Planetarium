@@ -67,6 +67,7 @@ function setupEventList() {
 
 function activateEvent(event) {
     if (currentPlanetarium) {
+        currentPlanetarium.resetState();
         currentPlanetarium.setObserverLocation(event.location.lat, event.location.lon);
         currentPlanetarium.setTimeMode('custom', {
             date: new Date(event.dateTime),

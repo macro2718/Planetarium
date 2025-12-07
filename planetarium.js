@@ -31,6 +31,27 @@ import {
     getLivePlanetarium
 } from './ui/planetariumContext.js';
 
+function createDefaultSettings() {
+    return {
+        showMilkyWay: true,
+        showConstellations: true,
+        showShootingStars: true,
+        showSun: false,
+        showMoon: true,
+        showAurora: true,
+        showHourCircles: false,
+        showDeclinationCircles: false,
+        showCelestialEquator: false,
+        showEcliptic: false,
+        showCardinalDirections: false,
+        showStarTrails: false,
+        autoRotate: false,
+        playMusic: false,
+        showLensFlare: true,
+        surfaceType: 'water'
+    };
+}
+
 // ========================================
 // プラネタリウム - 美しい星空シミュレーション
 // ========================================
@@ -43,24 +64,7 @@ class Planetarium {
         this.renderer = null;
         this.controls = null;
         this.minCameraHeight = -4;
-        this.settings = {
-            showMilkyWay: true,
-            showConstellations: true,
-            showShootingStars: true,
-            showSun: false,
-            showMoon: true,
-            showAurora: true,
-            showHourCircles: false,
-            showDeclinationCircles: false,
-            showCelestialEquator: false,
-            showEcliptic: false,
-            showCardinalDirections: false,
-            showStarTrails: false,
-            autoRotate: false,
-            playMusic: false,
-            showLensFlare: true,
-            surfaceType: 'water'
-        };
+        this.settings = createDefaultSettings();
         this.bgmAudio = null;
         this.bgmPlaylist = [];
         this.bgmCurrentIndex = 0;
@@ -98,6 +102,28 @@ class Planetarium {
         this.init();
     }
 
+    resetState() {
+        this.settings = createDefaultSettings();
+        this.timeScale = 240;
+        this.dayScale = 1;
+        this.realtimeOffsetMs = 0;
+        this.setTimeMode('realtime', { date: new Date() });
+        this.lastTime = this.getCurrentPerfSeconds();
+        this.isTimePaused = false;
+
+        if (this.camera) {
+            this.camera.position.set(0, 0, 0.1);
+        }
+        if (this.controls) {
+            this.controls.target.set(0, 0, 0);
+            this.controls.autoRotate = false;
+            this.controls.update();
+        }
+
+        this.applySettingsToSystems();
+        this.syncControlButtons();
+    }
+
     init() {
         this.setupScene();
         this.setupCamera();
@@ -130,6 +156,9 @@ class Planetarium {
         this.registerUpdater(this.eclipticSystem);
         this.lensFlareSystem = createLensFlareSystem(this);
         this.registerUpdater(this.lensFlareSystem);
+
+        this.applySettingsToSystems();
+        this.syncControlButtons();
 
         this.hideLoading();
         this.animate();
@@ -186,6 +215,62 @@ class Planetarium {
         this.controls.autoRotate = false;
         this.controls.autoRotateSpeed = 0.1;
         this.controls.maxPolarAngle = Math.PI - 0.001;
+    }
+
+    applySettingsToSystems() {
+        const settings = this.settings ?? {};
+        if (this.milkyWayGroup) this.milkyWayGroup.visible = !!settings.showMilkyWay;
+        if (this.constellationSystem) this.constellationSystem.updateVisibility(!!settings.showConstellations);
+        if (this.shootingStarsGroup) this.shootingStarsGroup.visible = !!settings.showShootingStars;
+        if (this.sunSystem?.setEnabled) {
+            this.sunSystem.setEnabled(!!settings.showSun);
+        } else if (this.sunGroup) {
+            this.sunGroup.visible = !!settings.showSun;
+        }
+        if (this.moonGroup) this.moonGroup.visible = !!settings.showMoon;
+        if (this.auroraGroup) this.auroraGroup.visible = !!settings.showAurora;
+        if (this.hourCircleSystem) this.hourCircleSystem.setVisible(!!settings.showHourCircles);
+        if (this.declinationCircleSystem) this.declinationCircleSystem.setVisible(!!settings.showDeclinationCircles);
+        if (this.celestialEquatorSystem) this.celestialEquatorSystem.setVisible(!!settings.showCelestialEquator);
+        if (this.eclipticSystem) this.eclipticSystem.setVisible(!!settings.showEcliptic);
+        if (this.cardinalDirectionSystem) this.cardinalDirectionSystem.setVisible(!!settings.showCardinalDirections);
+        if (this.starTrailSystem) this.starTrailSystem.setEnabled(!!settings.showStarTrails);
+        if (this.lensFlareSystem?.setEnabled) this.lensFlareSystem.setEnabled(!!settings.showLensFlare);
+        if (this.surfaceSystem?.setSurfaceType) this.surfaceSystem.setSurfaceType(settings.surfaceType ?? 'water');
+        if (this.controls) this.controls.autoRotate = !!settings.autoRotate;
+
+        if (settings.playMusic) {
+            this.startAmbientSound();
+        } else {
+            this.stopAmbientSound();
+        }
+    }
+
+    syncControlButtons() {
+        const toggleButtons = [
+            { id: 'btn-milkyway', flag: 'showMilkyWay' },
+            { id: 'btn-constellations', flag: 'showConstellations' },
+            { id: 'btn-shooting', flag: 'showShootingStars' },
+            { id: 'btn-sun', flag: 'showSun' },
+            { id: 'btn-moon', flag: 'showMoon' },
+            { id: 'btn-aurora', flag: 'showAurora' },
+            { id: 'btn-hour-circles', flag: 'showHourCircles' },
+            { id: 'btn-declination-circles', flag: 'showDeclinationCircles' },
+            { id: 'btn-celestial-equator', flag: 'showCelestialEquator' },
+            { id: 'btn-ecliptic', flag: 'showEcliptic' },
+            { id: 'btn-cardinal-directions', flag: 'showCardinalDirections' },
+            { id: 'btn-star-trails', flag: 'showStarTrails' },
+            { id: 'btn-lensflare', flag: 'showLensFlare' },
+            { id: 'btn-auto', flag: 'autoRotate' },
+            { id: 'btn-music', flag: 'playMusic' }
+        ];
+
+        for (const { id, flag } of toggleButtons) {
+            const btn = document.getElementById(id);
+            if (btn) {
+                btn.classList.toggle('active', !!this.settings?.[flag]);
+            }
+        }
     }
 
     updateSimulationTime(nowSeconds) {
