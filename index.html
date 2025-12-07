@@ -32,13 +32,18 @@
             letter-spacing: 0.3px;
         }
 
-        #canvas-container {
+        #canvas-container,
+        #archive-canvas-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 0;
+        }
+
+        .hidden-canvas {
+            display: none;
         }
 
         #canvas-overlay,
@@ -2328,8 +2333,9 @@
     <div id="loading">
         <span class="loading-text">星空を準備中...</span>
     </div>
-    
+
     <div id="canvas-container"></div>
+    <div id="archive-canvas-container" class="hidden-canvas"></div>
     <div id="beam-layer"></div>
     <div id="bokeh-layer"></div>
     <div id="grid-layer"></div>

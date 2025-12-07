@@ -1,32 +1,46 @@
 import * as THREE from '../three.module.js';
 import { getPhotoAlbumSystem } from './photoAlbum.js';
 
-export function attachUIInteractions(ctx) {
-    setupResizeHandler(ctx);
-    setupClickHandler(ctx);
-    setupControlButtons(ctx);
-    setupTimeControls(ctx);
+export function attachUIInteractions(getPlanetarium) {
+    setupResizeHandler(getPlanetarium);
+    setupClickHandler(getPlanetarium);
+    setupControlButtons(getPlanetarium);
+    setupTimeControls(getPlanetarium);
     
     // PhotoAlbumSystemの初期化（DOMが準備されてから）
     const albumSystem = getPhotoAlbumSystem();
     albumSystem.init();
     
     return {
-        showStarInfo: (data) => showStarInfo(ctx, data),
-        hideStarInfo: () => hideStarInfo(ctx)
+        showStarInfo: (data) => {
+            const ctx = getPlanetarium();
+            if (ctx) {
+                showStarInfo(ctx, data);
+            }
+        },
+        hideStarInfo: () => {
+            const ctx = getPlanetarium();
+            if (ctx) {
+                hideStarInfo(ctx);
+            }
+        }
     };
 }
 
-function setupResizeHandler(ctx) {
+function setupResizeHandler(getPlanetarium) {
     window.addEventListener('resize', () => {
+        const ctx = getPlanetarium();
+        if (!ctx) return;
         ctx.camera.aspect = window.innerWidth / window.innerHeight;
         ctx.camera.updateProjectionMatrix();
         ctx.renderer.setSize(window.innerWidth, window.innerHeight);
     });
 }
 
-function setupClickHandler(ctx) {
+function setupClickHandler(getPlanetarium) {
     window.addEventListener('click', (event) => {
+        const ctx = getPlanetarium();
+        if (!ctx) return;
         const selection = pickObject(ctx, event);
         if (selection) {
             showStarInfo(ctx, selection);
@@ -53,50 +67,52 @@ function pickObject(ctx, event) {
     return findNearestCatalogStar(ctx, event.clientX, event.clientY, 32);
 }
 
-function setupControlButtons(ctx) {
-    setupSurfaceButtons(ctx);
+function setupControlButtons(getPlanetarium) {
+    setupSurfaceButtons(getPlanetarium);
     const toggleButton = (id, flag, apply) => {
         const btn = document.getElementById(id);
         if (!btn) return;
         btn.addEventListener('click', (e) => {
+            const ctx = getPlanetarium();
+            if (!ctx) return;
             const next = !ctx.settings[flag];
             ctx.settings[flag] = next;
             e.target.classList.toggle('active');
-            apply(next);
+            apply(ctx, next);
         });
     };
-    toggleButton('btn-milkyway', 'showMilkyWay', (visible) => {
+    toggleButton('btn-milkyway', 'showMilkyWay', (ctx, visible) => {
         if (ctx.milkyWayGroup) ctx.milkyWayGroup.visible = visible;
     });
-    toggleButton('btn-constellations', 'showConstellations', (visible) => {
+    toggleButton('btn-constellations', 'showConstellations', (ctx, visible) => {
         if (ctx.constellationSystem) {
             ctx.constellationSystem.updateVisibility(visible);
         }
     });
-    toggleButton('btn-shooting', 'showShootingStars', (visible) => {
+    toggleButton('btn-shooting', 'showShootingStars', (ctx, visible) => {
         if (ctx.shootingStarsGroup) {
             ctx.shootingStarsGroup.visible = visible;
         }
     });
-    toggleButton('btn-sun', 'showSun', (visible) => {
+    toggleButton('btn-sun', 'showSun', (ctx, visible) => {
         if (ctx.sunSystem?.setEnabled) {
             ctx.sunSystem.setEnabled(visible);
         } else if (ctx.sunGroup) {
             ctx.sunGroup.visible = visible;
         }
     });
-    toggleButton('btn-moon', 'showMoon', (visible) => {
+    toggleButton('btn-moon', 'showMoon', (ctx, visible) => {
         if (ctx.moonGroup) ctx.moonGroup.visible = visible;
     });
-    toggleButton('btn-aurora', 'showAurora', (visible) => {
+    toggleButton('btn-aurora', 'showAurora', (ctx, visible) => {
         if (ctx.auroraGroup) ctx.auroraGroup.visible = visible;
     });
-    toggleButton('btn-lensflare', 'showLensFlare', (visible) => {
+    toggleButton('btn-lensflare', 'showLensFlare', (ctx, visible) => {
         if (ctx.lensFlareSystem?.setEnabled) {
             ctx.lensFlareSystem.setEnabled(visible);
         }
     });
-    toggleButton('btn-star-trails', 'showStarTrails', (visible) => {
+    toggleButton('btn-star-trails', 'showStarTrails', (ctx, visible) => {
         if (ctx.starTrailSystem) {
             ctx.starTrailSystem.setEnabled(visible);
         }
@@ -106,14 +122,16 @@ function setupControlButtons(ctx) {
     const homeBtn = document.getElementById('btn-home');
     if (homeBtn) {
         homeBtn.addEventListener('click', () => {
-            const albumSystem = getPhotoAlbumSystem();
-            albumSystem.showHomeFromPlanetarium();
-        });
+        const albumSystem = getPhotoAlbumSystem();
+        albumSystem.showHomeFromPlanetarium();
+    });
     }
-    
+
     const autoBtn = document.getElementById('btn-auto');
     if (autoBtn) {
         autoBtn.addEventListener('click', (e) => {
+            const ctx = getPlanetarium();
+            if (!ctx) return;
             ctx.settings.autoRotate = !ctx.settings.autoRotate;
             e.target.classList.toggle('active');
             ctx.controls.autoRotate = ctx.settings.autoRotate;
@@ -122,6 +140,8 @@ function setupControlButtons(ctx) {
     const musicBtn = document.getElementById('btn-music');
     if (musicBtn) {
         musicBtn.addEventListener('click', (e) => {
+            const ctx = getPlanetarium();
+            if (!ctx) return;
             ctx.settings.playMusic = !ctx.settings.playMusic;
             e.target.classList.toggle('active');
             if (ctx.settings.playMusic) {
@@ -133,35 +153,35 @@ function setupControlButtons(ctx) {
     }
     
     // 時圏表示ボタン
-    toggleButton('btn-hour-circles', 'showHourCircles', (visible) => {
+    toggleButton('btn-hour-circles', 'showHourCircles', (ctx, visible) => {
         if (ctx.hourCircleSystem) {
             ctx.hourCircleSystem.setVisible(visible);
         }
     });
     
     // 赤緯圏表示ボタン
-    toggleButton('btn-declination-circles', 'showDeclinationCircles', (visible) => {
+    toggleButton('btn-declination-circles', 'showDeclinationCircles', (ctx, visible) => {
         if (ctx.declinationCircleSystem) {
             ctx.declinationCircleSystem.setVisible(visible);
         }
     });
     
     // 天の赤道表示ボタン
-    toggleButton('btn-celestial-equator', 'showCelestialEquator', (visible) => {
+    toggleButton('btn-celestial-equator', 'showCelestialEquator', (ctx, visible) => {
         if (ctx.celestialEquatorSystem) {
             ctx.celestialEquatorSystem.setVisible(visible);
         }
     });
     
     // 黄道表示ボタン
-    toggleButton('btn-ecliptic', 'showEcliptic', (visible) => {
+    toggleButton('btn-ecliptic', 'showEcliptic', (ctx, visible) => {
         if (ctx.eclipticSystem) {
             ctx.eclipticSystem.setVisible(visible);
         }
     });
     
     // 方位表示ボタン
-    toggleButton('btn-cardinal-directions', 'showCardinalDirections', (visible) => {
+    toggleButton('btn-cardinal-directions', 'showCardinalDirections', (ctx, visible) => {
         if (ctx.cardinalDirectionSystem) {
             ctx.cardinalDirectionSystem.setVisible(visible);
         }
@@ -188,7 +208,7 @@ function setupControlButtons(ctx) {
     }
 }
 
-function setupSurfaceButtons(ctx) {
+function setupSurfaceButtons(getPlanetarium) {
     const surfaceButtons = Array.from(document.querySelectorAll('[data-surface-type]'));
     if (!surfaceButtons.length) return;
 
@@ -199,6 +219,8 @@ function setupSurfaceButtons(ctx) {
     };
 
     const applySurfaceType = (type) => {
+        const ctx = getPlanetarium();
+        if (!ctx) return;
         const normalizedType = type === 'land' ? 'desert' : type;
         ctx.settings.surfaceType = normalizedType;
         ctx.surfaceSystem?.setSurfaceType(normalizedType);
@@ -211,10 +233,10 @@ function setupSurfaceButtons(ctx) {
         });
     });
 
-    applySurfaceType(ctx.settings.surfaceType ?? 'water');
+    applySurfaceType((getPlanetarium()?.settings.surfaceType) ?? 'water');
 }
 
-function setupTimeControls(ctx) {
+function setupTimeControls(getPlanetarium) {
     const realtimeBtn = document.getElementById('time-mode-realtime');
     const customBtn = document.getElementById('time-mode-custom');
     const fixedBtn = document.getElementById('time-mode-fixed');
@@ -232,6 +254,7 @@ function setupTimeControls(ctx) {
     }
 
     const timeSettingsContainer = document.getElementById('time-settings-container');
+    const ctxRef = () => getPlanetarium();
 
     dateInput?.addEventListener('input', () => {
         userEditedDate = true;
@@ -244,6 +267,8 @@ function setupTimeControls(ctx) {
     };
 
     const updateControlsVisibility = () => {
+        const ctx = ctxRef();
+        if (!ctx) return;
         const isRealtime = ctx.timeMode === 'realtime';
         // リアルタイムモードでは設定全体を非表示
         if (timeSettingsContainer) {
@@ -252,6 +277,8 @@ function setupTimeControls(ctx) {
     };
 
     const updateButtonState = () => {
+        const ctx = ctxRef();
+        if (!ctx) return;
         const mode = ctx.timeMode;
         realtimeBtn?.classList.toggle('active', mode === 'realtime');
         customBtn?.classList.toggle('active', mode === 'custom');
@@ -261,6 +288,8 @@ function setupTimeControls(ctx) {
     };
 
     const updateSpeedDisplay = () => {
+        const ctx = ctxRef();
+        if (!ctx) return;
         if (!speedDisplay || !speedInput) return;
         const isFixed = ctx.timeMode === 'fixed-time';
         const value = parseFloat(speedInput.value);
@@ -279,6 +308,8 @@ function setupTimeControls(ctx) {
     };
 
     const syncInputsFromCtx = (forceDate = false) => {
+        const ctx = ctxRef();
+        if (!ctx) return;
         if (dateInput && (forceDate || ctx.timeMode === 'realtime')) {
             const current = typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date();
             setDateInputValue(current);
@@ -301,14 +332,17 @@ function setupTimeControls(ctx) {
         return parsed;
     };
 
-    const applyCustomSettings = (targetMode = ctx.timeMode === 'fixed-time' ? 'fixed-time' : 'custom') => {
+    const applyCustomSettings = (targetMode) => {
+        const ctx = ctxRef();
+        if (!ctx) return;
+        const mode = targetMode || (ctx.timeMode === 'fixed-time' ? 'fixed-time' : 'custom');
         const ctxDate = typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date();
         const inputDate = readInputDate();
         const shouldPreferCtxDate = !inputDate
             || (!userEditedDate && ctx.timeMode !== 'realtime' && Math.abs(inputDate.getTime() - ctxDate.getTime()) > 60000);
         const targetDate = shouldPreferCtxDate ? ctxDate : inputDate;
-        const rawScale = speedInput ? parseFloat(speedInput.value) : (targetMode === 'fixed-time' ? ctx.dayScale : ctx.timeScale);
-        if (targetMode === 'fixed-time') {
+        const rawScale = speedInput ? parseFloat(speedInput.value) : (mode === 'fixed-time' ? ctx.dayScale : ctx.timeScale);
+        if (mode === 'fixed-time') {
             const nextScale = Number.isFinite(rawScale) ? rawScale : (Number.isFinite(ctx.dayScale) ? ctx.dayScale : 1);
             ctx.setTimeMode?.('fixed-time', { date: targetDate, dayScale: nextScale });
         } else {
@@ -322,6 +356,8 @@ function setupTimeControls(ctx) {
     };
 
     realtimeBtn?.addEventListener('click', () => {
+        const ctx = ctxRef();
+        if (!ctx) return;
         ctx.setTimeMode?.('realtime');
         ctx.toggleTimePause?.(false);
         syncInputsFromCtx(true);
@@ -329,6 +365,8 @@ function setupTimeControls(ctx) {
     });
 
     customBtn?.addEventListener('click', () => {
+        const ctx = ctxRef();
+        if (!ctx) return;
         if (speedInput && Number.isFinite(ctx.timeScale)) {
             speedInput.value = ctx.timeScale;
         }
@@ -337,6 +375,8 @@ function setupTimeControls(ctx) {
     });
 
     fixedBtn?.addEventListener('click', () => {
+        const ctx = ctxRef();
+        if (!ctx) return;
         if (speedInput && Number.isFinite(ctx.dayScale)) {
             speedInput.value = ctx.dayScale;
         }
@@ -352,6 +392,8 @@ function setupTimeControls(ctx) {
 
     const updatePlaybackButton = () => {
         if (!playbackBtn) return;
+        const ctx = ctxRef();
+        if (!ctx) return;
         const isRealtime = ctx.timeMode === 'realtime';
         const paused = ctx.isTimePaused && !isRealtime;
         playbackBtn.textContent = paused ? '▶️ 再生' : '⏸ 一時停止';
@@ -360,6 +402,8 @@ function setupTimeControls(ctx) {
     };
 
     playbackBtn?.addEventListener('click', () => {
+        const ctx = ctxRef();
+        if (!ctx) return;
         ctx.toggleTimePause?.();
         updatePlaybackButton();
     });
