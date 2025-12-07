@@ -1,5 +1,5 @@
 import { showLocationScreen, hideLocationScreen } from './locationSelector.js';
-import { showEventArchiveScreen, hideEventArchiveScreen } from './eventArchive.js';
+import { showEventArchiveScreen, hideEventArchiveScreen, resetArchiveTimeState } from './eventArchive.js';
 
 export function initModeSelector() {
     setupEntryButton();
@@ -28,6 +28,7 @@ function setupModeButtons() {
     if (planetariumBtn) {
         planetariumBtn.addEventListener('click', () => {
             hideArchiveAndMode();
+            resetArchiveTimeState();
             showLocationScreen();
         });
     }
