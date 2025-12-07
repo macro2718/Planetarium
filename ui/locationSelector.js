@@ -117,15 +117,15 @@ function setupBackButton() {
     const backBtn = document.getElementById('location-back');
     if (backBtn) {
         backBtn.addEventListener('click', () => {
-            backToHomeFromLocation();
+            backToModeFromLocation();
         });
     }
 }
 
 /**
- * 場所選択画面からホームに戻る（フェードトランジション付き）
+ * 場所選択画面からモード選択画面へ戻る（ホームが存在する場合はホームへ）
  */
-function backToHomeFromLocation() {
+function backToModeFromLocation() {
     const homeScreen = document.getElementById('home-screen');
     const modeScreen = document.getElementById('mode-screen');
     const locationScreen = document.getElementById('location-screen');
