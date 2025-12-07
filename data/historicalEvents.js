@@ -9,7 +9,18 @@ export const HISTORICAL_EVENTS = [
             lat: 29.5593,
             lon: -95.0892
         },
-        tags: ['NASA', '月面着陸', 'アームストロング']
+        tags: ['NASA', '月面着陸', 'アームストロング'],
+        effects: [
+            {
+                type: 'info-panel',
+                title: '月面に響いた言葉',
+                body: '「これは一人の人間にとっては小さな一歩だが、人類にとっては偉大な飛躍である。」着陸船イーグルが静かの海に降り立った瞬間の緊張感を、夜空の静寂とともに振り返ります。'
+            },
+            {
+                type: 'auto-rotate',
+                enabled: false
+            }
+        ]
     },
     {
         id: 'hayleys-comet-1986',
@@ -21,7 +32,25 @@ export const HISTORICAL_EVENTS = [
             lat: -44.0033,
             lon: 170.4830
         },
-        tags: ['彗星', 'テカポ', '観測史']
+        tags: ['彗星', 'テカポ', '観測史'],
+        effects: [
+            {
+                type: 'info-panel',
+                title: '76年ぶりの旅人',
+                body: '1986年のハレー彗星は淡い尾を引きながら太陽へと接近。南半球では長い尾が夜空を横切り、再会の歓声が上がりました。'
+            },
+            {
+                type: 'comet-tail',
+                enabled: true,
+                intensity: 1,
+                tint: '#87f3ff'
+            },
+            {
+                type: 'meteor-shower',
+                enabled: false,
+                intensity: 0
+            }
+        ]
     },
     {
         id: 'leonids-2001',
@@ -33,6 +62,23 @@ export const HISTORICAL_EVENTS = [
             lat: 34.5794,
             lon: -118.1165
         },
-        tags: ['流星群', '極大', 'しし座']
+        tags: ['流星群', '極大', 'しし座'],
+        effects: [
+            {
+                type: 'info-panel',
+                title: '流星嵐の記憶',
+                body: 'ピーク時には1時間に数千もの流星が流れた2001年のしし座流星群。空全体が光の雨に包まれる様子を強調表示します。'
+            },
+            {
+                type: 'meteor-shower',
+                enabled: true,
+                intensity: 1
+            },
+            {
+                type: 'comet-tail',
+                enabled: false,
+                intensity: 0
+            }
+        ]
     }
 ];

@@ -1,4 +1,5 @@
 import { HISTORICAL_EVENTS } from '../data/historicalEvents.js';
+import { hideEventEffectPanel, showEventEffectPanel } from './eventEffectPanel.js';
 
 let currentPlanetarium = null;
 let onEventSelected = null;
@@ -11,6 +12,8 @@ function resetToRealtime() {
         currentPlanetarium.setTimeMode('realtime');
         currentPlanetarium.toggleTimePause(false);
     }
+
+    hideEventEffectPanel();
 }
 
 export function initEventArchive(options = {}) {
@@ -74,6 +77,7 @@ function activateEvent(event) {
             timeScale: 0
         });
         currentPlanetarium.toggleTimePause(true);
+        applyEventEffects(event);
     }
 
     hideEventArchiveScreen();
@@ -110,6 +114,49 @@ export function hideEventArchiveScreen() {
 
 export function resetArchiveTimeState() {
     resetToRealtime();
+}
+
+function applyEventEffects(event) {
+    if (!currentPlanetarium) return;
+    hideEventEffectPanel();
+
+    const effects = event?.effects ?? [];
+    let settingsChanged = false;
+
+    effects.forEach(effect => {
+        switch (effect.type) {
+        case 'comet-tail':
+            currentPlanetarium.settings.showCometTail = effect.enabled !== false;
+            currentPlanetarium.settings.cometTailIntensity = effect.intensity ?? 1;
+            if (effect.tint) {
+                currentPlanetarium.settings.cometTailTint = effect.tint;
+            }
+            settingsChanged = true;
+            break;
+        case 'meteor-shower':
+            currentPlanetarium.settings.showShootingStars = effect.enabled !== false;
+            currentPlanetarium.settings.meteorShowerIntensity = effect.intensity ?? 0.6;
+            settingsChanged = true;
+            break;
+        case 'info-panel':
+            showEventEffectPanel({
+                title: effect.title || event.title,
+                body: effect.body || event.description
+            });
+            break;
+        case 'auto-rotate':
+            currentPlanetarium.settings.autoRotate = effect.enabled !== false;
+            settingsChanged = true;
+            break;
+        default:
+            break;
+        }
+    });
+
+    if (settingsChanged) {
+        currentPlanetarium.applySettingsToSystems();
+        currentPlanetarium.syncControlButtons();
+    }
 }
 
 function showModeScreen() {
