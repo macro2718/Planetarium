@@ -1,6 +1,6 @@
 import { HISTORICAL_EVENTS } from '../data/historicalEvents.js';
 import { hideEventEffectPanel, showEventEffectPanel } from './eventEffectPanel.js';
-import { resetPlanetariumBgm } from './planetariumContext.js';
+import { getLivePlanetarium, resetPlanetariumBgm } from './planetariumContext.js';
 
 let currentPlanetarium = null;
 let onEventSelected = null;
@@ -71,6 +71,7 @@ function setupEventList() {
 
 function activateEvent(event) {
     if (currentPlanetarium) {
+        currentPlanetarium.start();
         currentPlanetarium.resetState();
         currentPlanetarium.setObserverLocation(event.location.lat, event.location.lon, event.location);
         currentPlanetarium.setTimeMode('custom', {
@@ -101,6 +102,8 @@ function setupBackButton() {
 export function showEventArchiveScreen() {
     const archiveScreen = document.getElementById('archive-screen');
     resetPlanetariumBgm();
+    currentPlanetarium?.stop();
+    getLivePlanetarium()?.stop();
     if (archiveScreen) {
         archiveScreen.classList.remove('hidden');
     }
