@@ -33,6 +33,14 @@ import {
     getLivePlanetarium
 } from './ui/planetariumContext.js';
 
+const DEFAULT_OBSERVER_LOCATION = {
+    name: '東京',
+    nameEn: 'Tokyo',
+    lat: 35.6895,
+    lon: 139.6917,
+    icon: '🗼'
+};
+
 function createDefaultSettings() {
     return {
         showMilkyWay: true,
@@ -86,7 +94,11 @@ class Planetarium {
         this.catalog = AstroCatalog.createDefault();
         this.starCatalog = this.catalog.getStars();
         this.starCatalogMap = this.catalog.getStarMap();
-        this.observer = { lat: 35.6895, lon: 139.6917 };
+        this.observerLocationInfo = { ...DEFAULT_OBSERVER_LOCATION };
+        this.observer = {
+            lat: DEFAULT_OBSERVER_LOCATION.lat,
+            lon: DEFAULT_OBSERVER_LOCATION.lon
+        };
         this.timeMode = 'realtime';
         this.timeScale = 240; // simulation seconds per real second (custom mode)
         this.dayScale = 1; // days per real second (fixed-time mode)
@@ -337,9 +349,22 @@ class Planetarium {
      * @param {number} lat - 緯度 (-90 〜 90)
      * @param {number} lon - 経度 (-180 〜 180)
      */
-    setObserverLocation(lat, lon) {
+    setObserverLocation(lat, lon, info = null) {
         this.observer.lat = lat;
         this.observer.lon = lon;
+        if (info && typeof info === 'object') {
+            this.observerLocationInfo = {
+                ...info,
+                lat,
+                lon
+            };
+        } else {
+            this.observerLocationInfo = {
+                ...(this.observerLocationInfo || {}),
+                lat,
+                lon
+            };
+        }
         // 恒星時を再計算
         this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, this.observer.lon);
         console.log(`観測地を設定: 緯度 ${lat.toFixed(4)}, 経度 ${lon.toFixed(4)}`);

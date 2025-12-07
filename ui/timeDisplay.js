@@ -1,3 +1,5 @@
+import { formatCoordinate } from '../data/locations.js';
+
 export function setupTimeDisplay(getPlanetarium) {
     const update = () => updateTimeDisplay(getPlanetarium);
     update();
@@ -12,8 +14,6 @@ export function setupTimeDisplay(getPlanetarium) {
 function updateTimeDisplay(getPlanetarium) {
     const ctx = typeof getPlanetarium === 'function' ? getPlanetarium() : null;
     if (!ctx) return;
-    const moonSystem = ctx.moonSystem;
-    if (!moonSystem) return;
     const now = typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date();
     const dateStr = now.toLocaleDateString('ja-JP', {
         year: 'numeric',
@@ -53,16 +53,33 @@ function updateTimeDisplay(getPlanetarium) {
             modeEl.textContent = `倍速再生 (${label})`;
         }
     }
-    const moonState = typeof moonSystem.syncWithContextTime === 'function'
-        ? moonSystem.syncWithContextTime()
-        : (() => {
-            const state = moonSystem.calculateState(now);
-            moonSystem.updateVisuals(state);
-            return state;
-        })();
-    const illuminationPct = Math.round(moonState.illumination * 100);
-    const infoEl = document.getElementById('celestial-info');
-    if (infoEl) {
-        infoEl.textContent = `${moonState.emoji} ${moonState.phaseName} | 輝面比 ${illuminationPct}%`;
+    const locationEl = document.getElementById('location-info');
+    if (locationEl) {
+        const lat = ctx.observer?.lat;
+        const lon = ctx.observer?.lon;
+        const locationInfo = ctx.observerLocationInfo || {};
+        const icon = locationInfo.icon || '📍';
+        const name = locationInfo.name || 'カスタム地点';
+        const englishName = locationInfo.nameEn ? ` (${locationInfo.nameEn})` : '';
+        const latText = Number.isFinite(lat) ? formatCoordinate(lat, true) : '---';
+        const lonText = Number.isFinite(lon) ? formatCoordinate(lon, false) : '---';
+        locationEl.textContent = `${icon} 観測地点: ${name}${englishName} | ${latText} / ${lonText}`;
     }
+
+    const moonSystem = ctx.moonSystem;
+    if (moonSystem) {
+        const moonState = typeof moonSystem.syncWithContextTime === 'function'
+            ? moonSystem.syncWithContextTime()
+            : (() => {
+                const state = moonSystem.calculateState(now);
+                moonSystem.updateVisuals(state);
+                return state;
+            })();
+        const illuminationPct = Math.round(moonState.illumination * 100);
+        const infoEl = document.getElementById('celestial-info');
+        if (infoEl) {
+            infoEl.textContent = `${moonState.emoji} ${moonState.phaseName} | 輝面比 ${illuminationPct}%`;
+        }
+    }
+}
 }
