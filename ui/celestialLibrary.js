@@ -213,7 +213,7 @@ function setupShelfScene() {
     scene.add(bounceLight);
 
     // Strong top-down shadow light to clearly drop book silhouettes on the shelf.
-    const shadowLight = new THREE.DirectionalLight(0xf8dab4, 7.65);
+    const shadowLight = new THREE.DirectionalLight(0xf8dab4, 3.65);
     shadowLight.position.set(6, 16, 9);
     shadowLight.target.position.set(0, 3.4, -1.2);
     shadowLight.castShadow = true;
@@ -236,33 +236,42 @@ function setupShelfScene() {
     const woodTextures = createWoodTextures(textureAnisotropy);
     applyWoodBackgroundTexture(screen, woodTextures.colorMap);
 
+    // Group that moves as the user scrolls so the wall and shelf travel with the books.
+    const shelfGroup = new THREE.Group();
+    scene.add(shelfGroup);
+
     // Back wall behind the shelf for a warmer, enclosed feel that matches the shelf surface.
-    const backWall = new THREE.Mesh(
-        new THREE.PlaneGeometry(220, 48),
-        new THREE.MeshStandardMaterial({
-            map: woodTextures.colorMap,
-            normalMap: woodTextures.normalMap,
-            color: 0x5a3b2a,
-            roughness: 0.62,
-            metalness: 0.05,
-            emissive: new THREE.Color(0x2d1a11).multiplyScalar(0.32),
-            normalScale: new THREE.Vector2(0.6, 0.9),
-            side: THREE.DoubleSide
-        })
-    );
+    const wallMaterial = new THREE.MeshStandardMaterial({
+        map: woodTextures.colorMap,
+        normalMap: woodTextures.normalMap,
+        color: 0x24150f,
+        roughness: 0.62,
+        metalness: 0.05,
+        emissive: new THREE.Color(0x130c08).multiplyScalar(0.5),
+        normalScale: new THREE.Vector2(0.6, 0.9),
+        side: THREE.DoubleSide
+    });
+
+    const backWall = new THREE.Mesh(new THREE.PlaneGeometry(220, 54), wallMaterial);
     backWall.position.set(0, 9, -12);
     backWall.receiveShadow = true;
-    scene.add(backWall);
+    shelfGroup.add(backWall);
+
+    // Lower wall panel uses the same material so the design stays consistent beneath the shelf line.
+    const lowerWall = new THREE.Mesh(new THREE.PlaneGeometry(220, 46), wallMaterial);
+    lowerWall.position.set(0, -28, -12.2);
+    lowerWall.receiveShadow = true;
+    shelfGroup.add(lowerWall);
 
     const shelfSurface = new THREE.Mesh(
         new THREE.BoxGeometry(160, 1.4, 12),
         new THREE.MeshStandardMaterial({
             map: woodTextures.colorMap,
             normalMap: woodTextures.normalMap,
-            color: 0x4d3223,
-            roughness: 0.52,
+            color: 0xb29070,
+            roughness: 0.5,
             metalness: 0.06,
-            emissive: new THREE.Color(0x8a5a3c).multiplyScalar(0.24),
+            emissive: new THREE.Color(0xc8a782).multiplyScalar(0.16),
             normalScale: new THREE.Vector2(0.8, 1.05)
         })
     );
@@ -270,17 +279,16 @@ function setupShelfScene() {
     shelfSurface.position.z = -1.8;
     shelfSurface.castShadow = true;
     shelfSurface.receiveShadow = true;
-    scene.add(shelfSurface);
+    shelfGroup.add(shelfSurface);
 
     const shelfShadow = new THREE.Mesh(
         new THREE.PlaneGeometry(180, 40),
         new THREE.ShadowMaterial({ color: 0x2a1a12, opacity: 0.75 })
     );
     shelfShadow.rotation.x = -Math.PI / 2;
-    shelfShadow.position.y = -0.1;
-    shelfShadow.position.z = -1.4;
+    shelfShadow.position.set( 0, -0.1, -1.4 );
     shelfShadow.receiveShadow = true;
-    scene.add(shelfShadow);
+    shelfGroup.add(shelfShadow);
 
     const shelfGlow = new THREE.Mesh(
         new THREE.PlaneGeometry(180, 36),
@@ -296,12 +304,12 @@ function setupShelfScene() {
     shelfGlow.rotation.x = -Math.PI / 2;
     shelfGlow.position.y = -0.4;
     shelfGlow.position.z = -2;
-    scene.add(shelfGlow);
+    shelfGroup.add(shelfGlow);
 
     const bookGroup = new THREE.Group();
     bookGroup.position.y = 4.2;
     bookGroup.position.z = -0.8;
-    scene.add(bookGroup);
+    shelfGroup.add(bookGroup);
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
@@ -310,6 +318,7 @@ function setupShelfScene() {
         renderer,
         scene,
         camera,
+        shelfGroup,
         bookGroup,
         container,
         raycaster,
@@ -381,7 +390,7 @@ function setupShelfScene() {
         const elapsed = shelfScene.clock.getElapsedTime();
         shelfScene.currentOffset += (shelfScene.targetOffset - shelfScene.currentOffset) * 0.08;
         const offset = shelfScene.baseOffset + shelfScene.currentOffset;
-        bookGroup.position.x = offset;
+        shelfGroup.position.x = offset;
 
         bookGroup.children.forEach((book, idx) => {
             const baseRotation = book.userData?.baseRotation;
@@ -463,9 +472,9 @@ function updateShelfBooks(contents) {
 function createBookMesh(content, index, anisotropy = 4) {
     const baseColor = pickAccentColor(content.name, index);
     const coverColor = new THREE.Color(baseColor);
-    coverColor.offsetHSL(0.01, -0.08, 0.06);
+    coverColor.offsetHSL(0, -0.04, -0.08);
     const accentColor = new THREE.Color(baseColor);
-    accentColor.offsetHSL(0.03, 0.08, 0.1);
+    accentColor.offsetHSL(0.015, 0.04, 0.02);
 
     const geometry = new THREE.BoxGeometry(1.2, 9.4, 3.0);   // Width, Height, Depth of the book
     const spineTexture = createSpineTexture(
@@ -527,75 +536,199 @@ function createSpineTexture(title, subtitle, baseColor, accentColor) {
     canvas.width = 512;
     canvas.height = 2048;
     const ctx = canvas.getContext('2d');
+    const { width, height } = canvas;
 
-    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    gradient.addColorStop(0, toRgba(baseColor, 1.0));
-    gradient.addColorStop(0.38, toRgba(accentColor, 1.0));
-    gradient.addColorStop(0.58, toRgba(baseColor, 1.0));
-    gradient.addColorStop(1, toRgba(accentColor, 0.94));
+    // Deep leather base with subtle warm banding.
+    const gradient = ctx.createLinearGradient(0, 0, 0, height);
+    gradient.addColorStop(0, toRgba(baseColor, 1));
+    gradient.addColorStop(0.22, toRgba(accentColor, 0.95));
+    gradient.addColorStop(0.5, toRgba(baseColor, 0.98));
+    gradient.addColorStop(0.78, toRgba(accentColor, 0.96));
+    gradient.addColorStop(1, toRgba(baseColor, 1));
     ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, width, height);
 
-    // Foil-like sheen that catches the light as books tilt.
-    const foil = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-    foil.addColorStop(0, 'rgba(255, 245, 230, 0.18)');
-    foil.addColorStop(0.48, 'rgba(255, 255, 255, 0.06)');
-    foil.addColorStop(1, 'rgba(190, 220, 255, 0.14)');
+    // Darkened edges to give the spine thickness.
+    const edgeShade = ctx.createLinearGradient(0, 0, width, 0);
+    edgeShade.addColorStop(0, 'rgba(10, 6, 4, 0.52)');
+    edgeShade.addColorStop(0.22, 'rgba(10, 6, 4, 0)');
+    edgeShade.addColorStop(0.78, 'rgba(10, 6, 4, 0)');
+    edgeShade.addColorStop(1, 'rgba(10, 6, 4, 0.48)');
+    ctx.fillStyle = edgeShade;
+    ctx.fillRect(0, 0, width, height);
+
+    // Central burnished bulge.
+    const centerGlow = ctx.createRadialGradient(width / 2, height / 2, width * 0.1, width / 2, height / 2, width * 0.8);
+    centerGlow.addColorStop(0, 'rgba(255, 226, 200, 0.08)');
+    centerGlow.addColorStop(1, 'rgba(0, 0, 0, 0.22)');
+    ctx.fillStyle = centerGlow;
+    ctx.fillRect(0, 0, width, height);
+
+    // Leather grain and scuffs for weight.
+    ctx.save();
+    ctx.globalAlpha = 0.12;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    for (let i = 0; i < 1200; i++) {
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        const len = 14 + Math.random() * 34;
+        const curve = (Math.random() - 0.5) * 0.4;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.quadraticCurveTo(x + len * 0.3, y + len * curve, x + len, y + len * 0.12);
+        ctx.stroke();
+    }
+    ctx.globalAlpha = 0.08;
+    for (let i = 0; i < 600; i++) {
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        const size = 10 + Math.random() * 22;
+        const shade = Math.random() > 0.5 ? 'rgba(0, 0, 0, 0.35)' : 'rgba(255, 255, 255, 0.16)';
+        ctx.fillStyle = shade;
+        ctx.fillRect(x, y, size * 0.4, size);
+    }
+    ctx.restore();
+
+    // Raised bands along the spine.
+    const bandHeights = [0.2, 0.8];
+    bandHeights.forEach((ratio) => {
+        const bandY = ratio * height;
+        const bandH = 70;
+        const band = ctx.createLinearGradient(0, bandY - bandH / 2, 0, bandY + bandH / 2);
+        band.addColorStop(0, 'rgba(0, 0, 0, 0.55)');
+        band.addColorStop(0.35, 'rgba(255, 235, 200, 0.28)');
+        band.addColorStop(0.5, 'rgba(255, 255, 255, 0.42)');
+        band.addColorStop(0.65, 'rgba(255, 235, 200, 0.26)');
+        band.addColorStop(1, 'rgba(0, 0, 0, 0.5)');
+        ctx.fillStyle = band;
+        ctx.fillRect(60, bandY - bandH / 2, width - 120, bandH);
+
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+        ctx.lineWidth = 6;
+        ctx.strokeRect(60, bandY - bandH / 2, width - 120, bandH);
+    });
+
+    // Top and bottom metal caps.
+    const capHeight = 94;
+    ['top', 'bottom'].forEach((pos, idx) => {
+        const y = pos === 'top' ? 18 : height - capHeight - 18;
+        const grad = ctx.createLinearGradient(0, y, 0, y + capHeight);
+        grad.addColorStop(0, 'rgba(255, 248, 230, 0.38)');
+        grad.addColorStop(0.45, toRgba(accentColor, 0.66));
+        grad.addColorStop(0.9, 'rgba(40, 26, 16, 0.7)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(32, y, width - 64, capHeight);
+
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.lineWidth = 6;
+        ctx.strokeRect(32, y, width - 64, capHeight);
+
+        const rivetXs = [width * 0.22, width * 0.5, width * 0.78];
+        rivetXs.forEach((rx) => {
+            const ry = y + capHeight * (idx === 0 ? 0.3 : 0.7);
+            const rivet = ctx.createRadialGradient(rx, ry, 4, rx, ry, 16);
+            rivet.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+            rivet.addColorStop(0.4, 'rgba(210, 210, 210, 0.8)');
+            rivet.addColorStop(1, 'rgba(40, 26, 16, 0.8)');
+            ctx.fillStyle = rivet;
+            ctx.beginPath();
+            ctx.arc(rx, ry, 14, 0, Math.PI * 2);
+            ctx.fill();
+        });
+    });
+
+    // Ornamental crest at center.
+    const crestY = height * 0.52;
+    const crestR = 86;
+    const crest = ctx.createRadialGradient(width * 0.28, crestY, crestR * 0.25, width * 0.28, crestY, crestR);
+    crest.addColorStop(0, 'rgba(255, 242, 220, 0.65)');
+    crest.addColorStop(0.4, 'rgba(255, 220, 150, 0.38)');
+    crest.addColorStop(1, 'rgba(0, 0, 0, 0.38)');
+    ctx.fillStyle = crest;
+    ctx.beginPath();
+    ctx.arc(width * 0.28, crestY, crestR, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.save();
+    ctx.translate(width * 0.28, crestY);
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillStyle = 'rgba(40, 26, 16, 0.85)';
+    ctx.beginPath();
+    for (let i = 0; i < 8; i++) {
+        const angle = (i / 8) * Math.PI * 2;
+        const inner = 24;
+        const outer = 56;
+        ctx.lineTo(Math.cos(angle) * outer, Math.sin(angle) * outer);
+        ctx.lineTo(Math.cos(angle + Math.PI / 8) * inner, Math.sin(angle + Math.PI / 8) * inner);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // Heavy frame lines.
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
+    ctx.lineWidth = 9;
+    ctx.strokeRect(24, 24, width - 48, height - 48);
+
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.55)';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(40, 40, width - 80, height - 80);
+
+    // Foil sheen that catches the light as books tilt.
+    const foil = ctx.createLinearGradient(0, 0, width, height);
+    foil.addColorStop(0, 'rgba(255, 245, 230, 0.22)');
+    foil.addColorStop(0.48, 'rgba(255, 255, 255, 0.08)');
+    foil.addColorStop(1, 'rgba(190, 220, 255, 0.18)');
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
     ctx.fillStyle = foil;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, width, height);
     ctx.restore();
-
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
-    ctx.lineWidth = 6;
-    ctx.strokeRect(26, 26, canvas.width - 52, canvas.height - 52);
-
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(48, 48, canvas.width - 96, canvas.height - 96);
 
     // Subtle diagonal brushed texture.
     ctx.save();
     ctx.globalCompositeOperation = 'overlay';
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
     ctx.lineWidth = 2;
-    for (let y = -canvas.height; y < canvas.height * 1.5; y += 56) {
+    for (let y = -height; y < height * 1.5; y += 56) {
         ctx.beginPath();
         ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y + canvas.width * 0.5);
+        ctx.lineTo(width, y + width * 0.5);
         ctx.stroke();
     }
     ctx.restore();
 
     // Vignette for depth.
-    const vignette = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    vignette.addColorStop(0, 'rgba(0, 0, 0, 0.18)');
+    const vignette = ctx.createLinearGradient(0, 0, 0, height);
+    vignette.addColorStop(0, 'rgba(0, 0, 0, 0.22)');
     vignette.addColorStop(0.12, 'rgba(0, 0, 0, 0)');
     vignette.addColorStop(0.88, 'rgba(0, 0, 0, 0)');
-    vignette.addColorStop(1, 'rgba(0, 0, 0, 0.16)');
+    vignette.addColorStop(1, 'rgba(0, 0, 0, 0.2)');
     ctx.save();
     ctx.globalCompositeOperation = 'multiply';
     ctx.fillStyle = vignette;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, width, height);
     ctx.restore();
 
     const safeTitle = (title || '').trim() || '星座';
     const titleLength = Array.from(safeTitle).length;
     const titleSize = Math.max(84, Math.min(96, 100 - Math.max(0, titleLength - 6) * 4));
     ctx.save();
-    ctx.translate(canvas.width * 0.5, canvas.height / 2);
+    ctx.translate(width * 0.5, height / 2);
     ctx.rotate(-Math.PI / 2);
     ctx.font = `${titleSize}px "Zen Kaku Gothic New", "Space Grotesk", sans-serif`;
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
+    const titleGradient = ctx.createLinearGradient(0, -width * 0.12, 0, width * 0.12);
+    titleGradient.addColorStop(0, 'rgba(255, 250, 240, 0.95)');
+    titleGradient.addColorStop(1, 'rgba(210, 224, 255, 0.85)');
+    ctx.fillStyle = titleGradient;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.22)';
-    ctx.shadowBlur = 3;
-    ctx.lineWidth = 4;
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+    ctx.shadowBlur = 3.5;
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.45)';
     ctx.strokeText(safeTitle, 0, 0);
-    ctx.shadowBlur = 0;
+    ctx.shadowBlur = 0.5;
     ctx.fillText(safeTitle, 0, 0);
     ctx.restore();
 
@@ -603,19 +736,19 @@ function createSpineTexture(title, subtitle, baseColor, accentColor) {
     const subtitleLength = Array.from(safeSubtitle).length;
     const subtitleSize = Math.max(34, Math.min(50, 56 - Math.max(0, subtitleLength - 8) * 2));
     ctx.save();
-    ctx.translate(canvas.width * 0.82, canvas.height / 2);
+    ctx.translate(width * 0.82, height / 2);
     ctx.rotate(-Math.PI / 2);
     ctx.font = `${subtitleSize}px "Space Grotesk", "Zen Kaku Gothic New", sans-serif`;
-    ctx.fillStyle = 'rgba(210, 230, 255, 0.8)';
+    ctx.fillStyle = 'rgba(210, 230, 255, 0.85)';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
-    ctx.shadowBlur = 2;
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.28)';
-    ctx.strokeText(safeSubtitle, 0, canvas.width * -0.06);
-    ctx.shadowBlur = 0;
-    ctx.fillText(safeSubtitle, 0, canvas.width * -0.06);
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.22)';
+    ctx.shadowBlur = 2.4;
+    ctx.lineWidth = 3.6;
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.32)';
+    ctx.strokeText(safeSubtitle, 0, width * -0.06);
+    ctx.shadowBlur = 0.6;
+    ctx.fillText(safeSubtitle, 0, width * -0.06);
     ctx.restore();
 
     return new THREE.CanvasTexture(canvas);
@@ -630,7 +763,7 @@ function toRgba(color, alpha = 1) {
 }
 
 function pickAccentColor(name, index) {
-    const palette = [0xb19373, 0x8c6c5a, 0x7d8aa5, 0x6a8270, 0xc2a489, 0x6f6785, 0x9cb7c7];
+    const palette = [0x3f2b24, 0x4b332b, 0x2f3b4f, 0x2b3c32, 0x553a2a, 0x2e273d, 0x3f5667];
     const hash = Array.from(name || '').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return palette[(hash + index) % palette.length];
 }

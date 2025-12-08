@@ -1894,7 +1894,7 @@
             border-color: rgba(180, 200, 255, 0.6);
         }
 
-        /* 星空の図書館画面 */
+        /* 星図書架画面 */
         #library-screen {
             position: fixed;
             inset: 0;
@@ -1971,37 +1971,22 @@
             display: flex;
             flex-direction: column;
             gap: 18px;
-            padding: 32px 46px 40px;
-            max-width: 1260px;
+            padding: 24px 32px 36px;
+            max-width: 1180px;
             width: 100%;
-            margin: 0 auto;
-            min-height: 100%;
-            background:
-                linear-gradient(140deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
-                radial-gradient(160% 140% at 50% 18%, rgba(255, 224, 196, 0.12), transparent 50%),
-                radial-gradient(90% 120% at 50% 120%, rgba(0, 0, 0, 0.48), rgba(0, 0, 0, 0.62));
-            border: 1px solid rgba(255, 224, 192, 0.22);
-            box-shadow:
-                0 30px 90px rgba(0, 0, 0, 0.46),
-                inset 0 1px 0 rgba(255, 255, 255, 0.14);
-            border-radius: 22px;
-            backdrop-filter: blur(0px) saturate(115%);
-            isolation: isolate;
-            overflow: hidden;
+            margin: 28px auto 0;
+            background: none;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            min-height: auto;
+            backdrop-filter: none;
+            isolation: unset;
+            overflow: visible;
         }
 
         .library-overlay::after {
-            content: '';
-            position: absolute;
-            inset: 18px;
-            border-radius: 18px;
-            background:
-                radial-gradient(240px 140px at 20% 18%, rgba(255, 244, 230, 0.12), transparent 60%),
-                radial-gradient(320px 200px at 78% 20%, rgba(186, 230, 255, 0.08), transparent 60%);
-            opacity: 0.6;
-            pointer-events: none;
-            z-index: 0;
-            mix-blend-mode: screen;
+            content: none;
         }
 
         .library-header {
@@ -2207,7 +2192,7 @@
             margin-right: 8px;
         }
 
-        /* 星空の図書館 詳細画面 */
+        /* 星図書架 詳細画面 */
         #library-detail-screen {
             position: fixed;
             inset: 0;
@@ -3107,7 +3092,7 @@
                 </div>
                 <div class="mode-card">
                     <span class="mode-tagline">CELESTIAL LIBRARY</span>
-                    <h3>星空の図書館</h3>
+                    <h3>星図書架</h3>
                     <p>プラネタリウムやクロノスカイで出会った星座の説明を集める読書室。気になった星座をクリックして、本棚を満たしていきましょう。</p>
                     <button id="mode-library">本棚をひらく</button>
                 </div>
@@ -3135,7 +3120,7 @@
         </div>
     </div>
 
-    <!-- 星空の図書館画面 -->
+    <!-- 星図書架画面 -->
     <div id="library-screen" class="hidden">
         <div id="library-three-container"></div>
         <div class="library-overlay">
@@ -3164,7 +3149,7 @@
         <div class="library-detail-header">
             <div class="library-detail-hero">
                 <div class="library-pill">CELESTIAL LIBRARY</div>
-                <h2 class="library-detail-title">星空の図書館</h2>
+                <h2 class="library-detail-title">星図書架</h2>
                 <p class="library-detail-subtitle">カードを開いて、星座の物語と観測の手がかりをじっくり読む別画面に切り替わります。</p>
             </div>
             <div class="library-detail-actions">
