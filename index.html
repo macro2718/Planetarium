@@ -227,12 +227,21 @@
             text-shadow: 0 0 18px rgba(140, 200, 255, 0.5);
         }
 
-        /* 隠し画面中はタイトル群を消しておく（ホーム/モード/ロケーション/アーカイブなど） */
+        /* 星空のキャンバスが非表示の間は、星空用UIも隠しておく */
         body:not(.planetarium-active) #title,
         body:not(.planetarium-active) #subtitle {
             opacity: 0;
             pointer-events: none;
             transform: translate(-50%, 10px);
+            transition: opacity var(--screen-fade-duration) var(--screen-fade-ease), transform var(--screen-fade-duration) var(--screen-fade-ease);
+        }
+
+        body:not(.planetarium-active) #controls,
+        body:not(.planetarium-active) #time-display,
+        body:not(.planetarium-active) #info-panel {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
             transition: opacity var(--screen-fade-duration) var(--screen-fade-ease), transform var(--screen-fade-duration) var(--screen-fade-ease);
         }
 
