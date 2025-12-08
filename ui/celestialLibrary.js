@@ -248,17 +248,15 @@ function setupShelfScene() {
         clock: new THREE.Clock()
     };
 
-    const handleWheel = (event) => {
-        shelfScene.targetOffset = clampOffset(shelfScene.targetOffset - event.deltaY * 0.01);
-    };
-
     let isDragging = false;
     let lastX = 0;
+    let dragged = false;
 
     const handlePointerDown = (event) => {
         if (event.target.closest('.library-back-btn')) return;
         isDragging = true;
         lastX = event.clientX;
+        dragged = false;
     };
 
     const handlePointerMove = (event) => {
@@ -267,6 +265,9 @@ function setupShelfScene() {
             const delta = (event.clientX - lastX) * 0.03;
             lastX = event.clientX;
             shelfScene.targetOffset = clampOffset(shelfScene.targetOffset + delta);
+            if (Math.abs(delta) > 0.0001) {
+                dragged = true;
+            }
         }
         updateHover();
     };
@@ -277,12 +278,12 @@ function setupShelfScene() {
 
     const handleClick = (event) => {
         if (event.target.closest('.library-back-btn')) return;
+        if (dragged) return;
         if (shelfScene.hover?.userData?.content) {
             handleBookSelect(shelfScene.hover.userData.content, true);
         }
     };
 
-    screen.addEventListener('wheel', handleWheel, { passive: true });
     screen.addEventListener('pointerdown', handlePointerDown);
     screen.addEventListener('pointermove', handlePointerMove);
     screen.addEventListener('pointerup', handlePointerUp);

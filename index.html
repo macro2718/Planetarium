@@ -2059,48 +2059,6 @@
             border-color: rgba(180, 200, 255, 0.6);
         }
 
-        .library-shelf-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            padding: 14px 16px;
-            border-radius: 14px;
-            background: rgba(6, 12, 26, 0.7);
-            border: 1px solid rgba(160, 200, 255, 0.18);
-            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
-        }
-
-        .library-hint {
-            font-size: 12px;
-            letter-spacing: 2px;
-            color: rgba(220, 235, 255, 0.82);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .library-rail {
-            flex: 1;
-            height: 6px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.06);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .library-rail .rail-glow {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(140, 210, 255, 0.4), rgba(120, 240, 230, 0.35), transparent);
-            animation: railSweep 8s linear infinite;
-        }
-
-        @keyframes railSweep {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(100%); }
-        }
-
         .library-chip {
             display: inline-flex;
             align-items: center;
@@ -2366,16 +2324,6 @@
             .library-actions {
                 width: 100%;
                 justify-content: space-between;
-            }
-            .library-shelf-bar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .library-hint {
-                width: 100%;
-            }
-            .library-rail {
-                width: 100%;
             }
         }
 
@@ -3112,10 +3060,6 @@
                     <div class="library-sigil">✶</div>
                     <button class="library-back-btn" id="library-back">← モード選択へ戻る</button>
                 </div>
-            </div>
-            <div class="library-shelf-bar">
-                <div class="library-hint">横スクロールやドラッグで背表紙を流し、気になる星座名をクリックすると物語が開きます</div>
-                <div class="library-rail"><span class="rail-glow"></span></div>
             </div>
             <div class="library-empty" id="library-empty">
                 まだ収蔵された星座はありません。星座をクリックするとここに解放されていきます。
