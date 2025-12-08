@@ -261,6 +261,10 @@ function setupShelfScene() {
 
     const handlePointerMove = (event) => {
         updatePointer(event);
+        if (isDragging && event.buttons === 0) {
+            // Stop dragging if the pointer release wasn't captured (e.g., pointerup on another element)
+            isDragging = false;
+        }
         if (isDragging) {
             const delta = (event.clientX - lastX) * 0.03;
             lastX = event.clientX;
@@ -288,6 +292,7 @@ function setupShelfScene() {
     screen.addEventListener('pointermove', handlePointerMove);
     screen.addEventListener('pointerup', handlePointerUp);
     screen.addEventListener('pointerleave', handlePointerUp);
+    screen.addEventListener('pointercancel', handlePointerUp);
     screen.addEventListener('click', handleClick);
 
     const resize = () => resizeShelfScene();
