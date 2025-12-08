@@ -316,6 +316,16 @@ function setupShelfScene() {
     bookGroup.position.z = -0.8;
     shelfGroup.add(bookGroup);
 
+    // Static fixtures that travel with the books (e.g., shelf dividers).
+    const fixtureGroup = new THREE.Group();
+    fixtureGroup.position.copy(bookGroup.position);
+    shelfGroup.add(fixtureGroup);
+
+    const shelfDivider = createShelfDivider(woodTextures);
+    shelfDivider.position.set(-2.5, 0.35, -0.85);
+    shelfDivider.visible = false;
+    fixtureGroup.add(shelfDivider);
+
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
 
@@ -325,6 +335,8 @@ function setupShelfScene() {
         camera,
         shelfGroup,
         bookGroup,
+        fixtureGroup,
+        leftDivider: shelfDivider,
         container,
         raycaster,
         pointer,
@@ -438,6 +450,18 @@ function updateShelfBooks(contents) {
     if (!shelfScene) setupShelfScene();
     if (!shelfScene) return;
 
+    const divider = shelfScene.leftDivider;
+    if (divider) {
+        divider.visible = contents.length > 0;
+        if (contents.length) {
+            const metrics = divider.userData?.metrics || { width: 0.62 };
+            const bookWidth = 1.2;
+            const gap = 0.18;
+            const leftPad = 1;
+            divider.position.x = -(bookWidth / 2 + gap + (metrics.width || 0) / 2 + leftPad);
+        }
+    }
+
     const group = shelfScene.bookGroup;
     while (group.children.length) {
         const child = group.children[0];
@@ -534,6 +558,58 @@ function createBookMesh(content, index, anisotropy = 4) {
         }
     };
     return mesh;
+}
+
+function createShelfDivider(woodTextures) {
+    const metrics = { width: 0.62, height: 11.2, depth: 5.2 };
+    const dividerMaterial = new THREE.MeshStandardMaterial({
+        map: woodTextures?.colorMap || null,
+        normalMap: woodTextures?.normalMap || null,
+        color: 0xb29070,
+        roughness: 0.5,
+        metalness: 0.06,
+        emissive: new THREE.Color(0xc8a782).multiplyScalar(0.16),
+        normalScale: new THREE.Vector2(0.8, 1.05)
+    });
+
+    const dividerGeometry = createRoundedDividerGeometry(metrics);
+    const divider = new THREE.Mesh(dividerGeometry, dividerMaterial);
+    divider.castShadow = true;
+    divider.receiveShadow = true;
+    divider.userData = { ...(divider.userData || {}), metrics };
+    return divider;
+}
+
+function createRoundedDividerGeometry(metrics) {
+    const width = metrics.width || 0.62;
+    const height = metrics.height || 11.2;
+    const depth = metrics.depth || 5.2;
+    const radius = Math.min(width, height) * 0.18;
+    const halfW = width / 2;
+    const halfH = height / 2;
+    const depthRadius = Math.min(depth * 0.10, 0.9); // deeper rounding for front/back edges
+
+    const shape = new THREE.Shape();
+    shape.moveTo(-halfW, -halfH);
+    shape.lineTo(-halfW, halfH - radius);
+    shape.quadraticCurveTo(-halfW, halfH, -halfW + radius, halfH);
+    shape.lineTo(halfW - radius, halfH);
+    shape.quadraticCurveTo(halfW, halfH, halfW, halfH - radius);
+    shape.lineTo(halfW, -halfH);
+    shape.lineTo(-halfW, -halfH);
+
+    const geometry = new THREE.ExtrudeGeometry(shape, {
+        depth,
+        bevelEnabled: true,
+        bevelSegments: 10,
+        bevelThickness: depthRadius,
+        bevelSize: depthRadius,
+        bevelOffset: 0,
+        curveSegments: 16
+    });
+    geometry.center();
+    geometry.computeVertexNormals();
+    return geometry;
 }
 
 function createSpineTexture(title, subtitle, baseColor, accentColor) {
