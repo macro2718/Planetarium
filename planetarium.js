@@ -27,6 +27,7 @@ import { initLocationSelector, setPlanetarium } from './ui/locationSelector.js';
 import { initModeSelector } from './ui/modeSelector.js';
 import { initEventArchive, setArchivePlanetarium } from './ui/eventArchive.js';
 import { initCelestialLibrary } from './ui/celestialLibrary.js';
+import { initHomeScene } from './ui/homeScene.js';
 import {
     registerPlanetaria,
     setActivePlanetarium,
@@ -719,6 +720,7 @@ initEventArchive({
     }
 });
 initCelestialLibrary();
+initHomeScene();
 
 initModeSelector({
     onEnterLive: () => setActivePlanetarium('live'),

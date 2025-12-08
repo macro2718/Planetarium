@@ -718,6 +718,23 @@
             inset: 0;
             overflow: hidden;
             pointer-events: none;
+            z-index: 0;
+        }
+
+        #home-three-container {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            filter: saturate(115%) brightness(1.08);
+        }
+
+        #home-three-container canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            opacity: 0.95;
         }
 
         .portal-arch {
@@ -901,6 +918,7 @@
             width: min(90vw, 900px);
             overflow: hidden;
             animation: floatGentle 6s ease-in-out infinite;
+            z-index: 3;
         }
 
         .home-content::before {
@@ -2993,6 +3011,7 @@
             <span class="star-particle" style="bottom: 35%; right: 35%; --duration: 2.7s; --delay: 1.3s;"></span>
             <span class="entrance-floor"></span>
         </div>
+        <div id="home-three-container"></div>
         <div class="home-content">
             <div class="home-badge">Virtual Observatory</div>
             <h1 class="home-title">PLANETARIUM</h1>
