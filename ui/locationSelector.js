@@ -1,4 +1,6 @@
 // 場所選択画面のUI制御
+import * as THREE from '../three.module.js';
+import { OrbitControls } from '../vendor/three/addons/controls/OrbitControls.js';
 import { LOCATIONS, REGION_LABELS, formatCoordinate } from '../data/locations.js';
 import {
     destroyAllPlanetaria,
@@ -10,19 +12,27 @@ import {
 
 let currentPlanetarium = null;
 let onLocationSelected = null;
+let selectedLocation = LOCATIONS[0];
+let locationGlobe = null;
+const locationCards = new Map();
+
 const SCREEN_FADE_MS = 600; // Keep in sync with CSS --screen-fade-duration
 
 /**
  * 場所選択システムを初期化
- * @param {Object} options 
+ * @param {Object} options
  * @param {Function} options.onSelect - 場所選択時のコールバック
  */
 export function initLocationSelector(options = {}) {
     onLocationSelected = options.onSelect;
 
     document.body.classList.add('home-visible');
-    setupLocationGrid();
+    setupLocationList();
     setupBackButton();
+    setupObserveButton();
+
+    locationGlobe = new LocationGlobe('location-globe');
+    setSelectedLocation(selectedLocation);
 }
 
 /**
@@ -33,17 +43,19 @@ export function setPlanetarium(planetarium) {
 }
 
 /**
- * 場所カードを生成してグリッドに追加
+ * 場所カードを生成してリストに追加
  */
-function setupLocationGrid() {
-    const grid = document.getElementById('location-grid');
-    if (!grid) return;
+function setupLocationList() {
+    const list = document.getElementById('location-list');
+    if (!list) return;
 
-    grid.innerHTML = '';
+    list.innerHTML = '';
+    locationCards.clear();
 
     LOCATIONS.forEach(location => {
         const card = createLocationCard(location);
-        grid.appendChild(card);
+        list.appendChild(card);
+        locationCards.set(location.id, card);
     });
 }
 
@@ -55,45 +67,85 @@ function createLocationCard(location) {
     card.className = 'location-card';
     card.dataset.region = location.region;
     card.dataset.locationId = location.id;
+    card.tabIndex = 0;
 
     const regionLabel = REGION_LABELS[location.region] || location.region;
-    
+
     card.innerHTML = `
-        <div class="location-card-header">
-            <div class="location-region-chip">${regionLabel}</div>
-        </div>
-        <div class="location-card-name">
-            <span class="jp">${location.name}</span>
-            <span class="en">${location.nameEn}</span>
-        </div>
-        <div class="location-card-description">${location.description}</div>
-        <div class="location-card-meta">
-            <div class="meta-block">
-                <span class="meta-label">LATITUDE</span>
-                <span class="meta-value">${formatCoordinate(location.lat, true)}</span>
+        <div class="location-card-row">
+            <div class="location-card-icon" aria-hidden="true">${location.icon || '✶'}</div>
+            <div class="location-card-body">
+                <div class="location-card-title">
+                    <span class="location-card-name">${location.name}</span>
+                    <span class="location-region-chip">${regionLabel}</span>
+                </div>
+                <div class="location-card-en">${location.nameEn}</div>
+                <p class="location-card-description">${location.description}</p>
+                <div class="location-card-coords">
+                    <span>LAT ${formatCoordinate(location.lat, true)}</span>
+                    <span> / LON ${formatCoordinate(location.lon, false)}</span>
+                </div>
             </div>
-            <div class="meta-block">
-                <span class="meta-label">LONGITUDE</span>
-                <span class="meta-value">${formatCoordinate(location.lon, false)}</span>
-            </div>
-        </div>
-        <div class="location-card-foot">
-            <span class="foot-icon">✶</span>
-            <span>CELESTIAL GATE</span>
+            <div class="location-card-arrow" aria-hidden="true">→</div>
         </div>
     `;
 
     card.addEventListener('click', () => {
-        selectLocation(location);
+        setSelectedLocation(location);
+    });
+    card.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            setSelectedLocation(location);
+        }
     });
 
     return card;
 }
 
+function setSelectedLocation(location) {
+    selectedLocation = location;
+    locationCards.forEach((card, id) => {
+        card.classList.toggle('selected', id === location.id);
+    });
+    updateSelectionSummary(location);
+    locationGlobe?.focusLocation(location);
+}
+
+function updateSelectionSummary(location) {
+    const nameEl = document.getElementById('location-selected-name');
+    const coordsEl = document.getElementById('location-selected-coords');
+    const chipEl = document.getElementById('location-selected-region');
+
+    if (nameEl) {
+        nameEl.textContent = `${location.icon || '✶'} ${location.name}`;
+    }
+    if (coordsEl) {
+        coordsEl.textContent = `${formatCoordinate(location.lat, true)} / ${formatCoordinate(location.lon, false)}`;
+    }
+    if (chipEl) {
+        chipEl.textContent = REGION_LABELS[location.region] || location.region;
+    }
+}
+
+/**
+ * 「観測する」ボタンのイベント設定
+ */
+function setupObserveButton() {
+    const observeBtn = document.getElementById('location-observe');
+    if (!observeBtn) return;
+
+    observeBtn.addEventListener('click', () => {
+        if (selectedLocation) {
+            startObservation(selectedLocation);
+        }
+    });
+}
+
 /**
  * 場所を選択してプラネタリウムを開始
  */
-function selectLocation(location) {
+function startObservation(location) {
     // Planetariumの観測地を更新
     if (currentPlanetarium) {
         setActivePlanetarium('live');
@@ -200,6 +252,8 @@ export function showLocationScreen() {
     if (homeScreen) {
         homeScreen.classList.add('hidden');
     }
+
+    setSelectedLocation(selectedLocation || LOCATIONS[0]);
 }
 
 /**
@@ -209,5 +263,154 @@ export function hideLocationScreen() {
     const locationScreen = document.getElementById('location-screen');
     if (locationScreen) {
         locationScreen.classList.add('hidden');
+    }
+}
+
+class LocationGlobe {
+    constructor(containerId) {
+        this.container = document.getElementById(containerId);
+        if (!this.container) return;
+
+        this.scene = new THREE.Scene();
+        this.renderer = new THREE.WebGLRenderer({
+            antialias: true,
+            alpha: true
+        });
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight || 1);
+        this.container.appendChild(this.renderer.domElement);
+
+        const aspect = this.container.clientWidth / Math.max(this.container.clientHeight, 1);
+        this.camera = new THREE.PerspectiveCamera(40, aspect, 0.1, 50);
+        this.camera.position.set(0, 0, 3.6);
+
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        this.controls.enableDamping = true;
+        this.controls.dampingFactor = 0.06;
+        this.controls.rotateSpeed = 0.5;
+        this.controls.enablePan = false;
+        this.controls.enableZoom = false;
+        this.controls.minPolarAngle = Math.PI * 0.16;
+        this.controls.maxPolarAngle = Math.PI - Math.PI * 0.16;
+
+        this.globeGroup = new THREE.Group();
+        this.scene.add(this.globeGroup);
+
+        this.addLights();
+        this.addGlobe();
+        this.pin = this.createPin();
+        this.globeGroup.add(this.pin);
+
+        this.resizeHandler = () => this.onResize();
+        window.addEventListener('resize', this.resizeHandler);
+
+        this.animate = this.animate.bind(this);
+        this.animate();
+    }
+
+    addLights() {
+        const ambient = new THREE.AmbientLight(0xbdd4ff, 0.75);
+        const rim = new THREE.DirectionalLight(0xffffff, 1.05);
+        rim.position.set(4, 2, 3);
+        const bottomFill = new THREE.DirectionalLight(0x5bb5ff, 0.35);
+        bottomFill.position.set(-2, -3, -2);
+        this.scene.add(ambient, rim, bottomFill);
+    }
+
+    addGlobe() {
+        const surface = new THREE.Mesh(
+            new THREE.SphereGeometry(0.92, 64, 64),
+            new THREE.MeshStandardMaterial({
+                color: new THREE.Color('#183463'),
+                roughness: 0.9,
+                metalness: 0.08,
+                emissive: new THREE.Color('#0f2243'),
+                emissiveIntensity: 0.3
+            })
+        );
+
+        const wireframe = new THREE.Mesh(
+            new THREE.SphereGeometry(0.93, 32, 32),
+            new THREE.MeshBasicMaterial({
+                color: new THREE.Color('#9fe0ff'),
+                wireframe: true,
+                transparent: true,
+                opacity: 0.15
+            })
+        );
+
+        const atmosphere = new THREE.Mesh(
+            new THREE.SphereGeometry(1.02, 48, 48),
+            new THREE.MeshBasicMaterial({
+                color: new THREE.Color('#9fe0ff'),
+                transparent: true,
+                opacity: 0.12,
+                blending: THREE.AdditiveBlending
+            })
+        );
+
+        const ring = new THREE.Mesh(
+            new THREE.RingGeometry(1.05, 1.28, 96),
+            new THREE.MeshBasicMaterial({
+                color: new THREE.Color('#9fe0ff'),
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.08,
+                blending: THREE.AdditiveBlending
+            })
+        );
+        ring.rotation.x = Math.PI / 2;
+
+        this.globeGroup.add(surface);
+        this.globeGroup.add(wireframe);
+        this.globeGroup.add(atmosphere);
+        this.globeGroup.add(ring);
+    }
+
+    createPin() {
+        const pinGeo = new THREE.SphereGeometry(0.035, 32, 32);
+        const pinMat = new THREE.MeshStandardMaterial({
+            color: new THREE.Color('#f0b9ff'),
+            emissive: new THREE.Color('#f0b9ff'),
+            emissiveIntensity: 0.8,
+            roughness: 0.4,
+            metalness: 0.2
+        });
+        return new THREE.Mesh(pinGeo, pinMat);
+    }
+
+    focusLocation(location) {
+        if (!location) return;
+        const { x, y, z } = this.latLonToVector(location.lat, location.lon, 0.92);
+        this.pin.position.set(x, y, z);
+        this.controls.target.set(0, 0, 0);
+    }
+
+    latLonToVector(lat, lon, radius) {
+        const phi = THREE.MathUtils.degToRad(90 - lat);
+        const theta = THREE.MathUtils.degToRad(lon + 180);
+        return {
+            x: -radius * Math.sin(phi) * Math.cos(theta),
+            y: radius * Math.cos(phi),
+            z: radius * Math.sin(phi) * Math.sin(theta)
+        };
+    }
+
+    onResize() {
+        if (!this.container) return;
+        const width = this.container.clientWidth || this.container.offsetWidth || 600;
+        const height = this.container.clientHeight || this.container.offsetHeight || 400;
+        this.camera.aspect = width / height;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(width, height);
+    }
+
+    animate() {
+        requestAnimationFrame(this.animate);
+        this.controls?.update();
+        if (this.globeGroup) {
+            this.globeGroup.rotation.y += 0.0008;
+        }
+        this.renderer.render(this.scene, this.camera);
     }
 }
