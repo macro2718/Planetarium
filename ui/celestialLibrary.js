@@ -166,6 +166,7 @@ function setupShelfScene() {
     const screen = document.getElementById('library-screen');
     if (!container || !screen) return null;
 
+    // Allow CSS background to show through while keeping normal blend mode for the canvas.
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(container.clientWidth || window.innerWidth, container.clientHeight || window.innerHeight);
@@ -468,9 +469,9 @@ function createSpineTexture(title, subtitle, baseColor, accentColor) {
     const ctx = canvas.getContext('2d');
 
     const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    gradient.addColorStop(0, toRgba(baseColor, 0.9));   // 90%の不透明度
-    gradient.addColorStop(0.5, toRgba(accentColor, 0.82)); // 82%の不透明度
-    gradient.addColorStop(1, toRgba(baseColor, 0.9));   // 90%の不透明度
+    gradient.addColorStop(0, toRgba(baseColor, 1.0));   // 100%の不透明度
+    gradient.addColorStop(0.5, toRgba(accentColor, 1.0)); // 100%の不透明度
+    gradient.addColorStop(1, toRgba(baseColor, 1.0));   // 100%の不透明度
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
