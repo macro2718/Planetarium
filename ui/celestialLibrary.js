@@ -136,9 +136,14 @@ function toggleEmptyState(isEmpty) {
 
 function showModeScreen() {
     const modeScreen = document.getElementById('mode-screen');
+    const homeScreen = document.getElementById('home-screen');
     if (modeScreen) {
         modeScreen.classList.remove('hidden');
     }
+    if (homeScreen) {
+        homeScreen.classList.remove('hidden');
+    }
+    document.body.classList.add('mode-screen-visible');
     document.body.classList.add('home-visible');
 }
 

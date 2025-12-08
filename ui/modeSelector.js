@@ -30,8 +30,9 @@ function setupEntryButton() {
         resetPlanetariumBgm();
         hideCelestialLibraryScreen();
         document.body.classList.remove('home-visible');
+        document.body.classList.add('mode-screen-visible');
+        homeScreen?.classList.remove('hidden');
         modeScreen?.classList.remove('hidden');
-        homeScreen?.classList.add('hidden');
         console.log('[modeSelector] modeScreen hidden:', modeScreen?.classList.contains('hidden'));
         console.log('[modeSelector] homeScreen hidden:', homeScreen?.classList.contains('hidden'));
     };
@@ -116,13 +117,17 @@ function setupBackButton() {
             const modeScreen = document.getElementById('mode-screen');
             modeScreen?.classList.add('hidden');
             document.body.classList.add('home-visible');
+            document.body.classList.remove('mode-screen-visible');
         });
     }
 }
 
 function hideArchiveAndMode() {
     const modeScreen = document.getElementById('mode-screen');
+    const homeScreen = document.getElementById('home-screen');
     modeScreen?.classList.add('hidden');
+    homeScreen?.classList.add('hidden');
+    document.body.classList.remove('mode-screen-visible');
     hideEventArchiveScreen();
     hideCelestialLibraryScreen();
     document.body.classList.remove('home-visible');

@@ -1119,13 +1119,8 @@
         #mode-screen {
             position: fixed;
             inset: 0;
-            background:
-                radial-gradient(180% 120% at 50% -10%, rgba(140, 200, 255, 0.16), transparent 46%),
-                radial-gradient(160% 140% at 50% 120%, rgba(52, 130, 220, 0.2), transparent 52%),
-                radial-gradient(90% 90% at 18% 46%, rgba(180, 120, 255, 0.18), transparent 55%),
-                radial-gradient(90% 90% at 84% 58%, rgba(90, 210, 210, 0.16), transparent 55%),
-                linear-gradient(135deg, #030510 0%, #040712 40%, #02040a 100%);
-            z-index: 1900;
+            background: transparent;
+            z-index: 2100;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -1143,67 +1138,43 @@
         }
 
         #mode-screen::before {
-            content: '';
-            position: absolute;
-            inset: -18%;
-            background:
-                conic-gradient(from 160deg at 50% 50%, rgba(180, 220, 255, 0.07), transparent 120deg, rgba(200, 160, 255, 0.09), transparent 260deg),
-                radial-gradient(90% 70% at 50% 48%, rgba(255, 255, 255, 0.06), transparent 60%),
-                repeating-radial-gradient(circle at 50% 50%, rgba(140, 190, 255, 0.05) 0 2px, transparent 3px 60px);
-            mix-blend-mode: screen;
-            opacity: 0.85;
-            filter: blur(2px);
-            pointer-events: none;
-            z-index: 0;
+            content: none;
         }
 
         #mode-screen::after {
-            content: '';
-            position: absolute;
-            inset: -10%;
-            background:
-                radial-gradient(40% 60% at 20% 20%, rgba(90, 180, 255, 0.12), transparent 60%),
-                radial-gradient(45% 70% at 82% 16%, rgba(255, 150, 220, 0.12), transparent 62%),
-                linear-gradient(115deg, rgba(255, 255, 255, 0.06), transparent 35%, rgba(255, 255, 255, 0.08) 55%, transparent 70%);
-            mix-blend-mode: screen;
-            opacity: 0.75;
+            content: none;
+        }
+
+        body.mode-screen-visible #home-screen {
             pointer-events: none;
-            z-index: 1;
+        }
+
+        body.mode-screen-visible #home-screen .home-content {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity var(--screen-fade-duration) ease, transform var(--screen-fade-duration) ease;
         }
 
         .mode-panel {
             position: relative;
             width: min(1080px, 92vw);
-            padding: 40px;
-            border-radius: 28px;
-            background: rgba(8, 12, 22, 0.78);
-            border: 1px solid rgba(170, 200, 255, 0.08);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(14px);
-            overflow: hidden;
+            padding: 30px 12px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            border-radius: 0;
+            background: none;
+            border: none;
+            box-shadow: none;
+            backdrop-filter: none;
         }
 
         .mode-panel::before {
-            content: '';
-            position: absolute;
-            inset: -30%;
-            background:
-                radial-gradient(50% 40% at 30% 28%, rgba(200, 220, 255, 0.12), transparent 60%),
-                radial-gradient(40% 35% at 78% 18%, rgba(200, 180, 255, 0.12), transparent 55%),
-                radial-gradient(55% 45% at 60% 82%, rgba(120, 220, 200, 0.08), transparent 68%);
-            mix-blend-mode: screen;
-            opacity: 0.8;
-            pointer-events: none;
+            content: none;
         }
 
         .mode-panel::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            border: 1px solid rgba(170, 200, 255, 0.12);
-            opacity: 0.6;
-            pointer-events: none;
+            content: none;
         }
 
         .mode-header {
@@ -3300,8 +3271,9 @@
                 console.log('[fallback] enter-planetarium clicked');
                 e.stopPropagation();
                 document.body.classList.remove('home-visible');
+                document.body.classList.add('mode-screen-visible');
                 if (modeScreen) modeScreen.classList.remove('hidden');
-                if (homeScreen) homeScreen.classList.add('hidden');
+                if (homeScreen) homeScreen.classList.remove('hidden');
             });
         }
     });

@@ -143,6 +143,8 @@ function backToModeFromLocation() {
     const locationScreen = document.getElementById('location-screen');
 
     document.body.classList.add('home-visible');
+    document.body.classList.add('mode-screen-visible');
+    homeScreen?.classList.remove('hidden');
 
     // モード選択画面が存在する場合は、そちらへ戻す
     if (modeScreen) {
