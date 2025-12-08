@@ -309,13 +309,11 @@ function setupShelfScene() {
         const offset = shelfScene.baseOffset + shelfScene.currentOffset;
         bookGroup.position.x = offset;
 
-        bookGroup.children.forEach((book, idx) => {
-            const wobble = book.userData?.wobble ?? 0;
-            book.position.y = 0.2 + Math.sin(elapsed * 1.2 + wobble) * 0.12;
-            book.rotation.z = Math.sin(elapsed * 0.6 + wobble) * 0.02;
-            book.rotation.y += 0.0015;
-            if (idx % 3 === 0) {
-                book.rotation.x = Math.sin(elapsed * 0.4 + wobble) * 0.01;
+        bookGroup.children.forEach((book) => {
+            const baseRotation = book.userData?.baseRotation;
+            book.position.y = 0.2;
+            if (baseRotation) {
+                book.rotation.set(baseRotation.x, baseRotation.y, baseRotation.z);
             }
         });
 
@@ -391,7 +389,7 @@ function createBookMesh(content, index, anisotropy = 4) {
 
     const geometry = new THREE.BoxGeometry(3.2, 9.4, 1.1);
     const spineTexture = createSpineTexture(
-        content.spineLabel || content.name,
+        content.name || content.spineLabel,
         content.spineCode || content.keywords?.[0] || '',
         baseColor,
         accentColor
@@ -427,7 +425,15 @@ function createBookMesh(content, index, anisotropy = 4) {
         coverMaterial
     ]);
 
-    mesh.userData = { content, wobble: Math.random() * Math.PI * 2 };
+    mesh.position.y = 0.2;
+    mesh.userData = {
+        content,
+        baseRotation: {
+            x: (Math.random() - 0.5) * 0.02,
+            y: (Math.random() - 0.5) * 0.08,
+            z: (Math.random() - 0.5) * 0.015
+        }
+    };
     return mesh;
 }
 
