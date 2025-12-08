@@ -911,46 +911,46 @@
 
         .home-content {
             position: relative;
-            padding: 70px 80px;
-            background: linear-gradient(165deg, 
-                rgba(8, 12, 30, 0.95) 0%, 
-                rgba(12, 18, 45, 0.9) 50%, 
-                rgba(15, 22, 55, 0.85) 100%);
-            border: 1px solid rgba(100, 150, 220, 0.2);
-            border-radius: 32px;
-            box-shadow:
-                0 50px 100px rgba(0, 0, 0, 0.6),
-                0 0 120px rgba(80, 140, 220, 0.15),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(24px);
-            max-width: 900px;
-            width: min(90vw, 900px);
-            overflow: hidden;
-            animation: floatGentle 6s ease-in-out infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            width: min(920px, 94vw);
+            padding: 120px 40px 100px;
             z-index: 3;
+            text-align: center;
         }
 
-        .home-content::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 32px;
-            background:
-                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(100, 160, 220, 0.1), transparent 50%),
-                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(150, 100, 200, 0.08), transparent 40%);
-            mix-blend-mode: screen;
-            pointer-events: none;
-        }
-
+        .home-content::before,
         .home-content::after {
             content: '';
             position: absolute;
-            top: -1px;
-            left: 20%;
-            right: 20%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(150, 200, 255, 0.4), transparent);
-            pointer-events: none;
+            inset: 6% 4% 8% 4%;
+            border-radius: 50%;
+            filter: blur(30px);
+            mix-blend-mode: screen;
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        .home-content::before {
+            background:
+                radial-gradient(40% 60% at 30% 40%, rgba(160, 200, 255, 0.18), transparent 60%),
+                radial-gradient(30% 40% at 70% 70%, rgba(140, 120, 255, 0.16), transparent 60%);
+        }
+
+        .home-content::after {
+            inset: 14% 10% 6% 10%;
+            background:
+                linear-gradient(90deg, rgba(120, 200, 255, 0.16), transparent 45%, rgba(255, 190, 220, 0.12)),
+                radial-gradient(30% 50% at 60% 30%, rgba(140, 240, 220, 0.16), transparent 60%);
+            opacity: 0.7;
+            filter: blur(24px);
+        }
+
+        .home-content > * {
+            position: relative;
+            z-index: 2;
         }
 
         .home-badge {
@@ -1019,79 +1019,19 @@
             font-weight: 400;
         }
 
-        .home-meta {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-bottom: 40px;
-        }
-
-        @media (max-width: 700px) {
-            .home-meta {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .meta-item {
-            padding: 18px 20px;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(100, 150, 200, 0.1);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .meta-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(150, 200, 255, 0.2), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .meta-item:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(120, 170, 220, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .meta-item:hover::before {
-            opacity: 1;
-        }
-
-        .meta-label {
-            display: block;
-            font-size: 10px;
-            letter-spacing: 2px;
-            color: rgba(150, 180, 220, 0.6);
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .meta-value {
-            font-size: 13px;
-            color: rgba(220, 230, 245, 0.85);
-            letter-spacing: 0.3px;
-            line-height: 1.5;
-        }
-
         .home-buttons {
             display: flex;
             gap: 16px;
             flex-wrap: wrap;
             justify-content: center;
+            align-self: center;
         }
 
         .home-btn {
             padding: 18px 36px;
             border-radius: 60px;
             border: 1px solid rgba(120, 170, 230, 0.25);
-            background: linear-gradient(135deg, rgba(40, 70, 130, 0.4), rgba(30, 50, 100, 0.3));
+            background: linear-gradient(135deg, rgba(40, 70, 130, 0.45), rgba(30, 50, 100, 0.34));
             color: rgba(220, 235, 255, 0.95);
             font-size: 14px;
             letter-spacing: 2px;
@@ -3033,24 +2973,10 @@
         </div>
         <div id="home-three-container"></div>
         <div class="home-content">
-            <div class="home-badge">ASTRAL GATE</div>
+            <div class="home-badge">ENTRANCE GATE</div>
             <h1 class="home-title">PLANETARIUM</h1>
-            <p class="home-subtitle">— ENTRANCE LOUNGE —</p>
+            <p class="home-subtitle">— ASTRAL VOYAGE —</p>
             <p class="home-tagline">黎明色の光が満ちるゲートが、静謐な宇宙へと続く回廊を描きます。プラネタリウムの入口で、澄んだ三次元の輝きに導かれながら、美しさだけを研ぎ澄ました星の旅へお入りください。</p>
-            <div class="home-meta">
-                <div class="meta-item">
-                    <span class="meta-label">ENTRANCE</span>
-                    <span class="meta-value">星々へ続く光の回廊を演出</span>
-                </div>
-                <div class="meta-item">
-                    <span class="meta-label">IMMERSION</span>
-                    <span class="meta-value">three.jsで描く立体的な星霧とゲート</span>
-                </div>
-                <div class="meta-item">
-                    <span class="meta-label">ATMOSPHERE</span>
-                    <span class="meta-value">ガラス質のUIと漂う光粒子が迎える静けさ</span>
-                </div>
-            </div>
             <div class="home-buttons">
                 <button class="home-btn primary" id="enter-planetarium">
                     <span class="btn-icon">✦</span>
@@ -3246,7 +3172,7 @@
     </div>
     
     <div id="title">P L A N E T A R I U M</div>
-    <div id="subtitle">Aurora Voyage</div>
+    <div id="subtitle">Astral Voyage</div>
     <div id="immersion-indicator">Photo Mode</div>
     <button id="exit-immersive" aria-label="フォトモードを終了">フォトモードを終了</button>
     <button id="capture-photo-btn" aria-label="写真を撮影"></button>

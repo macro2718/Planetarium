@@ -220,7 +220,7 @@ function createPortalFrame() {
 
 function createCrystalCore() {
     const mesh = new THREE.Mesh(
-        new THREE.IcosahedronGeometry(16, 1),
+        new THREE.SphereGeometry(16, 48, 48),
         new THREE.MeshStandardMaterial({
             color: 0xaad8ff,
             emissive: 0x447bcf,
@@ -247,7 +247,8 @@ function createCrystalCore() {
 }
 
 function createAuroraCurtain() {
-    const geometry = new THREE.PlaneGeometry(220, 140, 40, 40);
+    const radius = 120;
+    const geometry = new THREE.CircleGeometry(radius, 120);
     const colors = [];
     const top = new THREE.Color(0x9fe0ff);
     const mid = new THREE.Color(0xf0b9ff);
@@ -255,8 +256,14 @@ function createAuroraCurtain() {
 
     const position = geometry.getAttribute('position');
     for (let i = 0; i < position.count; i++) {
-        const y = position.getY(i) / 140 + 0.5;
-        const mix = bottom.clone().lerp(mid, y * 0.6).lerp(top, y * 0.4);
+        const x = position.getX(i);
+        const y = position.getY(i);
+        const verticalMix = y / radius * 0.5 + 0.5;
+        const radialFade = 1 - Math.min(1, Math.sqrt(x * x + y * y) / radius);
+        const mix = bottom
+            .clone()
+            .lerp(mid, verticalMix * 0.6 + 0.1)
+            .lerp(top, radialFade * 0.6);
         colors.push(mix.r, mix.g, mix.b);
     }
     geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
@@ -274,7 +281,7 @@ function createAuroraCurtain() {
     mesh.position.set(0, 40, -26);
     mesh.rotation.y = Math.PI / 10;
     mesh.rotation.x = Math.PI / 64;
-    mesh.scale.set(0.9, 1.05, 1);
+    mesh.scale.set(0.9, 0.9, 1);
     return mesh;
 }
 
@@ -340,7 +347,9 @@ function createStarField(count, radius) {
         opacity: 0.7,
         vertexColors: true,
         blending: THREE.AdditiveBlending,
-        depthWrite: false
+        depthWrite: false,
+        map: getCircleSpriteTexture(),
+        alphaTest: 0.15
     });
 
     const points = new THREE.Points(geometry, material);
@@ -376,7 +385,9 @@ function createSparkField(count, spread) {
         opacity: 0.95,
         vertexColors: true,
         blending: THREE.AdditiveBlending,
-        depthWrite: false
+        depthWrite: false,
+        map: getCircleSpriteTexture(),
+        alphaTest: 0.2
     });
 
     const points = new THREE.Points(geometry, material);
@@ -434,4 +445,26 @@ function createFloorGrid() {
         mat.depthWrite = false;
     });
     return grid;
+}
+
+let cachedCircleSprite = null;
+function getCircleSpriteTexture() {
+    if (cachedCircleSprite) return cachedCircleSprite;
+    const size = 64;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    const gradient = ctx.createRadialGradient(size / 2, size / 2, 2, size / 2, size / 2, size / 2);
+    gradient.addColorStop(0, 'rgba(255,255,255,1)');
+    gradient.addColorStop(0.55, 'rgba(255,255,255,0.6)');
+    gradient.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, size, size);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.magFilter = THREE.LinearFilter;
+    texture.minFilter = THREE.LinearFilter;
+    cachedCircleSprite = texture;
+    return texture;
 }
