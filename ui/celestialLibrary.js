@@ -171,13 +171,16 @@ function setupShelfScene() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(container.clientWidth || window.innerWidth, container.clientHeight || window.innerHeight);
     renderer.setClearColor(0x000000, 0);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.domElement.id = 'library-three-canvas';
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x2a1a12, 0.011);
+    scene.fog = new THREE.FogExp2(0x22150d, 0.009);
 
     const camera = new THREE.PerspectiveCamera(
         40,
@@ -188,10 +191,10 @@ function setupShelfScene() {
     camera.position.set(-4.5, 7.5, 28);
     camera.lookAt(new THREE.Vector3(0, 4, 0));
 
-    scene.add(new THREE.AmbientLight(0xffecd2, 0.25));
+    scene.add(new THREE.AmbientLight(0xffecd2, 0.32));
 
-    const keyLight = new THREE.SpotLight(0xffcfa1, 2.1, 120, Math.PI / 4, 0.42, 2);
-    keyLight.position.set(12, 18, 24);
+    const keyLight = new THREE.SpotLight(0xffd2a6, 2.15, 130, Math.PI / 4, 0.42, 2);
+    keyLight.position.set(12, 18, 22);
     keyLight.target.position.set(-2, 4, 0);
     keyLight.add(keyLight.target);
     keyLight.castShadow = true;
@@ -201,13 +204,17 @@ function setupShelfScene() {
     keyLight.shadow.radius = 4;
     scene.add(keyLight);
 
-    const rimLight = new THREE.PointLight(0xffe1b2, 0.65, 120, 2);
-    rimLight.position.set(-16, 10, -10);
+    const rimLight = new THREE.PointLight(0xffe9c8, 0.8, 140, 2.2);
+    rimLight.position.set(-16, 12, -10);
     scene.add(rimLight);
 
+    const bounceLight = new THREE.PointLight(0x9ed5ff, 0.58, 110, 2.8);
+    bounceLight.position.set(-18, 6, 12);
+    scene.add(bounceLight);
+
     // Strong top-down shadow light to clearly drop book silhouettes on the shelf.
-    const shadowLight = new THREE.DirectionalLight(0xf8dab4, 2.2);
-    shadowLight.position.set(6, 16, 8);
+    const shadowLight = new THREE.DirectionalLight(0xf8dab4, 2.25);
+    shadowLight.position.set(6, 16, 9);
     shadowLight.target.position.set(0, 3.4, -1.2);
     shadowLight.castShadow = true;
     shadowLight.shadow.mapSize.set(4096, 4096);
@@ -235,10 +242,10 @@ function setupShelfScene() {
         new THREE.MeshStandardMaterial({
             map: woodTextures.colorMap,
             normalMap: woodTextures.normalMap,
-            color: 0xffffff,
+            color: 0x5a3b2a,
             roughness: 0.62,
             metalness: 0.05,
-            emissive: new THREE.Color(0x3d2a1d).multiplyScalar(0.12),
+            emissive: new THREE.Color(0x2d1a11).multiplyScalar(0.22),
             normalScale: new THREE.Vector2(0.6, 0.9),
             side: THREE.DoubleSide
         })
@@ -252,10 +259,10 @@ function setupShelfScene() {
         new THREE.MeshStandardMaterial({
             map: woodTextures.colorMap,
             normalMap: woodTextures.normalMap,
-            color: 0xffffff,
+            color: 0x4d3223,
             roughness: 0.52,
             metalness: 0.06,
-            emissive: new THREE.Color(0xc58a62).multiplyScalar(0.15),
+            emissive: new THREE.Color(0x8a5a3c).multiplyScalar(0.14),
             normalScale: new THREE.Vector2(0.8, 1.05)
         })
     );
@@ -278,9 +285,9 @@ function setupShelfScene() {
     const shelfGlow = new THREE.Mesh(
         new THREE.PlaneGeometry(180, 36),
         new THREE.MeshBasicMaterial({
-            color: 0xffe2b1,
+            color: 0xfff2d6,
             transparent: true,
-            opacity: 0.12,
+            opacity: 0.16,
             blending: THREE.AdditiveBlending,
             depthWrite: false,
             side: THREE.DoubleSide
@@ -376,15 +383,21 @@ function setupShelfScene() {
         const offset = shelfScene.baseOffset + shelfScene.currentOffset;
         bookGroup.position.x = offset;
 
-        bookGroup.children.forEach((book) => {
+        bookGroup.children.forEach((book, idx) => {
             const baseRotation = book.userData?.baseRotation;
-            book.position.y = 0.2;
+            const bob = Math.sin(elapsed * 0.65 + idx * 0.35) * 0.035;
+            const hoverLift = shelfScene.hover === book ? 0.06 : 0;
+            book.position.y = 0.2 + bob + hoverLift;
             if (baseRotation) {
-                book.rotation.set(baseRotation.x, baseRotation.y, baseRotation.z);
+                book.rotation.set(
+                    baseRotation.x,
+                    baseRotation.y + Math.sin(elapsed * 0.3 + idx) * 0.005,
+                    baseRotation.z
+                );
             }
         });
 
-        shelfGlow.material.opacity = 0.14 + Math.sin(elapsed * 0.5) * 0.04;
+        shelfGlow.material.opacity = 0.12 + Math.sin(elapsed * 0.45) * 0.04;
         renderer.render(scene, camera);
     };
     animate();
@@ -465,22 +478,22 @@ function createBookMesh(content, index, anisotropy = 4) {
 
     const spineMaterial = new THREE.MeshStandardMaterial({
         map: spineTexture,
-        roughness: 0.35,
-        metalness: 0.32,
+        roughness: 0.28,
+        metalness: 0.38,
         emissive: new THREE.Color(baseColor).multiplyScalar(0.15),
-        emissiveIntensity: 0.35
+        emissiveIntensity: 0.42
     });
 
     const coverMaterial = new THREE.MeshStandardMaterial({
         color: coverColor,
-        roughness: 0.58,
-        metalness: 0.18
+        roughness: 0.48,
+        metalness: 0.24
     });
 
     const sideMaterial = new THREE.MeshStandardMaterial({
         color: accentColor,
-        roughness: 0.6,
-        metalness: 0.1
+        roughness: 0.5,
+        metalness: 0.16
     });
 
     const mesh = new THREE.Mesh(
@@ -516,11 +529,23 @@ function createSpineTexture(title, subtitle, baseColor, accentColor) {
     const ctx = canvas.getContext('2d');
 
     const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    gradient.addColorStop(0, toRgba(baseColor, 1.0));   // 100%の不透明度
-    gradient.addColorStop(0.5, toRgba(accentColor, 1.0)); // 100%の不透明度
-    gradient.addColorStop(1, toRgba(baseColor, 1.0));   // 100%の不透明度
+    gradient.addColorStop(0, toRgba(baseColor, 1.0));
+    gradient.addColorStop(0.38, toRgba(accentColor, 1.0));
+    gradient.addColorStop(0.58, toRgba(baseColor, 1.0));
+    gradient.addColorStop(1, toRgba(accentColor, 0.94));
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Foil-like sheen that catches the light as books tilt.
+    const foil = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    foil.addColorStop(0, 'rgba(255, 245, 230, 0.18)');
+    foil.addColorStop(0.48, 'rgba(255, 255, 255, 0.06)');
+    foil.addColorStop(1, 'rgba(190, 220, 255, 0.14)');
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    ctx.fillStyle = foil;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
 
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
     ctx.lineWidth = 6;
@@ -529,6 +554,31 @@ function createSpineTexture(title, subtitle, baseColor, accentColor) {
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.lineWidth = 2;
     ctx.strokeRect(48, 48, canvas.width - 96, canvas.height - 96);
+
+    // Subtle diagonal brushed texture.
+    ctx.save();
+    ctx.globalCompositeOperation = 'overlay';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+    ctx.lineWidth = 2;
+    for (let y = -canvas.height; y < canvas.height * 1.5; y += 56) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y + canvas.width * 0.5);
+        ctx.stroke();
+    }
+    ctx.restore();
+
+    // Vignette for depth.
+    const vignette = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    vignette.addColorStop(0, 'rgba(0, 0, 0, 0.18)');
+    vignette.addColorStop(0.12, 'rgba(0, 0, 0, 0)');
+    vignette.addColorStop(0.88, 'rgba(0, 0, 0, 0)');
+    vignette.addColorStop(1, 'rgba(0, 0, 0, 0.16)');
+    ctx.save();
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.fillStyle = vignette;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
 
     const safeTitle = (title || '').trim() || '星座';
     const titleLength = Array.from(safeTitle).length;
@@ -572,7 +622,7 @@ function toRgba(color, alpha = 1) {
 }
 
 function pickAccentColor(name, index) {
-    const palette = [0xa38263, 0x8c6c5a, 0x6b7385, 0x5e7a6a, 0x9d7c68, 0x6a6072];
+    const palette = [0xb19373, 0x8c6c5a, 0x7d8aa5, 0x6a8270, 0xc2a489, 0x6f6785, 0x9cb7c7];
     const hash = Array.from(name || '').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return palette[(hash + index) % palette.length];
 }
@@ -613,7 +663,7 @@ function applyWoodBackgroundTexture(element, colorTexture) {
 }
 
 function generateWoodGrainCanvases(width = 1024, height = 512) {
-    const baseColor = { r: 146, g: 108, b: 78 };
+    const baseColor = { r: 88, g: 60, b: 44 };
     const heightMap = buildWoodHeightMap(width, height);
 
     const colorCanvas = document.createElement('canvas');
