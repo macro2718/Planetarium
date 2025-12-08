@@ -276,6 +276,7 @@ class LocationGlobe {
             antialias: true,
             alpha: true
         });
+        this.renderer.outputColorSpace = THREE.SRGBColorSpace;
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight || 1);
         this.container.appendChild(this.renderer.domElement);
@@ -297,6 +298,7 @@ class LocationGlobe {
         this.scene.add(this.globeGroup);
 
         this.addLights();
+        this.addStars();
         this.addGlobe();
         this.pin = this.createPin();
         this.globeGroup.add(this.pin);
@@ -309,62 +311,63 @@ class LocationGlobe {
     }
 
     addLights() {
-        const ambient = new THREE.AmbientLight(0xbdd4ff, 0.75);
-        const rim = new THREE.DirectionalLight(0xffffff, 1.05);
+        const ambient = new THREE.AmbientLight(0xa7bfdc, 0.6);
+        const rim = new THREE.DirectionalLight(0xffffff, 1.2);
         rim.position.set(4, 2, 3);
-        const bottomFill = new THREE.DirectionalLight(0x5bb5ff, 0.35);
+        const bottomFill = new THREE.DirectionalLight(0x1c2f52, 0.35);
         bottomFill.position.set(-2, -3, -2);
         this.scene.add(ambient, rim, bottomFill);
     }
 
+    addStars() {
+        const starCount = 900;
+        const positions = new Float32Array(starCount * 3);
+        for (let i = 0; i < starCount; i++) {
+            const radius = 4 + Math.random() * 2.5;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            const x = radius * Math.sin(phi) * Math.cos(theta);
+            const y = radius * Math.cos(phi);
+            const z = radius * Math.sin(phi) * Math.sin(theta);
+            positions[i * 3] = x;
+            positions[i * 3 + 1] = y;
+            positions[i * 3 + 2] = z;
+        }
+
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+        const material = new THREE.PointsMaterial({
+            color: new THREE.Color('#cde6ff'),
+            size: 0.01,
+            transparent: true,
+            opacity: 0.7,
+            depthWrite: false,
+            sizeAttenuation: true
+        });
+
+        this.starField = new THREE.Points(geometry, material);
+        this.scene.add(this.starField);
+    }
+
     addGlobe() {
+        const earthTexture = new THREE.TextureLoader().load('assets/textures/earth-day.jpg', (texture) => {
+            texture.anisotropy = this.renderer.capabilities.getMaxAnisotropy?.() || 1;
+        });
+        earthTexture.colorSpace = THREE.SRGBColorSpace;
+
         const surface = new THREE.Mesh(
             new THREE.SphereGeometry(0.92, 64, 64),
             new THREE.MeshStandardMaterial({
-                color: new THREE.Color('#183463'),
-                roughness: 0.9,
-                metalness: 0.08,
-                emissive: new THREE.Color('#0f2243'),
-                emissiveIntensity: 0.3
+                map: earthTexture,
+                roughness: 0.85,
+                metalness: 0.05,
+                emissive: new THREE.Color('#0b1a30'),
+                emissiveIntensity: 0.18
             })
         );
-
-        const wireframe = new THREE.Mesh(
-            new THREE.SphereGeometry(0.93, 32, 32),
-            new THREE.MeshBasicMaterial({
-                color: new THREE.Color('#9fe0ff'),
-                wireframe: true,
-                transparent: true,
-                opacity: 0.15
-            })
-        );
-
-        const atmosphere = new THREE.Mesh(
-            new THREE.SphereGeometry(1.02, 48, 48),
-            new THREE.MeshBasicMaterial({
-                color: new THREE.Color('#9fe0ff'),
-                transparent: true,
-                opacity: 0.12,
-                blending: THREE.AdditiveBlending
-            })
-        );
-
-        const ring = new THREE.Mesh(
-            new THREE.RingGeometry(1.05, 1.28, 96),
-            new THREE.MeshBasicMaterial({
-                color: new THREE.Color('#9fe0ff'),
-                side: THREE.DoubleSide,
-                transparent: true,
-                opacity: 0.08,
-                blending: THREE.AdditiveBlending
-            })
-        );
-        ring.rotation.x = Math.PI / 2;
 
         this.globeGroup.add(surface);
-        this.globeGroup.add(wireframe);
-        this.globeGroup.add(atmosphere);
-        this.globeGroup.add(ring);
     }
 
     createPin() {
@@ -410,6 +413,9 @@ class LocationGlobe {
         this.controls?.update();
         if (this.globeGroup) {
             this.globeGroup.rotation.y += 0.0008;
+        }
+        if (this.starField) {
+            this.starField.rotation.y += 0.0002;
         }
         this.renderer.render(this.scene, this.camera);
     }
