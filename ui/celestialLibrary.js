@@ -368,7 +368,7 @@ function updateShelfBooks(contents) {
 
     if (!contents.length) return;
 
-    const spacing = 3.6;
+    const spacing = 2.4;   // Spacing between books
     const anisotropy = shelfScene.renderer.capabilities?.getMaxAnisotropy
         ? shelfScene.renderer.capabilities.getMaxAnisotropy()
         : 4;
@@ -387,7 +387,7 @@ function createBookMesh(content, index, anisotropy = 4) {
     const accentColor = new THREE.Color(baseColor);
     accentColor.offsetHSL(0.03, 0.08, 0.1);
 
-    const geometry = new THREE.BoxGeometry(3.2, 9.4, 1.1);
+    const geometry = new THREE.BoxGeometry(1.8, 9.4, 3.0);   // Width, Height, Depth of the book
     const spineTexture = createSpineTexture(
         content.name || content.spineLabel,
         content.spineCode || content.keywords?.[0] || '',
