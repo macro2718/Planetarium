@@ -188,21 +188,40 @@ function setupShelfScene() {
     camera.position.set(-4.5, 7.5, 28);
     camera.lookAt(new THREE.Vector3(0, 4, 0));
 
-    scene.add(new THREE.AmbientLight(0xffecd2, 0.7));
+    scene.add(new THREE.AmbientLight(0xffecd2, 0.25));
 
     const keyLight = new THREE.SpotLight(0xffcfa1, 2.1, 120, Math.PI / 4, 0.42, 2);
     keyLight.position.set(12, 18, 24);
     keyLight.target.position.set(-2, 4, 0);
     keyLight.add(keyLight.target);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.set(2048, 2048);
+    keyLight.shadow.mapSize.set(4096, 4096);
     keyLight.shadow.bias = -0.0004;
-    keyLight.shadow.radius = 6;
+    keyLight.shadow.normalBias = 0.01;
+    keyLight.shadow.radius = 4;
     scene.add(keyLight);
 
-    const rimLight = new THREE.PointLight(0xffe1b2, 1.25, 120, 2);
+    const rimLight = new THREE.PointLight(0xffe1b2, 0.65, 120, 2);
     rimLight.position.set(-16, 10, -10);
     scene.add(rimLight);
+
+    // Strong top-down shadow light to clearly drop book silhouettes on the shelf.
+    const shadowLight = new THREE.DirectionalLight(0xf8dab4, 2.2);
+    shadowLight.position.set(6, 16, 8);
+    shadowLight.target.position.set(0, 3.4, -1.2);
+    shadowLight.castShadow = true;
+    shadowLight.shadow.mapSize.set(4096, 4096);
+    shadowLight.shadow.bias = -0.00025;
+    shadowLight.shadow.normalBias = 0.02;
+    shadowLight.shadow.radius = 2.5;
+    shadowLight.shadow.camera.near = 1;
+    shadowLight.shadow.camera.far = 70;
+    shadowLight.shadow.camera.left = -26;
+    shadowLight.shadow.camera.right = 26;
+    shadowLight.shadow.camera.top = 22;
+    shadowLight.shadow.camera.bottom = -6;
+    scene.add(shadowLight);
+    scene.add(shadowLight.target);
 
     const shelfSurface = new THREE.Mesh(
         new THREE.BoxGeometry(160, 1.4, 12),
@@ -220,7 +239,7 @@ function setupShelfScene() {
 
     const shelfShadow = new THREE.Mesh(
         new THREE.PlaneGeometry(180, 40),
-        new THREE.ShadowMaterial({ color: 0x2a1a12, opacity: 0.32 })
+        new THREE.ShadowMaterial({ color: 0x2a1a12, opacity: 0.75 })
     );
     shelfShadow.rotation.x = -Math.PI / 2;
     shelfShadow.position.y = -0.1;
