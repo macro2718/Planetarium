@@ -2402,12 +2402,275 @@
             overflow: auto;
         }
 
+        .archive-workspace {
+            width: min(1260px, 100%);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: minmax(460px, 1.1fr) minmax(320px, 0.9fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .archive-selection-panel {
+            position: relative;
+            padding: 16px 16px 18px;
+            border-radius: 18px;
+            background: linear-gradient(160deg, rgba(20, 26, 48, 0.88), rgba(10, 14, 28, 0.95));
+            border: 1px solid rgba(160, 200, 255, 0.32);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            overflow: hidden;
+        }
+
+        .archive-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px 10px 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(136, 173, 255, 0.2);
+        }
+
+        .archive-timeline-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .archive-timeline-sub {
+            font-size: 12px;
+            color: rgba(200, 215, 255, 0.7);
+            letter-spacing: 1px;
+        }
+
+        .archive-timeline-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            max-height: 180px;
+            overflow-y: auto;
+            padding-right: 4px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(136, 173, 255, 0.4) transparent;
+        }
+
+        .archive-timeline-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .archive-timeline-list::-webkit-scrollbar-thumb {
+            background: rgba(136, 173, 255, 0.4);
+            border-radius: 3px;
+        }
+
+        .archive-timeline-item {
+            display: grid;
+            grid-template-columns: 70px 1fr;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .archive-timeline-item:hover {
+            border-color: rgba(136, 173, 255, 0.35);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .archive-timeline-item.selected {
+            border-color: rgba(159, 224, 255, 0.8);
+            background: linear-gradient(150deg, rgba(20, 40, 90, 0.7), rgba(12, 24, 54, 0.9));
+            box-shadow: 0 10px 24px rgba(120, 190, 255, 0.25);
+        }
+
+        .archive-timeline-year {
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: rgba(210, 225, 255, 0.9);
+        }
+
+        .archive-timeline-title {
+            font-size: 13px;
+            color: rgba(210, 225, 255, 0.9);
+            line-height: 1.5;
+        }
+
+        .archive-selection-panel::before {
+            content: '';
+            position: absolute;
+            inset: -20% -40% 30% -40%;
+            background: radial-gradient(90% 80% at 30% 24%, rgba(160, 200, 255, 0.1), transparent 60%),
+                radial-gradient(70% 60% at 80% 70%, rgba(255, 200, 150, 0.08), transparent 60%);
+            mix-blend-mode: screen;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .archive-selection-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .archive-selection-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(160, 200, 255, 0.45);
+            background: rgba(255, 255, 255, 0.05);
+            letter-spacing: 3px;
+            font-size: 11px;
+            color: rgba(210, 230, 255, 0.9);
+            font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
+        }
+
+        .archive-selected-title {
+            font-size: 20px;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.95);
+            margin-top: 6px;
+        }
+
+        .archive-selected-date,
+        .archive-selected-location {
+            font-size: 12px;
+            color: rgba(200, 220, 255, 0.8);
+            letter-spacing: 2px;
+        }
+
+        .archive-observe-btn {
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(150, 200, 255, 0.6);
+            background: linear-gradient(135deg, rgba(120, 180, 255, 0.85), rgba(110, 160, 235, 0.7));
+            color: #041024;
+            font-size: 13px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 12px 32px rgba(70, 130, 220, 0.36);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .archive-observe-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 48px rgba(120, 200, 255, 0.4);
+        }
+
+        .archive-selected-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .archive-selected-description {
+            font-size: 13px;
+            color: rgba(210, 225, 255, 0.82);
+            line-height: 1.7;
+        }
+
+        .archive-mini-globe-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(136, 173, 255, 0.2);
+        }
+
+        .archive-mini-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .archive-mini-sub {
+            font-size: 12px;
+            color: rgba(200, 215, 255, 0.7);
+            letter-spacing: 1px;
+        }
+
+        .archive-mini-globe {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            min-height: 200px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: radial-gradient(140% 120% at 50% 18%, rgba(60, 120, 200, 0.15), transparent 55%),
+                linear-gradient(160deg, rgba(8, 12, 24, 0.7), rgba(6, 10, 22, 0.9));
+            border: 1px solid rgba(136, 173, 255, 0.25);
+            box-shadow: inset 0 10px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .archive-list-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding: 16px;
+            border-radius: 16px;
+            background: linear-gradient(150deg, rgba(12, 18, 42, 0.78), rgba(18, 28, 58, 0.64));
+            border: 1px solid rgba(136, 173, 255, 0.25);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32);
+            min-height: 520px;
+            overflow: hidden;
+            max-height: calc(100vh - 220px);
+            overflow-y: auto;
+        }
+
+        .archive-list-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .archive-list-title {
+            font-size: 15px;
+            letter-spacing: 4px;
+            color: rgba(210, 225, 255, 0.9);
+            text-transform: uppercase;
+        }
+
+        .archive-list-sub {
+            font-size: 12px;
+            color: rgba(200, 215, 255, 0.72);
+            line-height: 1.6;
+        }
+
         .archive-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: 1fr;
             gap: 18px;
-            max-width: 1200px;
-            margin: 0 auto;
+            margin: 0;
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 6px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(136, 173, 255, 0.4) transparent;
+        }
+
+        .archive-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .archive-grid::-webkit-scrollbar-thumb {
+            background: rgba(136, 173, 255, 0.4);
+            border-radius: 3px;
         }
 
         .archive-card {
@@ -2419,6 +2682,9 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            cursor: pointer;
+            transition: all 0.28s ease;
+            position: relative;
         }
 
         .archive-card-head {
@@ -2479,21 +2745,16 @@
             letter-spacing: 1px;
         }
 
-        .archive-select {
-            align-self: flex-start;
-            padding: 10px 18px;
-            border-radius: 12px;
-            border: 1px solid rgba(150, 200, 255, 0.4);
-            background: linear-gradient(135deg, rgba(90, 150, 240, 0.45), rgba(120, 180, 255, 0.3));
-            color: rgba(255, 255, 255, 0.95);
-            cursor: pointer;
-            letter-spacing: 1px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        .archive-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(136, 173, 255, 0.35);
+            box-shadow: 0 18px 46px rgba(80, 140, 220, 0.25);
         }
 
-        .archive-select:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(80, 150, 240, 0.25);
+        .archive-card.selected {
+            border-color: rgba(159, 224, 255, 0.82);
+            box-shadow: 0 18px 46px rgba(120, 190, 255, 0.35);
+            background: linear-gradient(150deg, rgba(20, 40, 90, 0.7), rgba(12, 24, 54, 0.9));
         }
 
         @media (max-width: 900px) {
@@ -2509,6 +2770,15 @@
             }
             .archive-content {
                 padding: 22px;
+            }
+            .archive-workspace {
+                grid-template-columns: 1fr;
+            }
+            .archive-selection-panel {
+                order: 1;
+            }
+            .archive-list-panel {
+                order: 2;
             }
         }
 
@@ -3089,8 +3359,47 @@
             </div>
         </div>
         <div class="archive-content">
-            <div class="archive-grid" id="archive-grid">
-                <!-- 歴史イベントカードが挿入される -->
+            <div class="archive-workspace">
+                <div class="archive-selection-panel">
+                    <div class="archive-timeline">
+                        <div class="archive-timeline-head">
+                            <div class="archive-selection-chip">TIMELINE</div>
+                            <div class="archive-timeline-sub">歴史的な瞬間を年表で俯瞰</div>
+                        </div>
+                        <div class="archive-timeline-list" id="archive-timeline">
+                            <!-- 年表が挿入される -->
+                        </div>
+                    </div>
+                    <div class="archive-selection-head">
+                        <div>
+                            <div class="archive-selection-chip">SELECTED MOMENT</div>
+                            <div class="archive-selected-title" id="archive-selected-title">-</div>
+                            <div class="archive-selected-date" id="archive-selected-date">-</div>
+                            <div class="archive-selected-location" id="archive-selected-location">-</div>
+                        </div>
+                        <button class="archive-observe-btn" id="archive-observe">この瞬間へ移動 →</button>
+                    </div>
+                    <div class="archive-selected-tags" id="archive-selected-tags"></div>
+                    <p class="archive-selected-description" id="archive-selected-description">歴史的な瞬間を選択すると、ここに詳細が表示されます。</p>
+                    <div class="archive-mini-globe-panel">
+                        <div class="archive-mini-head">
+                            <div class="archive-selection-chip">EARTH VIEW</div>
+                            <div class="archive-mini-sub">観測地を3Dで確認</div>
+                        </div>
+                        <div class="archive-mini-globe" id="archive-mini-globe"></div>
+                    </div>
+                </div>
+                <div class="archive-list-panel">
+                    <div class="archive-list-head">
+                        <div>
+                            <div class="archive-list-title">HISTORICAL NIGHT</div>
+                            <div class="archive-list-sub">カードをクリックすると観測値がセットされます。</div>
+                        </div>
+                    </div>
+                    <div class="archive-grid" id="archive-grid">
+                        <!-- 歴史イベントカードが挿入される -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
