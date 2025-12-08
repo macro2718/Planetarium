@@ -173,14 +173,14 @@ function setupShelfScene() {
     renderer.setClearColor(0x000000, 0);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.05;
+    renderer.toneMappingExposure = 1.15;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.domElement.id = 'library-three-canvas';
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x22150d, 0.009);
+    scene.fog = new THREE.FogExp2(0x22150d, 0.0075);
 
     const camera = new THREE.PerspectiveCamera(
         40,
@@ -191,9 +191,9 @@ function setupShelfScene() {
     camera.position.set(-4.5, 7.5, 28);
     camera.lookAt(new THREE.Vector3(0, 4, 0));
 
-    scene.add(new THREE.AmbientLight(0xffecd2, 0.32));
+    scene.add(new THREE.AmbientLight(0xfff1e0, 0.48));
 
-    const keyLight = new THREE.SpotLight(0xffd2a6, 2.15, 130, Math.PI / 4, 0.42, 2);
+    const keyLight = new THREE.SpotLight(0xffd2a6, 2.55, 130, Math.PI / 4, 0.42, 2);
     keyLight.position.set(12, 18, 22);
     keyLight.target.position.set(-2, 4, 0);
     keyLight.add(keyLight.target);
@@ -204,16 +204,16 @@ function setupShelfScene() {
     keyLight.shadow.radius = 4;
     scene.add(keyLight);
 
-    const rimLight = new THREE.PointLight(0xffe9c8, 0.8, 140, 2.2);
+    const rimLight = new THREE.PointLight(0xffe9c8, 1.1, 140, 2.2);
     rimLight.position.set(-16, 12, -10);
     scene.add(rimLight);
 
-    const bounceLight = new THREE.PointLight(0x9ed5ff, 0.58, 110, 2.8);
+    const bounceLight = new THREE.PointLight(0x9ed5ff, 0.82, 110, 2.8);
     bounceLight.position.set(-18, 6, 12);
     scene.add(bounceLight);
 
     // Strong top-down shadow light to clearly drop book silhouettes on the shelf.
-    const shadowLight = new THREE.DirectionalLight(0xf8dab4, 2.25);
+    const shadowLight = new THREE.DirectionalLight(0xf8dab4, 7.65);
     shadowLight.position.set(6, 16, 9);
     shadowLight.target.position.set(0, 3.4, -1.2);
     shadowLight.castShadow = true;
@@ -245,7 +245,7 @@ function setupShelfScene() {
             color: 0x5a3b2a,
             roughness: 0.62,
             metalness: 0.05,
-            emissive: new THREE.Color(0x2d1a11).multiplyScalar(0.22),
+            emissive: new THREE.Color(0x2d1a11).multiplyScalar(0.32),
             normalScale: new THREE.Vector2(0.6, 0.9),
             side: THREE.DoubleSide
         })
@@ -262,7 +262,7 @@ function setupShelfScene() {
             color: 0x4d3223,
             roughness: 0.52,
             metalness: 0.06,
-            emissive: new THREE.Color(0x8a5a3c).multiplyScalar(0.14),
+            emissive: new THREE.Color(0x8a5a3c).multiplyScalar(0.24),
             normalScale: new THREE.Vector2(0.8, 1.05)
         })
     );
@@ -287,7 +287,7 @@ function setupShelfScene() {
         new THREE.MeshBasicMaterial({
             color: 0xfff2d6,
             transparent: true,
-            opacity: 0.16,
+            opacity: 0.22,
             blending: THREE.AdditiveBlending,
             depthWrite: false,
             side: THREE.DoubleSide
@@ -397,7 +397,7 @@ function setupShelfScene() {
             }
         });
 
-        shelfGlow.material.opacity = 0.12 + Math.sin(elapsed * 0.45) * 0.04;
+        shelfGlow.material.opacity = 0.18 + Math.sin(elapsed * 0.45) * 0.06;
         renderer.render(scene, camera);
     };
     animate();
@@ -448,7 +448,7 @@ function updateShelfBooks(contents) {
 
     if (!contents.length) return;
 
-    const spacing = 2.4;   // Spacing between books
+    const spacing = 1.6;   // Spacing between books
     const anisotropy = shelfScene.renderer.capabilities?.getMaxAnisotropy
         ? shelfScene.renderer.capabilities.getMaxAnisotropy()
         : 4;
@@ -467,7 +467,7 @@ function createBookMesh(content, index, anisotropy = 4) {
     const accentColor = new THREE.Color(baseColor);
     accentColor.offsetHSL(0.03, 0.08, 0.1);
 
-    const geometry = new THREE.BoxGeometry(1.8, 9.4, 3.0);   // Width, Height, Depth of the book
+    const geometry = new THREE.BoxGeometry(1.2, 9.4, 3.0);   // Width, Height, Depth of the book
     const spineTexture = createSpineTexture(
         content.name || content.spineLabel,
         content.spineCode || content.keywords?.[0] || '',
@@ -582,22 +582,26 @@ function createSpineTexture(title, subtitle, baseColor, accentColor) {
 
     const safeTitle = (title || '').trim() || '星座';
     const titleLength = Array.from(safeTitle).length;
-    const titleSize = Math.max(54, Math.min(80, 88 - Math.max(0, titleLength - 6) * 4));
+    const titleSize = Math.max(84, Math.min(96, 100 - Math.max(0, titleLength - 6) * 4));
     ctx.save();
-    ctx.translate(canvas.width * 0.66, canvas.height / 2);
+    ctx.translate(canvas.width * 0.5, canvas.height / 2);
     ctx.rotate(-Math.PI / 2);
     ctx.font = `${titleSize}px "Zen Kaku Gothic New", "Space Grotesk", sans-serif`;
     ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
-    ctx.shadowBlur = 8;
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.22)';
+    ctx.shadowBlur = 3;
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.strokeText(safeTitle, 0, 0);
+    ctx.shadowBlur = 0;
     ctx.fillText(safeTitle, 0, 0);
     ctx.restore();
 
     const safeSubtitle = (subtitle || '').trim() || 'CONSTELLATION';
     const subtitleLength = Array.from(safeSubtitle).length;
-    const subtitleSize = Math.max(30, Math.min(46, 52 - Math.max(0, subtitleLength - 8) * 2));
+    const subtitleSize = Math.max(34, Math.min(50, 56 - Math.max(0, subtitleLength - 8) * 2));
     ctx.save();
     ctx.translate(canvas.width * 0.82, canvas.height / 2);
     ctx.rotate(-Math.PI / 2);
@@ -605,8 +609,12 @@ function createSpineTexture(title, subtitle, baseColor, accentColor) {
     ctx.fillStyle = 'rgba(210, 230, 255, 0.8)';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
-    ctx.shadowBlur = 6;
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+    ctx.shadowBlur = 2;
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.28)';
+    ctx.strokeText(safeSubtitle, 0, canvas.width * -0.06);
+    ctx.shadowBlur = 0;
     ctx.fillText(safeSubtitle, 0, canvas.width * -0.06);
     ctx.restore();
 
