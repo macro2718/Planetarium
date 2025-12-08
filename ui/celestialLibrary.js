@@ -170,6 +170,8 @@ function setupShelfScene() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(container.clientWidth || window.innerWidth, container.clientHeight || window.innerHeight);
     renderer.setClearColor(0x000000, 0);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.domElement.id = 'library-three-canvas';
     container.appendChild(renderer.domElement);
 
@@ -182,14 +184,19 @@ function setupShelfScene() {
         0.1,
         260
     );
-    camera.position.set(0, 7.2, 28);
+    camera.position.set(-4.5, 7.5, 28);
+    camera.lookAt(new THREE.Vector3(0, 4, 0));
 
-    scene.add(new THREE.AmbientLight(0xffecd2, 0.85));
+    scene.add(new THREE.AmbientLight(0xffecd2, 0.7));
 
-    const keyLight = new THREE.SpotLight(0xffcfa1, 1.9, 120, Math.PI / 4, 0.45, 2);
-    keyLight.position.set(8, 18, 26);
-    keyLight.target.position.set(0, 4, 0);
+    const keyLight = new THREE.SpotLight(0xffcfa1, 2.1, 120, Math.PI / 4, 0.42, 2);
+    keyLight.position.set(12, 18, 24);
+    keyLight.target.position.set(-2, 4, 0);
     keyLight.add(keyLight.target);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.set(2048, 2048);
+    keyLight.shadow.bias = -0.0004;
+    keyLight.shadow.radius = 6;
     scene.add(keyLight);
 
     const rimLight = new THREE.PointLight(0xffe1b2, 1.25, 120, 2);
@@ -197,17 +204,28 @@ function setupShelfScene() {
     scene.add(rimLight);
 
     const shelfSurface = new THREE.Mesh(
-        new THREE.BoxGeometry(160, 1.2, 10),
+        new THREE.BoxGeometry(160, 1.4, 12),
         new THREE.MeshStandardMaterial({
             color: 0x8b5d3f,
-            roughness: 0.42,
-            metalness: 0.14,
+            roughness: 0.46,
+            metalness: 0.12,
             emissive: new THREE.Color(0xc58a62).multiplyScalar(0.2)
         })
     );
     shelfSurface.position.y = -0.6;
-    shelfSurface.position.z = -1.2;
+    shelfSurface.position.z = -1.8;
+    shelfSurface.receiveShadow = true;
     scene.add(shelfSurface);
+
+    const shelfShadow = new THREE.Mesh(
+        new THREE.PlaneGeometry(180, 40),
+        new THREE.ShadowMaterial({ color: 0x2a1a12, opacity: 0.32 })
+    );
+    shelfShadow.rotation.x = -Math.PI / 2;
+    shelfShadow.position.y = -0.1;
+    shelfShadow.position.z = -1.4;
+    shelfShadow.receiveShadow = true;
+    scene.add(shelfShadow);
 
     const shelfGlow = new THREE.Mesh(
         new THREE.PlaneGeometry(180, 36),
@@ -227,6 +245,7 @@ function setupShelfScene() {
 
     const bookGroup = new THREE.Group();
     bookGroup.position.y = 4.2;
+    bookGroup.position.z = -0.8;
     scene.add(bookGroup);
 
     const raycaster = new THREE.Raycaster();
@@ -375,7 +394,7 @@ function updateShelfBooks(contents) {
 
     contents.forEach((content, idx) => {
         const book = createBookMesh(content, idx, anisotropy);
-        book.position.set(idx * spacing, 0, 0);
+        book.position.set(idx * spacing, 0, (Math.random() - 0.5) * 0.35);
         group.add(book);
     });
 }
@@ -416,16 +435,21 @@ function createBookMesh(content, index, anisotropy = 4) {
         metalness: 0.1
     });
 
-    const mesh = new THREE.Mesh(geometry, [
-        sideMaterial,
-        sideMaterial.clone(),
-        coverMaterial.clone(),
-        coverMaterial.clone(),
-        spineMaterial,
-        coverMaterial
-    ]);
+    const mesh = new THREE.Mesh(
+        geometry,
+        [
+            sideMaterial,
+            sideMaterial.clone(),
+            coverMaterial.clone(),
+            coverMaterial.clone(),
+            spineMaterial,
+            coverMaterial
+        ]
+    );
 
     mesh.position.y = 0.2;
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
     mesh.userData = {
         content,
         baseRotation: {
