@@ -640,11 +640,11 @@
             position: fixed;
             inset: 0;
             background:
-                radial-gradient(140% 120% at 50% 0%, rgba(32, 48, 98, 0.85) 0%, transparent 45%),
-                radial-gradient(80% 70% at 20% 85%, rgba(48, 34, 94, 0.45), transparent 50%),
-                radial-gradient(90% 70% at 80% 78%, rgba(24, 72, 128, 0.35), transparent 52%),
-                linear-gradient(180deg, #03040a 0%, #050816 40%, #03040a 70%),
-                radial-gradient(ellipse 120% 90% at 50% 110%, rgba(10, 14, 30, 0.8), rgba(3, 5, 12, 1));
+                radial-gradient(140% 120% at 50% -6%, rgba(64, 104, 180, 0.65) 0%, transparent 40%),
+                radial-gradient(70% 60% at 20% 82%, rgba(68, 36, 120, 0.35), transparent 55%),
+                radial-gradient(70% 65% at 82% 76%, rgba(30, 122, 180, 0.28), transparent 52%),
+                linear-gradient(180deg, #03040a 0%, #050816 46%, #03040a 78%),
+                radial-gradient(ellipse 120% 90% at 50% 110%, rgba(6, 10, 22, 0.9), rgba(3, 5, 12, 1));
             display: flex;
             justify-content: center;
             align-items: center;
@@ -663,18 +663,18 @@
 
         #home-screen::before {
             background:
-                radial-gradient(ellipse 90% 60% at 50% 14%, rgba(140, 200, 255, 0.22), transparent 52%),
-                radial-gradient(ellipse 65% 40% at 50% 40%, rgba(255, 220, 180, 0.16), transparent 48%),
-                linear-gradient(180deg, rgba(170, 200, 255, 0.35), transparent 35%);
+                radial-gradient(ellipse 90% 60% at 50% 18%, rgba(140, 200, 255, 0.3), transparent 50%),
+                radial-gradient(ellipse 70% 40% at 48% 40%, rgba(255, 220, 180, 0.18), transparent 50%),
+                linear-gradient(180deg, rgba(170, 200, 255, 0.42), transparent 36%);
             mix-blend-mode: screen;
-            filter: blur(26px) saturate(130%);
-            animation: auroraWave 20s ease-in-out infinite;
+            filter: blur(26px) saturate(135%);
+            animation: auroraWave 22s ease-in-out infinite;
         }
 
         #home-screen::after {
             background:
-                radial-gradient(ellipse 120% 100% at 50% 52%, rgba(0, 0, 0, 0) 45%, rgba(2, 4, 10, 0.78) 85%),
-                radial-gradient(60% 20% at 50% 100%, rgba(10, 20, 35, 0.6), transparent 70%);
+                radial-gradient(ellipse 120% 100% at 50% 52%, rgba(0, 0, 0, 0) 45%, rgba(2, 4, 10, 0.82) 85%),
+                radial-gradient(65% 22% at 50% 100%, rgba(18, 34, 64, 0.55), transparent 70%);
         }
 
         #home-screen.hidden {
@@ -726,8 +726,8 @@
             inset: 0;
             z-index: 1;
             pointer-events: none;
-            mix-blend-mode: screen;
-            filter: saturate(115%) brightness(1.08);
+            mix-blend-mode: lighten;
+            filter: saturate(120%) brightness(1.05);
         }
 
         #home-three-container canvas {
@@ -3013,22 +3013,22 @@
         </div>
         <div id="home-three-container"></div>
         <div class="home-content">
-            <div class="home-badge">Virtual Observatory</div>
+            <div class="home-badge">ASTRAL GATE</div>
             <h1 class="home-title">PLANETARIUM</h1>
-            <p class="home-subtitle">— AURORA VOYAGE —</p>
-            <p class="home-tagline">静謐な宇宙に浮かぶオーロラのゆらめきと、星々の鼓動をそのまま閉じ込めた仮想天文台。光が呼吸するような、洗練された星空体験へご案内します。</p>
+            <p class="home-subtitle">— ENTRANCE LOUNGE —</p>
+            <p class="home-tagline">黎明色の光が満ちるゲートが、静謐な宇宙へと続く回廊を描きます。プラネタリウムの入口で、澄んだ三次元の輝きに導かれながら、美しさだけを研ぎ澄ました星の旅へお入りください。</p>
             <div class="home-meta">
                 <div class="meta-item">
-                    <span class="meta-label">EXPERIENCE</span>
-                    <span class="meta-value">リアルタイムの星空を旅する</span>
+                    <span class="meta-label">ENTRANCE</span>
+                    <span class="meta-value">星々へ続く光の回廊を演出</span>
                 </div>
                 <div class="meta-item">
-                    <span class="meta-label">VISUALS</span>
-                    <span class="meta-value">オーロラ・天の川・流星群</span>
+                    <span class="meta-label">IMMERSION</span>
+                    <span class="meta-value">three.jsで描く立体的な星霧とゲート</span>
                 </div>
                 <div class="meta-item">
-                    <span class="meta-label">MEMORIES</span>
-                    <span class="meta-value">煌めく瞬間をアルバムに</span>
+                    <span class="meta-label">ATMOSPHERE</span>
+                    <span class="meta-value">ガラス質のUIと漂う光粒子が迎える静けさ</span>
                 </div>
             </div>
             <div class="home-buttons">
