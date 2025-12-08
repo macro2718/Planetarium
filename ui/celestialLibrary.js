@@ -174,7 +174,7 @@ function setupShelfScene() {
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x0f0a08, 0.022);
+    scene.fog = new THREE.FogExp2(0x2a1a12, 0.011);
 
     const camera = new THREE.PerspectiveCamera(
         40,
@@ -184,25 +184,25 @@ function setupShelfScene() {
     );
     camera.position.set(0, 7.2, 28);
 
-    scene.add(new THREE.AmbientLight(0xffd7b0, 0.55));
+    scene.add(new THREE.AmbientLight(0xffecd2, 0.85));
 
-    const keyLight = new THREE.SpotLight(0xffb86c, 1.6, 120, Math.PI / 4, 0.45, 2);
+    const keyLight = new THREE.SpotLight(0xffcfa1, 1.9, 120, Math.PI / 4, 0.45, 2);
     keyLight.position.set(8, 18, 26);
     keyLight.target.position.set(0, 4, 0);
     keyLight.add(keyLight.target);
     scene.add(keyLight);
 
-    const rimLight = new THREE.PointLight(0xc5a37a, 1.05, 120, 2);
+    const rimLight = new THREE.PointLight(0xffe1b2, 1.25, 120, 2);
     rimLight.position.set(-16, 10, -10);
     scene.add(rimLight);
 
     const shelfSurface = new THREE.Mesh(
         new THREE.BoxGeometry(160, 1.2, 10),
         new THREE.MeshStandardMaterial({
-            color: 0x2b1a12,
-            roughness: 0.55,
-            metalness: 0.12,
-            emissive: new THREE.Color(0x3a2418).multiplyScalar(0.25)
+            color: 0x8b5d3f,
+            roughness: 0.42,
+            metalness: 0.14,
+            emissive: new THREE.Color(0xc58a62).multiplyScalar(0.2)
         })
     );
     shelfSurface.position.y = -0.6;
@@ -212,9 +212,9 @@ function setupShelfScene() {
     const shelfGlow = new THREE.Mesh(
         new THREE.PlaneGeometry(180, 36),
         new THREE.MeshBasicMaterial({
-            color: 0xffc27a,
+            color: 0xffe2b1,
             transparent: true,
-            opacity: 0.06,
+            opacity: 0.12,
             blending: THREE.AdditiveBlending,
             depthWrite: false,
             side: THREE.DoubleSide
@@ -317,7 +317,7 @@ function setupShelfScene() {
             }
         });
 
-        shelfGlow.material.opacity = 0.05 + Math.sin(elapsed * 0.5) * 0.02;
+        shelfGlow.material.opacity = 0.14 + Math.sin(elapsed * 0.5) * 0.04;
         renderer.render(scene, camera);
     };
     animate();
@@ -383,9 +383,9 @@ function updateShelfBooks(contents) {
 function createBookMesh(content, index, anisotropy = 4) {
     const baseColor = pickAccentColor(content.name, index);
     const coverColor = new THREE.Color(baseColor);
-    coverColor.offsetHSL(0, -0.08, -0.06);
+    coverColor.offsetHSL(0.01, -0.08, 0.06);
     const accentColor = new THREE.Color(baseColor);
-    accentColor.offsetHSL(0.04, 0.08, 0.08);
+    accentColor.offsetHSL(0.03, 0.08, 0.1);
 
     const geometry = new THREE.BoxGeometry(3.2, 9.4, 1.1);
     const spineTexture = createSpineTexture(
@@ -444,17 +444,17 @@ function createSpineTexture(title, subtitle, baseColor, accentColor) {
     const ctx = canvas.getContext('2d');
 
     const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    gradient.addColorStop(0, toRgba(baseColor, 0.92));
-    gradient.addColorStop(0.5, toRgba(accentColor, 0.88));
-    gradient.addColorStop(1, toRgba(baseColor, 0.92));
+    gradient.addColorStop(0, toRgba(baseColor, 0.9));   // 90%の不透明度
+    gradient.addColorStop(0.5, toRgba(accentColor, 0.82)); // 82%の不透明度
+    gradient.addColorStop(1, toRgba(baseColor, 0.9));   // 90%の不透明度
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
     ctx.lineWidth = 6;
     ctx.strokeRect(26, 26, canvas.width - 52, canvas.height - 52);
 
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.lineWidth = 2;
     ctx.strokeRect(48, 48, canvas.width - 96, canvas.height - 96);
 
@@ -500,7 +500,7 @@ function toRgba(color, alpha = 1) {
 }
 
 function pickAccentColor(name, index) {
-    const palette = [0xc68f6a, 0x5b3a29, 0x7a4f6d, 0x36505a, 0xa97c50, 0x4a6f62];
+    const palette = [0xa38263, 0x8c6c5a, 0x6b7385, 0x5e7a6a, 0x9d7c68, 0x6a6072];
     const hash = Array.from(name || '').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return palette[(hash + index) % palette.length];
 }

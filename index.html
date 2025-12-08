@@ -1899,9 +1899,9 @@
             position: fixed;
             inset: 0;
             background:
-                radial-gradient(140% 120% at 50% -10%, rgba(255, 210, 160, 0.18), transparent 45%),
-                radial-gradient(140% 120% at 50% 110%, rgba(64, 42, 22, 0.32), transparent 55%),
-                linear-gradient(160deg, #0e0907 0%, #17100d 42%, #0c0a0a 100%);
+                radial-gradient(140% 120% at 50% -10%, rgba(255, 232, 204, 0.35), transparent 48%),
+                radial-gradient(140% 120% at 50% 110%, rgba(140, 96, 64, 0.24), transparent 55%),
+                linear-gradient(160deg, #1f1410 0%, #2b1b14 45%, #211611 100%);
             z-index: 1740;
             display: flex;
             flex-direction: column;
@@ -1923,12 +1923,12 @@
             position: absolute;
             inset: -10%;
             background:
-                repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 140px),
-                linear-gradient(130deg, rgba(240, 190, 140, 0.12), transparent 55%, rgba(255, 228, 190, 0.08) 70%, transparent 90%),
-                radial-gradient(60% 40% at 22% 32%, rgba(140, 90, 60, 0.24), transparent 60%),
-                radial-gradient(60% 40% at 78% 26%, rgba(120, 150, 110, 0.14), transparent 60%);
+                repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 2px, transparent 2px 140px),
+                linear-gradient(130deg, rgba(245, 205, 160, 0.2), transparent 52%, rgba(255, 234, 200, 0.18) 72%, transparent 90%),
+                radial-gradient(60% 40% at 22% 32%, rgba(180, 120, 80, 0.32), transparent 60%),
+                radial-gradient(60% 40% at 78% 26%, rgba(140, 190, 150, 0.2), transparent 60%);
             mix-blend-mode: soft-light;
-            opacity: 0.6;
+            opacity: 0.72;
             pointer-events: none;
             z-index: 0;
         }
@@ -1938,10 +1938,10 @@
             position: absolute;
             inset: -12%;
             background:
-                conic-gradient(from 160deg at 50% 88%, rgba(240, 190, 140, 0.16), transparent 160deg, rgba(120, 80, 50, 0.12), transparent 320deg),
-                radial-gradient(120% 90% at 50% 82%, rgba(22, 16, 12, 0.8), transparent 58%);
+                conic-gradient(from 160deg at 50% 88%, rgba(245, 205, 160, 0.28), transparent 160deg, rgba(150, 110, 80, 0.2), transparent 320deg),
+                radial-gradient(120% 90% at 50% 82%, rgba(48, 32, 24, 0.45), transparent 62%);
             mix-blend-mode: soft-light;
-            opacity: 0.55;
+            opacity: 0.65;
             pointer-events: none;
             z-index: 1;
             filter: blur(2px);
@@ -1952,8 +1952,8 @@
             inset: 0;
             z-index: 0;
             pointer-events: none;
-            mix-blend-mode: soft-light;
-            filter: saturate(110%) brightness(1.0);
+            mix-blend-mode: screen;
+            filter: saturate(120%) brightness(1.28);
         }
 
         #library-three-container canvas {
@@ -1992,25 +1992,25 @@
             align-self: flex-start;
             padding: 8px 14px;
             border-radius: 999px;
-            background: linear-gradient(135deg, rgba(130, 200, 255, 0.26), rgba(120, 240, 230, 0.2));
-            border: 1px solid rgba(160, 200, 255, 0.35);
+            background: linear-gradient(135deg, rgba(255, 232, 200, 0.65), rgba(210, 240, 230, 0.5));
+            border: 1px solid rgba(255, 248, 230, 0.6);
             font-size: 11px;
             letter-spacing: 3px;
-            color: rgba(255, 255, 255, 0.82);
+            color: #3a2415;
             font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
         }
 
         .library-title {
             font-size: 32px;
             letter-spacing: 9px;
-            color: rgba(255, 255, 255, 0.94);
+            color: rgba(255, 240, 225, 0.96);
             font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
             text-transform: uppercase;
         }
 
         .library-subtitle {
             font-size: 14px;
-            color: rgba(220, 235, 255, 0.8);
+            color: rgba(255, 242, 226, 0.9);
             max-width: 760px;
             line-height: 1.8;
         }
@@ -2021,9 +2021,9 @@
             gap: 10px;
             padding: 10px 14px;
             border-radius: 12px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(160, 200, 255, 0.2);
-            color: rgba(220, 235, 255, 0.9);
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(160, 200, 255, 0.32);
+            color: rgba(70, 52, 34, 0.9);
             font-size: 13px;
         }
 
@@ -2074,25 +2074,25 @@
             gap: 6px;
             padding: 6px 10px;
             border-radius: 12px;
-            background: linear-gradient(135deg, rgba(90, 140, 230, 0.35), rgba(120, 200, 220, 0.24));
-            color: rgba(235, 245, 255, 0.9);
-            border: 1px solid rgba(160, 200, 255, 0.28);
+            background: linear-gradient(135deg, rgba(255, 228, 190, 0.45), rgba(200, 230, 210, 0.32));
+            color: #3e2a1c;
+            border: 1px solid rgba(255, 236, 210, 0.55);
             font-size: 11px;
             letter-spacing: 1px;
         }
 
         .library-chip.subtle {
-            background: rgba(255, 255, 255, 0.05);
-            color: rgba(220, 235, 255, 0.78);
-            border-color: rgba(160, 200, 255, 0.18);
+            background: rgba(255, 255, 255, 0.16);
+            color: #3e2a1c;
+            border-color: rgba(255, 236, 210, 0.4);
         }
 
         .library-tag {
             padding: 4px 8px;
             border-radius: 10px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(160, 200, 255, 0.18);
-            color: rgba(220, 235, 255, 0.86);
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 236, 210, 0.45);
+            color: #3e2a1c;
             font-size: 11px;
             letter-spacing: 1px;
         }
@@ -2101,9 +2101,9 @@
             width: 100%;
             padding: 16px;
             border-radius: 14px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px dashed rgba(160, 200, 255, 0.3);
-            color: rgba(220, 235, 255, 0.76);
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px dashed rgba(255, 236, 210, 0.6);
+            color: #3e2a1c;
             text-align: center;
             line-height: 1.8;
         }
@@ -2152,11 +2152,11 @@
             position: fixed;
             inset: 0;
             background:
-                radial-gradient(130% 110% at 50% -5%, rgba(240, 190, 140, 0.16), transparent 48%),
-                radial-gradient(150% 130% at 50% 110%, rgba(72, 46, 24, 0.28), transparent 52%),
-                radial-gradient(90% 90% at 14% 32%, rgba(140, 90, 60, 0.18), transparent 60%),
-                radial-gradient(90% 90% at 84% 28%, rgba(90, 120, 90, 0.12), transparent 60%),
-                linear-gradient(100deg, #0d0908 0%, #16100d 45%, #0c0a0a 100%);
+                radial-gradient(130% 110% at 50% -5%, rgba(255, 232, 204, 0.32), transparent 50%),
+                radial-gradient(150% 130% at 50% 110%, rgba(150, 100, 70, 0.26), transparent 54%),
+                radial-gradient(90% 90% at 14% 32%, rgba(190, 130, 90, 0.26), transparent 60%),
+                radial-gradient(90% 90% at 84% 28%, rgba(150, 190, 150, 0.2), transparent 60%),
+                linear-gradient(100deg, #241711 0%, #301e16 45%, #231710 100%);
             z-index: 1760;
             display: flex;
             flex-direction: column;
@@ -2178,12 +2178,12 @@
             position: absolute;
             inset: -8%;
             background:
-                repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0 2px, transparent 2px 120px),
-                linear-gradient(140deg, rgba(240, 190, 140, 0.1), transparent 55%, rgba(255, 228, 190, 0.08) 75%, transparent 90%),
-                radial-gradient(50% 40% at 22% 30%, rgba(140, 90, 60, 0.18), transparent 60%),
-                radial-gradient(50% 40% at 78% 20%, rgba(110, 140, 100, 0.14), transparent 60%);
+                repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 2px, transparent 2px 120px),
+                linear-gradient(140deg, rgba(245, 205, 160, 0.2), transparent 55%, rgba(255, 234, 200, 0.18) 75%, transparent 90%),
+                radial-gradient(50% 40% at 22% 30%, rgba(190, 130, 90, 0.24), transparent 60%),
+                radial-gradient(50% 40% at 78% 20%, rgba(150, 190, 150, 0.18), transparent 60%);
             mix-blend-mode: soft-light;
-            opacity: 0.62;
+            opacity: 0.7;
             pointer-events: none;
             z-index: 0;
         }
@@ -2210,13 +2210,13 @@
         .library-detail-title {
             font-size: 30px;
             letter-spacing: 8px;
-            color: rgba(255, 255, 255, 0.94);
+            color: rgba(255, 240, 225, 0.96);
             font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
         }
 
         .library-detail-subtitle {
             font-size: 14px;
-            color: rgba(220, 235, 255, 0.8);
+            color: rgba(255, 242, 226, 0.9);
             line-height: 1.8;
         }
 
@@ -2251,14 +2251,15 @@
             width: min(1020px, 100%);
             padding: 22px 24px;
             border-radius: 18px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(160, 200, 255, 0.2);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 236, 210, 0.5);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
             display: flex;
             flex-direction: column;
             gap: 12px;
             position: relative;
             z-index: 1;
+            color: #3e2a1c;
         }
 
         .library-detail-shell .library-card-head {
@@ -2268,7 +2269,7 @@
         .library-detail-name {
             font-size: 26px;
             letter-spacing: 6px;
-            color: rgba(255, 255, 255, 0.94);
+            color: rgba(58, 36, 21, 0.95);
             font-family: 'Zen Kaku Gothic New', 'Space Grotesk', sans-serif;
         }
 
@@ -2291,7 +2292,7 @@
             gap: 10px 14px;
             align-items: start;
             padding: 8px 0;
-            border-top: 1px solid rgba(160, 200, 255, 0.18);
+            border-top: 1px solid rgba(120, 90, 60, 0.25);
         }
 
         .library-detail-section:first-of-type {
