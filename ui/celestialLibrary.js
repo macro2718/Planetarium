@@ -223,17 +223,45 @@ function setupShelfScene() {
     scene.add(shadowLight);
     scene.add(shadowLight.target);
 
+    const textureAnisotropy = renderer.capabilities?.getMaxAnisotropy
+        ? renderer.capabilities.getMaxAnisotropy()
+        : 4;
+    const woodTextures = createWoodTextures(textureAnisotropy);
+    applyWoodBackgroundTexture(screen, woodTextures.colorMap);
+
+    // Back wall behind the shelf for a warmer, enclosed feel that matches the shelf surface.
+    const backWall = new THREE.Mesh(
+        new THREE.PlaneGeometry(220, 48),
+        new THREE.MeshStandardMaterial({
+            map: woodTextures.colorMap,
+            normalMap: woodTextures.normalMap,
+            color: 0xffffff,
+            roughness: 0.62,
+            metalness: 0.05,
+            emissive: new THREE.Color(0x3d2a1d).multiplyScalar(0.12),
+            normalScale: new THREE.Vector2(0.6, 0.9),
+            side: THREE.DoubleSide
+        })
+    );
+    backWall.position.set(0, 9, -12);
+    backWall.receiveShadow = true;
+    scene.add(backWall);
+
     const shelfSurface = new THREE.Mesh(
         new THREE.BoxGeometry(160, 1.4, 12),
         new THREE.MeshStandardMaterial({
-            color: 0x8b5d3f,
-            roughness: 0.46,
-            metalness: 0.12,
-            emissive: new THREE.Color(0xc58a62).multiplyScalar(0.2)
+            map: woodTextures.colorMap,
+            normalMap: woodTextures.normalMap,
+            color: 0xffffff,
+            roughness: 0.52,
+            metalness: 0.06,
+            emissive: new THREE.Color(0xc58a62).multiplyScalar(0.15),
+            normalScale: new THREE.Vector2(0.8, 1.05)
         })
     );
     shelfSurface.position.y = -0.6;
     shelfSurface.position.z = -1.8;
+    shelfSurface.castShadow = true;
     shelfSurface.receiveShadow = true;
     scene.add(shelfSurface);
 
@@ -547,6 +575,125 @@ function pickAccentColor(name, index) {
     const palette = [0xa38263, 0x8c6c5a, 0x6b7385, 0x5e7a6a, 0x9d7c68, 0x6a6072];
     const hash = Array.from(name || '').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return palette[(hash + index) % palette.length];
+}
+
+function createWoodTextures(anisotropy = 4) {
+    const { colorCanvas, normalCanvas } = generateWoodGrainCanvases();
+    const repeat = new THREE.Vector2(4.5, 2.4);
+
+    const colorMap = new THREE.CanvasTexture(colorCanvas);
+    colorMap.wrapS = THREE.RepeatWrapping;
+    colorMap.wrapT = THREE.RepeatWrapping;
+    colorMap.repeat.copy(repeat);
+    colorMap.anisotropy = anisotropy;
+
+    const normalMap = new THREE.CanvasTexture(normalCanvas);
+    normalMap.wrapS = THREE.RepeatWrapping;
+    normalMap.wrapT = THREE.RepeatWrapping;
+    normalMap.repeat.copy(repeat);
+    normalMap.anisotropy = anisotropy;
+
+    return { colorMap, normalMap };
+}
+
+function applyWoodBackgroundTexture(element, colorTexture) {
+    const canvas = colorTexture?.image;
+    if (!element || !canvas?.toDataURL) return;
+    const dataUrl = canvas.toDataURL('image/png');
+
+    element.style.backgroundImage = [
+        'radial-gradient(120% 130% at 50% -12%, rgba(255, 230, 204, 0.12), transparent 56%)',
+        'linear-gradient(165deg, rgba(24, 14, 10, 0.72), rgba(24, 14, 10, 0.62))',
+        `url('${dataUrl}')`
+    ].join(', ');
+    element.style.backgroundSize = 'cover, cover, 320px 160px';
+    element.style.backgroundRepeat = 'no-repeat, no-repeat, repeat';
+    element.style.backgroundPosition = 'center, center, top left';
+    element.style.backgroundBlendMode = 'soft-light, multiply, normal';
+}
+
+function generateWoodGrainCanvases(width = 1024, height = 512) {
+    const baseColor = { r: 146, g: 108, b: 78 };
+    const heightMap = buildWoodHeightMap(width, height);
+
+    const colorCanvas = document.createElement('canvas');
+    colorCanvas.width = width;
+    colorCanvas.height = height;
+    const colorCtx = colorCanvas.getContext('2d');
+    const colorData = colorCtx.createImageData(width, height);
+
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const idx = (y * width + x) * 4;
+            const h = heightMap[y * width + x];
+            const v = y / height;
+            const verticalTint = Math.cos((v - 0.5) * Math.PI) * 0.08;
+            const brightness = 0.76 + h * 0.22 + verticalTint;
+            const r = clamp255(baseColor.r * brightness + h * 12);
+            const g = clamp255(baseColor.g * brightness + h * 10);
+            const b = clamp255(baseColor.b * brightness + h * 6);
+            colorData.data[idx] = r;
+            colorData.data[idx + 1] = g;
+            colorData.data[idx + 2] = b;
+            colorData.data[idx + 3] = 255;
+        }
+    }
+    colorCtx.putImageData(colorData, 0, 0);
+
+    const normalCanvas = document.createElement('canvas');
+    normalCanvas.width = width;
+    normalCanvas.height = height;
+    const normalCtx = normalCanvas.getContext('2d');
+    const normalData = normalCtx.createImageData(width, height);
+    const strength = 1.35;
+
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const idx = (y * width + x) * 4;
+            const hL = heightMap[y * width + (x > 0 ? x - 1 : x)];
+            const hR = heightMap[y * width + (x < width - 1 ? x + 1 : x)];
+            const hT = heightMap[(y > 0 ? y - 1 : y) * width + x];
+            const hB = heightMap[(y < height - 1 ? y + 1 : y) * width + x];
+            const nx = (hL - hR) * strength;
+            const ny = (hT - hB) * strength;
+            const nz = 1.0;
+            const len = Math.sqrt(nx * nx + ny * ny + nz * nz) || 1;
+            normalData.data[idx] = clamp255((nx / len) * 127 + 128);
+            normalData.data[idx + 1] = clamp255((ny / len) * 127 + 128);
+            normalData.data[idx + 2] = clamp255((nz / len) * 127 + 128);
+            normalData.data[idx + 3] = 255;
+        }
+    }
+    normalCtx.putImageData(normalData, 0, 0);
+
+    return { colorCanvas, normalCanvas };
+}
+
+function buildWoodHeightMap(width, height) {
+    const map = new Float32Array(width * height);
+    const seed = 47.13;
+    for (let y = 0; y < height; y++) {
+        const v = y / height;
+        for (let x = 0; x < width; x++) {
+            const u = x / width;
+            const ring = Math.sin(u * 12 + Math.sin(v * 8) * 0.6);
+            const fineGrain = Math.sin(u * 36 + Math.sin(v * 22) * 0.6);
+            const swirl = Math.sin(v * 14 + u * 2) * 0.05;
+            const noise = woodNoise(x * 0.8, y * 0.4, seed);
+            const heightValue = 0.5 + ring * 0.08 + fineGrain * 0.06 + noise * 0.18 + swirl;
+            map[y * width + x] = Math.min(1, Math.max(0, heightValue));
+        }
+    }
+    return map;
+}
+
+function woodNoise(x, y, seed = 0) {
+    const n = Math.sin(x * 12.9898 + y * 78.233 + seed) * 43758.5453;
+    return n - Math.floor(n);
+}
+
+function clamp255(value) {
+    return Math.max(0, Math.min(255, Math.round(value)));
 }
 
 function updatePointer(event) {
