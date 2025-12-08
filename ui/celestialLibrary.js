@@ -7,7 +7,6 @@ const STORAGE_KEY = 'celestial-library-unlocked-v1';
 let unlockedConstellations = new Set();
 let detailView = null;
 let shelfScene = null;
-let selectedContent = null;
 
 const FALLBACK_STORY = '物語の断片はまだ集めているところです。星空で出会ったときの余韻を、そのままここに置いておきましょう。';
 const FALLBACK_OBSERVATION = '星図を広げ、実際の夜空で形をなぞると新しい発見があります。';
@@ -21,7 +20,6 @@ export function initCelestialLibrary() {
     setupBackButton();
     setupDetailScreen();
     setupShelfScene();
-    setupSelectionActions();
     renderLibraryList();
 }
 
@@ -64,6 +62,15 @@ function normalizeConstellationName(name) {
     return String(name).trim().replace(/\s+/g, ' ');
 }
 
+function formatConstellationCode(id) {
+    if (!id) return '';
+    return String(id)
+        .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+        .replace(/[_\s]+/g, ' ')
+        .trim()
+        .toUpperCase();
+}
+
 function loadUnlockedConstellations() {
     try {
         const stored = localStorage.getItem(STORAGE_KEY);
@@ -96,19 +103,7 @@ function setupBackButton() {
     }
 }
 
-function setupSelectionActions() {
-    const openBtn = document.getElementById('library-open-button');
-    if (openBtn) {
-        openBtn.addEventListener('click', () => {
-            if (selectedContent) {
-                openConstellationDetail(selectedContent);
-            }
-        });
-    }
-}
-
 function renderLibraryList() {
-    const empty = document.getElementById('library-empty');
     const count = document.getElementById('library-count');
     const libraryScreen = document.getElementById('library-screen');
     const detailScreen = document.getElementById('library-detail-screen');
@@ -123,18 +118,13 @@ function renderLibraryList() {
     if (!contents.length) {
         if (detailScreen) detailScreen.classList.add('hidden');
         if (libraryScreen) libraryScreen.classList.remove('hidden');
-        selectedContent = null;
         updateShelfBooks([]);
-        updateSelectionPanel(null);
         toggleEmptyState(true);
         return;
     }
 
     toggleEmptyState(false);
     updateShelfBooks(contents);
-
-    const persisted = contents.find((entry) => selectedContent?.name === entry.name);
-    handleBookSelect(persisted || contents[0], false);
 }
 
 function toggleEmptyState(isEmpty) {
@@ -156,14 +146,17 @@ function buildConstellationContent(name) {
     const normalized = normalizeConstellationName(name);
     const tale = findConstellationTale(name) || findConstellationTale(normalized);
     const base = CONSTELLATION_DESCRIPTION_MAP.get(normalized);
+    const canonicalName = tale?.name || base?.name || name;
     return {
-        name: tale?.name || base?.name || name,
+        name: canonicalName,
         season: tale?.season || '',
         keywords: tale?.keywords || [],
         lede: tale?.lede || base?.description || '星空で出会った記憶が本棚に収まりました。',
         story: tale?.story || FALLBACK_STORY,
         observation: tale?.observation || FALLBACK_OBSERVATION,
-        brightStars: tale?.brightStars || ''
+        brightStars: tale?.brightStars || '',
+        spineLabel: canonicalName,
+        spineCode: formatConstellationCode(base?.id || normalized)
     };
 }
 
@@ -263,7 +256,7 @@ function setupShelfScene() {
     let lastX = 0;
 
     const handlePointerDown = (event) => {
-        if (event.target.closest('.library-back-btn') || event.target.closest('.library-open-btn')) return;
+        if (event.target.closest('.library-back-btn')) return;
         isDragging = true;
         lastX = event.clientX;
     };
@@ -283,7 +276,7 @@ function setupShelfScene() {
     };
 
     const handleClick = (event) => {
-        if (event.target.closest('.library-back-btn') || event.target.closest('.library-open-btn')) return;
+        if (event.target.closest('.library-back-btn')) return;
         if (shelfScene.hover?.userData?.content) {
             handleBookSelect(shelfScene.hover.userData.content, true);
         }
@@ -391,7 +384,12 @@ function createBookMesh(content, index, anisotropy = 4) {
     accentColor.offsetHSL(0.04, 0.08, 0.08);
 
     const geometry = new THREE.BoxGeometry(3.2, 9.4, 1.1);
-    const spineTexture = createSpineTexture(content.name, content.keywords?.[0] || '', baseColor, accentColor);
+    const spineTexture = createSpineTexture(
+        content.spineLabel || content.name,
+        content.spineCode || content.keywords?.[0] || '',
+        baseColor,
+        accentColor
+    );
     spineTexture.anisotropy = anisotropy;
 
     const spineMaterial = new THREE.MeshStandardMaterial({
@@ -448,26 +446,34 @@ function createSpineTexture(title, subtitle, baseColor, accentColor) {
     ctx.lineWidth = 2;
     ctx.strokeRect(48, 48, canvas.width - 96, canvas.height - 96);
 
+    const safeTitle = (title || '').trim() || '星座';
+    const titleLength = Array.from(safeTitle).length;
+    const titleSize = Math.max(54, Math.min(80, 88 - Math.max(0, titleLength - 6) * 4));
     ctx.save();
     ctx.translate(canvas.width * 0.66, canvas.height / 2);
     ctx.rotate(-Math.PI / 2);
-    ctx.font = '72px "Zen Kaku Gothic New", "Space Grotesk", sans-serif';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+    ctx.font = `${titleSize}px "Zen Kaku Gothic New", "Space Grotesk", sans-serif`;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const label = title.length > 12 ? `${title.slice(0, 12)}…` : title;
-    ctx.fillText(label, 0, 0);
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
+    ctx.shadowBlur = 8;
+    ctx.fillText(safeTitle, 0, 0);
     ctx.restore();
 
+    const safeSubtitle = (subtitle || '').trim() || 'CONSTELLATION';
+    const subtitleLength = Array.from(safeSubtitle).length;
+    const subtitleSize = Math.max(30, Math.min(46, 52 - Math.max(0, subtitleLength - 8) * 2));
     ctx.save();
     ctx.translate(canvas.width * 0.82, canvas.height / 2);
     ctx.rotate(-Math.PI / 2);
-    ctx.font = '34px "Space Grotesk", "Zen Kaku Gothic New", sans-serif';
-    ctx.fillStyle = 'rgba(220, 235, 255, 0.72)';
+    ctx.font = `${subtitleSize}px "Space Grotesk", "Zen Kaku Gothic New", sans-serif`;
+    ctx.fillStyle = 'rgba(210, 230, 255, 0.8)';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const sub = subtitle || 'CONSTELLATION';
-    ctx.fillText(sub, 0, canvas.width * -0.05);
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
+    ctx.shadowBlur = 6;
+    ctx.fillText(safeSubtitle, 0, canvas.width * -0.06);
     ctx.restore();
 
     return new THREE.CanvasTexture(canvas);
@@ -508,65 +514,12 @@ function updateHover() {
     shelfScene.hover = target;
     if (target) {
         target.scale.set(1.02, 1.05, 1.02);
-        handleBookSelect(target.userData.content, false);
     }
 }
 
 function handleBookSelect(content, openDetail) {
     if (!content) return;
-    selectedContent = content;
-    updateSelectionPanel(content);
     if (openDetail) openConstellationDetail(content);
-}
-
-function updateSelectionPanel(content) {
-    const titleEl = document.getElementById('library-selection-title');
-    const ledeEl = document.getElementById('library-selection-lede');
-    const metaEl = document.getElementById('library-selection-meta');
-    const tagsEl = document.getElementById('library-selection-tags');
-    const openBtn = document.getElementById('library-open-button');
-
-    if (!content) {
-        if (titleEl) titleEl.textContent = 'まだ本がありません';
-        if (ledeEl) ledeEl.textContent = '星座を解放すると、ここに背表紙が並びます。';
-        if (metaEl) metaEl.innerHTML = '';
-        if (tagsEl) tagsEl.innerHTML = '';
-        if (openBtn) openBtn.disabled = true;
-        return;
-    }
-
-    if (titleEl) titleEl.textContent = content.name;
-    if (ledeEl) ledeEl.textContent = content.lede;
-
-    if (metaEl) {
-        metaEl.innerHTML = '';
-        if (content.season) {
-            const chip = document.createElement('span');
-            chip.className = 'library-chip';
-            chip.textContent = content.season;
-            metaEl.appendChild(chip);
-        }
-        if (content.keywords?.length) {
-            const chip = document.createElement('span');
-            chip.className = 'library-chip subtle';
-            chip.textContent = content.keywords[0];
-            metaEl.appendChild(chip);
-        }
-    }
-
-    if (tagsEl) {
-        tagsEl.innerHTML = '';
-        (content.keywords || []).forEach((tag) => {
-            const el = document.createElement('span');
-            el.className = 'library-tag';
-            el.textContent = tag;
-            tagsEl.appendChild(el);
-        });
-    }
-
-    if (openBtn) {
-        openBtn.disabled = false;
-    }
 }
 
 function openConstellationDetail(content) {
