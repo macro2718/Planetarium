@@ -1,6 +1,12 @@
 import * as THREE from '../three.module.js';
 import { equatorialToHorizontalVector, normalizeDegrees } from '../utils/astronomy.js';
 
+// Place the Sun within the sky dome and size it to its actual angular diameter (~0.53°).
+const SUN_DISTANCE = 6150;
+const SUN_ANGULAR_DIAMETER_DEG = 5.4;
+const SUN_CORE_RADIUS = Math.tan(THREE.MathUtils.degToRad(SUN_ANGULAR_DIAMETER_DEG * 0.5)) * SUN_DISTANCE;
+const SUN_GLOW_RADIUS = SUN_CORE_RADIUS * 2.6;
+
 export function createSunSystem(ctx) {
     ctx.sunGroup = new THREE.Group();
     ctx.scene.add(ctx.sunGroup);
@@ -10,12 +16,9 @@ export function createSunSystem(ctx) {
     const sunLight = new THREE.DirectionalLight(0xffffff, 3.0);
     ctx.scene.add(sunLight);
 
-    const coreRadius = 140;
-    const glowRadius = 220;
-
     const sunTexture = createSunTexture();
 
-    const sunGeometry = new THREE.SphereGeometry(coreRadius, 64, 64);
+    const sunGeometry = new THREE.SphereGeometry(SUN_CORE_RADIUS, 64, 64);
     // 大気がないため、太陽は純白に輝く
     const sunMaterial = new THREE.MeshBasicMaterial({
         color: new THREE.Color(1.0, 1.0, 1.0),
@@ -34,7 +37,7 @@ export function createSunSystem(ctx) {
 
     const coronaTexture = createCoronaTexture();
 
-    const glowGeometry = new THREE.SphereGeometry(glowRadius, 32, 32);
+    const glowGeometry = new THREE.SphereGeometry(SUN_GLOW_RADIUS, 32, 32);
     const glowMaterial = new THREE.MeshBasicMaterial({
         color: new THREE.Color(1.0, 1.0, 1.0),
         transparent: true,
@@ -52,7 +55,7 @@ export function createSunSystem(ctx) {
         blending: THREE.AdditiveBlending,
         depthWrite: false
     }));
-    coronaSprite.scale.set(glowRadius * 1.8, glowRadius * 1.8, 1);
+    coronaSprite.scale.set(SUN_GLOW_RADIUS * 1.8, SUN_GLOW_RADIUS * 1.8, 1);
     ctx.sunGroup.add(coronaSprite);
 
     const sunState = { current: null };
@@ -66,7 +69,7 @@ export function createSunSystem(ctx) {
         // 光源の位置を更新
         sunLight.position.copy(state.position);
         
-        const visible = (ctx.settings?.showSun ?? false) && state.altDeg > -5;
+        const visible = (ctx.settings?.showSun ?? false) && state.altDeg > 0;
         ctx.sunGroup.visible = visible;
         sunLight.visible = visible;
 
@@ -95,7 +98,7 @@ export function createSunSystem(ctx) {
         setEnabled: (enabled) => {
             ctx.settings.showSun = enabled;
             const state = ensureState();
-            const visible = enabled && state.altDeg > -5;
+            const visible = enabled && state.altDeg > 0;
             ctx.sunGroup.visible = visible;
             sunLight.visible = visible;
         },
@@ -116,8 +119,7 @@ function calculateSunState(ctx, date = new Date()) {
     const obliquity = 23.439291 - 0.0000137 * daysSinceJ2000;
 
     const { raDeg, decDeg } = convertEclipticToEquatorial(eclipticLongitude, 0, obliquity);
-    const radius = 2400;
-    const { position, altDeg, azDeg } = convertEquatorialToHorizontal(ctx, raDeg, decDeg, radius);
+    const { position, altDeg, azDeg } = convertEquatorialToHorizontal(ctx, raDeg, decDeg, SUN_DISTANCE);
 
     return {
         position,

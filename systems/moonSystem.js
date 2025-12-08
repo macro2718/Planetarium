@@ -1,10 +1,14 @@
 import * as THREE from '../three.module.js';
 import { equatorialToHorizontalVector, normalizeDegrees } from '../utils/astronomy.js';
 
+// Place the Moon inside the sky dome and size it to its actual angular diameter (~0.52°).
+const MOON_DISTANCE = 6000;
+const MOON_ANGULAR_DIAMETER_DEG = 5.2;
+const MOON_RADIUS = Math.tan(THREE.MathUtils.degToRad(MOON_ANGULAR_DIAMETER_DEG * 0.5)) * MOON_DISTANCE;
+
 export function createMoonSystem(ctx) {
     ctx.moonGroup = new THREE.Group();
     ctx.scene.add(ctx.moonGroup);
-    const moonRadius = 120;
     ctx.moonUniforms = {
         time: { value: 0 },
         phaseAngle: { value: 0 },
@@ -12,7 +16,7 @@ export function createMoonSystem(ctx) {
         sunDirection: { value: new THREE.Vector3(0, 0.2, -1).normalize() },
         albedo: { value: new THREE.Color(0.93, 0.92, 0.89) }
     };
-    const moonGeometry = new THREE.SphereGeometry(moonRadius, 128, 128);
+    const moonGeometry = new THREE.SphereGeometry(MOON_RADIUS, 128, 128);
     const moonMaterial = new THREE.ShaderMaterial({
         uniforms: ctx.moonUniforms,
         vertexShader: `
@@ -285,8 +289,7 @@ function calculateMoonState(ctx, date = new Date()) {
     const sunVector = sunHorizontal?.position ?? new THREE.Vector3(1, 0, 0);
 
     // Place the Moon slightly in front of the Sun so it stays visible during overlaps
-    const moonDistance = 2200;
-    const { position, altDeg, azDeg } = convertEquatorialToHorizontal(ctx, raDeg, decDeg, moonDistance);
+    const { position, altDeg, azDeg } = convertEquatorialToHorizontal(ctx, raDeg, decDeg, MOON_DISTANCE);
 
     const phaseDifference = normalizeDegrees(lon - sunLon);
     const phaseAngle = THREE.MathUtils.degToRad(phaseDifference);
