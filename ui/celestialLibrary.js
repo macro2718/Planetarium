@@ -256,7 +256,7 @@ function setupShelfScene() {
     };
 
     const handleWheel = (event) => {
-        shelfScene.targetOffset = clampOffset(shelfScene.targetOffset + event.deltaY * 0.01);
+        shelfScene.targetOffset = clampOffset(shelfScene.targetOffset - event.deltaY * 0.01);
     };
 
     let isDragging = false;
@@ -273,7 +273,7 @@ function setupShelfScene() {
         if (isDragging) {
             const delta = (event.clientX - lastX) * 0.03;
             lastX = event.clientX;
-            shelfScene.targetOffset = clampOffset(shelfScene.targetOffset - delta);
+            shelfScene.targetOffset = clampOffset(shelfScene.targetOffset + delta);
         }
         updateHover();
     };
