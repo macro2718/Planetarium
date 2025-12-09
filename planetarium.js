@@ -725,7 +725,8 @@ initHomeScene();
 initModeSelector({
     onEnterLive: () => setActivePlanetarium('live'),
     onEnterArchive: () => setActivePlanetarium('archive'),
-    onEnterLibrary: () => setActivePlanetarium('live')
+    onEnterLibrary: () => setActivePlanetarium('live'),
+    onEnterAlbum: () => setActivePlanetarium('live')
 });
 
 // 初期ロード時に選択画面へ進めるよう、星空の準備中オーバーレイを先に隠す

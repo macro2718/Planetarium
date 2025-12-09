@@ -3510,10 +3510,6 @@
                     <span class="btn-icon">✦</span>
                     星空を見る
                 </button>
-                <button class="home-btn" id="open-album">
-                    <span class="btn-icon">◇</span>
-                    アルバム
-                </button>
             </div>
         </div>
     </div>
@@ -3549,6 +3545,12 @@
                     <h3>書斎</h3>
                     <p>プラネタリウムやクロノスカイで出会った星座の説明を集める読書室。気になった星座をクリックして、本棚を満たしていきましょう。</p>
                     <button id="mode-library">本棚をひらく</button>
+                </div>
+                <div class="mode-card">
+                    <span class="mode-tagline">PHOTO ALBUM</span>
+                    <h3>アルバム</h3>
+                    <p>撮影した夜空の写真をまとめて鑑賞。日時や観測地、フィルター情報を眺めながら、自分だけの星空アルバムを振り返りましょう。</p>
+                    <button id="mode-album">アルバムを開く</button>
                 </div>
             </div>
         </div>
@@ -3745,7 +3747,7 @@
     <div id="album-screen" class="hidden">
         <div class="album-header">
             <h2 class="album-title">📷 ALBUM</h2>
-            <button class="album-back-btn" id="album-back">← ホームに戻る</button>
+            <button class="album-back-btn" id="album-back">← モード選択に戻る</button>
         </div>
         <div class="album-grid" id="album-grid">
             <!-- 写真がここに動的に追加される -->

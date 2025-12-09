@@ -5,7 +5,6 @@
 import { formatCoordinate } from '../data/locations.js';
 
 const ALBUM_STORAGE_KEY = 'planetarium_album';
-const SCREEN_FADE_MS = 600; // Keep in sync with CSS --screen-fade-duration
 
 export class PhotoAlbumSystem {
     constructor() {
@@ -401,21 +400,12 @@ export class PhotoAlbumSystem {
     }
 
     setupEventListeners() {
-        // ホーム画面のボタン
-        const openAlbumBtn = document.getElementById('open-album');
+        // 画面遷移ボタン
         const albumBackBtn = document.getElementById('album-back');
-        
-        // enter-planetarium ボタンは interactionController.js で処理されるため、ここでは設定しない
-        
-        if (openAlbumBtn) {
-            openAlbumBtn.addEventListener('click', () => {
-                this.openAlbum();
-            });
-        }
         
         if (albumBackBtn) {
             albumBackBtn.addEventListener('click', () => {
-                this.backToHome();
+                this.backToModeSelector();
             });
         }
         
@@ -528,38 +518,28 @@ export class PhotoAlbumSystem {
             this.renderAlbumGrid();
         }
 
+        this.onHomeScreen = false;
         document.body.classList.remove('home-visible');
     }
 
-    backToHome() {
+    backToModeSelector() {
         const homeScreen = document.getElementById('home-screen');
+        const modeScreen = document.getElementById('mode-screen');
         const albumScreen = document.getElementById('album-screen');
 
-        // フェードアウト・フェードイン トランジション
-        // ホーム画面(z-index:2000)がアルバム画面(z-index:1500)より上にあるため、
-        // 先にホーム画面を表示してからアルバムをフェードアウトすることで
-        // 背後のプラネタリウムが見えないようにする
-
-        // 1. ホーム画面を透明状態で表示（アルバムの上に重なる）
         if (homeScreen) {
-            homeScreen.classList.add('fading-in');
             homeScreen.classList.remove('hidden');
-            
-            // 次のフレームでフェードインを開始
-            requestAnimationFrame(() => {
-                homeScreen.classList.remove('fading-in');
-            });
+        }
+        if (modeScreen) {
+            modeScreen.classList.remove('hidden');
+        }
+        if (albumScreen) {
+            albumScreen.classList.add('hidden');
         }
 
-        // 2. ホーム画面のフェードイン完了後にアルバム画面を非表示
-        setTimeout(() => {
-            if (albumScreen) {
-                albumScreen.classList.add('hidden');
-            }
-        }, SCREEN_FADE_MS); // ホーム画面のトランジション完了を待つ
-
         this.onHomeScreen = true;
-        document.body.classList.add('home-visible');
+        document.body.classList.add('mode-screen-visible');
+        document.body.classList.remove('home-visible');
     }
 
     showHomeFromPlanetarium() {

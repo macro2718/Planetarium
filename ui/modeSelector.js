@@ -2,11 +2,12 @@ import { showLocationScreen, hideLocationScreen } from './locationSelector.js';
 import { showEventArchiveScreen, hideEventArchiveScreen, resetArchiveTimeState } from './eventArchive.js';
 import { hideCelestialLibraryScreen, hideLibraryGatewayScreen, showLibraryGatewayScreen } from './celestialLibrary.js';
 import { resetPlanetariumBgm } from './planetariumContext.js';
+import { getPhotoAlbumSystem } from './photoAlbum.js';
 
 export function initModeSelector(options = {}) {
-    const { onEnterLive, onEnterArchive, onEnterLibrary } = options;
+    const { onEnterLive, onEnterArchive, onEnterLibrary, onEnterAlbum } = options;
     setupEntryButton();
-    setupModeButtons({ onEnterLive, onEnterArchive, onEnterLibrary });
+    setupModeButtons({ onEnterLive, onEnterArchive, onEnterLibrary, onEnterAlbum });
     setupBackButton();
 }
 
@@ -53,7 +54,7 @@ function setupEntryButton() {
     });
 }
 
-function setupModeButtons({ onEnterLive, onEnterArchive, onEnterLibrary }) {
+function setupModeButtons({ onEnterLive, onEnterArchive, onEnterLibrary, onEnterAlbum }) {
     const handleEnterLive = () => {
         onEnterLive?.();
         hideArchiveAndMode();
@@ -73,6 +74,13 @@ function setupModeButtons({ onEnterLive, onEnterArchive, onEnterLibrary }) {
         showLibraryGatewayScreen();
     };
 
+    const handleEnterAlbum = () => {
+        onEnterAlbum?.();
+        hideArchiveAndMode();
+        const albumSystem = getPhotoAlbumSystem();
+        albumSystem.openAlbum();
+    };
+
     const planetariumBtn = document.getElementById('mode-planetarium');
     if (planetariumBtn) {
         planetariumBtn.addEventListener('click', handleEnterLive);
@@ -86,6 +94,11 @@ function setupModeButtons({ onEnterLive, onEnterArchive, onEnterLibrary }) {
     const libraryBtn = document.getElementById('mode-library');
     if (libraryBtn) {
         libraryBtn.addEventListener('click', handleEnterLibrary);
+    }
+
+    const albumBtn = document.getElementById('mode-album');
+    if (albumBtn) {
+        albumBtn.addEventListener('click', handleEnterAlbum);
     }
 
     // モード選択画面のDOMが差し替わっても動作するように、デリゲートでも拾う
@@ -102,6 +115,11 @@ function setupModeButtons({ onEnterLive, onEnterArchive, onEnterLibrary }) {
 
         if (event.target.closest('#mode-library')) {
             handleEnterLibrary();
+            return;
+        }
+
+        if (event.target.closest('#mode-album')) {
+            handleEnterAlbum();
         }
     });
 }
