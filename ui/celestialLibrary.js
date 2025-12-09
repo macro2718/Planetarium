@@ -290,10 +290,10 @@ function setupShelfScene() {
         new THREE.MeshStandardMaterial({
             map: woodTextures.colorMap,
             normalMap: woodTextures.normalMap,
-            color: 0xb29070,
+            color: 0x4b2e1f,
             roughness: 0.5,
             metalness: 0.06,
-            emissive: new THREE.Color(0xc8a782).multiplyScalar(0.16),
+            emissive: new THREE.Color(0x26160e).multiplyScalar(0.24),
             normalScale: new THREE.Vector2(0.8, 1.05)
         })
     );
