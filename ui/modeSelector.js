@@ -3,6 +3,7 @@ import { showEventArchiveScreen, hideEventArchiveScreen, resetArchiveTimeState }
 import { hideCelestialLibraryScreen, hideLibraryGatewayScreen, showLibraryGatewayScreen } from './celestialLibrary.js';
 import { resetPlanetariumBgm } from './planetariumContext.js';
 import { getPhotoAlbumSystem } from './photoAlbum.js';
+import { playModeSelectionBgm, playTitleBgm } from './bgmController.js';
 
 export function initModeSelector(options = {}) {
     const { onEnterLive, onEnterArchive, onEnterLibrary, onEnterAlbum } = options;
@@ -31,6 +32,7 @@ function setupEntryButton() {
         resetPlanetariumBgm();
         hideCelestialLibraryScreen();
         hideLibraryGatewayScreen();
+        playModeSelectionBgm();
         document.body.classList.remove('home-visible');
         document.body.classList.add('mode-screen-visible');
         homeScreen?.classList.remove('hidden');
@@ -138,6 +140,7 @@ function setupBackButton() {
             modeScreen?.classList.add('hidden');
             document.body.classList.add('home-visible');
             document.body.classList.remove('mode-screen-visible');
+            playTitleBgm();
         });
     }
 }

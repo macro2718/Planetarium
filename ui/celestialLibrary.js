@@ -2,6 +2,7 @@ import * as THREE from '../three.module.js';
 import { destroyAllPlanetaria, resetPlanetariumBgm } from './planetariumContext.js';
 import { findConstellationTale } from '../data/constellationTales.js';
 import { BASE_CONSTELLATION_DATA } from '../data/constellations.js';
+import { playModeSelectionBgm } from './bgmController.js';
 
 const STORAGE_KEY = 'celestial-library-unlocked-v1';
 const SHADOW_CAMERA_BASE = {
@@ -48,6 +49,7 @@ export function showLibraryGatewayScreen() {
     const modeScreen = document.getElementById('mode-screen');
     prepareLibraryMode();
     hideCelestialLibraryScreen();
+    playModeSelectionBgm();
     if (gatewayScreen) {
         gatewayScreen.classList.remove('hidden');
     }
@@ -73,6 +75,7 @@ export function showCelestialLibraryScreen() {
     const homeScreen = document.getElementById('home-screen');
     prepareLibraryMode();
     hideLibraryGatewayScreen();
+    playModeSelectionBgm();
     if (libraryScreen) {
         libraryScreen.classList.remove('hidden');
     }
@@ -212,6 +215,7 @@ function showModeScreen() {
     if (homeScreen) {
         homeScreen.classList.remove('hidden');
     }
+    playModeSelectionBgm();
     document.body.classList.add('mode-screen-visible');
     document.body.classList.add('home-visible');
 }

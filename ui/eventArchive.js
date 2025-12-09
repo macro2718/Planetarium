@@ -11,6 +11,7 @@ import {
     setActivePlanetarium,
     showPlanetariumCanvas
 } from './planetariumContext.js';
+import { enterPlanetariumScene, playModeSelectionBgm } from './bgmController.js';
 
 let currentPlanetarium = null;
 let onEventSelected = null;
@@ -169,6 +170,7 @@ function activateEvent(event) {
     setSelectedEvent(event);
 
     if (currentPlanetarium) {
+        enterPlanetariumScene();
         setActivePlanetarium('archive');
         showPlanetariumCanvas();
         currentPlanetarium.start();
@@ -236,6 +238,7 @@ export function showEventArchiveScreen() {
     const archiveScreen = document.getElementById('archive-screen');
     resetPlanetariumBgm();
     destroyAllPlanetaria();
+    playModeSelectionBgm();
     currentPlanetarium?.stop();
     getLivePlanetarium()?.stop();
     if (archiveScreen) {
@@ -310,6 +313,7 @@ function showModeScreen() {
     if (homeScreen) {
         homeScreen.classList.remove('hidden');
     }
+    playModeSelectionBgm();
     document.body.classList.add('mode-screen-visible');
     document.body.classList.add('home-visible');
 }

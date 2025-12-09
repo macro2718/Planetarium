@@ -3,6 +3,7 @@
 // ========================================
 
 import { formatCoordinate } from '../data/locations.js';
+import { playModeSelectionBgm, playTitleBgm } from './bgmController.js';
 
 const ALBUM_STORAGE_KEY = 'planetarium_album';
 
@@ -520,6 +521,7 @@ export class PhotoAlbumSystem {
 
         this.onHomeScreen = false;
         document.body.classList.remove('home-visible');
+        playModeSelectionBgm();
     }
 
     backToModeSelector() {
@@ -540,6 +542,7 @@ export class PhotoAlbumSystem {
         this.onHomeScreen = true;
         document.body.classList.add('mode-screen-visible');
         document.body.classList.remove('home-visible');
+        playModeSelectionBgm();
     }
 
     showHomeFromPlanetarium() {
@@ -549,6 +552,7 @@ export class PhotoAlbumSystem {
         }
         this.onHomeScreen = true;
         document.body.classList.add('home-visible');
+        playTitleBgm();
     }
 
     isOnHomeScreen() {

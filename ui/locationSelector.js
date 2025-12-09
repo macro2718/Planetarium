@@ -9,6 +9,7 @@ import {
     setActivePlanetarium,
     showPlanetariumCanvas
 } from './planetariumContext.js';
+import { playModeSelectionBgm, enterPlanetariumScene, playTitleBgm } from './bgmController.js';
 
 let currentPlanetarium = null;
 let onLocationSelected = null;
@@ -163,6 +164,7 @@ function setupObserveButton() {
 function startObservation(location) {
     // Planetariumの観測地を更新
     if (currentPlanetarium) {
+        enterPlanetariumScene();
         setActivePlanetarium('live');
         showPlanetariumCanvas();
         currentPlanetarium.start();
@@ -212,6 +214,7 @@ function backToModeFromLocation() {
     document.body.classList.add('home-visible');
     document.body.classList.add('mode-screen-visible');
     homeScreen?.classList.remove('hidden');
+    playModeSelectionBgm();
 
     // モード選択画面が存在する場合は、そちらへ戻す
     if (modeScreen) {
@@ -234,6 +237,7 @@ function backToModeFromLocation() {
     if (homeScreen) {
         homeScreen.classList.add('fading-in');
         homeScreen.classList.remove('hidden');
+        playTitleBgm();
 
         requestAnimationFrame(() => {
             homeScreen.classList.remove('fading-in');
@@ -255,6 +259,7 @@ export function showLocationScreen() {
     const homeScreen = document.getElementById('home-screen');
     resetPlanetariumBgm();
     destroyAllPlanetaria();
+    playModeSelectionBgm();
 
     currentPlanetarium?.stop();
     getArchivePlanetarium()?.stop();
