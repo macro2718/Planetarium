@@ -1,15 +1,24 @@
 import * as THREE from '../three.module.js';
 
+let renderer = null;
+let scene = null;
+let camera = null;
+let container = null;
+let homeScreen = null;
+let modeScreen = null;
+let currentHost = null;
+
 export function initHomeScene() {
-    const container = document.getElementById('home-three-container');
-    const homeScreen = document.getElementById('home-screen');
+    container = document.getElementById('home-three-container');
+    homeScreen = document.getElementById('home-screen');
+    modeScreen = document.getElementById('mode-screen');
 
     if (!container || !homeScreen) {
         console.warn('[homeScene] home container not found');
         return;
     }
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(container.clientWidth || window.innerWidth, container.clientHeight || window.innerHeight);
     renderer.setClearColor(0x02040b, 0);
@@ -18,10 +27,10 @@ export function initHomeScene() {
     renderer.domElement.style.inset = '0';
     container.appendChild(renderer.domElement);
 
-    const scene = new THREE.Scene();
+    scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x050814, 0.007);
 
-    const camera = new THREE.PerspectiveCamera(
+    camera = new THREE.PerspectiveCamera(
         58,
         (container.clientWidth || window.innerWidth) / Math.max(1, container.clientHeight || window.innerHeight),
         0.1,
@@ -107,15 +116,15 @@ export function initHomeScene() {
     const pathGlow = createPathGlow();
     scene.add(pathGlow);
 
-    const floorGrid = createFloorGrid();
-    scene.add(floorGrid);
+    currentHost = container.parentElement?.closest('#home-screen, #mode-screen') || homeScreen;
 
     const clock = new THREE.Clock();
 
     const animate = () => {
         requestAnimationFrame(animate);
+        syncSceneHost();
         const elapsed = clock.getElapsedTime();
-        const visible = !homeScreen.classList.contains('hidden');
+        const visible = isHostVisible();
 
         renderer.domElement.style.opacity = visible ? '0.95' : '0';
         if (!visible) return;
@@ -159,14 +168,59 @@ export function initHomeScene() {
     };
     animate();
 
-    const resize = () => {
-        const { clientWidth, clientHeight } = container;
-        renderer.setSize(clientWidth || window.innerWidth, clientHeight || window.innerHeight);
-        camera.aspect = (clientWidth || window.innerWidth) / Math.max(1, clientHeight || window.innerHeight);
-        camera.updateProjectionMatrix();
-    };
+    const resize = () => updateRendererSize();
     window.addEventListener('resize', resize);
     resize();
+}
+
+function syncSceneHost() {
+    if (!container) return;
+    const targetScreen = resolveTargetScreen();
+
+    if (!targetScreen) {
+        currentHost = null;
+        return;
+    }
+
+    if (container.parentElement !== targetScreen) {
+        targetScreen.prepend(container);
+        updateRendererSize();
+    }
+    currentHost = targetScreen;
+}
+
+function resolveTargetScreen() {
+    if (modeScreen && isModeScreenVisible()) return modeScreen;
+    if (homeScreen && isHomeScreenVisible()) return homeScreen;
+    if (container) {
+        return container.parentElement?.closest('#home-screen, #mode-screen') || currentHost;
+    }
+    return currentHost;
+}
+
+function isHostVisible() {
+    if (!currentHost) return false;
+    if (currentHost === modeScreen) return isModeScreenVisible();
+    if (currentHost === homeScreen) return isHomeScreenVisible();
+    return false;
+}
+
+function isModeScreenVisible() {
+    if (!modeScreen) return false;
+    return document.body.classList.contains('mode-screen-visible') && !modeScreen.classList.contains('hidden');
+}
+
+function isHomeScreenVisible() {
+    if (!homeScreen) return false;
+    return document.body.classList.contains('home-visible') && !homeScreen.classList.contains('hidden');
+}
+
+function updateRendererSize() {
+    if (!renderer || !camera || !container) return;
+    const { clientWidth, clientHeight } = container;
+    renderer.setSize(clientWidth || window.innerWidth, clientHeight || window.innerHeight);
+    camera.aspect = (clientWidth || window.innerWidth) / Math.max(1, clientHeight || window.innerHeight);
+    camera.updateProjectionMatrix();
 }
 
 function createPortalFrame() {
@@ -432,19 +486,6 @@ function createPathGlow() {
     mesh.position.set(0, -16, 90);
     mesh.scale.set(0.6, 1, 1);
     return mesh;
-}
-
-function createFloorGrid() {
-    const grid = new THREE.GridHelper(420, 42, 0x9fe0ff, 0x2b3d65);
-    grid.rotation.x = Math.PI / 2;
-    grid.position.set(0, -16, 90);
-    const materials = Array.isArray(grid.material) ? grid.material : [grid.material];
-    materials.forEach((mat) => {
-        mat.transparent = true;
-        mat.opacity = 0.16;
-        mat.depthWrite = false;
-    });
-    return grid;
 }
 
 let cachedCircleSprite = null;

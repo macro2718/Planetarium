@@ -1,12 +1,38 @@
+const MODE_SELECTION_TRACKS = ['bgm/mode_selection/Whispers in the Quiet.mp3'];
+
 const PLAYLISTS = {
-    title: ['bgm/title/Starlight Drift.mp3'],
-    menu: ['bgm/mode_selection/Whispers in the Quiet.mp3']
+    title: MODE_SELECTION_TRACKS,
+    menu: MODE_SELECTION_TRACKS
 };
 
 let currentScene = null;
 let uiAudio = null;
 let playlist = [];
+let playlistSourceRef = null;
 let playlistIndex = 0;
+let awaitingUserInteraction = false;
+
+function requestUserResume() {
+    if (awaitingUserInteraction) return;
+    awaitingUserInteraction = true;
+
+    const resumePlayback = () => {
+        awaitingUserInteraction = false;
+        if (uiAudio) {
+            uiAudio.play().catch((err) => {
+                console.error('UI BGM再生リトライ失敗:', err);
+            });
+            return;
+        }
+        if (playlist.length) {
+            startTrack(playlistIndex);
+        }
+    };
+
+    ['pointerdown', 'touchstart', 'keydown'].forEach((eventName) => {
+        document.addEventListener(eventName, resumePlayback, { once: true });
+    });
+}
 
 function startTrack(index = 0) {
     if (!playlist.length) return;
@@ -29,6 +55,7 @@ function startTrack(index = 0) {
 
     uiAudio.play().catch((err) => {
         console.error('UI BGM再生エラー:', err);
+        requestUserResume();
     });
 }
 
@@ -48,7 +75,20 @@ function playScene(scene) {
     }
 
     const sameScene = currentScene === scene;
+    const samePlaylist = playlistSourceRef && playlistSourceRef === next;
     currentScene = scene;
+
+    if (samePlaylist && uiAudio) {
+        if (uiAudio.paused) {
+            uiAudio.play().catch((err) => {
+                console.error('UI BGM再生エラー (再開):', err);
+                requestUserResume();
+            });
+        }
+        return;
+    }
+
+    playlistSourceRef = next;
     playlist = next.slice();
 
     if (sameScene && uiAudio && !uiAudio.paused) return;
@@ -74,6 +114,7 @@ export function stopUiBgm() {
         uiAudio.currentTime = 0;
     }
     uiAudio = null;
+    playlistSourceRef = null;
     playlist = [];
     playlistIndex = 0;
 }

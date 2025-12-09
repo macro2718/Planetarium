@@ -325,9 +325,11 @@ export class PhotoAlbumSystem {
         if (this.photos.length === 0) {
             grid.innerHTML = `
                 <div class="album-empty">
-                    <span class="album-empty-icon">📷</span>
-                    <span class="album-empty-text">まだ写真がありません</span>
-                    <span style="margin-top: 10px; opacity: 0.5; font-size: 14px;">フォトモードで撮影してください</span>
+                    <div class="album-empty-panel">
+                        <span class="album-empty-icon">📷</span>
+                        <span class="album-empty-text">まだ写真がありません</span>
+                        <span style="opacity: 0.6; font-size: 14px;">フォトモードで撮影してください</span>
+                    </div>
                 </div>
             `;
             return;

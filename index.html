@@ -727,7 +727,7 @@
             display: none; /* タイトル画面の装飾オーバーレイを無効化 */
         }
 
-        #home-three-container {
+        .entrance-three-layer {
             position: absolute;
             inset: 0;
             z-index: 1;
@@ -736,7 +736,7 @@
             filter: saturate(120%) brightness(1.05);
         }
 
-        #home-three-container canvas {
+        .entrance-three-layer canvas {
             width: 100%;
             height: 100%;
             display: block;
@@ -1088,7 +1088,7 @@
         }
 
         /* 共通：ホーム以外の画面は擬似要素の上に内容を載せる */
-        #mode-screen > *,
+        #mode-screen > *:not(.entrance-three-layer),
         #location-screen > *,
         #archive-screen > *,
         #library-gateway-screen > *,
@@ -3461,7 +3461,7 @@
 <body>
     <!-- ホーム画面 -->
     <div id="home-screen">
-        <div id="home-three-container"></div>
+        <div id="home-three-container" class="entrance-three-layer"></div>
         <div class="home-content">
             <div class="home-badge">ENTRANCE GATE</div>
             <h1 class="home-title">PLANETARIUM</h1>
