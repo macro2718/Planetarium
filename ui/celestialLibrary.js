@@ -321,10 +321,15 @@ function setupShelfScene() {
     fixtureGroup.position.copy(bookGroup.position);
     shelfGroup.add(fixtureGroup);
 
-    const shelfDivider = createShelfDivider(woodTextures);
-    shelfDivider.position.set(-2.5, 0.35, -0.85);
-    shelfDivider.visible = false;
-    fixtureGroup.add(shelfDivider);
+    const leftDivider = createShelfDivider(woodTextures);
+    leftDivider.position.set(-2.5, 0.35, -0.85);
+    leftDivider.visible = false;
+    fixtureGroup.add(leftDivider);
+
+    const rightDivider = createShelfDivider(woodTextures);
+    rightDivider.position.set(2.5, 0.35, -0.85);
+    rightDivider.visible = false;
+    fixtureGroup.add(rightDivider);
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
@@ -336,7 +341,8 @@ function setupShelfScene() {
         shelfGroup,
         bookGroup,
         fixtureGroup,
-        leftDivider: shelfDivider,
+        leftDivider,
+        rightDivider,
         container,
         raycaster,
         pointer,
@@ -450,15 +456,33 @@ function updateShelfBooks(contents) {
     if (!shelfScene) setupShelfScene();
     if (!shelfScene) return;
 
-    const divider = shelfScene.leftDivider;
-    if (divider) {
-        divider.visible = contents.length > 0;
-        if (contents.length) {
-            const metrics = divider.userData?.metrics || { width: 0.62 };
-            const bookWidth = 1.2;
-            const gap = 0.18;
-            const leftPad = 1;
-            divider.position.x = -(bookWidth / 2 + gap + (metrics.width || 0) / 2 + leftPad);
+    const bookSpacing = 1.6;
+    const bookWidth = 1.2;
+    const bookGap = 0.18;
+    const dividerPad = 1;
+    const totalConstellations = Math.max(0, BASE_CONSTELLATION_DATA.length);
+
+    const leftDivider = shelfScene.leftDivider;
+    const rightDivider = shelfScene.rightDivider;
+    const hasBooks = contents.length > 0;
+
+    if (leftDivider) {
+        leftDivider.visible = hasBooks;
+        if (hasBooks) {
+            const metrics = leftDivider.userData?.metrics || { width: 0.62 };
+            leftDivider.position.x = -(bookWidth / 2 + bookGap + (metrics.width || 0) / 2 + dividerPad);
+        }
+    }
+
+    if (rightDivider) {
+        rightDivider.visible = hasBooks;
+        if (hasBooks) {
+            const metrics = rightDivider.userData?.metrics || { width: 0.62 };
+            const totalBooks = Math.max(totalConstellations, contents.length);
+            const lastBookIndex = Math.max(totalBooks - 1, 0);
+            // Anchor the right divider just beyond the final book position when the shelf is complete.
+            rightDivider.position.x =
+                lastBookIndex * bookSpacing + (bookWidth / 2 + bookGap + (metrics.width || 0) / 2 + dividerPad);
         }
     }
 
@@ -486,14 +510,13 @@ function updateShelfBooks(contents) {
 
     if (!contents.length) return;
 
-    const spacing = 1.6;   // Spacing between books
     const anisotropy = shelfScene.renderer.capabilities?.getMaxAnisotropy
         ? shelfScene.renderer.capabilities.getMaxAnisotropy()
         : 4;
 
     contents.forEach((content, idx) => {
         const book = createBookMesh(content, idx, anisotropy);
-        book.position.set(idx * spacing, 0, (Math.random() - 0.5) * 0.35);
+        book.position.set(idx * bookSpacing, 0, (Math.random() - 0.5) * 0.35);
         group.add(book);
     });
 }
