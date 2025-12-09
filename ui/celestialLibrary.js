@@ -595,11 +595,13 @@ function updateOffsetBounds() {
         : shelfScene.layoutMetrics.finalRightEdge || visibleRightEdge;
 
     const halfViewWidth = getShelfHalfViewWidth();
-    const overscroll = 1.8; // slight cushion so drag doesn't feel hard-stopped
-    const extraPan = Math.max(halfViewWidth * 0.15, 1.8); // allow a bit more travel past dividers
-    const minOffset = -halfViewWidth - shelfScene.baseOffset - leftEdge + overscroll + extraPan * 2;
-    const maxOffsetVisible = halfViewWidth - shelfScene.baseOffset - visibleRightEdge - overscroll - extraPan;
-    const maxOffsetFuture = halfViewWidth - shelfScene.baseOffset - finalRightEdge - overscroll - extraPan;
+    const overscrollRight = 1.8; // slight cushion so drag doesn't feel hard-stopped
+    const overscrollLeft = 2.6; // stronger cushion to shorten left travel
+    const extraPanRight = Math.max(halfViewWidth * 0.15, 1.8); // allow a bit more travel past dividers (right)
+    const extraPanLeft = Math.max(halfViewWidth * 0.22, 2.4);
+    const minOffset = -halfViewWidth - shelfScene.baseOffset - leftEdge + overscrollLeft + extraPanLeft;
+    const maxOffsetVisible = halfViewWidth - shelfScene.baseOffset - visibleRightEdge - overscrollRight - extraPanRight;
+    const maxOffsetFuture = halfViewWidth - shelfScene.baseOffset - finalRightEdge - overscrollLeft - extraPanLeft;
 
     shelfScene.minOffset = Math.min(minOffset, maxOffsetFuture);
     shelfScene.maxOffset = Math.max(minOffset, maxOffsetVisible);
