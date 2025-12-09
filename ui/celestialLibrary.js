@@ -15,6 +15,11 @@ const CONSTELLATION_DESCRIPTION_MAP = new Map(
     BASE_CONSTELLATION_DATA.map((entry) => [normalizeConstellationName(entry.name), entry])
 );
 
+function getRegisteredConstellationCount() {
+    const baseCount = Array.isArray(BASE_CONSTELLATION_DATA) ? BASE_CONSTELLATION_DATA.length : 0;
+    return Math.max(baseCount, CONSTELLATION_DESCRIPTION_MAP?.size || 0);
+}
+
 export function initCelestialLibrary() {
     unlockedConstellations = loadUnlockedConstellations();
     setupBackButton();
@@ -352,6 +357,11 @@ function setupShelfScene() {
         baseOffset: 0,
         maxOffset: 0,
         minOffset: 0,
+        layoutMetrics: {
+            leftEdge: 0,
+            currentRightEdge: 0,
+            finalRightEdge: 0
+        },
         clock: new THREE.Clock()
     };
 
@@ -501,19 +511,21 @@ function updateOffsetBounds() {
 
     const leftEdge = shelfScene.leftDivider?.visible
         ? shelfScene.leftDivider.position.x - (leftMetrics.width || 0) / 2
-        : 0;
-    const rightEdge = shelfScene.rightDivider?.visible
+        : shelfScene.layoutMetrics.leftEdge || 0;
+    const visibleRightEdge = shelfScene.layoutMetrics.currentRightEdge || 0;
+    const finalRightEdge = shelfScene.rightDivider?.visible
         ? shelfScene.rightDivider.position.x + (rightMetrics.width || 0) / 2
-        : 0;
+        : shelfScene.layoutMetrics.finalRightEdge || visibleRightEdge;
 
     const halfViewWidth = getShelfHalfViewWidth();
     const overscroll = 1.8; // slight cushion so drag doesn't feel hard-stopped
     const extraPan = Math.max(halfViewWidth * 0.15, 1.8); // allow a bit more travel past dividers
-    const minOffset = -halfViewWidth - shelfScene.baseOffset - leftEdge + overscroll + extraPan*2;
-    const maxOffset = halfViewWidth - shelfScene.baseOffset - rightEdge - overscroll - extraPan;
+    const minOffset = -halfViewWidth - shelfScene.baseOffset - leftEdge + overscroll + extraPan * 2;
+    const maxOffsetVisible = halfViewWidth - shelfScene.baseOffset - visibleRightEdge - overscroll - extraPan;
+    const maxOffsetFuture = halfViewWidth - shelfScene.baseOffset - finalRightEdge - overscroll - extraPan;
 
-    shelfScene.minOffset = Math.min(minOffset, maxOffset);
-    shelfScene.maxOffset = Math.max(minOffset, maxOffset);
+    shelfScene.minOffset = Math.min(minOffset, maxOffsetFuture);
+    shelfScene.maxOffset = Math.max(minOffset, maxOffsetVisible);
     shelfScene.targetOffset = clampOffset(shelfScene.targetOffset);
     shelfScene.currentOffset = clampOffset(shelfScene.currentOffset);
 }
@@ -526,11 +538,13 @@ function updateShelfBooks(contents) {
     const bookWidth = 1.2;
     const bookGap = 0.18;
     const dividerPad = 1;
-    const totalBooks = Math.max(contents.length, 1);
+    const unlockedBooks = contents.length;
+    const totalBooks = Math.max(unlockedBooks, 1);
+    const registeredConstellations = Math.max(getRegisteredConstellationCount(), totalBooks);
 
     const leftDivider = shelfScene.leftDivider;
     const rightDivider = shelfScene.rightDivider;
-    const hasBooks = contents.length > 0;
+    const hasBooks = unlockedBooks > 0;
 
     if (leftDivider) {
         leftDivider.visible = hasBooks;
@@ -544,7 +558,7 @@ function updateShelfBooks(contents) {
         rightDivider.visible = hasBooks;
         if (hasBooks) {
             const metrics = rightDivider.userData?.metrics || { width: 0.62 };
-            const lastBookIndex = Math.max(totalBooks - 1, 0);
+            const lastBookIndex = Math.max(registeredConstellations - 1, 0);
             // Anchor the right divider just beyond the final book position when the shelf is complete.
             rightDivider.position.x =
                 lastBookIndex * bookSpacing + (bookWidth / 2 + bookGap + (metrics.width || 0) / 2 + dividerPad);
@@ -588,6 +602,21 @@ function updateShelfBooks(contents) {
         book.position.set(idx * bookSpacing, 0, (Math.random() - 0.5) * 0.35);
         group.add(book);
     });
+
+    const leftEdge = leftDivider?.visible
+        ? leftDivider.position.x - (leftDivider.userData?.metrics?.width || 0.62) / 2
+        : 0;
+    const currentRightEdge = hasBooks
+        ? Math.max(unlockedBooks - 1, 0) * bookSpacing + (bookWidth / 2 + bookGap)
+        : 0;
+    const finalRightEdge = rightDivider?.visible
+        ? rightDivider.position.x + (rightDivider.userData?.metrics?.width || 0.62) / 2
+        : currentRightEdge;
+    shelfScene.layoutMetrics = {
+        leftEdge,
+        currentRightEdge,
+        finalRightEdge
+    };
 
     updateOffsetBounds();
 }
