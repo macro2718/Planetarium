@@ -1815,19 +1815,23 @@
         }
 
         .archive-back-btn {
-            padding: 10px 18px;
-            border-radius: 999px;
-            border: 1px solid rgba(180, 200, 255, 0.35);
-            background: rgba(255, 255, 255, 0.04);
-            color: rgba(255, 255, 255, 0.86);
+            padding: 12px 22px;
+            border-radius: 12px;
+            border: 1px solid rgba(136, 173, 255, 0.5);
+            background: linear-gradient(135deg, rgba(12, 18, 42, 0.8), rgba(32, 48, 88, 0.6));
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            letter-spacing: 2px;
             cursor: pointer;
             transition: all 0.25s ease;
-            letter-spacing: 1px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 26px rgba(50, 100, 180, 0.28);
         }
 
         .archive-back-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(180, 200, 255, 0.6);
+            background: linear-gradient(135deg, rgba(22, 38, 76, 0.9), rgba(52, 78, 128, 0.7));
+            border-color: rgba(186, 213, 255, 0.7);
+            transform: translateY(-1px);
         }
 
         /* 書斎 導入画面 */
@@ -2207,6 +2211,25 @@
         .library-back-btn:hover {
             background: linear-gradient(120deg, rgba(255, 255, 255, 0.12), rgba(178, 226, 255, 0.2));
             border-color: rgba(178, 226, 255, 0.7);
+            transform: translateY(-1px);
+        }
+
+        /* モード選択に戻る（書斎導入用） */
+        .library-back-btn.library-gateway-back {
+            padding: 12px 22px;
+            border-radius: 12px;
+            border: 1px solid rgba(136, 173, 255, 0.5);
+            background: linear-gradient(135deg, rgba(12, 18, 42, 0.8), rgba(32, 48, 88, 0.6));
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 13px;
+            letter-spacing: 2px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 26px rgba(50, 100, 180, 0.28);
+        }
+
+        .library-back-btn.library-gateway-back:hover {
+            background: linear-gradient(135deg, rgba(22, 38, 76, 0.9), rgba(52, 78, 128, 0.7));
+            border-color: rgba(186, 213, 255, 0.7);
             transform: translateY(-1px);
         }
 
