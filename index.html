@@ -25,6 +25,11 @@
             --photo-filter-overlay-opacity: 0;
             --photo-filter-vignette-strength: 0;
             --photo-filter-vignette-alpha: 0;
+            --hero-pill-size: 11px;
+            --hero-title-size: 30px;
+            --hero-title-spacing: 8px;
+            --hero-subtitle-size: 14px;
+            --hero-back-btn-size: 13px;
         }
 
         * {
@@ -1288,6 +1293,7 @@
             overflow: hidden;
             color: var(--text-main);
             letter-spacing: 0.4px;
+            font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
             isolation: isolate;
         }
 
@@ -1329,24 +1335,24 @@
             border-radius: 999px;
             background: linear-gradient(135deg, rgba(90, 138, 220, 0.28), rgba(175, 120, 210, 0.28));
             border: 1px solid rgba(160, 200, 255, 0.35);
-            font-size: 11px;
+            font-size: var(--hero-pill-size);
             letter-spacing: 3px;
             color: rgba(255, 255, 255, 0.82);
             font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
         }
 
         .location-title {
-            font-size: 30px;
-            letter-spacing: 8px;
+            font-size: var(--hero-title-size);
+            letter-spacing: var(--hero-title-spacing);
             color: rgba(255, 255, 255, 0.94);
             font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
             text-transform: uppercase;
         }
 
         .location-subtitle {
-            font-size: 14px;
+            font-size: var(--hero-subtitle-size);
             color: rgba(200, 215, 255, 0.74);
-            line-height: 1.7;
+            line-height: 1.8;
             max-width: 720px;
             font-family: 'Zen Kaku Gothic New', 'Space Grotesk', sans-serif;
         }
@@ -1377,7 +1383,7 @@
             border: 1px solid rgba(136, 173, 255, 0.5);
             background: linear-gradient(135deg, rgba(12, 18, 42, 0.8), rgba(32, 48, 88, 0.6));
             color: rgba(255, 255, 255, 0.9);
-            font-size: 13px;
+            font-size: var(--hero-back-btn-size);
             letter-spacing: 2px;
             cursor: pointer;
             transition: all 0.25s ease;
@@ -1671,11 +1677,10 @@
             grid-template-columns: 1fr auto;
             gap: 14px;
             align-items: flex-start;
-            padding: 14px 16px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(136, 173, 255, 0.22);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+            padding: 0;
+            border: none;
+            background: none;
+            box-shadow: none;
         }
 
         .location-summary-panel > div {
@@ -1867,22 +1872,22 @@
             border-radius: 999px;
             background: linear-gradient(135deg, rgba(130, 170, 255, 0.28), rgba(120, 220, 200, 0.28));
             border: 1px solid rgba(160, 200, 255, 0.35);
-            font-size: 11px;
+            font-size: var(--hero-pill-size);
             letter-spacing: 3px;
             color: rgba(255, 255, 255, 0.82);
             font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
         }
 
         .archive-title {
-            font-size: 30px;
-            letter-spacing: 8px;
+            font-size: var(--hero-title-size);
+            letter-spacing: var(--hero-title-spacing);
             color: rgba(255, 255, 255, 0.94);
             font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
             text-transform: uppercase;
         }
 
         .archive-subtitle {
-            font-size: 14px;
+            font-size: var(--hero-subtitle-size);
             color: rgba(220, 235, 255, 0.78);
             max-width: 720px;
             line-height: 1.8;
@@ -1913,7 +1918,7 @@
             border: 1px solid rgba(136, 173, 255, 0.5);
             background: linear-gradient(135deg, rgba(12, 18, 42, 0.8), rgba(32, 48, 88, 0.6));
             color: rgba(255, 255, 255, 0.9);
-            font-size: 13px;
+            font-size: var(--hero-back-btn-size);
             letter-spacing: 2px;
             cursor: pointer;
             transition: all 0.25s ease;
