@@ -6,7 +6,6 @@ import { createGrassSurface } from './surfaces/grassSurface.js';
 
 export function createSurfaceSystem(ctx, moonStateProvider) {
     const group = new THREE.Group();
-    ctx.surfaceGroup = group;
     ctx.scene.add(group);
 
     const surfaces = new Map();

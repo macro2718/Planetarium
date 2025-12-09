@@ -60,7 +60,6 @@ export function createHourCircleSystem(ctx) {
     
     group.visible = false; // デフォルトは非表示
     ctx.scene.add(group);
-    ctx.hourCircleGroup = group;
     
     return {
         group,
@@ -119,7 +118,6 @@ export function createDeclinationCircleSystem(ctx) {
     
     group.visible = false; // デフォルトは非表示
     ctx.scene.add(group);
-    ctx.declinationCircleGroup = group;
     
     return {
         group,
@@ -181,7 +179,6 @@ export function createCelestialEquatorSystem(ctx) {
 
     group.visible = false; // デフォルトは非表示
     ctx.scene.add(group);
-    ctx.celestialEquatorGroup = group;
 
     return {
         group,
@@ -277,7 +274,6 @@ export function createEclipticSystem(ctx) {
 
     group.visible = false; // デフォルトは非表示
     ctx.scene.add(group);
-    ctx.eclipticGroup = group;
 
     return {
         group,
@@ -339,7 +335,6 @@ export function createGalacticEquatorSystem(ctx) {
 
     group.visible = false;
     ctx.scene.add(group);
-    ctx.galacticEquatorGroup = group;
 
     return {
         group,
@@ -399,7 +394,6 @@ export function createLunarOrbitPlaneSystem(ctx) {
 
     group.visible = false;
     ctx.scene.add(group);
-    ctx.lunarOrbitGroup = group;
 
     return {
         group,

@@ -107,7 +107,6 @@ class Planetarium {
         this.clickableObjects = [];
         this.catalogPickables = [];
         this.catalog = AstroCatalog.createDefault();
-        this.starCatalog = this.catalog.getStars();
         this.starCatalogMap = this.catalog.getStarMap();
         this.observerLocationInfo = { ...DEFAULT_OBSERVER_LOCATION };
         this.observer = {
@@ -131,7 +130,6 @@ class Planetarium {
         this.isTimePaused = false;
         this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, this.observer.lon);
         this.infoTimeout = null;
-        this.currentMoonState = null;
         this.updaters = [];
         this.lastTime = nowSeconds;
         this.containerId = containerId;

@@ -143,7 +143,6 @@ export function createMoonSystem(ctx) {
 
     const updateState = (state) => {
         if (!state) return;
-        ctx.currentMoonState = state;
         ctx.moonGroup.position.copy(state.position);
         ctx.moonGroup.lookAt(0, 0, 0);
         ctx.moonUniforms.phaseAngle.value = state.phaseAngle;

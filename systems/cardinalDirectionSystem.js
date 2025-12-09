@@ -107,7 +107,6 @@ export function createCardinalDirectionSystem(ctx) {
     
     group.visible = false; // デフォルトは非表示
     ctx.scene.add(group);
-    ctx.cardinalDirectionGroup = group;
     
     return {
         group,
