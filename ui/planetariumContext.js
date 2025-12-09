@@ -1,3 +1,5 @@
+import { hideEventEffectPanel } from './eventEffectPanel.js';
+
 let livePlanetarium = null;
 let archivePlanetarium = null;
 let activePlanetarium = null;
@@ -56,6 +58,7 @@ export function showPlanetariumCanvas() {
 export function hidePlanetariumCanvas() {
     planetariumVisible = false;
     applyCanvasVisibility(activePlanetarium === archivePlanetarium ? 'archive' : 'live');
+    hideEventEffectPanel();
 }
 
 export function destroyPlanetarium(mode = 'active') {
