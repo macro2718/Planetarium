@@ -113,9 +113,6 @@ export function initHomeScene() {
     const guideLights = createGuideLights();
     scene.add(guideLights);
 
-    const pathGlow = createPathGlow();
-    scene.add(pathGlow);
-
     currentHost = container.parentElement?.closest('#home-screen, #mode-screen') || homeScreen;
 
     const clock = new THREE.Clock();
@@ -143,8 +140,6 @@ export function initHomeScene() {
 
         aurora.material.opacity = 0.26 + Math.sin(elapsed * 0.5) * 0.16;
         aurora.rotation.y = Math.sin(elapsed * 0.18) * 0.2;
-
-        pathGlow.material.opacity = 0.18 + Math.sin(elapsed * 0.8) * 0.06;
 
         orbitLines.forEach((line, idx) => {
             line.rotation.z += line.userData.speed;
@@ -468,24 +463,6 @@ function createGuideLights() {
     });
 
     return group;
-}
-
-function createPathGlow() {
-    const geometry = new THREE.PlaneGeometry(140, 360, 1, 1);
-    const material = new THREE.MeshBasicMaterial({
-        color: 0x9fe0ff,
-        transparent: true,
-        opacity: 0.18,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-        side: THREE.DoubleSide
-    });
-
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.rotation.x = -Math.PI / 2;
-    mesh.position.set(0, -16, 90);
-    mesh.scale.set(0.6, 1, 1);
-    return mesh;
 }
 
 let cachedCircleSprite = null;
