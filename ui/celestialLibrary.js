@@ -167,8 +167,7 @@ function setupBackButton() {
     const backBtn = document.getElementById('library-back');
     if (backBtn) {
         backBtn.addEventListener('click', () => {
-            showModeScreen();
-            hideCelestialLibraryScreen();
+            showLibraryGatewayScreen();
         });
     }
 }
