@@ -1124,7 +1124,7 @@
             z-index: 2100;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: stretch;
             transition: opacity var(--screen-fade-duration) var(--screen-fade-ease), visibility var(--screen-fade-duration) var(--screen-fade-ease);
             overflow: hidden;
             color: var(--text-main);
@@ -1162,12 +1162,14 @@
             padding: 30px 12px 32px;
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 0;
             border-radius: 0;
             background: none;
             border: none;
             box-shadow: none;
             backdrop-filter: none;
+            height: 100vh;
+            overflow: hidden;
         }
 
         .mode-panel::before {
@@ -1183,9 +1185,16 @@
             justify-content: space-between;
             align-items: flex-start;
             gap: 20px;
-            position: relative;
-            z-index: 2;
-            margin-bottom: 30px;
+            position: sticky;
+            top: 0;
+            z-index: 3;
+            padding: 20px 4px 14px;
+            margin-bottom: 0;
+            background: none;
+            backdrop-filter: none;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
         }
 
         .mode-copy {
@@ -1226,6 +1235,7 @@
             display: flex;
             gap: 12px;
             align-items: center;
+            flex-shrink: 0;
         }
 
         .mode-back-btn {
@@ -1242,6 +1252,14 @@
         .mode-back-btn:hover {
             background: rgba(255, 255, 255, 0.08);
             border-color: rgba(180, 200, 255, 0.6);
+        }
+
+        .mode-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 18px 2px 16px;
+            margin-top: 12px;
+            scroll-behavior: smooth;
         }
 
         .mode-grid {
@@ -3496,30 +3514,32 @@
                     <button class="mode-back-btn" id="mode-back-home">← ホームに戻る</button>
                 </div>
             </div>
-            <div class="mode-grid">
-                <div class="mode-card">
-                    <span class="mode-tagline">LIVE PLANETARIUM</span>
-                    <h3>プラネタリウム</h3>
-                    <p>現在の夜空を巡る基本モード。観測地を選んで、今この瞬間の星の息遣いを感じましょう。</p>
-                    <button id="mode-planetarium">観測地を選ぶ</button>
-                </div>
-                <div class="mode-card">
-                    <span class="mode-tagline">CHRONO SKY</span>
-                    <h3>クロノスカイ</h3>
-                    <p>歴史に刻まれた瞬間の星空へタイムトラベル。月面着陸や流星群の嵐など、あの夜の光景を呼び戻します。</p>
-                    <button id="mode-archive">歴史的な夜空へ</button>
-                </div>
-                <div class="mode-card">
-                    <span class="mode-tagline">CELESTIAL LIBRARY</span>
-                    <h3>書斎</h3>
-                    <p>プラネタリウムやクロノスカイで出会った星座の説明を集める読書室。気になった星座をクリックして、本棚を満たしていきましょう。</p>
-                    <button id="mode-library">本棚をひらく</button>
-                </div>
-                <div class="mode-card">
-                    <span class="mode-tagline">PHOTO ALBUM</span>
-                    <h3>アルバム</h3>
-                    <p>撮影した夜空の写真をまとめて鑑賞。日時や観測地、フィルター情報を眺めながら、自分だけの星空アルバムを振り返りましょう。</p>
-                    <button id="mode-album">アルバムを開く</button>
+            <div class="mode-scroll">
+                <div class="mode-grid">
+                    <div class="mode-card">
+                        <span class="mode-tagline">LIVE PLANETARIUM</span>
+                        <h3>プラネタリウム</h3>
+                        <p>現在の夜空を巡る基本モード。観測地を選んで、今この瞬間の星の息遣いを感じましょう。</p>
+                        <button id="mode-planetarium">観測地を選ぶ</button>
+                    </div>
+                    <div class="mode-card">
+                        <span class="mode-tagline">CHRONO SKY</span>
+                        <h3>クロノスカイ</h3>
+                        <p>歴史に刻まれた瞬間の星空へタイムトラベル。月面着陸や流星群の嵐など、あの夜の光景を呼び戻します。</p>
+                        <button id="mode-archive">歴史的な夜空へ</button>
+                    </div>
+                    <div class="mode-card">
+                        <span class="mode-tagline">CELESTIAL LIBRARY</span>
+                        <h3>書斎</h3>
+                        <p>プラネタリウムやクロノスカイで出会った星座の説明を集める読書室。気になった星座をクリックして、本棚を満たしていきましょう。</p>
+                        <button id="mode-library">本棚をひらく</button>
+                    </div>
+                    <div class="mode-card">
+                        <span class="mode-tagline">PHOTO ALBUM</span>
+                        <h3>アルバム</h3>
+                        <p>撮影した夜空の写真をまとめて鑑賞。日時や観測地、フィルター情報を眺めながら、自分だけの星空アルバムを振り返りましょう。</p>
+                        <button id="mode-album">アルバムを開く</button>
+                    </div>
                 </div>
             </div>
         </div>
