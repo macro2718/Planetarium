@@ -1,1 +1,1 @@
-export * from './vendor/three/three.module.js';
+export * from './node_modules/three/build/three.module.js';
