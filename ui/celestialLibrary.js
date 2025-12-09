@@ -4,6 +4,13 @@ import { findConstellationTale } from '../data/constellationTales.js';
 import { BASE_CONSTELLATION_DATA } from '../data/constellations.js';
 
 const STORAGE_KEY = 'celestial-library-unlocked-v1';
+const SHADOW_CAMERA_BASE = {
+    near: 1,
+    far: 70,
+    halfWidth: 26,
+    top: 22,
+    bottom: -6
+};
 let unlockedConstellations = new Set();
 let detailView = null;
 let shelfScene = null;
@@ -231,14 +238,19 @@ function setupShelfScene() {
     shadowLight.shadow.bias = -0.00025;
     shadowLight.shadow.normalBias = 0.02;
     shadowLight.shadow.radius = 2.5;
-    shadowLight.shadow.camera.near = 1;
-    shadowLight.shadow.camera.far = 70;
-    shadowLight.shadow.camera.left = -26;
-    shadowLight.shadow.camera.right = 26;
-    shadowLight.shadow.camera.top = 22;
-    shadowLight.shadow.camera.bottom = -6;
+    shadowLight.shadow.camera.near = SHADOW_CAMERA_BASE.near;
+    shadowLight.shadow.camera.far = SHADOW_CAMERA_BASE.far;
+    shadowLight.shadow.camera.left = -SHADOW_CAMERA_BASE.halfWidth;
+    shadowLight.shadow.camera.right = SHADOW_CAMERA_BASE.halfWidth;
+    shadowLight.shadow.camera.top = SHADOW_CAMERA_BASE.top;
+    shadowLight.shadow.camera.bottom = SHADOW_CAMERA_BASE.bottom;
     scene.add(shadowLight);
     scene.add(shadowLight.target);
+    shadowLight.userData.baseOffsetX = shadowLight.position.x - shadowLight.target.position.x;
+    shadowLight.userData.baseY = shadowLight.position.y;
+    shadowLight.userData.baseZ = shadowLight.position.z;
+    shadowLight.userData.targetY = shadowLight.target.position.y;
+    shadowLight.userData.targetZ = shadowLight.target.position.z;
 
     const textureAnisotropy = renderer.capabilities?.getMaxAnisotropy
         ? renderer.capabilities.getMaxAnisotropy()
@@ -349,6 +361,9 @@ function setupShelfScene() {
         leftDivider,
         rightDivider,
         container,
+        shadowLight,
+        shadowCameraBase: { ...SHADOW_CAMERA_BASE },
+        shadowShelfSpan: 0,
         raycaster,
         pointer,
         hover: null,
@@ -434,6 +449,7 @@ function setupShelfScene() {
         shelfScene.currentOffset += (shelfScene.targetOffset - shelfScene.currentOffset) * 0.08;
         const offset = shelfScene.baseOffset + shelfScene.currentOffset;
         shelfGroup.position.x = offset;
+        updateShadowCameraBounds();
 
         bookGroup.children.forEach((book, idx) => {
             const baseRotation = book.userData?.baseRotation;
@@ -530,6 +546,46 @@ function updateOffsetBounds() {
     shelfScene.currentOffset = clampOffset(shelfScene.currentOffset);
 }
 
+function updateShadowCameraBounds(shelfSpanOverride) {
+    if (!shelfScene?.shadowLight) return;
+
+    if (typeof shelfSpanOverride === 'number') {
+        shelfScene.shadowShelfSpan = shelfSpanOverride;
+    }
+
+    const base = shelfScene.shadowCameraBase || SHADOW_CAMERA_BASE;
+    const layout = shelfScene.layoutMetrics || {};
+    const leftEdge = Number.isFinite(layout.leftEdge) ? layout.leftEdge : 0;
+    const finalRightEdge = Number.isFinite(layout.finalRightEdge) ? layout.finalRightEdge : leftEdge;
+    const span = Number.isFinite(shelfScene.shadowShelfSpan)
+        ? shelfScene.shadowShelfSpan
+        : Math.max(0, finalRightEdge - leftEdge);
+    const halfSpan = Math.max(0, span / 2);
+    const viewPad = Math.max(getShelfHalfViewWidth?.() || 0, 0);
+    const horizontal = Math.max(base.halfWidth, halfSpan + viewPad + 8); // wider pad so dividers/deck edges stay inside
+    const growth = horizontal - base.halfWidth;
+    const camera = shelfScene.shadowLight.shadow.camera;
+    camera.left = -horizontal;
+    camera.right = horizontal;
+    camera.top = base.top + growth * 0.9;
+    camera.bottom = base.bottom - growth * 0.55;
+    camera.near = Math.max(0.1, base.near - 0.2);
+    camera.far = base.far + growth * 2.4;
+    camera.updateProjectionMatrix();
+
+    const centerLocal = (leftEdge + finalRightEdge) / 2;
+    const centerX = (shelfScene.baseOffset || 0) + (shelfScene.currentOffset || 0) + centerLocal;
+    const light = shelfScene.shadowLight;
+    const offsetX = light.userData?.baseOffsetX ?? 0;
+    light.position.x = centerX + offsetX;
+    light.position.y = light.userData?.baseY ?? light.position.y;
+    light.position.z = light.userData?.baseZ ?? light.position.z;
+    light.target.position.x = centerX;
+    light.target.position.y = light.userData?.targetY ?? light.target.position.y;
+    light.target.position.z = light.userData?.targetZ ?? light.target.position.z;
+    light.target.updateMatrixWorld();
+}
+
 function updateShelfBooks(contents) {
     if (!shelfScene) setupShelfScene();
     if (!shelfScene) return;
@@ -586,6 +642,8 @@ function updateShelfBooks(contents) {
     shelfScene.baseOffset = totalWidth > 0 ? -(totalWidth / 2) : 0;
 
     if (!contents.length) {
+        shelfScene.shadowShelfSpan = 0;
+        updateShadowCameraBounds(0);
         shelfScene.minOffset = 0;
         shelfScene.maxOffset = 0;
         shelfScene.targetOffset = 0;
@@ -612,12 +670,15 @@ function updateShelfBooks(contents) {
     const finalRightEdge = rightDivider?.visible
         ? rightDivider.position.x + (rightDivider.userData?.metrics?.width || 0.62) / 2
         : currentRightEdge;
+    const shelfSpan = Math.max(finalRightEdge - leftEdge, 0);
+    shelfScene.shadowShelfSpan = shelfSpan;
     shelfScene.layoutMetrics = {
         leftEdge,
         currentRightEdge,
         finalRightEdge
     };
 
+    updateShadowCameraBounds(shelfSpan);
     updateOffsetBounds();
 }
 
