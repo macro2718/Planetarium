@@ -1417,18 +1417,20 @@
             flex: 1;
             display: flex;
             justify-content: center;
-            padding: 12px 48px 120px;
+            align-items: flex-start;
+            padding: 16px 40px 100px;
             overflow: auto;
         }
 
         .location-workspace {
-            width: min(1260px, 100%);
+            width: min(1240px, 100%);
+            margin: 0 auto;
             display: grid;
-            grid-template-columns: minmax(520px, 1fr) minmax(340px, 420px);
-            gap: 22px;
+            grid-template-columns: minmax(320px, 0.85fr) minmax(560px, 1.15fr);
+            gap: 18px;
             position: relative;
-            align-items: stretch;
-            padding-bottom: 72px;
+            align-items: start;
+            padding-bottom: 56px;
         }
 
         .location-globe-panel {
@@ -1439,7 +1441,11 @@
             background: radial-gradient(140% 120% at 50% 18%, rgba(60, 120, 200, 0.2), transparent 55%),
                 linear-gradient(160deg, rgba(8, 12, 24, 0.74), rgba(6, 10, 22, 0.8));
             box-shadow: 0 18px 50px rgba(0, 0, 0, 0.26);
-            min-height: 520px;
+            min-height: 500px;
+            max-width: 520px;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            justify-self: start;
         }
 
         #location-globe {
@@ -1456,49 +1462,47 @@
             opacity: 0;
         }
 
-        .location-globe-meta {
-            position: absolute;
-            left: 16px;
-            bottom: 16px;
-            display: flex;
-            align-items: center;
+        .location-selection-panel {
+            position: relative;
+            padding: 16px;
+            border-radius: 18px;
+            background: linear-gradient(160deg, rgba(20, 26, 48, 0.72), rgba(10, 14, 28, 0.78));
+            border: 1px solid rgba(136, 173, 255, 0.26);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.26);
+            display: grid;
+            grid-template-rows: auto auto;
             gap: 14px;
-            padding: 12px 14px 12px 12px;
-            border-radius: 14px;
-            background: rgba(8, 14, 28, 0.8);
-            border: 1px solid rgba(136, 173, 255, 0.35);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            min-width: 320px;
-            max-width: calc(100% - 32px);
+            overflow: hidden;
+            min-height: 420px;
         }
 
-        .location-selected-name {
-            font-size: 16px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            display: block;
+        .location-selection-panel::before {
+            content: '';
+            position: absolute;
+            inset: -18% -34% 26% -34%;
+            background: radial-gradient(90% 80% at 32% 22%, rgba(160, 200, 255, 0.1), transparent 60%),
+                radial-gradient(70% 60% at 78% 76%, rgba(255, 200, 180, 0.08), transparent 60%);
+            mix-blend-mode: screen;
+            opacity: 0.65;
+            pointer-events: none;
         }
 
-        .location-selected-coords {
-            font-size: 11px;
-            opacity: 0.72;
-            letter-spacing: 2px;
+        .location-selection-panel > * {
+            position: relative;
+            z-index: 1;
         }
 
         .location-list-panel {
             display: flex;
             flex-direction: column;
             gap: 14px;
-            padding: 16px;
-            border-radius: 16px;
-            background: linear-gradient(150deg, rgba(12, 18, 42, 0.64), rgba(18, 28, 58, 0.54));
-            border: 1px solid rgba(136, 173, 255, 0.22);
-            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.26);
-            min-height: 520px;
+            padding: 12px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(136, 173, 255, 0.18);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
+            min-height: 0;
+            max-height: 360px;
             overflow: hidden;
         }
 
@@ -1669,11 +1673,43 @@
             transition: transform 0.25s ease, box-shadow 0.25s ease;
             z-index: 3;
             white-space: nowrap;
+            align-self: start;
         }
 
         .location-observe-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 20px 48px rgba(120, 200, 255, 0.4);
+        }
+
+        .location-summary-panel {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(136, 173, 255, 0.22);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+        }
+
+        .location-summary-panel > div {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .location-selected-name {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            display: block;
+        }
+
+        .location-selected-coords {
+            font-size: 11px;
+            opacity: 0.72;
+            letter-spacing: 2px;
         }
 
         @media (max-width: 1120px) {
@@ -1695,18 +1731,40 @@
             }
 
             .location-content {
-                padding: 14px 24px 120px;
+                padding: 14px 24px 90px;
+            }
+
+            .location-globe-panel {
+                max-width: 100%;
+                min-height: 400px;
+            }
+
+            .location-selection-panel {
+                grid-template-rows: auto auto;
+                min-height: auto;
+            }
+
+            .location-list-panel {
+                max-height: 320px;
             }
         }
 
         @media (max-width: 640px) {
             .location-content {
-                padding: 10px 18px 120px;
+                padding: 10px 18px 90px;
+            }
+
+            .location-globe-panel {
+                min-height: 340px;
             }
 
             .location-title {
                 font-size: 26px;
                 letter-spacing: 5px;
+            }
+
+            .location-list-panel {
+                max-height: 260px;
             }
 
             .location-card-row {
@@ -3587,24 +3645,26 @@
                 <div class="location-globe-panel">
                     <div id="location-globe"></div>
                     <div class="location-globe-overlay"></div>
-                    <div class="location-globe-meta">
+                </div>
+                <div class="location-selection-panel">
+                    <div class="location-list-panel">
+                        <div class="location-list-head">
+                            <div>
+                                <div class="location-list-title">OBSERVING POINTS</div>
+                                <div class="location-list-sub">カードをクリックすると地点がセットされます。</div>
+                            </div>
+                        </div>
+                        <div class="location-list" id="location-list">
+                            <!-- 場所カードはJavaScriptで動的に生成 -->
+                        </div>
+                    </div>
+                    <div class="location-summary-panel">
                         <div>
                             <div class="location-region-chip" id="location-selected-region">REGION</div>
-                            <span class="location-selected-name" id="location-selected-name">-</span>
-                            <span class="location-selected-coords" id="location-selected-coords">-</span>
+                            <div class="location-selected-name" id="location-selected-name">-</div>
+                            <div class="location-selected-coords" id="location-selected-coords">-</div>
                         </div>
                         <button class="location-observe-btn" id="location-observe">観測する →</button>
-                    </div>
-                </div>
-                <div class="location-list-panel">
-                    <div class="location-list-head">
-                        <div>
-                            <div class="location-list-title">OBSERVING POINTS</div>
-                            <div class="location-list-sub">カードをクリックすると地点がセットされます。</div>
-                        </div>
-                    </div>
-                    <div class="location-list" id="location-list">
-                        <!-- 場所カードはJavaScriptで動的に生成 -->
                     </div>
                 </div>
             </div>

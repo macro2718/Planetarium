@@ -338,7 +338,7 @@ class ArchiveMiniGlobe {
 
         const aspect = (this.container.clientWidth || 1) / Math.max(this.container.clientHeight || 1, 1);
         this.camera = new THREE.PerspectiveCamera(36, aspect, 0.1, 30);
-        this.camera.position.set(0, 0, 3.2);
+        this.camera.position.set(0, 0, 3.8);
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enableDamping = true;
