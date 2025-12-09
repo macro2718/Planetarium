@@ -1,6 +1,6 @@
 import { showLocationScreen, hideLocationScreen } from './locationSelector.js';
 import { showEventArchiveScreen, hideEventArchiveScreen, resetArchiveTimeState } from './eventArchive.js';
-import { hideCelestialLibraryScreen, showCelestialLibraryScreen } from './celestialLibrary.js';
+import { hideCelestialLibraryScreen, hideLibraryGatewayScreen, showLibraryGatewayScreen } from './celestialLibrary.js';
 import { resetPlanetariumBgm } from './planetariumContext.js';
 
 export function initModeSelector(options = {}) {
@@ -29,6 +29,7 @@ function setupEntryButton() {
         console.log('[modeSelector] showModeSelector called');
         resetPlanetariumBgm();
         hideCelestialLibraryScreen();
+        hideLibraryGatewayScreen();
         document.body.classList.remove('home-visible');
         document.body.classList.add('mode-screen-visible');
         homeScreen?.classList.remove('hidden');
@@ -69,7 +70,7 @@ function setupModeButtons({ onEnterLive, onEnterArchive, onEnterLibrary }) {
     const handleEnterLibrary = () => {
         onEnterLibrary?.();
         hideArchiveAndMode();
-        showCelestialLibraryScreen();
+        showLibraryGatewayScreen();
     };
 
     const planetariumBtn = document.getElementById('mode-planetarium');
@@ -114,6 +115,7 @@ function setupBackButton() {
             hideLocationScreen();
             hideEventArchiveScreen();
             hideCelestialLibraryScreen();
+            hideLibraryGatewayScreen();
             const modeScreen = document.getElementById('mode-screen');
             modeScreen?.classList.add('hidden');
             document.body.classList.add('home-visible');
@@ -130,5 +132,6 @@ function hideArchiveAndMode() {
     document.body.classList.remove('mode-screen-visible');
     hideEventArchiveScreen();
     hideCelestialLibraryScreen();
+    hideLibraryGatewayScreen();
     document.body.classList.remove('home-visible');
 }

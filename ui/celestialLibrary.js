@@ -27,19 +27,52 @@ function getRegisteredConstellationCount() {
     return Math.max(baseCount, CONSTELLATION_DESCRIPTION_MAP?.size || 0);
 }
 
+function prepareLibraryMode() {
+    resetPlanetariumBgm();
+    destroyAllPlanetaria();
+    hideLibraryDetailScreen();
+}
+
 export function initCelestialLibrary() {
     unlockedConstellations = loadUnlockedConstellations();
+    setupGatewayScreen();
     setupBackButton();
     setupDetailScreen();
     setupShelfScene();
     renderLibraryList();
 }
 
+export function showLibraryGatewayScreen() {
+    const gatewayScreen = document.getElementById('library-gateway-screen');
+    const homeScreen = document.getElementById('home-screen');
+    const modeScreen = document.getElementById('mode-screen');
+    prepareLibraryMode();
+    hideCelestialLibraryScreen();
+    if (gatewayScreen) {
+        gatewayScreen.classList.remove('hidden');
+    }
+    if (homeScreen) {
+        homeScreen.classList.add('hidden');
+    }
+    if (modeScreen) {
+        modeScreen.classList.add('hidden');
+    }
+    document.body.classList.remove('home-visible');
+    document.body.classList.remove('mode-screen-visible');
+}
+
+export function hideLibraryGatewayScreen() {
+    const gatewayScreen = document.getElementById('library-gateway-screen');
+    if (gatewayScreen) {
+        gatewayScreen.classList.add('hidden');
+    }
+}
+
 export function showCelestialLibraryScreen() {
     const libraryScreen = document.getElementById('library-screen');
     const homeScreen = document.getElementById('home-screen');
-    resetPlanetariumBgm();
-    destroyAllPlanetaria();
+    prepareLibraryMode();
+    hideLibraryGatewayScreen();
     if (libraryScreen) {
         libraryScreen.classList.remove('hidden');
     }
@@ -56,6 +89,7 @@ export function hideCelestialLibraryScreen() {
     if (libraryScreen) {
         libraryScreen.classList.add('hidden');
     }
+    hideLibraryDetailScreen();
 }
 
 export function unlockConstellation(constellationName) {
@@ -102,6 +136,30 @@ function saveUnlockedConstellations() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(unlockedConstellations)));
     } catch (error) {
         console.warn('[celestialLibrary] Failed to save constellations', error);
+    }
+}
+
+function hideLibraryDetailScreen() {
+    const detailScreen = document.getElementById('library-detail-screen');
+    if (detailScreen) {
+        detailScreen.classList.add('hidden');
+    }
+}
+
+function setupGatewayScreen() {
+    const enterBtn = document.getElementById('library-enter-shelf');
+    if (enterBtn) {
+        enterBtn.addEventListener('click', () => {
+            showCelestialLibraryScreen();
+        });
+    }
+
+    const backBtn = document.getElementById('library-gateway-back');
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            hideLibraryGatewayScreen();
+            showModeScreen();
+        });
     }
 }
 

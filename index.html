@@ -1109,6 +1109,7 @@
         #mode-screen > *,
         #location-screen > *,
         #archive-screen > *,
+        #library-gateway-screen > *,
         #library-screen > *,
         #album-screen > * {
             position: relative;
@@ -1883,7 +1884,168 @@
             border-color: rgba(180, 200, 255, 0.6);
         }
 
-        /* 星図書架画面 */
+        /* 書斎 導入画面 */
+        #library-gateway-screen {
+            position: fixed;
+            inset: 0;
+            background:
+                url('images/library.png') center/cover no-repeat,
+                linear-gradient(120deg, rgba(12, 8, 6, 0.72), rgba(10, 6, 5, 0.82)),
+                radial-gradient(120% 90% at 16% 18%, rgba(255, 230, 210, 0.25), transparent 55%),
+                radial-gradient(120% 140% at 80% 12%, rgba(120, 180, 255, 0.16), transparent 55%);
+            z-index: 1730;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 32px 26px 86px;
+            transition: opacity var(--screen-fade-duration) var(--screen-fade-ease), visibility var(--screen-fade-duration) var(--screen-fade-ease);
+            color: var(--text-main);
+            letter-spacing: 0.4px;
+            isolation: isolate;
+            overflow: hidden;
+        }
+
+        #library-gateway-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .library-gateway-content {
+            position: relative;
+            z-index: 2;
+            width: min(960px, 92vw);
+            display: block;
+        }
+
+        .library-gateway-card {
+            position: relative;
+            background: none;
+            backdrop-filter: none;
+            border: none;
+            border-radius: 18px;
+            padding: 26px 28px 24px;
+            box-shadow: none;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 300px;
+            grid-template-rows: auto 1fr;
+            gap: 18px 26px;
+            min-height: 420px;
+        }
+
+        .library-gateway-lede {
+            font-size: 14px;
+            color: rgba(255, 242, 230, 0.9);
+            line-height: 1.9;
+            max-width: 720px;
+        }
+
+        .library-gateway-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: rgba(255, 236, 210, 0.78);
+        }
+
+        .library-gateway-header {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 160px;
+        }
+
+        .library-gateway-body {
+            grid-row: 2;
+            grid-column: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 720px;
+            align-self: center;
+            margin-top: -160px;
+        }
+
+        .library-gateway-actions {
+            position: absolute;
+            bottom: 40px;
+            right: 0;
+            transform: none;
+            grid-column: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .library-gateway-back {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .library-enter-btn {
+            padding: 12px 22px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 224, 192, 0.6);
+            background: linear-gradient(120deg, rgba(255, 236, 210, 0.9), rgba(176, 230, 240, 0.65));
+            color: #2a1810;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 2px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), 0 0 26px rgba(255, 224, 192, 0.32);
+            transition: transform 0.24s ease, box-shadow 0.24s ease, filter 0.24s ease;
+        }
+
+        .library-enter-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.32), 0 0 30px rgba(255, 236, 210, 0.4);
+            filter: saturate(1.05);
+        }
+
+        @media (max-width: 680px) {
+            #library-gateway-screen {
+                padding: 24px 16px 42px;
+                align-items: center;
+            }
+
+            .library-gateway-card {
+                padding: 20px 18px 18px;
+                min-height: auto;
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 12px;
+            }
+
+            .library-gateway-header {
+                padding-right: 0;
+            }
+
+            .library-gateway-body {
+                grid-column: 1;
+                grid-row: 2;
+                align-self: flex-start;
+                margin-top: 0;
+            }
+
+            .library-gateway-actions {
+                position: static;
+                grid-column: 1;
+                grid-row: 3;
+                align-items: flex-start;
+                justify-content: flex-start;
+            }
+
+            .library-gateway-back {
+                position: static;
+                justify-self: flex-end;
+            }
+        }
+
+        /* 書斎画面 */
         #library-screen {
             position: fixed;
             inset: 0;
@@ -2186,7 +2348,7 @@
             margin-right: 8px;
         }
 
-        /* 星図書架 詳細画面 */
+        /* 書斎 詳細画面 */
         #library-detail-screen {
             position: fixed;
             inset: 0;
@@ -3342,7 +3504,7 @@
                 </div>
                 <div class="mode-card">
                     <span class="mode-tagline">CELESTIAL LIBRARY</span>
-                    <h3>星図書架</h3>
+                    <h3>書斎</h3>
                     <p>プラネタリウムやクロノスカイで出会った星座の説明を集める読書室。気になった星座をクリックして、本棚を満たしていきましょう。</p>
                     <button id="mode-library">本棚をひらく</button>
                 </div>
@@ -3404,6 +3566,29 @@
                     <div class="archive-grid" id="archive-grid">
                         <!-- 歴史イベントカードが挿入される -->
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 書斎 導入画面 -->
+    <div id="library-gateway-screen" class="hidden">
+        <div class="library-gateway-content">
+            <div class="library-gateway-card">
+                <button class="library-back-btn library-gateway-back" id="library-gateway-back">← モード選択へ戻る</button>
+                <div class="library-gateway-header">
+                    <div class="library-pill">CELESTIAL LIBRARY</div>
+                    <h2 class="library-title">書斎</h2>
+                </div>
+                <div class="library-gateway-body">
+                    <p class="library-gateway-lede">プラネタリウムで出会った星座の記憶を、静かな前室で整えてから本棚へ。木の香りが立ちのぼる一枚絵の先に、立体の背表紙が並ぶ書架が待っています。</p>
+                    <div class="library-gateway-meta">
+                        <span>3D SHELF VIEW</span>
+                        <span>星座の物語と観測ノート</span>
+                    </div>
+                </div>
+                <div class="library-gateway-actions">
+                    <button class="library-enter-btn" id="library-enter-shelf">本棚に進む →</button>
                 </div>
             </div>
         </div>

@@ -44,7 +44,7 @@ function setupResizeHandler(getPlanetarium) {
 function setupClickHandler(getPlanetarium) {
     window.addEventListener('click', (event) => {
         // UI要素上のクリックはスキップ
-        const uiOverlay = event.target.closest('#home-screen, #mode-screen, #archive-screen, #library-screen, #location-screen, #album-screen, #controls, .home-btn, .mode-card, .control-btn');
+        const uiOverlay = event.target.closest('#home-screen, #mode-screen, #archive-screen, #library-gateway-screen, #library-screen, #library-detail-screen, #location-screen, #album-screen, #controls, .home-btn, .mode-card, .control-btn');
         if (uiOverlay) return;
 
         const ctx = getPlanetarium();
