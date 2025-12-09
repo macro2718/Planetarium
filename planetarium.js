@@ -21,7 +21,6 @@ import { createStarTrailSystem } from './systems/starTrailSystem.js';
 import { createLensFlareSystem } from './systems/lensFlareSystem.js';
 import { attachUIInteractions } from './ui/interactionController.js';
 import { setupTimeDisplay } from './ui/timeDisplay.js';
-import { calculateLocalSiderealTime } from './utils/astronomy.js';
 import { setupPhotoCaptureButton } from './ui/photoAlbum.js';
 import { initLocationSelector, setPlanetarium } from './ui/locationSelector.js';
 import { initModeSelector } from './ui/modeSelector.js';
@@ -30,55 +29,19 @@ import { initCelestialLibrary } from './ui/celestialLibrary.js';
 import { initHomeScene } from './ui/homeScene.js';
 import { playTitleBgm } from './ui/bgmController.js';
 import {
+    DEFAULT_OBSERVER_LOCATION,
+    createDefaultSettings,
+    normalizeSurfaceType
+} from './core/settings.js';
+import { TimeController } from './core/timeController.js';
+import { AudioManager } from './core/audioManager.js';
+import {
     registerPlanetaria,
     setActivePlanetarium,
     getActivePlanetarium,
     getArchivePlanetarium,
     getLivePlanetarium
 } from './ui/planetariumContext.js';
-
-const DEFAULT_OBSERVER_LOCATION = {
-    name: '東京',
-    nameEn: 'Tokyo',
-    lat: 35.6895,
-    lon: 139.6917,
-    icon: '🗼',
-    surfaceType: 'grass'
-};
-
-const normalizeSurfaceType = (type) => {
-    if (!type) return 'water';
-    return type === 'land' ? 'desert' : type;
-};
-
-function createDefaultSettings() {
-    return {
-        showMilkyWay: true,
-        showConstellations: true,
-        showShootingStars: true,
-        showSun: false,
-        showMoon: true,
-        showPlanets: true,
-        showAurora: true,
-        showHourCircles: false,
-        showDeclinationCircles: false,
-        showCelestialEquator: false,
-        showEcliptic: false,
-        showGalacticEquator: false,
-        showLunarOrbit: false,
-        showCardinalDirections: false,
-        showStarTrails: false,
-        autoRotate: false,
-        playMusic: true,
-        showLensFlare: true,
-        surfaceType: normalizeSurfaceType(DEFAULT_OBSERVER_LOCATION.surfaceType) ?? 'water',
-        showCometTail: false,
-        cometTailTint: '#b7f0ff',
-        cometTailIntensity: 1,
-        meteorShowerIntensity: 0,
-        playEnvSound: true
-    };
-}
 
 // ========================================
 // プラネタリウム - 美しい星空シミュレーション
@@ -93,13 +56,7 @@ class Planetarium {
         this.controls = null;
         this.minCameraHeight = -4;
         this.settings = createDefaultSettings();
-        this.bgmAudio = null;
-        this.envAudio = null;
-        this.currentEnvSoundPath = null;
-        this.audioReady = false;
-        this.bgmPlaylist = [];
-        this.bgmCurrentIndex = 0;
-        this.isPlaying = false;
+        this.audioManager = new AudioManager();
         this.raycaster = new THREE.Raycaster();
         this.raycaster.params.Points.threshold = 50;
         this.raycaster.params.Mesh = { threshold: 30 };
@@ -113,41 +70,58 @@ class Planetarium {
             lat: DEFAULT_OBSERVER_LOCATION.lat,
             lon: DEFAULT_OBSERVER_LOCATION.lon
         };
-        this.timeMode = 'realtime';
+        this.timeController = new TimeController({
+            isArchive,
+            nowProvider: () => performance.now() * 0.001
+        });
         this.isArchive = isArchive;
-        this.timeScale = 240; // simulation seconds per real second (custom mode)
-        this.dayScale = 1; // days per real second (fixed-time mode)
-        this.simulationStartDate = new Date();
-        const nowSeconds = performance.now() * 0.001;
-        this.simulationStartPerf = nowSeconds;
-        this.simulatedDate = new Date(this.simulationStartDate);
-        this.initialRealtimeDate = new Date(this.simulationStartDate);
-        this.realtimeOffsetMs = 0;
-        this.fixedTimeOfDayMs = this.simulationStartDate.getHours() * 3600000
-            + this.simulationStartDate.getMinutes() * 60000
-            + this.simulationStartDate.getSeconds() * 1000
-            + this.simulationStartDate.getMilliseconds();
-        this.isTimePaused = false;
-        this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, this.observer.lon);
+        this.localSiderealTime = this.timeController.localSiderealTime;
         this.infoTimeout = null;
         this.updaters = [];
-        this.lastTime = nowSeconds;
+        this.lastTime = this.timeController.getCurrentSeconds();
         this.containerId = containerId;
         this.resizeRenderer = this.resizeRenderer.bind(this);
         this.animate = this.animate.bind(this);
         this.isInitialized = false;
         this.isRunning = false;
         this.animationFrameId = null;
+
+        this.updateSimulationTime(this.timeController.getCurrentSeconds());
+    }
+
+    get simulatedDate() {
+        return this.timeController.getSimulatedDate();
+    }
+
+    get timeMode() {
+        return this.timeController.timeMode;
+    }
+
+    get timeScale() {
+        return this.timeController.timeScale;
+    }
+
+    set timeScale(value) {
+        this.timeController.timeScale = value;
+    }
+
+    get dayScale() {
+        return this.timeController.dayScale;
+    }
+
+    set dayScale(value) {
+        this.timeController.dayScale = value;
+    }
+
+    get isTimePaused() {
+        return this.timeController.isTimePaused;
     }
 
     resetState() {
         this.settings = createDefaultSettings();
-        this.timeScale = 240;
-        this.dayScale = 1;
-        this.realtimeOffsetMs = 0;
+        this.timeController.reset();
         this.setTimeMode('realtime', { date: new Date() });
-        this.lastTime = this.getCurrentPerfSeconds();
-        this.isTimePaused = false;
+        this.lastTime = this.timeController.getCurrentSeconds();
 
         if (this.camera) {
             this.camera.position.set(0, 0, 0.1);
@@ -215,9 +189,9 @@ class Planetarium {
             this.init();
         }
         if (this.isRunning) return;
-        this.audioReady = true;
+        this.audioManager.setAudioReady(true);
         this.isRunning = true;
-        this.lastTime = this.getCurrentPerfSeconds();
+        this.lastTime = this.timeController.getCurrentSeconds();
         this.hideLoading();
         if (this.settings.playEnvSound) {
             this.startEnvironmentSound(this.settings.surfaceType);
@@ -227,7 +201,7 @@ class Planetarium {
 
     stop() {
         this.isRunning = false;
-        this.audioReady = false;
+        this.audioManager.setAudioReady(false);
         if (this.animationFrameId) {
             cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;
@@ -471,33 +445,16 @@ class Planetarium {
     }
 
     updateSimulationTime(nowSeconds) {
-        if (this.timeMode === 'realtime') {
-            const offset = Number.isFinite(this.realtimeOffsetMs) ? this.realtimeOffsetMs : 0;
-            this.simulatedDate = new Date(Date.now() + offset);
-        } else {
-            const elapsed = nowSeconds - this.simulationStartPerf;
-            if (this.timeMode === 'custom') {
-                const scale = this.isTimePaused ? 0 : this.timeScale;
-                const simulatedMs = this.simulationStartDate.getTime() + elapsed * 1000 * scale;
-                this.simulatedDate = new Date(simulatedMs);
-            } else if (this.timeMode === 'fixed-time') {
-                // 日付送りモード: 指定時刻を維持しつつ、日付を離散的に進める
-                const scale = this.isTimePaused ? 0 : this.dayScale;
-                // 経過秒数 * dayScale で進んだ日数を計算（離散的）
-                const daysPassed = Math.floor(elapsed * scale);
-                const baseDate = new Date(this.simulationStartDate);
-                baseDate.setDate(baseDate.getDate() + daysPassed);
-                const startOfDay = new Date(baseDate);
-                startOfDay.setHours(0, 0, 0, 0);
-                const timeOfDayMs = this.fixedTimeOfDayMs ?? 0;
-                this.simulatedDate = new Date(startOfDay.getTime() + timeOfDayMs);
-            }
-        }
-        this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, this.observer.lon);
+        const { simulatedDate, localSiderealTime } = this.timeController.update(
+            nowSeconds,
+            this.observer.lon
+        );
+        this.localSiderealTime = localSiderealTime;
+        return simulatedDate;
     }
 
     getSimulatedDate() {
-        return this.simulatedDate ?? new Date();
+        return this.timeController.getSimulatedDate();
     }
 
     /**
@@ -521,8 +478,7 @@ class Planetarium {
                 lon
             };
         }
-        // 恒星時を再計算
-        this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, this.observer.lon);
+        this.updateSimulationTime(this.timeController.getCurrentSeconds());
         if (info?.surfaceType) {
             this.setSurfaceType(info.surfaceType);
         }
@@ -530,80 +486,18 @@ class Planetarium {
     }
 
     setTimeMode(mode, options = {}) {
-        if (mode === 'realtime') {
-            this.timeMode = 'realtime';
-            this.isTimePaused = false;
-            const providedDate = options.date instanceof Date
-                ? options.date
-                : (options.date ? new Date(options.date) : null);
-            const hasValidDate = providedDate && !Number.isNaN(providedDate.getTime());
-            const fallbackDate = this.isArchive
-                ? (this.simulatedDate || this.initialRealtimeDate)
-                : new Date();
-            const baseDate = hasValidDate ? providedDate : fallbackDate;
-            this.realtimeOffsetMs = baseDate.getTime() - Date.now();
-            this.simulationStartDate = new Date(baseDate);
-            this.simulationStartPerf = this.getCurrentPerfSeconds();
-            this.simulatedDate = new Date(baseDate);
-        } else if (mode === 'custom') {
-            this.timeMode = 'custom';
-            this.isTimePaused = false;
-            if (typeof options.timeScale === 'number' && !Number.isNaN(options.timeScale)) {
-                this.timeScale = options.timeScale;
-            }
-            const providedDate = options.date instanceof Date
-                ? options.date
-                : (options.date ? new Date(options.date) : null);
-            const hasValidDate = providedDate && !Number.isNaN(providedDate.getTime());
-            const baseDate = hasValidDate ? providedDate : this.getSimulatedDate();
-            this.simulationStartDate = new Date(baseDate);
-            this.simulationStartPerf = this.getCurrentPerfSeconds();
-            this.simulatedDate = new Date(baseDate);
-            this.fixedTimeOfDayMs = baseDate.getHours() * 3600000
-                + baseDate.getMinutes() * 60000
-                + baseDate.getSeconds() * 1000
-                + baseDate.getMilliseconds();
-        } else if (mode === 'fixed-time') {
-            this.timeMode = 'fixed-time';
-            this.isTimePaused = false;
-            if (typeof options.dayScale === 'number' && !Number.isNaN(options.dayScale)) {
-                this.dayScale = options.dayScale;
-            }
-            const providedDate = options.date instanceof Date
-                ? options.date
-                : (options.date ? new Date(options.date) : null);
-            const hasValidDate = providedDate && !Number.isNaN(providedDate.getTime());
-            const baseDate = hasValidDate ? providedDate : this.getSimulatedDate();
-            this.fixedTimeOfDayMs = baseDate.getHours() * 3600000
-                + baseDate.getMinutes() * 60000
-                + baseDate.getSeconds() * 1000
-                + baseDate.getMilliseconds();
-            this.simulationStartDate = new Date(baseDate);
-            this.simulationStartPerf = this.getCurrentPerfSeconds();
-            this.simulatedDate = new Date(baseDate);
-        } else {
-            console.warn('Unknown time mode:', mode);
-            return;
-        }
-        this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, this.observer.lon);
+        this.timeController.setMode(mode, options);
+        this.updateSimulationTime(this.timeController.getCurrentSeconds());
     }
 
     toggleTimePause(forceState) {
-        if (this.timeMode === 'realtime') {
-            this.isTimePaused = false;
-            return this.isTimePaused;
-        }
-        const nowSeconds = this.getCurrentPerfSeconds();
-        this.updateSimulationTime(nowSeconds);
-        const next = typeof forceState === 'boolean' ? forceState : !this.isTimePaused;
-        this.isTimePaused = next;
-        this.simulationStartDate = new Date(this.simulatedDate);
-        this.simulationStartPerf = nowSeconds;
-        return this.isTimePaused;
+        const paused = this.timeController.togglePause(forceState, this.observer.lon);
+        this.localSiderealTime = this.timeController.localSiderealTime;
+        return paused;
     }
 
     getCurrentPerfSeconds() {
-        return performance.now() * 0.001;
+        return this.timeController.getCurrentSeconds();
     }
 
     enforceCameraAboveWater() {
@@ -622,119 +516,40 @@ class Planetarium {
         this.controls.maxPolarAngle = Math.min(Math.max(limit, minLimit), Math.PI - epsilon);
     }
 
-    async loadBgmPlaylist() {
-        // bgmフォルダ内のmp3ファイルリストを取得
-        // 静的なリストとして定義（サーバーサイドがないため）
-        const bgmBasePath = 'bgm/planetarium/';
-        const bgmFiles = [
-            `${bgmBasePath}Weightless Dreaming.mp3`
-        ];
-        this.bgmPlaylist = bgmFiles;
-        this.bgmCurrentIndex = 0;
-    }
-
     async startBgm() {
-        if (this.isPlaying) return;
-        
-        if (this.bgmPlaylist.length === 0) {
-            await this.loadBgmPlaylist();
-        }
-        
-        if (this.bgmPlaylist.length === 0) {
-            console.warn('BGMファイルが見つかりません');
-            return;
-        }
-
-        this.playCurrentTrack();
+        await this.audioManager.startBgm();
     }
 
     playCurrentTrack() {
-        if (this.bgmAudio) {
-            this.bgmAudio.pause();
-            this.bgmAudio = null;
-        }
-
-        const trackPath = this.bgmPlaylist[this.bgmCurrentIndex];
-        this.bgmAudio = new Audio(trackPath);
-        this.bgmAudio.volume = 0.5;
-        
-        // 曲が終わったら次の曲へ
-        this.bgmAudio.addEventListener('ended', () => {
-            this.bgmCurrentIndex = (this.bgmCurrentIndex + 1) % this.bgmPlaylist.length;
-            if (this.isPlaying) {
-                this.playCurrentTrack();
-            }
-        });
-
-        this.bgmAudio.play().catch(err => {
-            console.error('BGM再生エラー:', err);
-        });
-        this.isPlaying = true;
+        this.audioManager.playCurrentTrack();
     }
 
     stopBgm() {
-        if (this.bgmAudio) {
-            this.bgmAudio.pause();
-            this.bgmAudio.currentTime = 0;
-        }
-        this.isPlaying = false;
+        this.audioManager.stopBgm();
     }
 
     startAmbientSound() {
-        this.startBgm();
+        this.audioManager.startAmbientSound();
     }
 
     stopAmbientSound() {
-        this.stopBgm();
+        this.audioManager.stopAmbientSound();
     }
 
     getEnvironmentSoundPath(surfaceType = 'water') {
-        const normalized = normalizeSurfaceType(surfaceType);
-        const envMap = {
-            water: 'env_sound/sea.mp3',
-            grass: 'env_sound/grassland.mp3',
-            desert: 'env_sound/grassland.mp3',
-            ice: 'env_sound/sea.mp3'
-        };
-        return envMap[normalized] || envMap.water;
+        return this.audioManager.getEnvironmentSoundPath(surfaceType);
     }
 
     startEnvironmentSound(surfaceType = this.settings?.surfaceType ?? 'water') {
-        if (!this.audioReady) return;
-        const trackPath = this.getEnvironmentSoundPath(surfaceType);
-        if (!trackPath) {
-            console.warn('環境音ファイルが見つかりません');
-            return;
-        }
-
-        if (this.envAudio) {
-            if (this.currentEnvSoundPath === trackPath && !this.envAudio.paused) {
-                return;
-            }
-            this.envAudio.pause();
-            this.envAudio = null;
-        }
-
-        this.envAudio = new Audio(trackPath);
-        this.envAudio.loop = true;
-        this.envAudio.volume = 0.4;
-        this.currentEnvSoundPath = trackPath;
-        this.envAudio.play().catch((err) => {
-            console.error('環境音再生エラー:', err);
-        });
+        this.audioManager.startEnvironmentSound(surfaceType);
     }
 
     stopEnvironmentSound() {
-        if (!this.envAudio) return;
-        this.envAudio.pause();
-        this.envAudio.currentTime = 0;
-        this.envAudio = null;
-        this.currentEnvSoundPath = null;
+        this.audioManager.stopEnvironmentSound();
     }
 
     updateEnvironmentSoundForSurface(surfaceType = this.settings?.surfaceType ?? 'water') {
-        if (!this.settings?.playEnvSound || !this.audioReady) return;
-        this.startEnvironmentSound(surfaceType);
+        this.audioManager.updateEnvironmentSoundForSurface(surfaceType, this.settings);
     }
 
     hideLoading() {
@@ -749,7 +564,7 @@ class Planetarium {
     animate() {
         if (!this.isRunning) return;
         this.animationFrameId = requestAnimationFrame(this.animate);
-        const now = performance.now() * 0.001;
+        const now = this.timeController.getCurrentSeconds();
         this.updateSimulationTime(now);
         const delta = now - this.lastTime;
         this.lastTime = now;
