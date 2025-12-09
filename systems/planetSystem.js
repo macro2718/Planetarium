@@ -100,7 +100,6 @@ export function createPlanetSystem(ctx) {
             const pickScale = Math.max(planet.radius * 6, size * 0.5);
             pickMesh.scale.setScalar(pickScale);
 
-            const illumPct = Math.round(state.illumination * 100);
             const distanceAu = state.distanceAu?.toFixed(3) ?? '—';
             const magnitudeLabel = `視等級 ${mag.toFixed(1)}`;
             sprite.userData.magnitude = magnitudeLabel;

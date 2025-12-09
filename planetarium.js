@@ -22,7 +22,7 @@ import { createLensFlareSystem } from './systems/lensFlareSystem.js';
 import { attachUIInteractions } from './ui/interactionController.js';
 import { setupTimeDisplay } from './ui/timeDisplay.js';
 import { calculateLocalSiderealTime } from './utils/astronomy.js';
-import { getPhotoAlbumSystem, setupPhotoCaptureButton } from './ui/photoAlbum.js';
+import { setupPhotoCaptureButton } from './ui/photoAlbum.js';
 import { initLocationSelector, setPlanetarium } from './ui/locationSelector.js';
 import { initModeSelector } from './ui/modeSelector.js';
 import { initEventArchive, setArchivePlanetarium } from './ui/eventArchive.js';
