@@ -690,6 +690,22 @@
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
+            z-index: 0;
+            display: none !important;
+        }
+
+        /* ホーム以外の状態ではホーム画面を確実に退避 */
+        body:not(.home-visible) #home-screen {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            z-index: 0 !important;
+            display: none !important;
+        }
+
+        body.home-visible #home-screen {
+            z-index: 2000;
+            display: flex;
         }
 
         /* ホーム画面を即時表示するためのクラス */
@@ -3912,7 +3928,7 @@
                 document.body.classList.remove('home-visible');
                 document.body.classList.add('mode-screen-visible');
                 if (modeScreen) modeScreen.classList.remove('hidden');
-                if (homeScreen) homeScreen.classList.remove('hidden');
+                if (homeScreen) homeScreen.classList.add('hidden');
             });
         }
     });
