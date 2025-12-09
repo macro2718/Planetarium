@@ -46,9 +46,6 @@ export function setArchivePlanetarium(planetarium) {
 
 function setupEventList() {
     const grid = document.getElementById('archive-grid');
-    if (!grid) return;
-
-    grid.innerHTML = '';
     eventCards.clear();
 
     const sortedEvents = [...HISTORICAL_EVENTS].sort((a, b) => {
@@ -57,41 +54,44 @@ function setupEventList() {
         return aTime - bTime;
     });
 
-    sortedEvents.forEach(event => {
-        const card = document.createElement('div');
-        card.className = 'archive-card';
-        card.dataset.eventId = event.id;
-        card.tabIndex = 0;
+    if (grid) {
+        grid.innerHTML = '';
+        sortedEvents.forEach(event => {
+            const card = document.createElement('div');
+            card.className = 'archive-card';
+            card.dataset.eventId = event.id;
+            card.tabIndex = 0;
 
-        const localDate = formatEventDate(event.dateTime);
+            const localDate = formatEventDate(event.dateTime);
 
-        card.innerHTML = `
-            <div class="archive-card-head">
-                <div class="archive-badge">CHRONO SKY</div>
-                <div class="archive-date">${localDate}</div>
-            </div>
-            <h3 class="archive-title">${event.title}</h3>
-            <p class="archive-description">${event.description}</p>
-            <div class="archive-meta">
-                <div class="archive-location">観測地: ${event.location.name}</div>
-                <div class="archive-tags">${event.tags.map(tag => `<span class="archive-tag">${tag}</span>`).join('')}</div>
-            </div>
-        `;
+            card.innerHTML = `
+                <div class="archive-card-head">
+                    <div class="archive-badge">CHRONO SKY</div>
+                    <div class="archive-date">${localDate}</div>
+                </div>
+                <h3 class="archive-title">${event.title}</h3>
+                <p class="archive-description">${event.description}</p>
+                <div class="archive-meta">
+                    <div class="archive-location">観測地: ${event.location.name}</div>
+                    <div class="archive-tags">${event.tags.map(tag => `<span class="archive-tag">${tag}</span>`).join('')}</div>
+                </div>
+            `;
 
-        card.addEventListener('click', () => {
-            setSelectedEvent(event);
-        });
-
-        card.addEventListener('keydown', (evt) => {
-            if (evt.key === 'Enter' || evt.key === ' ') {
-                evt.preventDefault();
+            card.addEventListener('click', () => {
                 setSelectedEvent(event);
-            }
-        });
+            });
 
-        grid.appendChild(card);
-        eventCards.set(event.id, card);
-    });
+            card.addEventListener('keydown', (evt) => {
+                if (evt.key === 'Enter' || evt.key === ' ') {
+                    evt.preventDefault();
+                    setSelectedEvent(event);
+                }
+            });
+
+            grid.appendChild(card);
+            eventCards.set(event.id, card);
+        });
+    }
 
     const initialEvent = selectedEvent || sortedEvents[0];
     if (initialEvent) {
