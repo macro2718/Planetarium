@@ -351,6 +351,7 @@ function setupShelfScene() {
         currentOffset: 0,
         baseOffset: 0,
         maxOffset: 0,
+        minOffset: 0,
         clock: new THREE.Clock()
     };
 
@@ -454,11 +455,67 @@ function resizeShelfScene() {
     renderer.setSize(clientWidth || window.innerWidth, clientHeight || window.innerHeight);
     camera.aspect = (clientWidth || window.innerWidth) / Math.max(1, clientHeight || window.innerHeight);
     camera.updateProjectionMatrix();
+    updateOffsetBounds();
 }
 
 function clampOffset(value) {
     if (!shelfScene) return 0;
-    return THREE.MathUtils.clamp(value, -shelfScene.maxOffset, shelfScene.maxOffset);
+    const min = Number.isFinite(shelfScene.minOffset) ? shelfScene.minOffset : 0;
+    const max = Number.isFinite(shelfScene.maxOffset) ? shelfScene.maxOffset : 0;
+    if (min > max) {
+        return (min + max) / 2;
+    }
+    return THREE.MathUtils.clamp(value, min, max);
+}
+
+function getShelfHalfViewWidth() {
+    if (!shelfScene?.camera) return 0;
+    const { camera, container, shelfGroup } = shelfScene;
+    if (!camera.isPerspectiveCamera) return 0;
+
+    const aspect =
+        container?.clientWidth && container?.clientHeight
+            ? container.clientWidth / Math.max(1, container.clientHeight)
+            : camera.aspect;
+
+    const shelfPosition = new THREE.Vector3();
+    shelfGroup?.getWorldPosition?.(shelfPosition);
+    const distance = Math.max(0.1, camera.position.distanceTo(shelfPosition));
+    const halfHeight = Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * distance;
+    return halfHeight * aspect;
+}
+
+function updateOffsetBounds() {
+    if (!shelfScene) return;
+    const hasBooks = (shelfScene.bookGroup?.children || []).length > 0;
+    if (!hasBooks) {
+        shelfScene.minOffset = 0;
+        shelfScene.maxOffset = 0;
+        shelfScene.targetOffset = 0;
+        shelfScene.currentOffset = 0;
+        return;
+    }
+
+    const leftMetrics = shelfScene.leftDivider?.userData?.metrics || { width: 0.62 };
+    const rightMetrics = shelfScene.rightDivider?.userData?.metrics || { width: 0.62 };
+
+    const leftEdge = shelfScene.leftDivider?.visible
+        ? shelfScene.leftDivider.position.x - (leftMetrics.width || 0) / 2
+        : 0;
+    const rightEdge = shelfScene.rightDivider?.visible
+        ? shelfScene.rightDivider.position.x + (rightMetrics.width || 0) / 2
+        : 0;
+
+    const halfViewWidth = getShelfHalfViewWidth();
+    const overscroll = 1.8; // slight cushion so drag doesn't feel hard-stopped
+    const extraPan = Math.max(halfViewWidth * 0.15, 1.8); // allow a bit more travel past dividers
+    const minOffset = -halfViewWidth - shelfScene.baseOffset - leftEdge + overscroll + extraPan*2;
+    const maxOffset = halfViewWidth - shelfScene.baseOffset - rightEdge - overscroll - extraPan;
+
+    shelfScene.minOffset = Math.min(minOffset, maxOffset);
+    shelfScene.maxOffset = Math.max(minOffset, maxOffset);
+    shelfScene.targetOffset = clampOffset(shelfScene.targetOffset);
+    shelfScene.currentOffset = clampOffset(shelfScene.currentOffset);
 }
 
 function updateShelfBooks(contents) {
@@ -469,7 +526,7 @@ function updateShelfBooks(contents) {
     const bookWidth = 1.2;
     const bookGap = 0.18;
     const dividerPad = 1;
-    const totalConstellations = Math.max(0, BASE_CONSTELLATION_DATA.length);
+    const totalBooks = Math.max(contents.length, 1);
 
     const leftDivider = shelfScene.leftDivider;
     const rightDivider = shelfScene.rightDivider;
@@ -487,7 +544,6 @@ function updateShelfBooks(contents) {
         rightDivider.visible = hasBooks;
         if (hasBooks) {
             const metrics = rightDivider.userData?.metrics || { width: 0.62 };
-            const totalBooks = Math.max(totalConstellations, contents.length);
             const lastBookIndex = Math.max(totalBooks - 1, 0);
             // Anchor the right divider just beyond the final book position when the shelf is complete.
             rightDivider.position.x =
@@ -512,12 +568,16 @@ function updateShelfBooks(contents) {
     }
 
     shelfScene.hover = null;
-    shelfScene.maxOffset = Math.max(0, (contents.length - 1) * 3.6 * 0.55);
-    shelfScene.baseOffset = contents.length > 1 ? -((contents.length - 1) * 3.6) / 2 : 0;
-    shelfScene.targetOffset = clampOffset(shelfScene.targetOffset);
-    shelfScene.currentOffset = clampOffset(shelfScene.currentOffset);
+    const totalWidth = Math.max(totalBooks - 1, 0) * bookSpacing;
+    shelfScene.baseOffset = totalWidth > 0 ? -(totalWidth / 2) : 0;
 
-    if (!contents.length) return;
+    if (!contents.length) {
+        shelfScene.minOffset = 0;
+        shelfScene.maxOffset = 0;
+        shelfScene.targetOffset = 0;
+        shelfScene.currentOffset = 0;
+        return;
+    }
 
     const anisotropy = shelfScene.renderer.capabilities?.getMaxAnisotropy
         ? shelfScene.renderer.capabilities.getMaxAnisotropy()
@@ -528,6 +588,8 @@ function updateShelfBooks(contents) {
         book.position.set(idx * bookSpacing, 0, (Math.random() - 0.5) * 0.35);
         group.add(book);
     });
+
+    updateOffsetBounds();
 }
 
 function createBookMesh(content, index, anisotropy = 4) {
