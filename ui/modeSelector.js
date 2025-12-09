@@ -33,7 +33,7 @@ function setupEntryButton() {
         hideCelestialLibraryScreen();
         hideLibraryGatewayScreen();
         playModeSelectionBgm();
-        document.body.classList.remove('home-visible');
+        document.body.classList.add('home-visible');
         document.body.classList.add('mode-screen-visible');
         homeScreen?.classList.remove('hidden');
         modeScreen?.classList.remove('hidden');

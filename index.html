@@ -3882,10 +3882,10 @@
             enterBtn.addEventListener('click', (e) => {
                 console.log('[fallback] enter-planetarium clicked');
                 e.stopPropagation();
-                document.body.classList.remove('home-visible');
+                document.body.classList.add('home-visible');
                 document.body.classList.add('mode-screen-visible');
                 if (modeScreen) modeScreen.classList.remove('hidden');
-                if (homeScreen) homeScreen.classList.add('hidden');
+                if (homeScreen) homeScreen.classList.remove('hidden');
             });
         }
     });
