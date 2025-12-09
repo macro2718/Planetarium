@@ -68,13 +68,14 @@ function createDefaultSettings() {
         showCardinalDirections: false,
         showStarTrails: false,
         autoRotate: false,
-        playMusic: false,
+        playMusic: true,
         showLensFlare: true,
         surfaceType: normalizeSurfaceType(DEFAULT_OBSERVER_LOCATION.surfaceType) ?? 'water',
         showCometTail: false,
         cometTailTint: '#b7f0ff',
         cometTailIntensity: 1,
-        meteorShowerIntensity: 0
+        meteorShowerIntensity: 0,
+        playEnvSound: true
     };
 }
 
@@ -92,6 +93,9 @@ class Planetarium {
         this.minCameraHeight = -4;
         this.settings = createDefaultSettings();
         this.bgmAudio = null;
+        this.envAudio = null;
+        this.currentEnvSoundPath = null;
+        this.audioReady = false;
         this.bgmPlaylist = [];
         this.bgmCurrentIndex = 0;
         this.isPlaying = false;
@@ -212,14 +216,19 @@ class Planetarium {
             this.init();
         }
         if (this.isRunning) return;
+        this.audioReady = true;
         this.isRunning = true;
         this.lastTime = this.getCurrentPerfSeconds();
         this.hideLoading();
+        if (this.settings.playEnvSound) {
+            this.startEnvironmentSound(this.settings.surfaceType);
+        }
         this.animate();
     }
 
     stop() {
         this.isRunning = false;
+        this.audioReady = false;
         if (this.animationFrameId) {
             cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;
@@ -228,6 +237,8 @@ class Planetarium {
 
     destroy() {
         this.stop();
+        this.stopAmbientSound();
+        this.stopEnvironmentSound();
         window.removeEventListener('resize', this.resizeRenderer);
         if (this.controls?.dispose) {
             this.controls.dispose();
@@ -377,6 +388,7 @@ class Planetarium {
         if (applied) {
             this.settings.surfaceType = applied;
             this.syncSurfaceButtons(applied);
+            this.updateEnvironmentSoundForSurface(applied);
         }
         return applied;
     }
@@ -419,6 +431,12 @@ class Planetarium {
         } else {
             this.stopAmbientSound();
         }
+
+        if (settings.playEnvSound) {
+            this.startEnvironmentSound(settings.surfaceType);
+        } else {
+            this.stopEnvironmentSound();
+        }
     }
 
     syncControlButtons() {
@@ -439,7 +457,8 @@ class Planetarium {
             { id: 'btn-star-trails', flag: 'showStarTrails' },
             { id: 'btn-lensflare', flag: 'showLensFlare' },
             { id: 'btn-auto', flag: 'autoRotate' },
-            { id: 'btn-music', flag: 'playMusic' }
+            { id: 'btn-music', flag: 'playMusic' },
+            { id: 'btn-env-sound', flag: 'playEnvSound' }
         ];
 
         for (const { id, flag } of toggleButtons) {
@@ -654,9 +673,10 @@ class Planetarium {
     }
 
     stopBgm() {
-        if (!this.bgmAudio) return;
-        this.bgmAudio.pause();
-        this.bgmAudio.currentTime = 0;
+        if (this.bgmAudio) {
+            this.bgmAudio.pause();
+            this.bgmAudio.currentTime = 0;
+        }
         this.isPlaying = false;
     }
 
@@ -666,6 +686,55 @@ class Planetarium {
 
     stopAmbientSound() {
         this.stopBgm();
+    }
+
+    getEnvironmentSoundPath(surfaceType = 'water') {
+        const normalized = normalizeSurfaceType(surfaceType);
+        const envMap = {
+            water: 'env_sound/sea.mp3',
+            grass: 'env_sound/grassland.mp3',
+            desert: 'env_sound/grassland.mp3',
+            ice: 'env_sound/sea.mp3'
+        };
+        return envMap[normalized] || envMap.water;
+    }
+
+    startEnvironmentSound(surfaceType = this.settings?.surfaceType ?? 'water') {
+        if (!this.audioReady) return;
+        const trackPath = this.getEnvironmentSoundPath(surfaceType);
+        if (!trackPath) {
+            console.warn('環境音ファイルが見つかりません');
+            return;
+        }
+
+        if (this.envAudio) {
+            if (this.currentEnvSoundPath === trackPath && !this.envAudio.paused) {
+                return;
+            }
+            this.envAudio.pause();
+            this.envAudio = null;
+        }
+
+        this.envAudio = new Audio(trackPath);
+        this.envAudio.loop = true;
+        this.envAudio.volume = 0.4;
+        this.currentEnvSoundPath = trackPath;
+        this.envAudio.play().catch((err) => {
+            console.error('環境音再生エラー:', err);
+        });
+    }
+
+    stopEnvironmentSound() {
+        if (!this.envAudio) return;
+        this.envAudio.pause();
+        this.envAudio.currentTime = 0;
+        this.envAudio = null;
+        this.currentEnvSoundPath = null;
+    }
+
+    updateEnvironmentSoundForSurface(surfaceType = this.settings?.surfaceType ?? 'water') {
+        if (!this.settings?.playEnvSound || !this.audioReady) return;
+        this.startEnvironmentSound(surfaceType);
     }
 
     hideLoading() {

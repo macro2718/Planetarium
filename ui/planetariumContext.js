@@ -80,9 +80,13 @@ export function resetPlanetariumBgm() {
         if (!planetarium) return;
         if (planetarium.settings) {
             planetarium.settings.playMusic = false;
+            planetarium.settings.playEnvSound = false;
         }
         if (typeof planetarium.stopAmbientSound === 'function') {
             planetarium.stopAmbientSound();
+        }
+        if (typeof planetarium.stopEnvironmentSound === 'function') {
+            planetarium.stopEnvironmentSound();
         }
         if (typeof planetarium.syncControlButtons === 'function') {
             planetarium.syncControlButtons();

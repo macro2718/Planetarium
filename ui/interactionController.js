@@ -176,6 +176,20 @@ function setupControlButtons(getPlanetarium) {
             }
         });
     }
+    const envSoundBtn = document.getElementById('btn-env-sound');
+    if (envSoundBtn) {
+        envSoundBtn.addEventListener('click', (e) => {
+            const ctx = getPlanetarium();
+            if (!ctx) return;
+            ctx.settings.playEnvSound = !ctx.settings.playEnvSound;
+            e.target.classList.toggle('active');
+            if (ctx.settings.playEnvSound) {
+                ctx.startEnvironmentSound(ctx.settings.surfaceType);
+            } else {
+                ctx.stopEnvironmentSound();
+            }
+        });
+    }
     
     // 時圏表示ボタン
     toggleButton('btn-hour-circles', 'showHourCircles', (ctx, visible) => {
