@@ -626,8 +626,9 @@ class Planetarium {
     async loadBgmPlaylist() {
         // bgmフォルダ内のmp3ファイルリストを取得
         // 静的なリストとして定義（サーバーサイドがないため）
+        const bgmBasePath = 'bgm/planetarium/';
         const bgmFiles = [
-            'bgm/Weightless Dreaming.mp3'
+            `${bgmBasePath}Weightless Dreaming.mp3`
         ];
         this.bgmPlaylist = bgmFiles;
         this.bgmCurrentIndex = 0;
