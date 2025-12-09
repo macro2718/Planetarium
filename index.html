@@ -1302,12 +1302,7 @@
         #location-screen {
             position: fixed;
             inset: 0;
-            background:
-                radial-gradient(140% 120% at 50% -10%, rgba(120, 200, 255, 0.18) 0%, transparent 50%),
-                radial-gradient(160% 140% at 50% 110%, rgba(40, 120, 180, 0.22), transparent 55%),
-                radial-gradient(120% 120% at 12% 36%, rgba(120, 220, 255, 0.12), transparent 60%),
-                radial-gradient(120% 120% at 84% 30%, rgba(210, 160, 255, 0.12), transparent 60%),
-                linear-gradient(145deg, #030711 0%, #050b15 45%, #04101c 100%);
+            background: url('images/planetarium.png') center/cover no-repeat;
             z-index: 1800;
             display: flex;
             flex-direction: column;
@@ -1325,33 +1320,11 @@
         }
 
         #location-screen::before {
-            content: '';
-            position: absolute;
-            inset: -12%;
-            background:
-                repeating-linear-gradient(130deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 48px),
-                repeating-linear-gradient(50deg, rgba(120, 200, 255, 0.04) 0 1px, transparent 1px 56px),
-                radial-gradient(80% 50% at 20% 26%, rgba(80, 170, 255, 0.18), transparent 60%),
-                radial-gradient(60% 50% at 82% 20%, rgba(200, 140, 255, 0.14), transparent 60%);
-            mix-blend-mode: screen;
-            opacity: 0.6;
-            pointer-events: none;
-            z-index: 0;
-            filter: blur(0.5px);
+            content: none;
         }
 
         #location-screen::after {
-            content: '';
-            position: absolute;
-            inset: -14%;
-            background:
-                radial-gradient(70% 70% at 50% 80%, rgba(36, 120, 160, 0.3), transparent 60%),
-                conic-gradient(from 120deg at 50% 75%, rgba(120, 200, 255, 0.12), transparent 160deg, rgba(120, 255, 210, 0.1), transparent 320deg);
-            mix-blend-mode: screen;
-            opacity: 0.55;
-            pointer-events: none;
-            z-index: 1;
-            filter: blur(6px);
+            content: none;
         }
 
         .location-header {
