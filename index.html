@@ -1752,11 +1752,7 @@
         #archive-screen {
             position: fixed;
             inset: 0;
-            background:
-                radial-gradient(120% 120% at 50% -8%, rgba(200, 150, 255, 0.16), transparent 48%),
-                radial-gradient(160% 110% at 16% 80%, rgba(255, 180, 130, 0.12), transparent 52%),
-                radial-gradient(140% 110% at 88% 70%, rgba(110, 200, 220, 0.14), transparent 52%),
-                linear-gradient(120deg, #0a0d1c 0%, #050815 55%, #070911 100%);
+            background: url('images/chrono sky.png') center/cover no-repeat;
             z-index: 1750;
             display: flex;
             flex-direction: column;
@@ -1774,34 +1770,11 @@
         }
 
         #archive-screen::before {
-            content: '';
-            position: absolute;
-            inset: -8%;
-            background:
-                repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 22px),
-                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 38px),
-                radial-gradient(120% 90% at 50% 40%, rgba(140, 200, 255, 0.08), transparent 65%),
-                conic-gradient(from 220deg at 50% 50%, rgba(255, 200, 150, 0.08), transparent 180deg, rgba(150, 200, 255, 0.08), transparent 300deg);
-            mix-blend-mode: screen;
-            opacity: 0.7;
-            pointer-events: none;
-            z-index: 0;
-            filter: blur(1px);
+            content: none;
         }
 
         #archive-screen::after {
-            content: '';
-            position: absolute;
-            inset: -16%;
-            background:
-                radial-gradient(50% 40% at 50% 110%, rgba(40, 60, 120, 0.4), transparent 60%),
-                linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 30%, rgba(255, 255, 255, 0.06) 70%, transparent 90%),
-                radial-gradient(30% 30% at 12% 22%, rgba(255, 200, 150, 0.2), transparent 60%),
-                radial-gradient(30% 30% at 88% 18%, rgba(150, 200, 255, 0.15), transparent 60%);
-            mix-blend-mode: screen;
-            opacity: 0.5;
-            pointer-events: none;
-            z-index: 1;
+            content: none;
         }
 
         .archive-header {
