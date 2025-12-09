@@ -15,6 +15,12 @@ let onLocationSelected = null;
 let selectedLocation = LOCATIONS[0];
 let locationGlobe = null;
 const locationCards = new Map();
+const SURFACE_LABELS = {
+    water: '水面',
+    desert: '砂漠',
+    grass: '草原',
+    ice: '氷原'
+};
 
 const SCREEN_FADE_MS = 600; // Keep in sync with CSS --screen-fade-duration
 
@@ -77,13 +83,10 @@ function createLocationCard(location) {
             <div class="location-card-body">
                 <div class="location-card-title">
                     <span class="location-card-name">${location.name}</span>
-                    <span class="location-region-chip">${regionLabel}</span>
                 </div>
-                <div class="location-card-en">${location.nameEn}</div>
-                <p class="location-card-description">${location.description}</p>
-                <div class="location-card-coords">
-                    <span>LAT ${formatCoordinate(location.lat, true)}</span>
-                    <span> / LON ${formatCoordinate(location.lon, false)}</span>
+                <div class="location-card-meta">
+                    <span class="location-card-en">${location.nameEn}</span>
+                    <span class="location-region-chip">${regionLabel}</span>
                 </div>
             </div>
             <div class="location-card-arrow" aria-hidden="true">→</div>
@@ -115,7 +118,10 @@ function setSelectedLocation(location) {
 function updateSelectionSummary(location) {
     const nameEl = document.getElementById('location-selected-name');
     const coordsEl = document.getElementById('location-selected-coords');
+    const enEl = document.getElementById('location-selected-en');
     const chipEl = document.getElementById('location-selected-region');
+    const descEl = document.getElementById('location-selected-description');
+    const surfaceEl = document.getElementById('location-selected-surface');
 
     if (nameEl) {
         nameEl.textContent = `${location.icon || '✶'} ${location.name}`;
@@ -123,8 +129,17 @@ function updateSelectionSummary(location) {
     if (coordsEl) {
         coordsEl.textContent = `${formatCoordinate(location.lat, true)} / ${formatCoordinate(location.lon, false)}`;
     }
+    if (enEl) {
+        enEl.textContent = location.nameEn || '-';
+    }
     if (chipEl) {
         chipEl.textContent = REGION_LABELS[location.region] || location.region;
+    }
+    if (surfaceEl) {
+        surfaceEl.textContent = SURFACE_LABELS[location.surfaceType] || location.surfaceType || '-';
+    }
+    if (descEl) {
+        descEl.textContent = location.description || 'この観測地の詳細情報がここに表示されます。';
     }
 }
 

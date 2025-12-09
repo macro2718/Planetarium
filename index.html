@@ -1617,6 +1617,13 @@
             gap: 10px;
         }
 
+        .location-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
         .location-card-name {
             font-size: 16px;
             letter-spacing: 1px;
@@ -1699,6 +1706,12 @@
             gap: 6px;
         }
 
+        .location-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
         .location-selected-name {
             font-size: 16px;
             font-weight: 600;
@@ -1706,10 +1719,54 @@
             display: block;
         }
 
+        .location-selected-en {
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: rgba(200, 215, 255, 0.72);
+            text-transform: uppercase;
+        }
+
         .location-selected-coords {
             font-size: 11px;
             opacity: 0.72;
             letter-spacing: 2px;
+        }
+
+        .location-selected-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 2px;
+        }
+
+        .location-info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(136, 173, 255, 0.18);
+        }
+
+        .location-info-label {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: rgba(200, 215, 255, 0.72);
+            text-transform: uppercase;
+        }
+
+        .location-info-value {
+            font-size: 12px;
+            color: rgba(220, 235, 255, 0.9);
+            letter-spacing: 1.4px;
+        }
+
+        .location-selected-description {
+            margin-top: 4px;
+            font-size: 12px;
+            line-height: 1.7;
+            color: rgba(210, 225, 255, 0.86);
         }
 
         @media (max-width: 1120px) {
@@ -3651,7 +3708,7 @@
                         <div class="location-list-head">
                             <div>
                                 <div class="location-list-title">OBSERVING POINTS</div>
-                                <div class="location-list-sub">カードをクリックすると地点がセットされます。</div>
+                                <div class="location-list-sub">カードをクリックすると地点がセットされ、下の情報パネルに詳細が表示されます。</div>
                             </div>
                         </div>
                         <div class="location-list" id="location-list">
@@ -3659,10 +3716,23 @@
                         </div>
                     </div>
                     <div class="location-summary-panel">
-                        <div>
+                        <div class="location-summary">
                             <div class="location-region-chip" id="location-selected-region">REGION</div>
                             <div class="location-selected-name" id="location-selected-name">-</div>
-                            <div class="location-selected-coords" id="location-selected-coords">-</div>
+                            <div class="location-selected-en" id="location-selected-en">-</div>
+                            <div class="location-selected-info-grid">
+                                <div class="location-info-item">
+                                    <span class="location-info-label">座標</span>
+                                    <span class="location-info-value" id="location-selected-coords">-</span>
+                                </div>
+                                <div class="location-info-item">
+                                    <span class="location-info-label">地表</span>
+                                    <span class="location-info-value" id="location-selected-surface">-</span>
+                                </div>
+                            </div>
+                            <p class="location-selected-description" id="location-selected-description">
+                                観測地を選ぶと、ここに詳細情報が表示されます。
+                            </p>
                         </div>
                         <button class="location-observe-btn" id="location-observe">観測する →</button>
                     </div>
