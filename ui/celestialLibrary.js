@@ -357,19 +357,28 @@ function setupShelfScene() {
     let isDragging = false;
     let lastX = 0;
     let dragged = false;
+    const endDrag = () => {
+        isDragging = false;
+        screen.classList.remove('dragging');
+    };
 
     const handlePointerDown = (event) => {
         if (event.target.closest('.library-back-btn')) return;
         isDragging = true;
         lastX = event.clientX;
         dragged = false;
+        screen.classList.add('dragging');
+        const selection = window.getSelection?.();
+        if (selection?.removeAllRanges) {
+            selection.removeAllRanges();
+        }
     };
 
     const handlePointerMove = (event) => {
         updatePointer(event);
         if (isDragging && event.buttons === 0) {
             // Stop dragging if the pointer release wasn't captured (e.g., pointerup on another element)
-            isDragging = false;
+            endDrag();
         }
         if (isDragging) {
             const delta = (event.clientX - lastX) * 0.03;
@@ -383,7 +392,7 @@ function setupShelfScene() {
     };
 
     const handlePointerUp = () => {
-        isDragging = false;
+        endDrag();
     };
 
     const handleClick = (event) => {
