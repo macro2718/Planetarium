@@ -400,6 +400,20 @@ function setupShelfScene() {
     rightDivider.visible = false;
     fixtureGroup.add(rightDivider);
 
+    const dividerMetrics = leftDivider.userData?.metrics || { height: 11.2 };
+    const shelfThickness = shelfSurface.geometry?.parameters?.height || 1.4;
+    const dividerTopY = fixtureGroup.position.y + leftDivider.position.y + (dividerMetrics.height || 0) / 2;
+    const upperShelfOffset = 1.2;
+    const upperShelfSurface = shelfSurface.clone();
+    upperShelfSurface.position.set(
+        shelfSurface.position.x,
+        dividerTopY + shelfThickness / 2 + upperShelfOffset,
+        shelfSurface.position.z
+    );
+    upperShelfSurface.castShadow = true;
+    upperShelfSurface.receiveShadow = true;
+    shelfGroup.add(upperShelfSurface);
+
     // Side panels now run deeper to extend forward as well as back.
     const sidePanelMetrics = { width: 1.3, height: 64, depth: 20 };
     const sidePanelGap = 0.32;
@@ -608,11 +622,11 @@ function updateOffsetBounds() {
 
     const halfViewWidth = getShelfHalfViewWidth();
     const overscrollRight = 1.8; // slight cushion so drag doesn't feel hard-stopped
-    const overscrollLeft = 2.6; // stronger cushion to shorten left travel
+    const overscrollLeft = 3.2; // stronger cushion to further shorten left travel
     const extraPanRight = Math.max(halfViewWidth * 0.15, 1.8); // allow a bit more travel past dividers (right)
     const extraPanLeft = Math.max(halfViewWidth * 0.22, 2.4);
-    const minOffset = -halfViewWidth - shelfScene.baseOffset - leftEdge + overscrollLeft + extraPanLeft;
-    const maxOffsetVisible = halfViewWidth - shelfScene.baseOffset - visibleRightEdge - overscrollRight - extraPanRight;
+    const minOffset = -halfViewWidth - shelfScene.baseOffset - leftEdge + overscrollLeft - extraPanLeft;
+    const maxOffsetVisible = halfViewWidth - shelfScene.baseOffset - visibleRightEdge - overscrollRight - 3 * extraPanRight;   // extra pan reduced on visible edge
     const maxOffsetFuture = halfViewWidth - shelfScene.baseOffset - finalRightEdge - overscrollLeft - extraPanLeft;
 
     shelfScene.minOffset = Math.min(minOffset, maxOffsetFuture);
