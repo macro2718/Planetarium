@@ -204,9 +204,13 @@ export class Planetarium {
         disposeScene(this);
     }
 
-    registerUpdater(system) {
-        if (system?.update) {
-            this.updaters.push(system.update);
+    registerUpdater(systemOrUpdater) {
+        if (typeof systemOrUpdater === 'function') {
+            this.updaters.push(systemOrUpdater);
+            return;
+        }
+        if (systemOrUpdater?.update) {
+            this.updaters.push(systemOrUpdater.update);
         }
     }
 
