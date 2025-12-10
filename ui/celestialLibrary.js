@@ -337,20 +337,20 @@ function setupShelfScene() {
     lowerWall.receiveShadow = true;
     shelfGroup.add(lowerWall);
 
-    const shelfSurface = new THREE.Mesh(
-        new THREE.BoxGeometry(160, 1.4, 12),
-        new THREE.MeshStandardMaterial({
-            map: woodTextures.colorMap,
-            normalMap: woodTextures.normalMap,
-            color: 0x4b2e1f,
-            roughness: 0.5,
-            metalness: 0.06,
-            emissive: new THREE.Color(0x26160e).multiplyScalar(0.24),
-            normalScale: new THREE.Vector2(0.8, 1.05)
-        })
-    );
+    const shelfMaterial = new THREE.MeshStandardMaterial({
+        map: woodTextures.colorMap,
+        normalMap: woodTextures.normalMap,
+        color: 0x4b2e1f,
+        roughness: 0.5,
+        metalness: 0.06,
+        emissive: new THREE.Color(0x26160e).multiplyScalar(0.24),
+        normalScale: new THREE.Vector2(0.8, 1.05)
+    });
+
+    const shelfSurface = new THREE.Mesh(new THREE.BoxGeometry(160, 1.4, 16), shelfMaterial);
     shelfSurface.position.y = -0.6;
-    shelfSurface.position.z = -1.8;
+    // Extend depth backward to meet the rear wall while keeping the front near its original spot.
+    shelfSurface.position.z = -4;
     shelfSurface.castShadow = true;
     shelfSurface.receiveShadow = true;
     shelfGroup.add(shelfSurface);
@@ -360,7 +360,7 @@ function setupShelfScene() {
         new THREE.ShadowMaterial({ color: 0x2a1a12, opacity: 0.75 })
     );
     shelfShadow.rotation.x = -Math.PI / 2;
-    shelfShadow.position.set( 0, -0.1, -1.4 );
+    shelfShadow.position.set( 0, -0.1, -4 );
     shelfShadow.receiveShadow = true;
     shelfGroup.add(shelfShadow);
 
@@ -377,7 +377,7 @@ function setupShelfScene() {
     );
     shelfGlow.rotation.x = -Math.PI / 2;
     shelfGlow.position.y = -0.4;
-    shelfGlow.position.z = -2;
+    shelfGlow.position.z = -4;
     shelfGroup.add(shelfGlow);
 
     const bookGroup = new THREE.Group();
@@ -400,6 +400,22 @@ function setupShelfScene() {
     rightDivider.visible = false;
     fixtureGroup.add(rightDivider);
 
+    // Side panels now run deeper to extend forward as well as back.
+    const sidePanelMetrics = { width: 1.3, height: 64, depth: 20 };
+    const sidePanelGap = 0.32;
+    // Center the panel using shelf height, bias slightly upward so the top rises higher while still piercing the deck.
+    const sidePanelY = shelfSurface.position.y - fixtureGroup.position.y + 0.4;
+
+    const leftSidePanel = createShelfSidePanel(shelfMaterial.clone(), sidePanelMetrics);
+    leftSidePanel.position.set(0, sidePanelY, shelfSurface.position.z);
+    leftSidePanel.visible = false;
+    fixtureGroup.add(leftSidePanel);
+
+    const rightSidePanel = createShelfSidePanel(shelfMaterial.clone(), sidePanelMetrics);
+    rightSidePanel.position.set(0, sidePanelY, shelfSurface.position.z);
+    rightSidePanel.visible = false;
+    fixtureGroup.add(rightSidePanel);
+
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
 
@@ -412,6 +428,11 @@ function setupShelfScene() {
         fixtureGroup,
         leftDivider,
         rightDivider,
+        leftSidePanel,
+        rightSidePanel,
+        sidePanelMetrics,
+        sidePanelGap,
+        sidePanelY,
         container,
         shadowLight,
         shadowCameraBase: { ...SHADOW_CAMERA_BASE },
@@ -654,6 +675,13 @@ function updateShelfBooks(contents) {
 
     const leftDivider = shelfScene.leftDivider;
     const rightDivider = shelfScene.rightDivider;
+    const leftSidePanel = shelfScene.leftSidePanel;
+    const rightSidePanel = shelfScene.rightSidePanel;
+    const sidePanelMetrics = shelfScene.sidePanelMetrics || {};
+    const sidePanelGap = Number.isFinite(shelfScene.sidePanelGap) ? shelfScene.sidePanelGap : 0;
+    const sidePanelHalfWidth = (sidePanelMetrics.width || 0) / 2;
+    const sidePanelOffset = sidePanelHalfWidth > 0 ? dividerPad + sidePanelGap + sidePanelHalfWidth : 0;
+    const sidePanelY = Number.isFinite(shelfScene.sidePanelY) ? shelfScene.sidePanelY : null;
     const hasBooks = unlockedBooks > 0;
 
     if (leftDivider) {
@@ -672,6 +700,30 @@ function updateShelfBooks(contents) {
             // Anchor the right divider just beyond the final book position when the shelf is complete.
             rightDivider.position.x =
                 lastBookIndex * bookSpacing + (bookWidth / 2 + bookGap + (metrics.width || 0) / 2 + dividerPad);
+        }
+    }
+
+    if (leftSidePanel) {
+        leftSidePanel.visible = hasBooks;
+        if (sidePanelY !== null) {
+            leftSidePanel.position.y = sidePanelY;
+        }
+        if (hasBooks && leftDivider) {
+            const metrics = leftDivider.userData?.metrics || { width: 0.62 };
+            leftSidePanel.position.x =
+                leftDivider.position.x - (metrics.width || 0) / 2 - sidePanelOffset;
+        }
+    }
+
+    if (rightSidePanel) {
+        rightSidePanel.visible = hasBooks;
+        if (sidePanelY !== null) {
+            rightSidePanel.position.y = sidePanelY;
+        }
+        if (hasBooks && rightDivider) {
+            const metrics = rightDivider.userData?.metrics || { width: 0.62 };
+            rightSidePanel.position.x =
+                rightDivider.position.x + (metrics.width || 0) / 2 + sidePanelOffset;
         }
     }
 
@@ -716,13 +768,13 @@ function updateShelfBooks(contents) {
     });
 
     const leftEdge = leftDivider?.visible
-        ? leftDivider.position.x - (leftDivider.userData?.metrics?.width || 0.62) / 2
+        ? leftDivider.position.x - (leftDivider.userData?.metrics?.width || 0.62) / 2 - sidePanelOffset
         : 0;
     const currentRightEdge = hasBooks
-        ? Math.max(unlockedBooks - 1, 0) * bookSpacing + (bookWidth / 2 + bookGap)
+        ? Math.max(unlockedBooks - 1, 0) * bookSpacing + (bookWidth / 2 + bookGap) + sidePanelOffset
         : 0;
     const finalRightEdge = rightDivider?.visible
-        ? rightDivider.position.x + (rightDivider.userData?.metrics?.width || 0.62) / 2
+        ? rightDivider.position.x + (rightDivider.userData?.metrics?.width || 0.62) / 2 + sidePanelOffset
         : currentRightEdge;
     const shelfSpan = Math.max(finalRightEdge - leftEdge, 0);
     shelfScene.shadowShelfSpan = shelfSpan;
@@ -816,6 +868,17 @@ function createShelfDivider(woodTextures) {
     divider.receiveShadow = true;
     divider.userData = { ...(divider.userData || {}), metrics };
     return divider;
+}
+
+function createShelfSidePanel(material, metrics = {}) {
+    const width = metrics.width || 1.2;
+    const height = metrics.height || 12;
+    const depth = metrics.depth || 12.2;
+    const geometry = new THREE.BoxGeometry(width, height, depth);
+    const panel = new THREE.Mesh(geometry, material || new THREE.MeshStandardMaterial());
+    panel.castShadow = true;
+    panel.receiveShadow = true;
+    return panel;
 }
 
 function createRoundedDividerGeometry(metrics) {
