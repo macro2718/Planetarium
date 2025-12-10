@@ -365,18 +365,18 @@ function setupShelfScene() {
     shelfGroup.add(shelfShadow);
 
     const shelfGlow = new THREE.Mesh(
-        new THREE.PlaneGeometry(180, 36),
+        new THREE.PlaneGeometry(170, 0),
         new THREE.MeshBasicMaterial({
-            color: 0xfff2d6,
+            color: 0xffe4bd,
             transparent: true,
-            opacity: 0.22,
+            opacity: 0.08,
             blending: THREE.AdditiveBlending,
             depthWrite: false,
             side: THREE.DoubleSide
         })
     );
     shelfGlow.rotation.x = -Math.PI / 2;
-    shelfGlow.position.y = -0.4;
+    shelfGlow.position.y = -2.2; // hide glow plane under the deck so it doesn't wash lower geometry
     shelfGlow.position.z = -4;
     shelfGroup.add(shelfGlow);
 
