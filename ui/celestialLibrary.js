@@ -86,6 +86,7 @@ export function showCelestialLibraryScreen() {
     document.body.classList.remove('home-visible');
     renderLibraryList();
     resizeShelfScene();
+    snapShelfToLeftEdge();
 }
 
 export function hideCelestialLibraryScreen() {
@@ -633,6 +634,25 @@ function updateOffsetBounds() {
     shelfScene.maxOffset = Math.max(minOffset, maxOffsetVisible);
     shelfScene.targetOffset = clampOffset(shelfScene.targetOffset);
     shelfScene.currentOffset = clampOffset(shelfScene.currentOffset);
+}
+
+function snapShelfToLeftEdge() {
+    if (!shelfScene) return;
+    // Reset to a neutral position so the view bounds are computed consistently,
+    // then jump to the leftmost allowed offset.
+    shelfScene.currentOffset = 0;
+    shelfScene.targetOffset = 0;
+    if (shelfScene.shelfGroup) {
+        shelfScene.shelfGroup.position.x = shelfScene.baseOffset || 0;
+    }
+    updateOffsetBounds();
+    const leftOffset = Number.isFinite(shelfScene.maxOffset) ? shelfScene.maxOffset : 0;
+    shelfScene.targetOffset = leftOffset;
+    shelfScene.currentOffset = leftOffset;
+    if (shelfScene.shelfGroup) {
+        shelfScene.shelfGroup.position.x = (shelfScene.baseOffset || 0) + leftOffset;
+    }
+    updateShadowCameraBounds();
 }
 
 function updateShadowCameraBounds(shelfSpanOverride) {
