@@ -89,6 +89,9 @@ function setupControlButtons(getPlanetarium) {
             apply(ctx, next);
         });
     };
+    toggleButton('btn-background-stars', 'showBackgroundStars', (ctx, visible) => {
+        if (ctx.starsGroup) ctx.starsGroup.visible = visible;
+    });
     toggleButton('btn-milkyway', 'showMilkyWay', (ctx, visible) => {
         if (ctx.milkyWayGroup) ctx.milkyWayGroup.visible = visible;
     });

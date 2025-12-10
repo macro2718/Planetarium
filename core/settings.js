@@ -14,6 +14,7 @@ export const normalizeSurfaceType = (type) => {
 
 export function createDefaultSettings() {
     return {
+        showBackgroundStars: true,
         showMilkyWay: true,
         showConstellations: true,
         showShootingStars: true,

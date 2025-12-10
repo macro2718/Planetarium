@@ -22,6 +22,7 @@ export function applySurfaceType(ctx, type) {
 
 export function applySettingsToSystems(ctx) {
     const settings = ctx.settings ?? {};
+    if (ctx.starsGroup) ctx.starsGroup.visible = !!settings.showBackgroundStars;
     if (ctx.milkyWayGroup) ctx.milkyWayGroup.visible = !!settings.showMilkyWay;
     if (ctx.constellationSystem) ctx.constellationSystem.updateVisibility(!!settings.showConstellations);
     if (ctx.shootingStarsGroup) ctx.shootingStarsGroup.visible = !!settings.showShootingStars;
@@ -68,6 +69,7 @@ export function applySettingsToSystems(ctx) {
 
 export function syncControlButtons(ctx) {
     const toggleButtons = [
+        { id: 'btn-background-stars', flag: 'showBackgroundStars' },
         { id: 'btn-milkyway', flag: 'showMilkyWay' },
         { id: 'btn-constellations', flag: 'showConstellations' },
         { id: 'btn-shooting', flag: 'showShootingStars' },
