@@ -6,7 +6,7 @@
     <title>Planetarium - 星空への旅</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Space+Grotesk:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --glass: rgba(12, 18, 42, 0.55);
@@ -1726,12 +1726,14 @@
             letter-spacing: 4px;
             color: rgba(210, 225, 255, 0.9);
             text-transform: uppercase;
+            font-family: 'Cormorant Garamond', 'Space Grotesk', 'Zen Kaku Gothic New', serif;
         }
 
         .location-list-sub {
             font-size: 12px;
             color: rgba(200, 215, 255, 0.72);
             line-height: 1.6;
+            font-family: 'Zen Kaku Gothic New', 'Georgia', serif;
         }
 
         .location-list {
@@ -1797,20 +1799,13 @@
 
         .location-card-row {
             display: grid;
-            grid-template-columns: auto 1fr auto;
+            grid-template-columns: 1fr auto;
             gap: 14px;
             align-items: center;
         }
 
         .location-card-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            display: grid;
-            place-items: center;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(136, 173, 255, 0.22);
-            font-size: 18px;
+            display: none;
         }
 
         .location-card-body {
@@ -1836,6 +1831,7 @@
             font-size: 16px;
             letter-spacing: 1px;
             color: rgba(255, 255, 255, 0.95);
+            font-family: 'Zen Kaku Gothic New', 'Georgia', serif;
         }
 
         .location-region-chip {
@@ -1846,13 +1842,15 @@
             color: rgba(200, 220, 255, 0.82);
             font-size: 10px;
             letter-spacing: 2px;
-            font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
+            font-family: 'Cormorant Garamond', 'Space Grotesk', 'Zen Kaku Gothic New', serif;
         }
 
         .location-card-en {
             font-size: 12px;
             letter-spacing: 2px;
             color: rgba(200, 215, 255, 0.7);
+            font-family: 'Cormorant Garamond', 'Georgia', serif;
+            font-style: italic;
         }
 
         .location-card-description {
@@ -1889,6 +1887,8 @@
             z-index: 3;
             white-space: nowrap;
             align-self: start;
+            font-family: 'Cormorant Garamond', 'Space Grotesk', serif;
+            font-weight: 600;
         }
 
         .location-observe-btn:hover {
@@ -1924,6 +1924,7 @@
             font-weight: 600;
             letter-spacing: 1px;
             display: block;
+            font-family: 'Zen Kaku Gothic New', 'Georgia', serif;
         }
 
         .location-selected-en {
@@ -1931,12 +1932,15 @@
             letter-spacing: 2px;
             color: rgba(200, 215, 255, 0.72);
             text-transform: uppercase;
+            font-family: 'Cormorant Garamond', 'Georgia', serif;
+            font-style: italic;
         }
 
         .location-selected-coords {
             font-size: 11px;
             opacity: 0.72;
             letter-spacing: 2px;
+            font-family: 'Cormorant Garamond', 'Georgia', serif;
         }
 
         .location-selected-info-grid {
@@ -1961,12 +1965,14 @@
             letter-spacing: 2px;
             color: rgba(200, 215, 255, 0.72);
             text-transform: uppercase;
+            font-family: 'Cormorant Garamond', 'Georgia', serif;
         }
 
         .location-info-value {
             font-size: 12px;
             color: rgba(220, 235, 255, 0.9);
             letter-spacing: 1.4px;
+            font-family: 'Zen Kaku Gothic New', 'Georgia', serif;
         }
 
         .location-selected-description {
@@ -1974,6 +1980,7 @@
             font-size: 12px;
             line-height: 1.7;
             color: rgba(210, 225, 255, 0.86);
+            font-family: 'Zen Kaku Gothic New', 'Georgia', serif;
         }
 
         @media (max-width: 1120px) {
