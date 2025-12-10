@@ -1,4 +1,6 @@
 const MODE_SELECTION_TRACKS = ['bgm/mode_selection/Whispers in the Quiet.mp3'];
+const UI_BGM_VOLUME_STORAGE_KEY = 'planetarium-ui-bgm-volume';
+const DEFAULT_UI_BGM_VOLUME = 0.5;
 
 const PLAYLISTS = {
     title: MODE_SELECTION_TRACKS,
@@ -11,6 +13,32 @@ let playlist = [];
 let playlistSourceRef = null;
 let playlistIndex = 0;
 let awaitingUserInteraction = false;
+let uiBgmVolume = loadStoredVolume();
+
+function clampVolume(value) {
+    return Math.min(1, Math.max(0, value));
+}
+
+function loadStoredVolume() {
+    try {
+        const stored = localStorage.getItem(UI_BGM_VOLUME_STORAGE_KEY);
+        if (!stored) return DEFAULT_UI_BGM_VOLUME;
+        const parsed = parseFloat(stored);
+        if (Number.isNaN(parsed)) return DEFAULT_UI_BGM_VOLUME;
+        return clampVolume(parsed);
+    } catch (error) {
+        console.warn('UI BGM音量の読み込みに失敗しました', error);
+        return DEFAULT_UI_BGM_VOLUME;
+    }
+}
+
+function persistVolume(volume) {
+    try {
+        localStorage.setItem(UI_BGM_VOLUME_STORAGE_KEY, String(volume));
+    } catch (error) {
+        console.warn('UI BGM音量の保存に失敗しました', error);
+    }
+}
 
 function requestUserResume() {
     if (awaitingUserInteraction) return;
@@ -46,7 +74,7 @@ function startTrack(index = 0) {
 
     const src = playlist[playlistIndex];
     uiAudio = new Audio(src);
-    uiAudio.volume = 0.5;
+    uiAudio.volume = uiBgmVolume;
     uiAudio.loop = playlist.length === 1;
     uiAudio.addEventListener('ended', () => {
         if (playlist.length <= 1) return;
@@ -117,4 +145,16 @@ export function stopUiBgm() {
     playlistSourceRef = null;
     playlist = [];
     playlistIndex = 0;
+}
+
+export function getUiBgmVolume() {
+    return uiBgmVolume;
+}
+
+export function setUiBgmVolume(volume = DEFAULT_UI_BGM_VOLUME) {
+    uiBgmVolume = clampVolume(volume);
+    if (uiAudio) {
+        uiAudio.volume = uiBgmVolume;
+    }
+    persistVolume(uiBgmVolume);
 }

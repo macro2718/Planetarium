@@ -7,6 +7,7 @@ import { initEventArchive, setArchivePlanetarium } from './ui/eventArchive.js';
 import { initCelestialLibrary } from './ui/celestialLibrary.js';
 import { initHomeScene } from './ui/homeScene.js';
 import { playTitleBgm } from './ui/bgmController.js';
+import { initHomeSettingsPanel } from './ui/settingsPanel.js';
 import {
     registerPlanetaria,
     setActivePlanetarium,
@@ -43,6 +44,7 @@ initEventArchive({
 
 initCelestialLibrary();
 initHomeScene();
+initHomeSettingsPanel();
 
 initModeSelector({
     onEnterLive: () => setActivePlanetarium('live'),
