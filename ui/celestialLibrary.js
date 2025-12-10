@@ -3,6 +3,7 @@ import { destroyAllPlanetaria, resetPlanetariumBgm } from './planetariumContext.
 import { findConstellationTale } from '../data/constellationTales.js';
 import { BASE_CONSTELLATION_DATA } from '../data/constellations.js';
 import { playModeSelectionBgm } from './bgmController.js';
+import { transitionToModeScreen } from './screenTransition.js';
 
 const STORAGE_KEY = 'celestial-library-unlocked-v1';
 const SHADOW_CAMERA_BASE = {
@@ -160,7 +161,6 @@ function setupGatewayScreen() {
     const backBtn = document.getElementById('library-gateway-back');
     if (backBtn) {
         backBtn.addEventListener('click', () => {
-            hideLibraryGatewayScreen();
             showModeScreen();
         });
     }
@@ -207,17 +207,8 @@ function toggleEmptyState(isEmpty) {
 }
 
 function showModeScreen() {
-    const modeScreen = document.getElementById('mode-screen');
-    const homeScreen = document.getElementById('home-screen');
-    if (modeScreen) {
-        modeScreen.classList.remove('hidden');
-    }
-    if (homeScreen) {
-        homeScreen.classList.remove('hidden');
-    }
     playModeSelectionBgm();
-    document.body.classList.add('mode-screen-visible');
-    document.body.classList.add('home-visible');
+    transitionToModeScreen('library-gateway-screen');
 }
 
 function buildConstellationContent(name) {

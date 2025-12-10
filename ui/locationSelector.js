@@ -10,6 +10,7 @@ import {
     showPlanetariumCanvas
 } from './planetariumContext.js';
 import { playModeSelectionBgm, enterPlanetariumScene, playTitleBgm } from './bgmController.js';
+import { transitionToModeScreen } from './screenTransition.js';
 
 let currentPlanetarium = null;
 let onLocationSelected = null;
@@ -22,8 +23,6 @@ const SURFACE_LABELS = {
     grass: '草原',
     ice: '氷原'
 };
-
-const SCREEN_FADE_MS = 600; // Keep in sync with CSS --screen-fade-duration
 
 /**
  * 場所選択システムを初期化
@@ -208,47 +207,25 @@ function setupBackButton() {
  */
 function backToModeFromLocation() {
     const homeScreen = document.getElementById('home-screen');
-    const modeScreen = document.getElementById('mode-screen');
     const locationScreen = document.getElementById('location-screen');
 
-    document.body.classList.add('home-visible');
-    document.body.classList.add('mode-screen-visible');
-    homeScreen?.classList.remove('hidden');
     playModeSelectionBgm();
 
-    // モード選択画面が存在する場合は、そちらへ戻す
-    if (modeScreen) {
-        modeScreen.classList.add('fading-in');
-        modeScreen.classList.remove('hidden');
-
-        requestAnimationFrame(() => {
-            modeScreen.classList.remove('fading-in');
-        });
-
-        setTimeout(() => {
-            if (locationScreen) {
-                locationScreen.classList.add('hidden');
-            }
-        }, SCREEN_FADE_MS);
+    if (document.getElementById('mode-screen')) {
+        transitionToModeScreen(locationScreen);
         return;
     }
 
     // フォールバックとしてホーム画面へ戻る
     if (homeScreen) {
-        homeScreen.classList.add('fading-in');
         homeScreen.classList.remove('hidden');
+        document.body.classList.add('home-visible');
         playTitleBgm();
-
-        requestAnimationFrame(() => {
-            homeScreen.classList.remove('fading-in');
-        });
     }
 
-    setTimeout(() => {
-        if (locationScreen) {
-            locationScreen.classList.add('hidden');
-        }
-    }, SCREEN_FADE_MS);
+    if (locationScreen) {
+        locationScreen.classList.add('hidden');
+    }
 }
 
 /**

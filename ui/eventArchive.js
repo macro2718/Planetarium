@@ -12,6 +12,7 @@ import {
     showPlanetariumCanvas
 } from './planetariumContext.js';
 import { enterPlanetariumScene, playModeSelectionBgm } from './bgmController.js';
+import { transitionToModeScreen } from './screenTransition.js';
 
 let currentPlanetarium = null;
 let onEventSelected = null;
@@ -229,7 +230,6 @@ function setupBackButton() {
     if (backBtn) {
         backBtn.addEventListener('click', () => {
             showModeScreen();
-            hideEventArchiveScreen();
         });
     }
 }
@@ -302,20 +302,12 @@ function applyEventEffects(event) {
 }
 
 function showModeScreen() {
-    const modeScreen = document.getElementById('mode-screen');
-    const homeScreen = document.getElementById('home-screen');
+    const archiveScreen = document.getElementById('archive-screen');
     getArchivePlanetarium()?.stop();
     getLivePlanetarium()?.stop();
     destroyAllPlanetaria();
-    if (modeScreen) {
-        modeScreen.classList.remove('hidden');
-    }
-    if (homeScreen) {
-        homeScreen.classList.remove('hidden');
-    }
     playModeSelectionBgm();
-    document.body.classList.add('mode-screen-visible');
-    document.body.classList.add('home-visible');
+    transitionToModeScreen(archiveScreen);
 }
 
 function initMiniGlobe() {
