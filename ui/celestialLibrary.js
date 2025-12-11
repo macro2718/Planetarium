@@ -16,6 +16,8 @@ const SHADOW_CAMERA_BASE = {
 let unlockedConstellations = new Set();
 let detailView = null;
 let shelfScene = null;
+let shelfContents = [];
+let currentDetailIndex = -1;
 
 const FALLBACK_STORY = '物語の断片はまだ集めているところです。星空で出会ったときの余韻を、そのままここに置いておきましょう。';
 const FALLBACK_OBSERVATION = '星図を広げ、実際の夜空で形をなぞると新しい発見があります。';
@@ -149,6 +151,12 @@ function hideLibraryDetailScreen() {
     if (detailScreen) {
         detailScreen.classList.add('hidden');
     }
+    const libraryScreen = document.getElementById('library-screen');
+    if (libraryScreen) {
+        libraryScreen.classList.remove('detail-open');
+    }
+    currentDetailIndex = -1;
+    updateDetailNavState();
 }
 
 function setupGatewayScreen() {
@@ -183,6 +191,10 @@ function renderLibraryList() {
 
     const names = Array.from(unlockedConstellations).sort((a, b) => a.localeCompare(b, 'ja'));
     const contents = names.map(buildConstellationContent);
+    shelfContents = contents;
+    if (!contents.length) {
+        currentDetailIndex = -1;
+    }
 
     if (count) {
         count.textContent = names.length;
@@ -193,11 +205,13 @@ function renderLibraryList() {
         if (libraryScreen) libraryScreen.classList.remove('hidden');
         updateShelfBooks([]);
         toggleEmptyState(true);
+        updateDetailNavState();
         return;
     }
 
     toggleEmptyState(false);
-    updateShelfBooks(contents);
+    updateShelfBooks(shelfContents);
+    updateDetailNavState();
 }
 
 function toggleEmptyState(isEmpty) {
@@ -513,7 +527,11 @@ function setupShelfScene() {
         if (event.target.closest('.library-back-btn')) return;
         if (dragged) return;
         if (shelfScene.hover?.userData?.content) {
-            handleBookSelect(shelfScene.hover.userData.content, true);
+            handleBookSelect(
+                shelfScene.hover.userData.content,
+                true,
+                shelfScene.hover.userData.contentIndex
+            );
         }
     };
 
@@ -797,6 +815,7 @@ function updateShelfBooks(contents) {
 
     contents.forEach((content, idx) => {
         const book = createBookMesh(content, idx, anisotropy);
+        book.userData.contentIndex = idx;
         book.position.set(idx * bookSpacing, 0, (Math.random() - 0.5) * 0.35);
         group.add(book);
     });
@@ -1327,8 +1346,11 @@ function updateHover() {
     }
 }
 
-function handleBookSelect(content, openDetail) {
+function handleBookSelect(content, openDetail, contentIndex) {
     if (!content) return;
+    if (Number.isInteger(contentIndex)) {
+        currentDetailIndex = contentIndex;
+    }
     if (openDetail) openConstellationDetail(content);
 }
 
@@ -1340,6 +1362,11 @@ function openConstellationDetail(content) {
     refs.story.textContent = content.story;
     refs.observation.textContent = content.observation;
     refs.bright.textContent = content.brightStars || '—';
+
+    const contentIndex = findContentIndex(content);
+    if (contentIndex >= 0) {
+        currentDetailIndex = contentIndex;
+    }
 
     if (refs.meta) {
         refs.meta.innerHTML = '';
@@ -1367,14 +1394,17 @@ function openConstellationDetail(content) {
         });
     }
 
+    updateDetailNavState();
     if (refs.detailScreen) refs.detailScreen.classList.remove('hidden');
-    if (refs.libraryScreen) refs.libraryScreen.classList.add('hidden');
+    if (refs.libraryScreen) refs.libraryScreen.classList.add('detail-open');
 }
 
 function closeConstellationDetail() {
     if (!detailView) return;
     if (detailView.detailScreen) detailView.detailScreen.classList.add('hidden');
-    if (detailView.libraryScreen) detailView.libraryScreen.classList.remove('hidden');
+    if (detailView.libraryScreen) detailView.libraryScreen.classList.remove('detail-open');
+    currentDetailIndex = -1;
+    updateDetailNavState();
 }
 
 function setupDetailScreen() {
@@ -1387,6 +1417,8 @@ function setupDetailScreen() {
         detailScreen,
         libraryScreen,
         backBtn: document.getElementById('library-detail-back'),
+        prevBtn: document.getElementById('library-detail-prev'),
+        nextBtn: document.getElementById('library-detail-next'),
         title: document.getElementById('library-detail-title'),
         lede: document.getElementById('library-detail-lede'),
         story: document.getElementById('library-detail-story'),
@@ -1399,9 +1431,43 @@ function setupDetailScreen() {
     if (detailView.backBtn) {
         detailView.backBtn.addEventListener('click', closeConstellationDetail);
     }
+    if (detailView.prevBtn) {
+        detailView.prevBtn.addEventListener('click', () => handleDetailNavigation(-1));
+    }
+    if (detailView.nextBtn) {
+        detailView.nextBtn.addEventListener('click', () => handleDetailNavigation(1));
+    }
     window.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') closeConstellationDetail();
     });
 
     return detailView;
+}
+
+function handleDetailNavigation(step) {
+    if (!shelfContents.length) return;
+    if (currentDetailIndex < 0) return;
+    const nextIndex = Math.min(Math.max(currentDetailIndex + step, 0), shelfContents.length - 1);
+    if (nextIndex === currentDetailIndex) return;
+    openConstellationDetail(shelfContents[nextIndex]);
+}
+
+function findContentIndex(content) {
+    if (!content) return -1;
+    const directIndex = shelfContents.findIndex((entry) => entry === content);
+    if (directIndex >= 0) return directIndex;
+    const target = normalizeConstellationName(content.name || content.spineLabel || '');
+    if (!target) return -1;
+    return shelfContents.findIndex((entry) => {
+        const entryName = normalizeConstellationName(entry?.name || entry?.spineLabel || '');
+        return entryName === target;
+    });
+}
+
+function updateDetailNavState() {
+    if (!detailView) return;
+    const hasPrev = currentDetailIndex > 0;
+    const hasNext = currentDetailIndex >= 0 && currentDetailIndex < shelfContents.length - 1;
+    if (detailView.prevBtn) detailView.prevBtn.disabled = !hasPrev;
+    if (detailView.nextBtn) detailView.nextBtn.disabled = !hasNext;
 }
