@@ -2547,6 +2547,13 @@
             font-family: 'Cormorant Garamond', 'Space Grotesk', serif;
         }
 
+        #library-gateway-screen > .library-game-btn {
+            position: absolute;
+            left: 26px;
+            bottom: 26px;
+            z-index: 3;
+        }
+
         .library-back-btn:hover {
             background: linear-gradient(120deg, rgba(255, 255, 255, 0.12), rgba(178, 226, 255, 0.2));
             border-color: rgba(178, 226, 255, 0.7);
@@ -3809,6 +3816,7 @@
 
     <!-- 書斎 導入画面 -->
     <div id="library-gateway-screen" class="hidden">
+        <button class="library-enter-btn library-game-btn" id="library-game-btn" type="button">ゲームを遊ぶ</button>
         <div class="library-gateway-content">
             <div class="library-gateway-card">
                 <button class="library-back-btn library-gateway-back" id="library-gateway-back">← モード選択へ戻る</button>
@@ -3824,7 +3832,7 @@
                     </div>
                 </div>
                 <div class="library-gateway-actions">
-                    <button class="library-enter-btn" id="library-enter-shelf">星図書架に進む →</button>
+                    <button class="library-enter-btn" id="library-enter-shelf">星図書架を除く →</button>
                 </div>
             </div>
         </div>
