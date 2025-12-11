@@ -2,6 +2,7 @@ import * as THREE from '../three.module.js';
 import { destroyAllPlanetaria, resetPlanetariumBgm } from './planetariumContext.js';
 import { findConstellationTale } from '../data/constellationTales.js';
 import { BASE_CONSTELLATION_DATA } from '../data/constellations.js';
+import { CONSTELLATION_BOOK_DETAILS } from '../data/constellationBookDetails.js';
 import { playModeSelectionBgm } from './bgmController.js';
 import { transitionToModeScreen } from './screenTransition.js';
 
@@ -21,6 +22,13 @@ let currentDetailIndex = -1;
 
 const FALLBACK_STORY = '物語の断片はまだ集めているところです。星空で出会ったときの余韻を、そのままここに置いておきましょう。';
 const FALLBACK_OBSERVATION = '星図を広げ、実際の夜空で形をなぞると新しい発見があります。';
+const FALLBACK_PROFILE = '星座の素性はまだ調査中。季節の空で輪郭をなぞると、必要な情報が自然と見えてきます。';
+const FALLBACK_GUIDE = '明るい星を基準に線を結び、近くの星座を道標にすると形が浮かび上がります。';
+const FALLBACK_LORE = '起源や神話はこれから記録される予定。夜空で出会った瞬間の印象をノートに残してみましょう。';
+const FALLBACK_DEEP_SKY = '周辺には双眼鏡で楽しめる星雲・星団が隠れています。滲む光を探して余白を埋めてください。';
+const FALLBACK_TRIVIA = '肉眼と双眼鏡、季節や空の条件で表情が変わる星座です。観測メモを追記すると自分だけの本になります。';
+const FALLBACK_POEM = '静かな光の並びが、夜のページをそっとめくる。';
+const FALLBACK_QUEST = '隣り合う星座へ視線を移し、物語を連鎖させて本棚を満たしましょう。';
 
 const CONSTELLATION_DESCRIPTION_MAP = new Map(
     BASE_CONSTELLATION_DATA.map((entry) => [normalizeConstellationName(entry.name), entry])
@@ -230,18 +238,62 @@ function buildConstellationContent(name) {
     const normalized = normalizeConstellationName(name);
     const tale = findConstellationTale(name) || findConstellationTale(normalized);
     const base = CONSTELLATION_DESCRIPTION_MAP.get(normalized);
+    const canonicalId = tale?.id || base?.id || normalized;
+    const detail = canonicalId ? CONSTELLATION_BOOK_DETAILS[canonicalId] || CONSTELLATION_BOOK_DETAILS[normalized] : null;
     const canonicalName = tale?.name || base?.name || name;
+    const keywords = tale?.keywords || [];
+    const season = tale?.season || '';
+    const brightStars = detail?.mainStars || tale?.brightStars || '';
+    const lede = tale?.lede || base?.description || '星空で出会った記憶が本棚に収まりました。';
+
+    const profile = detail?.profile || buildDefaultProfile(canonicalName, season, keywords, base?.description);
+    const guide = detail?.guide || tale?.observation || base?.description || FALLBACK_GUIDE;
+    const lore = detail?.lore || tale?.story || FALLBACK_LORE;
+    const deepSky = detail?.deepSky || FALLBACK_DEEP_SKY;
+    const trivia = detail?.trivia || buildDefaultTrivia(brightStars, keywords);
+    const poem = detail?.poem || FALLBACK_POEM;
+    const quest = detail?.quest || buildDefaultQuest(keywords);
+
     return {
         name: canonicalName,
-        season: tale?.season || '',
-        keywords: tale?.keywords || [],
-        lede: tale?.lede || base?.description || '星空で出会った記憶が本棚に収まりました。',
-        story: tale?.story || FALLBACK_STORY,
-        observation: tale?.observation || FALLBACK_OBSERVATION,
-        brightStars: tale?.brightStars || '',
+        season,
+        keywords,
+        lede,
+        story: lore || FALLBACK_STORY,
+        observation: detail?.observation || tale?.observation || FALLBACK_OBSERVATION,
+        brightStars,
+        profile,
+        guide,
+        lore,
+        deepSky,
+        trivia,
+        poem,
+        quest,
         spineLabel: canonicalName,
-        spineCode: formatConstellationCode(base?.id || normalized)
+        spineCode: formatConstellationCode(base?.id || canonicalId || normalized)
     };
+}
+
+function buildDefaultProfile(name, season, keywords, baseDescription) {
+    const tags = (keywords || []).slice(0, 3).join('・');
+    const pieces = [name];
+    if (season) pieces.push(season);
+    if (tags) pieces.push(`キーワード: ${tags}`);
+    if (baseDescription) pieces.push(baseDescription);
+    return pieces.join(' / ') || FALLBACK_PROFILE;
+}
+
+function buildDefaultTrivia(brightStars, keywords) {
+    if (brightStars) return `代表星 ${brightStars} を起点に線をなぞると形が浮かび上がります。`;
+    if (keywords?.includes('黄道星座')) return '黄道12星座のひとつ。惑星が通過しやすいので接近の瞬間を観測メモに残そう。';
+    return FALLBACK_TRIVIA;
+}
+
+function buildDefaultQuest(keywords) {
+    if (keywords?.includes('夏の大三角')) return '夏の大三角の残りの二星も棚に揃え、天の川の旅を完成させましょう。';
+    if (keywords?.includes('冬の大三角')) return '冬の大三角をコンプリートして、冬の夜空ガイドを自分の言葉で書き添えましょう。';
+    if (keywords?.includes('黄道星座')) return '黄道を前後の星座へたどり、季節の変化を並べた「惑星の通り道」棚を作ってみて。';
+    return FALLBACK_QUEST;
 }
 
 function setupShelfScene() {
@@ -1359,9 +1411,15 @@ function openConstellationDetail(content) {
     if (!refs) return;
     refs.title.textContent = content.name;
     refs.lede.textContent = content.lede;
-    refs.story.textContent = content.story;
-    refs.observation.textContent = content.observation;
+    if (refs.profile) refs.profile.textContent = content.profile || FALLBACK_PROFILE;
+    refs.story.textContent = content.lore || content.story || FALLBACK_LORE;
+    refs.observation.textContent = content.observation || FALLBACK_OBSERVATION;
     refs.bright.textContent = content.brightStars || '—';
+    if (refs.guide) refs.guide.textContent = content.guide || FALLBACK_GUIDE;
+    if (refs.deep) refs.deep.textContent = content.deepSky || FALLBACK_DEEP_SKY;
+    if (refs.trivia) refs.trivia.textContent = content.trivia || FALLBACK_TRIVIA;
+    if (refs.poem) refs.poem.textContent = content.poem || FALLBACK_POEM;
+    if (refs.quest) refs.quest.textContent = content.quest || FALLBACK_QUEST;
 
     const contentIndex = findContentIndex(content);
     if (contentIndex >= 0) {
@@ -1419,11 +1477,17 @@ function setupDetailScreen() {
         backBtn: document.getElementById('library-detail-back'),
         prevBtn: document.getElementById('library-detail-prev'),
         nextBtn: document.getElementById('library-detail-next'),
+        profile: document.getElementById('library-detail-profile'),
         title: document.getElementById('library-detail-title'),
         lede: document.getElementById('library-detail-lede'),
         story: document.getElementById('library-detail-story'),
         observation: document.getElementById('library-detail-observation'),
         bright: document.getElementById('library-detail-bright'),
+        guide: document.getElementById('library-detail-guide'),
+        deep: document.getElementById('library-detail-deep'),
+        trivia: document.getElementById('library-detail-trivia'),
+        poem: document.getElementById('library-detail-poem'),
+        quest: document.getElementById('library-detail-quest'),
         meta: document.getElementById('library-detail-meta'),
         tags: document.getElementById('library-detail-tags')
     };
