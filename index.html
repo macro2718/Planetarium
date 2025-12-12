@@ -4157,6 +4157,27 @@
         }
     });
     </script>
+    <script>
+        const showLoadError = (message) => {
+            const loadingEl = document.getElementById('loading');
+            if (!loadingEl) return;
+            const textEl = loadingEl.querySelector('.loading-text');
+            if (textEl) {
+                textEl.textContent = message;
+            }
+            loadingEl.classList.remove('hidden');
+        };
+
+        window.addEventListener('error', (event) => {
+            showLoadError('読み込みに失敗しました。ネットワーク/コンソールを確認してください。');
+            console.error(event.error || event.message);
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+            showLoadError('初期化に失敗しました。ネットワーク/コンソールを確認してください。');
+            console.error(event.reason);
+        });
+    </script>
     <script type="module" src="planetarium.js"></script>
 </body>
 </html>
