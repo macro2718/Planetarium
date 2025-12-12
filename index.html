@@ -1819,9 +1819,12 @@
         }
 
         .location-card-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr) auto;
+            align-items: baseline;
+            column-gap: 10px;
+            min-width: 0;
+            width: 100%;
         }
 
         .location-card-meta {
@@ -1836,6 +1839,10 @@
             letter-spacing: 1px;
             color: rgba(255, 255, 255, 0.95);
             font-family: 'Zen Kaku Gothic New', 'Georgia', serif;
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .location-region-chip {
@@ -1847,6 +1854,7 @@
             font-size: 10px;
             letter-spacing: 2px;
             font-family: 'Cormorant Garamond', 'Space Grotesk', 'Zen Kaku Gothic New', serif;
+            white-space: nowrap;
         }
 
         .location-card-en {
@@ -1855,6 +1863,10 @@
             color: rgba(200, 215, 255, 0.7);
             font-family: 'Cormorant Garamond', 'Georgia', serif;
             font-style: italic;
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .location-card-description {
@@ -1921,6 +1933,27 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+        }
+
+        .location-summary-head {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) minmax(0, 0.85fr);
+            align-items: baseline;
+            column-gap: 10px;
+            row-gap: 6px;
+            min-width: 0;
+        }
+
+        .location-summary-head .location-region-chip {
+            justify-self: start;
+        }
+
+        .location-summary-head .location-selected-name,
+        .location-summary-head .location-selected-en {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
         }
 
         .location-selected-name {
@@ -2038,6 +2071,16 @@
                 letter-spacing: 5px;
             }
 
+            .location-card-title {
+                grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr) auto;
+                column-gap: 8px;
+            }
+
+            .location-summary-head {
+                grid-template-columns: auto minmax(0, 1fr) minmax(0, 0.7fr);
+                column-gap: 8px;
+            }
+
             .location-list-panel {
                 max-height: 260px;
             }
@@ -2113,7 +2156,7 @@
             font-family: 'Cormorant Garamond', 'Space Grotesk', serif;
         }
 
-        .archive-title {
+        .archive-hero .archive-title {
             font-size: var(--hero-title-size);
             letter-spacing: var(--hero-title-spacing);
             color: rgba(255, 255, 255, 0.94);
@@ -3023,17 +3066,15 @@
         }
 
         .archive-selection-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 12px;
-            border-radius: 12px;
-            border: 1px solid rgba(160, 200, 255, 0.45);
-            background: rgba(255, 255, 255, 0.05);
-            letter-spacing: 3px;
-            font-size: 11px;
-            color: rgba(210, 230, 255, 0.9);
-            font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
+            display: inline-block;
+            padding: 0;
+            border: none;
+            background: transparent;
+            letter-spacing: 4px;
+            font-size: 15px;
+            color: rgba(210, 225, 255, 0.9);
+            text-transform: uppercase;
+            font-family: 'Cormorant Garamond', 'Space Grotesk', 'Zen Kaku Gothic New', serif;
         }
 
         .archive-selected-title {
@@ -3157,7 +3198,7 @@
             font-family: 'Cormorant Garamond', 'Georgia', serif;
         }
 
-        .archive-title {
+        .archive-card .archive-title {
             font-size: 18px;
             letter-spacing: 2px;
             color: rgba(255, 255, 255, 0.94);
@@ -3233,7 +3274,7 @@
             .archive-content {
                 padding: 18px 16px 26px;
             }
-            .archive-title {
+            .archive-hero .archive-title {
                 font-size: 26px;
                 letter-spacing: 5px;
             }
@@ -3956,9 +3997,11 @@
                     </div>
                     <div class="location-summary-panel">
                         <div class="location-summary">
-                            <div class="location-region-chip" id="location-selected-region">REGION</div>
-                            <div class="location-selected-name" id="location-selected-name">-</div>
-                            <div class="location-selected-en" id="location-selected-en">-</div>
+                            <div class="location-summary-head">
+                                <div class="location-region-chip" id="location-selected-region">REGION</div>
+                                <div class="location-selected-name" id="location-selected-name">-</div>
+                                <div class="location-selected-en" id="location-selected-en">-</div>
+                            </div>
                             <div class="location-selected-info-grid">
                                 <div class="location-info-item">
                                     <span class="location-info-label">座標</span>

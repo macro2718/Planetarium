@@ -83,8 +83,6 @@ function createLocationCard(location) {
             <div class="location-card-body">
                 <div class="location-card-title">
                     <span class="location-card-name">${location.name}</span>
-                </div>
-                <div class="location-card-meta">
                     <span class="location-card-en">${location.nameEn}</span>
                     <span class="location-region-chip">${regionLabel}</span>
                 </div>
