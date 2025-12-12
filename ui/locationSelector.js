@@ -279,8 +279,8 @@ class LocationGlobe {
         this.container.appendChild(this.renderer.domElement);
 
         const aspect = this.container.clientWidth / Math.max(this.container.clientHeight, 1);
-        this.camera = new THREE.PerspectiveCamera(40, aspect, 0.1, 50);
-        this.camera.position.set(0, 0, 3.6);
+        this.camera = new THREE.PerspectiveCamera(36, aspect, 0.1, 50);
+        this.camera.position.set(0, 0, 3.8);
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enableDamping = true;
@@ -354,7 +354,7 @@ class LocationGlobe {
         earthTexture.colorSpace = THREE.SRGBColorSpace;
 
         const surface = new THREE.Mesh(
-            new THREE.SphereGeometry(0.92, 64, 64),
+            new THREE.SphereGeometry(0.9, 48, 48),
             new THREE.MeshStandardMaterial({
                 map: earthTexture,
                 roughness: 0.85,
@@ -381,7 +381,7 @@ class LocationGlobe {
 
     focusLocation(location) {
         if (!location) return;
-        const { x, y, z } = this.latLonToVector(location.lat, location.lon, 0.92);
+        const { x, y, z } = this.latLonToVector(location.lat, location.lon, 0.9);
         this.pin.position.set(x, y, z);
         this.controls.target.set(0, 0, 0);
     }
