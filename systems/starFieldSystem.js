@@ -9,14 +9,15 @@ export function createStarFieldSystem(ctx) {
     createStarLayer(ctx, 10000, skyRadius, 1.8, 3.5);
     ctx.scene.add(ctx.starsGroup);
 
-    let lastLst = ctx.localSiderealTime;
-    let lastLat = ctx.observer?.lat;
+    let lastLst = null;
+    let lastLat = null;
+    const rotY = new THREE.Matrix4();
+    const rotX = new THREE.Matrix4();
+    const rotationMatrix = new THREE.Matrix4();
 
     // 赤道座標系から地平座標系への変換行列を適用
     // equatorialToHorizontalVector と同じ変換を行列で表現
-    function applyRotation() {
-        const lstDeg = ctx.localSiderealTime ?? 0;
-        const latDeg = ctx.observer?.lat ?? 35;
+    function applyRotation(lstDeg, latDeg) {
         const lstRad = THREE.MathUtils.degToRad(lstDeg);
         const latRad = THREE.MathUtils.degToRad(latDeg);
         
@@ -28,32 +29,43 @@ export function createStarFieldSystem(ctx) {
         // 1. Y軸（天の北極）周りに -LST 分回転（時角の適用）
         // 2. X軸周りに (90° - 緯度) 分回転（天の極を傾ける）
         
-        const rotY = new THREE.Matrix4().makeRotationY(-lstRad);
-        const rotX = new THREE.Matrix4().makeRotationX(Math.PI / 2 - latRad);
+        rotY.makeRotationY(-lstRad);
+        rotX.makeRotationX(Math.PI / 2 - latRad);
         
-        const matrix = new THREE.Matrix4();
-        matrix.multiplyMatrices(rotX, rotY);
+        rotationMatrix.multiplyMatrices(rotX, rotY);
         
-        ctx.starsGroup.rotation.setFromRotationMatrix(matrix);
+        ctx.starsGroup.rotation.setFromRotationMatrix(rotationMatrix);
     }
 
-    applyRotation();
+    function syncRotation() {
+        const lst = ctx.localSiderealTime ?? 0;
+        const lat = ctx.observer?.lat ?? 35;
+        const lstDelta = angularDifferenceDeg(lst, lastLst);
+        const latDelta = lastLat === null ? Infinity : Math.abs(lat - lastLat);
+        if (lastLst === null || lstDelta > 0.02 || latDelta > 0.0005) {
+            lastLst = lst;
+            lastLat = lat;
+            applyRotation(lst, lat);
+        }
+    }
+
+    syncRotation();
 
     return {
         group: ctx.starsGroup,
         update(time) {
-            const lst = ctx.localSiderealTime;
-            const lat = ctx.observer?.lat;
-            if (lastLst !== lst || lastLat !== lat) {
-                lastLst = lst;
-                lastLat = lat;
-                applyRotation();
-            }
+            syncRotation();
             ctx.starMaterials.forEach(material => {
                 material.uniforms.time.value = time;
             });
         }
     };
+}
+
+function angularDifferenceDeg(a, b) {
+    if (a === null || b === null) return Infinity;
+    const diff = ((a - b + 540) % 360) - 180;
+    return Math.abs(diff);
 }
 
 function createStarLayer(ctx, count, radius, minSize, maxSize) {

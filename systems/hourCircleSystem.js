@@ -7,6 +7,9 @@ import {
 } from '../utils/astronomy.js';
 import { calculateGalacticBasis } from './milkyWaySystem.js';
 
+const LST_UPDATE_THRESHOLD = 0.02;
+const LAT_UPDATE_THRESHOLD = 0.0005;
+
 /**
  * 時圏（天球上の経線）システム
  * 天球上に時角を示す経線を描画する
@@ -151,10 +154,12 @@ export function createCelestialEquatorSystem(ctx) {
     group.add(line);
     const label = createTextSprite('天の赤道', 0x66ddff);
     group.add(label);
+    const state = { lastLst: null, lastLat: null, extraKey: null, needsUpdate: true };
 
     const updateGeometry = () => {
-        const lst = ctx.localSiderealTime ?? 0;
-        const latitude = ctx.observer?.lat ?? 0;
+        const snapshot = shouldRefreshGeometry(group, ctx, state);
+        if (!snapshot) return;
+        const { lst, lat: latitude } = snapshot;
         for (let i = 0; i <= segments; i++) {
             const ra = (i / segments) * 360;
             const result = equatorialToHorizontalVector(ra, 0, lst, latitude, radius);
@@ -184,6 +189,7 @@ export function createCelestialEquatorSystem(ctx) {
         group,
         setVisible(visible) {
             group.visible = visible;
+            state.needsUpdate = true;
         },
         update() {
             updateGeometry();
@@ -212,6 +218,7 @@ export function createEclipticSystem(ctx) {
     group.add(line);
     const label = createTextSprite('黄道', 0xffaa44);
     group.add(label);
+    const state = { lastLst: null, lastLat: null, extraKey: null, needsUpdate: true };
 
     const seasonalPoints = [
         { lon: 0, name: '春分点', color: 0x88ff88 },
@@ -235,8 +242,9 @@ export function createEclipticSystem(ctx) {
     });
 
     const updateGeometry = () => {
-        const lst = ctx.localSiderealTime ?? 0;
-        const latitude = ctx.observer?.lat ?? 0;
+        const snapshot = shouldRefreshGeometry(group, ctx, state);
+        if (!snapshot) return;
+        const { lst, lat: latitude } = snapshot;
         for (let i = 0; i <= segments; i++) {
             const lon = (i / segments) * 360;
             const { raDeg, decDeg } = eclipticToEquatorial(lon);
@@ -279,6 +287,7 @@ export function createEclipticSystem(ctx) {
         group,
         setVisible(visible) {
             group.visible = visible;
+            state.needsUpdate = true;
         },
         update() {
             updateGeometry();
@@ -307,8 +316,13 @@ export function createGalacticEquatorSystem(ctx) {
     group.add(line);
     const label = createTextSprite('銀河赤道', 0x88ccff);
     group.add(label);
+    const state = { lastLst: null, lastLat: null, extraKey: null, needsUpdate: true };
 
     const updateGeometry = () => {
+        const simulatedDate = ctx.getSimulatedDate?.() ?? new Date();
+        const timeKey = Math.round(simulatedDate.getTime() / 1000);
+        const snapshot = shouldRefreshGeometry(group, ctx, state, timeKey);
+        if (!snapshot) return;
         const basis = calculateGalacticBasis(ctx);
         if (!basis) return;
 
@@ -340,6 +354,7 @@ export function createGalacticEquatorSystem(ctx) {
         group,
         setVisible(visible) {
             group.visible = visible;
+            state.needsUpdate = true;
         },
         update() {
             updateGeometry();
@@ -368,8 +383,13 @@ export function createLunarOrbitPlaneSystem(ctx) {
     group.add(line);
     const label = createTextSprite('白道', 0xffffff);
     group.add(label);
+    const state = { lastLst: null, lastLat: null, extraKey: null, needsUpdate: true };
 
     const updateGeometry = () => {
+        const simulatedDate = ctx.getSimulatedDate?.() ?? new Date();
+        const timeKey = Math.round(simulatedDate.getTime() / 1000);
+        const snapshot = shouldRefreshGeometry(group, ctx, state, timeKey);
+        if (!snapshot) return;
         const basis = calculateLunarOrbitBasis(ctx);
         if (!basis) return;
 
@@ -399,11 +419,37 @@ export function createLunarOrbitPlaneSystem(ctx) {
         group,
         setVisible(visible) {
             group.visible = visible;
+            state.needsUpdate = true;
         },
         update() {
             updateGeometry();
         }
     };
+}
+
+function shouldRefreshGeometry(group, ctx, state, extraKey = null) {
+    if (!group.visible) {
+        return null;
+    }
+    const lst = ctx.localSiderealTime ?? 0;
+    const lat = ctx.observer?.lat ?? 0;
+    const lstDelta = angularDifferenceDeg(lst, state.lastLst);
+    const latDelta = state.lastLat === null ? Infinity : Math.abs(lat - state.lastLat);
+    const extraChanged = extraKey !== state.extraKey;
+    if (!state.needsUpdate && lstDelta < LST_UPDATE_THRESHOLD && latDelta < LAT_UPDATE_THRESHOLD && !extraChanged) {
+        return null;
+    }
+    state.lastLst = lst;
+    state.lastLat = lat;
+    state.extraKey = extraKey;
+    state.needsUpdate = false;
+    return { lst, lat };
+}
+
+function angularDifferenceDeg(a, b) {
+    if (a === null || b === null) return Infinity;
+    const diff = ((a - b + 540) % 360) - 180;
+    return Math.abs(diff);
 }
 
 function calculateLunarOrbitBasis(ctx) {
