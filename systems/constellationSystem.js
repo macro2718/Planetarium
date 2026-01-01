@@ -8,6 +8,12 @@ export function createConstellationSystem(ctx) {
     const starEntries = new Map();
     const lineEntries = [];
     let lastLst = null;
+    let lastLat = null;
+    let lastUpdateTime = -Infinity;
+    let positionsDirty = true;
+    const lstThreshold = 0.02; // degrees
+    const latThreshold = 0.0005;
+    const minUpdateInterval = 0.25; // seconds
 
     const ensureStar = (starId) => {
         if (starEntries.has(starId)) {
@@ -95,12 +101,23 @@ export function createConstellationSystem(ctx) {
     return {
         group: ctx.constellationsGroup,
         updateVisibility(visible) {
+            positionsDirty = true;
             updateConstellationLinesVisibility(ctx, visible);
         },
         update(time = 0) {
-            const lstChanged = lastLst !== ctx.localSiderealTime;
-            if (lstChanged) {
-                lastLst = ctx.localSiderealTime;
+            const lst = ctx.localSiderealTime ?? 0;
+            const lat = ctx.observer?.lat ?? 0;
+            const lstDelta = angularDifferenceDeg(lst, lastLst);
+            const latDelta = lastLat === null ? Infinity : Math.abs(lat - lastLat);
+            const shouldRefresh = positionsDirty
+                || lstDelta > lstThreshold
+                || latDelta > latThreshold;
+            const enoughTimeElapsed = time - lastUpdateTime >= minUpdateInterval;
+            if (shouldRefresh && enoughTimeElapsed) {
+                lastLst = lst;
+                lastLat = lat;
+                lastUpdateTime = time;
+                positionsDirty = false;
                 starEntries.forEach(entry => updateStarEntry(ctx, entry, radius));
                 lineEntries.forEach(entry => updateLineEntry(entry, starEntries));
                 updateConstellationLinesVisibility(ctx, ctx.settings.showConstellations);
@@ -275,4 +292,10 @@ function getStarGlowTexture(ctx) {
     texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
     ctx.starGlowTexture = texture;
     return texture;
+}
+
+function angularDifferenceDeg(a, b) {
+    if (a === null || b === null) return Infinity;
+    const diff = ((a - b + 540) % 360) - 180;
+    return Math.abs(diff);
 }
