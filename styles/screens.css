@@ -14,7 +14,7 @@
             position: fixed;
             inset: 0;
             background: #050816;
-            background-image: url('images/entrance.png'), url('images/entrance.jpg');
+            background-image: url('../images/entrance.jpg');
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
@@ -230,7 +230,7 @@
         #location-screen {
             position: fixed;
             inset: 0;
-            background: url('images/planetarium.png') center/cover no-repeat;
+            background: url('../images/planetarium.png') center/cover no-repeat;
             z-index: 1800;
             display: flex;
             flex-direction: column;
@@ -819,7 +819,7 @@
         #archive-screen {
             position: fixed;
             inset: 0;
-            background: url('images/chrono sky.png') center/cover no-repeat;
+            background: url('../images/chrono sky.png') center/cover no-repeat;
             z-index: 1750;
             display: flex;
             flex-direction: column;
@@ -928,4 +928,3 @@
             border-color: rgba(186, 213, 255, 0.7);
             transform: translateY(-1px);
         }
-

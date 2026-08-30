@@ -3,7 +3,7 @@
             position: fixed;
             inset: 0;
             background: #050816;
-            background-image: url('images/entrance.png'), url('images/entrance.jpg');
+            background-image: url('../images/entrance.jpg');
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
@@ -555,4 +555,3 @@
             50% { transform: translate3d(0, -12px, 0); }
             100% { transform: translate3d(0, 0, 0); }
         }
-

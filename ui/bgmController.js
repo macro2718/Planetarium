@@ -1,6 +1,7 @@
 const MODE_SELECTION_TRACKS = ['bgm/mode_selection/Whispers in the Quiet.mp3'];
 const UI_BGM_VOLUME_STORAGE_KEY = 'planetarium-ui-bgm-volume';
 const DEFAULT_UI_BGM_VOLUME = 0.5;
+const USER_INTERACTION_EVENTS = ['pointerdown', 'touchstart', 'keydown'];
 
 const PLAYLISTS = {
     title: MODE_SELECTION_TRACKS,
@@ -13,6 +14,7 @@ let playlist = [];
 let playlistSourceRef = null;
 let playlistIndex = 0;
 let awaitingUserInteraction = false;
+let resumePlaybackHandler = null;
 let uiBgmVolume = loadStoredVolume();
 
 function clampVolume(value) {
@@ -40,16 +42,56 @@ function persistVolume(volume) {
     }
 }
 
+function clearUserResumeRequest() {
+    if (resumePlaybackHandler && typeof document !== 'undefined') {
+        USER_INTERACTION_EVENTS.forEach((eventName) => {
+            document.removeEventListener(eventName, resumePlaybackHandler);
+        });
+    }
+    resumePlaybackHandler = null;
+    awaitingUserInteraction = false;
+}
+
+function isWaitingForFirstInteraction() {
+    return typeof navigator !== 'undefined'
+        && navigator.userActivation
+        && !navigator.userActivation.hasBeenActive;
+}
+
+function handlePlaybackFailure(err, errorLabel) {
+    if (err?.name === 'NotAllowedError') {
+        requestUserResume();
+        return;
+    }
+    console.error(errorLabel, err);
+}
+
+function attemptPlayback(errorLabel = 'UI BGM再生エラー:') {
+    if (!uiAudio) return;
+
+    if (isWaitingForFirstInteraction()) {
+        requestUserResume();
+        return;
+    }
+
+    try {
+        const playPromise = uiAudio.play();
+        playPromise?.catch((err) => {
+            handlePlaybackFailure(err, errorLabel);
+        });
+    } catch (err) {
+        handlePlaybackFailure(err, errorLabel);
+    }
+}
+
 function requestUserResume() {
-    if (awaitingUserInteraction) return;
+    if (awaitingUserInteraction || typeof document === 'undefined') return;
     awaitingUserInteraction = true;
 
-    const resumePlayback = () => {
-        awaitingUserInteraction = false;
+    resumePlaybackHandler = () => {
+        clearUserResumeRequest();
         if (uiAudio) {
-            uiAudio.play().catch((err) => {
-                console.error('UI BGM再生リトライ失敗:', err);
-            });
+            attemptPlayback('UI BGM再生リトライ失敗:');
             return;
         }
         if (playlist.length) {
@@ -57,8 +99,8 @@ function requestUserResume() {
         }
     };
 
-    ['pointerdown', 'touchstart', 'keydown'].forEach((eventName) => {
-        document.addEventListener(eventName, resumePlayback, { once: true });
+    USER_INTERACTION_EVENTS.forEach((eventName) => {
+        document.addEventListener(eventName, resumePlaybackHandler, { once: true });
     });
 }
 
@@ -81,10 +123,7 @@ function startTrack(index = 0) {
         startTrack((playlistIndex + 1) % playlist.length);
     });
 
-    uiAudio.play().catch((err) => {
-        console.error('UI BGM再生エラー:', err);
-        requestUserResume();
-    });
+    attemptPlayback();
 }
 
 function playScene(scene) {
@@ -108,10 +147,7 @@ function playScene(scene) {
 
     if (samePlaylist && uiAudio) {
         if (uiAudio.paused) {
-            uiAudio.play().catch((err) => {
-                console.error('UI BGM再生エラー (再開):', err);
-                requestUserResume();
-            });
+            attemptPlayback('UI BGM再生エラー (再開):');
         }
         return;
     }
@@ -137,6 +173,7 @@ export function enterPlanetariumScene() {
 }
 
 export function stopUiBgm() {
+    clearUserResumeRequest();
     if (uiAudio) {
         uiAudio.pause();
         uiAudio.currentTime = 0;

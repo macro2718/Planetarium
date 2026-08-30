@@ -3,7 +3,7 @@
             position: fixed;
             inset: 0;
             background:
-                url('images/library.png') center/cover no-repeat,
+                url('../images/library.png') center/cover no-repeat,
                 linear-gradient(120deg, rgba(12, 8, 6, 0.72), rgba(10, 6, 5, 0.82)),
                 radial-gradient(120% 90% at 16% 18%, rgba(255, 230, 210, 0.25), transparent 55%),
                 radial-gradient(120% 140% at 80% 12%, rgba(120, 180, 255, 0.16), transparent 55%);
@@ -1066,4 +1066,3 @@
                 letter-spacing: 5px;
             }
         }
-
