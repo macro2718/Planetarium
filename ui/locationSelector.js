@@ -3,6 +3,7 @@ import { LOCATIONS, REGION_LABELS, formatCoordinate } from '../data/locations.js
 import {
     destroyAllPlanetaria,
     getArchivePlanetarium,
+    hidePlanetariumCanvas,
     resetPlanetariumBgm,
     setActivePlanetarium,
     showPlanetariumCanvas
@@ -194,6 +195,7 @@ function setupBackButton() {
  * 場所選択画面からモード選択画面へ戻る（ホームが存在する場合はホームへ）
  */
 function backToModeFromLocation() {
+    destroyAllPlanetaria();
     playModeSelectionBgm();
     locationGlobe?.stop();
     navigateTo(SCREEN_ROUTES.MODE);
@@ -204,7 +206,7 @@ function backToModeFromLocation() {
  */
 export function showLocationScreen() {
     resetPlanetariumBgm();
-    destroyAllPlanetaria();
+    hidePlanetariumCanvas();
     playModeSelectionBgm();
 
     currentPlanetarium?.stop();

@@ -1,5 +1,10 @@
 import * as THREE from '../three.module.js';
 import { calculatePlanetaryStates, PLANET_DEFINITIONS } from '../utils/planetEphemeris.js';
+import { angularDifferenceDegrees } from '../utils/astronomy.js';
+
+const STATE_LST_THRESHOLD = 0.02;
+const STATE_LAT_THRESHOLD = 0.0005;
+const ORBITAL_TIME_THRESHOLD_MS = 60000;
 
 export function createPlanetSystem(ctx) {
     ctx.planetGroup = new THREE.Group();
@@ -59,19 +64,27 @@ export function createPlanetSystem(ctx) {
         pickMeshes.set(planet.id, pickMesh);
     }
 
-    const cache = { timestamp: null, states: null };
+    const cache = { timestamp: null, lst: null, lat: null, states: null };
     const getDate = () => (typeof ctx.getSimulatedDate === 'function' ? ctx.getSimulatedDate() : new Date());
 
     const computeStates = () => {
         const date = getDate();
         const ts = date.getTime();
-        if (cache.timestamp === ts && cache.states) {
-            return cache.states;
+        const lst = ctx.localSiderealTime ?? 0;
+        const lat = ctx.observer?.lat ?? 0;
+        const shouldRefresh = !cache.states
+            || Math.abs(ts - cache.timestamp) >= ORBITAL_TIME_THRESHOLD_MS
+            || angularDifferenceDegrees(lst, cache.lst) >= STATE_LST_THRESHOLD
+            || Math.abs(lat - cache.lat) >= STATE_LAT_THRESHOLD;
+        if (!shouldRefresh) {
+            return { states: cache.states, changed: false };
         }
         const states = calculatePlanetaryStates(date, ctx.observer, ctx.localSiderealTime);
         cache.timestamp = ts;
+        cache.lst = lst;
+        cache.lat = lat;
         cache.states = states;
-        return states;
+        return { states, changed: true };
     };
 
     const updateVisuals = (states) => {
@@ -112,16 +125,18 @@ export function createPlanetSystem(ctx) {
         }
     };
 
-    updateVisuals(computeStates());
+    updateVisuals(computeStates().states);
 
     return {
         group: ctx.planetGroup,
         getState(id) {
-            const states = computeStates();
+            const { states, changed } = computeStates();
+            if (changed) updateVisuals(states);
             return states[id];
         },
         update() {
-            updateVisuals(computeStates());
+            const { states, changed } = computeStates();
+            if (changed) updateVisuals(states);
         }
     };
 }

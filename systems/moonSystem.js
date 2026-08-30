@@ -1,9 +1,14 @@
 import * as THREE from '../three.module.js';
 import {
+    angularDifferenceDegrees,
     eclipticToEquatorial,
     equatorialToHorizontalVector,
     normalizeDegrees
 } from '../utils/astronomy.js';
+
+const STATE_LST_THRESHOLD = 0.02;
+const STATE_LAT_THRESHOLD = 0.0005;
+const ORBITAL_TIME_THRESHOLD_MS = 60000;
 
 // Place the Moon inside the sky dome and size it to its actual angular diameter (~0.52°).
 const MOON_DISTANCE = 6000;
@@ -152,7 +157,7 @@ export function createMoonSystem(ctx) {
         ctx.moonUniforms.phaseAngle.value = state.phaseAngle;
         ctx.moonUniforms.illumination.value = state.illumination;
         ctx.moonUniforms.sunDirection.value.copy(state.sunDirection);
-        ctx.moonGroup.visible = state.altDeg > 0;
+        ctx.moonGroup.visible = (ctx.settings?.showMoon ?? true) && state.altDeg > 0;
         if (ctx.moonCore) {
             const illuminationPct = Math.round(state.illumination * 100);
             ctx.moonCore.userData.magnitude = `月齢 ${state.moonAge.toFixed(1)}日`;
@@ -163,11 +168,13 @@ export function createMoonSystem(ctx) {
     const ensureStateUpToDate = () => {
         const date = getCurrentDate();
         const timestamp = date.getTime();
-        if (moonState.current && moonState.current.timestamp === timestamp) {
+        if (!shouldRefreshState(moonState.current, ctx, timestamp)) {
             return moonState.current;
         }
         const state = calculateMoonState(ctx, date);
         state.timestamp = timestamp;
+        state.lst = ctx.localSiderealTime ?? 0;
+        state.lat = ctx.observer?.lat ?? 0;
         moonState.current = state;
         updateState(state);
         return state;
@@ -176,6 +183,8 @@ export function createMoonSystem(ctx) {
     const initialDate = getCurrentDate();
     moonState.current = calculateMoonState(ctx, initialDate);
     moonState.current.timestamp = initialDate.getTime();
+    moonState.current.lst = ctx.localSiderealTime ?? 0;
+    moonState.current.lat = ctx.observer?.lat ?? 0;
     updateState(moonState.current);
 
     return {
@@ -184,6 +193,8 @@ export function createMoonSystem(ctx) {
             const targetDate = date ?? getCurrentDate();
             const state = calculateMoonState(ctx, targetDate);
             state.timestamp = targetDate.getTime();
+            state.lst = ctx.localSiderealTime ?? 0;
+            state.lat = ctx.observer?.lat ?? 0;
             moonState.current = state;
             return state;
         },
@@ -207,6 +218,13 @@ export function createMoonSystem(ctx) {
             ensureStateUpToDate();
         }
     };
+}
+
+function shouldRefreshState(current, ctx, timestamp) {
+    if (!current) return true;
+    return Math.abs(timestamp - current.timestamp) >= ORBITAL_TIME_THRESHOLD_MS
+        || angularDifferenceDegrees(ctx.localSiderealTime ?? 0, current.lst) >= STATE_LST_THRESHOLD
+        || Math.abs((ctx.observer?.lat ?? 0) - current.lat) >= STATE_LAT_THRESHOLD;
 }
 
 function getMoonPhaseLabel(phase) {

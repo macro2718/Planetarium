@@ -20,7 +20,10 @@ export function setupRenderer(ctx) {
     ctx.renderer = new THREE.WebGLRenderer({
         antialias: true,
         alpha: true,
-        preserveDrawingBuffer: true  // 写真撮影のために必要
+        powerPreference: 'high-performance',
+        // Photos explicitly render once immediately before reading the canvas.
+        // Keeping every frame's drawing buffer alive is unnecessary and costly.
+        preserveDrawingBuffer: false
     });
     resizeRenderer(ctx);
     ctx.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -61,21 +64,40 @@ export function setupControls(ctx) {
 
 export function disposeScene(ctx) {
     if (!ctx.scene) return;
+    const geometries = new Set();
+    const materials = new Set();
+    const textures = new Set();
     ctx.scene.traverse((obj) => {
-        if (obj.geometry?.dispose) {
-            obj.geometry.dispose();
-        }
+        if (obj.geometry?.dispose) geometries.add(obj.geometry);
         const mat = obj.material;
         if (Array.isArray(mat)) {
-            mat.forEach((m) => m?.dispose?.());
-        } else if (mat?.dispose) {
-            mat.dispose();
+            mat.forEach((material) => collectMaterialResources(material, materials, textures));
+        } else {
+            collectMaterialResources(mat, materials, textures);
         }
-        if (obj.texture?.dispose) {
-            obj.texture.dispose();
+        if (obj.texture?.isTexture) textures.add(obj.texture);
+    });
+    geometries.forEach((geometry) => geometry.dispose());
+    materials.forEach((material) => material.dispose());
+    textures.forEach((texture) => texture.dispose());
+    ctx.scene.clear();
+}
+
+function collectMaterialResources(material, materials, textures) {
+    if (!material?.dispose) return;
+    materials.add(material);
+    Object.values(material).forEach((value) => {
+        if (value?.isTexture) textures.add(value);
+    });
+    Object.values(material.uniforms ?? {}).forEach((uniform) => {
+        const value = uniform?.value;
+        if (value?.isTexture) textures.add(value);
+        if (Array.isArray(value)) {
+            value.forEach((entry) => {
+                if (entry?.isTexture) textures.add(entry);
+            });
         }
     });
-    ctx.scene.clear();
 }
 
 export function enforceCameraAboveWater(ctx) {

@@ -188,7 +188,11 @@ export class PhotoAlbumSystem {
         const simulatedDate = this.getSimulatedDate(ctx) || now;
         const location = this.getLocationMetadata(ctx);
 
-        // キャンバスからデータを取得
+        // With preserveDrawingBuffer disabled, render and read synchronously in
+        // the same task. This keeps normal animation frames on the fast path.
+        if (ctx?.scene && ctx?.camera) {
+            renderer.render(ctx.scene, ctx.camera);
+        }
         const canvas = renderer.domElement;
         const baseDataUrl = canvas.toDataURL('image/png');
         const { dataUrl, filter } = await this.applyFilterToDataUrl(baseDataUrl);

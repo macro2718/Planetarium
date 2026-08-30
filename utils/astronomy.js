@@ -62,6 +62,11 @@ export function normalizeDegrees(value) {
     return ((value % 360) + 360) % 360;
 }
 
+export function angularDifferenceDegrees(a, b) {
+    if (!Number.isFinite(a) || !Number.isFinite(b)) return Infinity;
+    return Math.abs(((a - b + 540) % 360) - 180);
+}
+
 export function normalizeRadians(value) {
     const fullTurn = Math.PI * 2;
     return ((value % fullTurn) + fullTurn) % fullTurn;
@@ -137,18 +142,17 @@ export function eclipticVectorToEquatorial(vector, obliquityRad, target = null) 
 export function eclipticToEquatorial(lonDeg, latDeg = 0, obliquityDeg = 23.439291) {
     const longitude = degToRad(lonDeg);
     const latitude = degToRad(latDeg);
-    const equatorial = eclipticVectorToEquatorial(
-        new THREE.Vector3(
-            Math.cos(longitude) * Math.cos(latitude),
-            Math.sin(longitude) * Math.cos(latitude),
-            Math.sin(latitude)
-        ),
-        degToRad(obliquityDeg)
-    );
-    const length = equatorial.length() || 1;
+    const obliquity = degToRad(obliquityDeg);
+    const cosLatitude = Math.cos(latitude);
+    const x = Math.cos(longitude) * cosLatitude;
+    const eclipticY = Math.sin(longitude) * cosLatitude;
+    const eclipticZ = Math.sin(latitude);
+    const y = eclipticY * Math.cos(obliquity) - eclipticZ * Math.sin(obliquity);
+    const z = eclipticY * Math.sin(obliquity) + eclipticZ * Math.cos(obliquity);
+    const length = Math.hypot(x, y, z) || 1;
     return {
-        raDeg: normalizeDegrees(radToDeg(Math.atan2(equatorial.y, equatorial.x))),
-        decDeg: radToDeg(Math.asin(clamp(equatorial.z / length, -1, 1)))
+        raDeg: normalizeDegrees(radToDeg(Math.atan2(y, x))),
+        decDeg: radToDeg(Math.asin(clamp(z / length, -1, 1)))
     };
 }
 

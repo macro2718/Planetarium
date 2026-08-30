@@ -160,14 +160,16 @@ export class Planetarium {
         if (this.controls?.dispose) {
             this.controls.dispose();
         }
+        this.disposeScene();
         if (this.renderer) {
+            this.renderer.renderLists?.dispose?.();
             this.renderer.dispose();
+            this.renderer.forceContextLoss?.();
             const dom = this.renderer.domElement;
             if (dom?.parentElement) {
                 dom.parentElement.removeChild(dom);
             }
         }
-        this.disposeScene();
         this.scene = null;
         this.camera = null;
         this.renderer = null;
@@ -175,11 +177,24 @@ export class Planetarium {
         this.constellationSystem = null;
         this.sunSystem = null;
         this.moonSystem = null;
+        this.starsGroup = null;
+        this.starMaterials = [];
+        this.constellationsGroup = null;
+        this.constellationLines = [];
         this.auroraGroup = null;
+        this.auroraMaterials = [];
         this.milkyWayGroup = null;
+        this.milkyWayMaterials = [];
+        this.milkyWayLight = null;
+        this.cosmicDustGroup = null;
+        this.dustMaterial = null;
         this.shootingStarsGroup = null;
+        this.shootingStars = [];
         this.sunGroup = null;
         this.moonGroup = null;
+        this.moonCore = null;
+        this.moonUniforms = null;
+        this.planetGroup = null;
         this.surfaceSystem = null;
         this.cometTailSystem = null;
         this.meteorShowerSystem = null;
@@ -195,6 +210,7 @@ export class Planetarium {
         this.updaters = [];
         this.clickableObjects = [];
         this.catalogPickables = [];
+        this.starGlowTexture = null;
         this.isInitialized = false;
         this.isRunning = false;
         this.animationFrameId = null;

@@ -82,6 +82,13 @@
             position: fixed;
             inset: 0;
             pointer-events: none;
+            backface-visibility: hidden;
+        }
+
+        #bokeh-layer,
+        #bokeh-layer::after,
+        #beam-layer {
+            will-change: transform;
         }
 
         #photo-filter-overlay {
@@ -711,4 +718,3 @@
                 top: 18px;
             }
         }
-

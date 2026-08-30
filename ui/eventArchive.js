@@ -5,6 +5,7 @@ import {
     destroyAllPlanetaria,
     getArchivePlanetarium,
     getLivePlanetarium,
+    hidePlanetariumCanvas,
     resetPlanetariumBgm,
     setActivePlanetarium,
     showPlanetariumCanvas
@@ -175,7 +176,7 @@ function setupBackButton() {
 
 export function showEventArchiveScreen() {
     resetPlanetariumBgm();
-    destroyAllPlanetaria();
+    hidePlanetariumCanvas();
     playModeSelectionBgm();
     currentPlanetarium?.stop();
     getLivePlanetarium()?.stop();

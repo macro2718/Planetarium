@@ -1,9 +1,14 @@
 import * as THREE from '../three.module.js';
 import {
+    angularDifferenceDegrees,
     eclipticToEquatorial,
     equatorialToHorizontalVector,
     normalizeDegrees
 } from '../utils/astronomy.js';
+
+const STATE_LST_THRESHOLD = 0.02;
+const STATE_LAT_THRESHOLD = 0.0005;
+const ORBITAL_TIME_THRESHOLD_MS = 60000;
 
 // Place the Sun within the sky dome and size it to its actual angular diameter (~0.53°).
 const SUN_DISTANCE = 6150;
@@ -84,11 +89,13 @@ export function createSunSystem(ctx) {
     const ensureState = () => {
         const date = getDate();
         const timestamp = date.getTime();
-        if (sunState.current && sunState.current.timestamp === timestamp) {
+        if (!shouldRefreshState(sunState.current, ctx, timestamp)) {
             return sunState.current;
         }
         const state = calculateSunState(ctx, date);
         state.timestamp = timestamp;
+        state.lst = ctx.localSiderealTime ?? 0;
+        state.lat = ctx.observer?.lat ?? 0;
         sunState.current = state;
         updateState(state);
         return state;
@@ -110,6 +117,13 @@ export function createSunSystem(ctx) {
             ensureState();
         }
     };
+}
+
+function shouldRefreshState(current, ctx, timestamp) {
+    if (!current) return true;
+    return Math.abs(timestamp - current.timestamp) >= ORBITAL_TIME_THRESHOLD_MS
+        || angularDifferenceDegrees(ctx.localSiderealTime ?? 0, current.lst) >= STATE_LST_THRESHOLD
+        || Math.abs((ctx.observer?.lat ?? 0) - current.lat) >= STATE_LAT_THRESHOLD;
 }
 
 function calculateSunState(ctx, date = new Date()) {

@@ -1,5 +1,9 @@
 import * as THREE from '../three.module.js';
-import { equatorialToHorizontalVector, precessEquatorialJ2000ToDate } from '../utils/astronomy.js';
+import {
+    angularDifferenceDegrees,
+    equatorialToHorizontalVector,
+    precessEquatorialJ2000ToDate
+} from '../utils/astronomy.js';
 
 const GALACTIC_CENTER = { ra: 266.4051, dec: -28.936175 };
 const FLARE_DISTANCE = 6;
@@ -66,7 +70,13 @@ export function createLensFlareSystem(ctx) {
 
     const tempVec = new THREE.Vector3();
     const ndcVec = new THREE.Vector3();
+    const strongestNdc = new THREE.Vector3();
+    const ghostNdc = new THREE.Vector3();
     const cameraDir = new THREE.Vector3();
+    const getGalacticCorePosition = createGalacticCorePositionGetter(ctx);
+    const sunTint = new THREE.Color(1.0, 0.92, 0.75);
+    const moonTint = new THREE.Color(0.78, 0.88, 1.0);
+    const milkyWayTint = new THREE.Color(0.92, 0.95, 1.05);
 
     const placeSprite = (sprite, ndc, sizePx, opacity, stretch = 1) => {
         if (opacity <= 0.001) {
@@ -89,7 +99,7 @@ export function createLensFlareSystem(ctx) {
         tempVec.copy(worldPosition).sub(ctx.camera.position);
         ctx.camera.getWorldDirection(cameraDir);
         if (tempVec.dot(cameraDir) < 0) return null;
-        return ndcVec.clone();
+        return ndcVec;
     };
 
     const collectSources = () => {
@@ -102,7 +112,7 @@ export function createLensFlareSystem(ctx) {
                 sources.push({
                     position: state.position,
                     strength,
-                    tint: new THREE.Color(1.0, 0.92, 0.75)
+                    tint: sunTint
                 });
             }
         }
@@ -117,13 +127,13 @@ export function createLensFlareSystem(ctx) {
                     sources.push({
                         position: state.position,
                         strength,
-                        tint: new THREE.Color(0.78, 0.88, 1.0)
+                        tint: moonTint
                     });
                 }
             }
         }
 
-        const milkyCenter = getGalacticCorePosition(ctx);
+        const milkyCenter = getGalacticCorePosition();
         if (ctx.settings?.showMilkyWay && milkyCenter) {
             const { position, altDeg } = milkyCenter;
             const altitudeBoost = THREE.MathUtils.clamp((altDeg + 6) / 26, 0, 1);
@@ -132,7 +142,7 @@ export function createLensFlareSystem(ctx) {
                 sources.push({
                     position,
                     strength,
-                    tint: new THREE.Color(0.92, 0.95, 1.05)
+                    tint: milkyWayTint
                 });
             }
         }
@@ -140,13 +150,7 @@ export function createLensFlareSystem(ctx) {
         return sources;
     };
 
-    const applyFlare = (source) => {
-        const ndc = projectToScreen(source.position);
-        if (!ndc) {
-            hideAll();
-            return;
-        }
-
+    const applyFlare = (source, ndc) => {
         const radial = Math.sqrt(ndc.x * ndc.x + ndc.y * ndc.y);
         const centerFade = 1 - THREE.MathUtils.smoothstep(0.45, 1.2, radial);
         const intensity = source.strength * centerFade;
@@ -157,7 +161,7 @@ export function createLensFlareSystem(ctx) {
 
         const tint = source.tint ?? new THREE.Color(1, 1, 1);
         ghosts.forEach(({ sprite, config }) => {
-            const ghostNdc = ndc.clone().multiplyScalar(config.offset);
+            ghostNdc.copy(ndc).multiplyScalar(config.offset);
             const edgeFade = 1 - THREE.MathUtils.smoothstep(0.9, 1.35, ghostNdc.length());
             const opacity = intensity * config.opacity * edgeFade;
             sprite.material.color.copy(tint);
@@ -211,13 +215,14 @@ export function createLensFlareSystem(ctx) {
                 if (power > strongestPower) {
                     strongestPower = power;
                     strongest = src;
+                    strongestNdc.copy(ndc);
                 }
             });
             if (!strongest) {
                 hideAll();
                 return;
             }
-            applyFlare(strongest);
+            applyFlare(strongest, strongestNdc);
         }
     };
 }
@@ -229,20 +234,38 @@ function pixelsToWorldUnits(pixels, distance, camera) {
     return height * pxRatio;
 }
 
-function getGalacticCorePosition(ctx) {
-    if (!ctx.localSiderealTime || ctx.observer?.lat == null) return null;
-    const date = ctx.getSimulatedDate ? ctx.getSimulatedDate() : new Date();
-    const equatorial = precessEquatorialJ2000ToDate(GALACTIC_CENTER.ra, GALACTIC_CENTER.dec, date);
-    if (!equatorial) return null;
-    const result = equatorialToHorizontalVector(
-        equatorial.ra,
-        equatorial.dec,
-        ctx.localSiderealTime,
-        ctx.observer.lat,
-        GALACTIC_RADIUS
-    );
-    if (!result) return null;
-    return { position: result.vector, altDeg: result.altDeg };
+function createGalacticCorePositionGetter(ctx) {
+    let cached = null;
+    let lastLst = null;
+    let lastLat = null;
+    let lastDateKey = null;
+    return () => {
+        if (!ctx.localSiderealTime || ctx.observer?.lat == null) return null;
+        const date = ctx.getSimulatedDate ? ctx.getSimulatedDate() : new Date();
+        const dateKey = Math.floor(date.getTime() / 86400000);
+        const lst = ctx.localSiderealTime;
+        const lat = ctx.observer.lat;
+        if (cached
+            && angularDifferenceDegrees(lst, lastLst) < 0.02
+            && Math.abs(lat - lastLat) < 0.0005
+            && dateKey === lastDateKey) {
+            return cached;
+        }
+        const equatorial = precessEquatorialJ2000ToDate(GALACTIC_CENTER.ra, GALACTIC_CENTER.dec, date);
+        if (!equatorial) return null;
+        const result = equatorialToHorizontalVector(
+            equatorial.ra,
+            equatorial.dec,
+            lst,
+            lat,
+            GALACTIC_RADIUS
+        );
+        cached = result ? { position: result.vector, altDeg: result.altDeg } : null;
+        lastLst = lst;
+        lastLat = lat;
+        lastDateKey = dateKey;
+        return cached;
+    };
 }
 
 function createGhostTexture() {

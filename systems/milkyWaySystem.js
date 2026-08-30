@@ -1,5 +1,9 @@
 import * as THREE from '../three.module.js';
-import { equatorialToHorizontalVector, precessEquatorialJ2000ToDate } from '../utils/astronomy.js';
+import {
+    angularDifferenceDegrees,
+    equatorialToHorizontalVector,
+    precessEquatorialJ2000ToDate
+} from '../utils/astronomy.js';
 
 const GALACTIC_NORTH_POLE = { ra: 192.85948, dec: 27.12825 }; // IAU 2009 (J2000)
 const GALACTIC_CENTER = { ra: 266.4051, dec: -28.936175 };
@@ -20,7 +24,7 @@ export function createMilkyWaySystem(ctx) {
     const rotationQuat = new THREE.Quaternion();
     let lastLst = null;
     let lastLat = ctx.observer?.lat;
-    let lastBasis = null;
+    let lastDateKey = null;
 
     createMilkyWayBandDome(ctx, baseBasis.normal, baseBasis.axis);
     createMilkyWayClusters(ctx, baseBasis.normal, baseBasis.axis);
@@ -37,7 +41,9 @@ export function createMilkyWaySystem(ctx) {
         ctx.milkyWayGroup.setRotationFromQuaternion(rotationQuat);
         updateBandUniforms(ctx, galacticBasis);
         updateMilkyWayLight(ctx, galacticBasis);
-        lastBasis = galacticBasis;
+        lastLst = ctx.localSiderealTime ?? 0;
+        lastLat = ctx.observer?.lat ?? 0;
+        lastDateKey = getDateKey(ctx);
     };
 
     applyGalacticOrientation();
@@ -47,12 +53,11 @@ export function createMilkyWaySystem(ctx) {
         update(time) {
             const lst = ctx.localSiderealTime;
             const lat = ctx.observer?.lat;
-            if (lastLst !== lst || lastLat !== lat) {
-                lastLst = lst;
-                lastLat = lat;
+            const dateKey = getDateKey(ctx);
+            if (angularDifferenceDegrees(lst ?? 0, lastLst) >= 0.02
+                || Math.abs((lat ?? 0) - (lastLat ?? 0)) >= 0.0005
+                || dateKey !== lastDateKey) {
                 applyGalacticOrientation();
-            } else if (lastBasis) {
-                updateMilkyWayLight(ctx, lastBasis);
             }
             ctx.milkyWayMaterials.forEach(material => {
                 if (material.uniforms?.time) {
@@ -61,6 +66,11 @@ export function createMilkyWaySystem(ctx) {
             });
         }
     };
+}
+
+function getDateKey(ctx) {
+    const date = ctx.getSimulatedDate?.() ?? new Date();
+    return Math.floor(date.getTime() / 86400000);
 }
 
 function createMilkyWayBandDome(ctx, bandNormal, bandAxis) {

@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
+    angularDifferenceDegrees,
     calculateLocalSiderealTime,
     eclipticToEquatorial,
     eclipticVectorToEquatorial,
@@ -28,6 +29,7 @@ test('angle normalization handles positive and negative turns', () => {
     assert.equal(normalizeDegrees(725), 5);
     assert.equal(normalizeDegrees(-5), 355);
     closeTo(normalizeRadians(-Math.PI / 2), Math.PI * 1.5);
+    closeTo(angularDifferenceDegrees(359.9, 0.1), 0.2, 1e-12);
 });
 
 test('Julian day and Greenwich sidereal time match J2000', () => {
