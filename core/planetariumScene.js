@@ -1,7 +1,5 @@
 import * as THREE from '../three.module.js';
 import { OrbitControls } from '../vendor/three/addons/controls/OrbitControls.js';
-import { setupPhotoCaptureButton } from '../ui/photoAlbum.js';
-import { getActivePlanetarium } from '../ui/planetariumContext.js';
 
 export function setupScene(ctx) {
     ctx.scene = new THREE.Scene();
@@ -31,11 +29,6 @@ export function setupRenderer(ctx) {
     container.appendChild(ctx.renderer.domElement);
 
     window.addEventListener('resize', ctx.resizeRenderer);
-
-    setupPhotoCaptureButton(
-        () => getActivePlanetarium()?.renderer || ctx.renderer,
-        () => getActivePlanetarium() || ctx
-    );
 }
 
 export function resizeRenderer(ctx) {

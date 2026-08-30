@@ -1,7 +1,9 @@
 import * as THREE from '../three.module.js';
 import {
+    clamp,
     equatorialToHorizontalVector,
     degToRad,
+    eclipticToEquatorial,
     radToDeg,
     normalizeDegrees
 } from '../utils/astronomy.js';
@@ -466,26 +468,6 @@ function convertEquatorialDirectionToHorizontal(dirEq, ctx, radius = 1) {
         radius
     );
     return result?.vector ?? null;
-}
-
-function clamp(value, min, max) {
-    return Math.min(Math.max(value, min), max);
-}
-
-function eclipticToEquatorial(lonDeg) {
-    const obliquityDeg = 23.4397;
-    const lonRad = degToRad(lonDeg);
-    const obRad = degToRad(obliquityDeg);
-    const sinLon = Math.sin(lonRad);
-    const cosLon = Math.cos(lonRad);
-    const sinOb = Math.sin(obRad);
-    const cosOb = Math.cos(obRad);
-    const raRad = Math.atan2(sinLon * cosOb, cosLon);
-    const decRad = Math.asin(sinOb * sinLon);
-    return {
-        raDeg: normalizeDegrees(radToDeg(raRad)),
-        decDeg: radToDeg(decRad)
-    };
 }
 
 /**

@@ -8,6 +8,8 @@ import { initCelestialLibrary } from './ui/celestialLibrary.js';
 import { initHomeScene } from './ui/homeScene.js';
 import { playTitleBgm } from './ui/bgmController.js';
 import { initHomeSettingsPanel } from './ui/settingsPanel.js';
+import { navigateTo, SCREEN_ROUTES } from './ui/screenRouter.js';
+import { setupPhotoCaptureButton } from './ui/photoAlbum.js';
 import {
     registerPlanetaria,
     setActivePlanetarium,
@@ -24,9 +26,14 @@ const archivePlanetarium = new Planetarium({
 
 registerPlanetaria({ live: livePlanetarium, archive: archivePlanetarium });
 setActivePlanetarium('live');
+navigateTo(SCREEN_ROUTES.HOME);
 
 attachUIInteractions(getActivePlanetarium);
 setupTimeDisplay(getActivePlanetarium);
+setupPhotoCaptureButton(
+    () => getActivePlanetarium()?.renderer,
+    getActivePlanetarium
+);
 
 setPlanetarium(getLivePlanetarium());
 initLocationSelector({

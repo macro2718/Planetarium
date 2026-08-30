@@ -1,6 +1,4 @@
 // 場所選択画面のUI制御
-import * as THREE from '../three.module.js';
-import { OrbitControls } from '../vendor/three/addons/controls/OrbitControls.js';
 import { LOCATIONS, REGION_LABELS, formatCoordinate } from '../data/locations.js';
 import {
     destroyAllPlanetaria,
@@ -9,8 +7,9 @@ import {
     setActivePlanetarium,
     showPlanetariumCanvas
 } from './planetariumContext.js';
-import { playModeSelectionBgm, enterPlanetariumScene, playTitleBgm } from './bgmController.js';
-import { transitionToModeScreen } from './screenTransition.js';
+import { playModeSelectionBgm, enterPlanetariumScene } from './bgmController.js';
+import { navigateTo, SCREEN_ROUTES, setScreenVisible } from './screenRouter.js';
+import { GlobePreview } from './globePreview.js';
 
 let currentPlanetarium = null;
 let onLocationSelected = null;
@@ -32,12 +31,11 @@ const SURFACE_LABELS = {
 export function initLocationSelector(options = {}) {
     onLocationSelected = options.onSelect;
 
-    document.body.classList.add('home-visible');
     setupLocationList();
     setupBackButton();
     setupObserveButton();
 
-    locationGlobe = new LocationGlobe('location-globe');
+    locationGlobe = new GlobePreview('location-globe', { autoStart: false });
     setSelectedLocation(selectedLocation);
 }
 
@@ -169,16 +167,8 @@ function startObservation(location) {
         currentPlanetarium.setObserverLocation(location.lat, location.lon, location);
     }
 
-    // 場所選択画面を非表示
-    hideLocationScreen();
-
-    document.body.classList.remove('home-visible');
-
-    // プラネタリウム画面を表示
-    const homeScreen = document.getElementById('home-screen');
-    if (homeScreen) {
-        homeScreen.classList.add('hidden');
-    }
+    locationGlobe?.stop();
+    navigateTo(SCREEN_ROUTES.PLANETARIUM);
 
     // コールバックがあれば呼び出し
     if (onLocationSelected) {
@@ -204,34 +194,15 @@ function setupBackButton() {
  * 場所選択画面からモード選択画面へ戻る（ホームが存在する場合はホームへ）
  */
 function backToModeFromLocation() {
-    const homeScreen = document.getElementById('home-screen');
-    const locationScreen = document.getElementById('location-screen');
-
     playModeSelectionBgm();
-
-    if (document.getElementById('mode-screen')) {
-        transitionToModeScreen(locationScreen);
-        return;
-    }
-
-    // フォールバックとしてホーム画面へ戻る
-    if (homeScreen) {
-        homeScreen.classList.remove('hidden');
-        document.body.classList.add('home-visible');
-        playTitleBgm();
-    }
-
-    if (locationScreen) {
-        locationScreen.classList.add('hidden');
-    }
+    locationGlobe?.stop();
+    navigateTo(SCREEN_ROUTES.MODE);
 }
 
 /**
  * 場所選択画面を表示
  */
 export function showLocationScreen() {
-    const locationScreen = document.getElementById('location-screen');
-    const homeScreen = document.getElementById('home-screen');
     resetPlanetariumBgm();
     destroyAllPlanetaria();
     playModeSelectionBgm();
@@ -239,15 +210,8 @@ export function showLocationScreen() {
     currentPlanetarium?.stop();
     getArchivePlanetarium()?.stop();
 
-    document.body.classList.remove('home-visible');
-
-    if (locationScreen) {
-        locationScreen.classList.remove('hidden');
-    }
-    if (homeScreen) {
-        homeScreen.classList.add('hidden');
-    }
-
+    navigateTo(SCREEN_ROUTES.LOCATION);
+    locationGlobe?.start();
     setSelectedLocation(selectedLocation || LOCATIONS[0]);
 }
 
@@ -255,163 +219,11 @@ export function showLocationScreen() {
  * 場所選択画面を非表示
  */
 export function hideLocationScreen() {
-    const locationScreen = document.getElementById('location-screen');
-    if (locationScreen) {
-        locationScreen.classList.add('hidden');
-    }
+    locationGlobe?.stop();
+    setScreenVisible('location-screen', false);
 }
 
-class LocationGlobe {
-    constructor(containerId) {
-        this.container = document.getElementById(containerId);
-        if (!this.container) return;
-
-        this.scene = new THREE.Scene();
-        this.renderer = new THREE.WebGLRenderer({
-            antialias: true,
-            alpha: true
-        });
-        this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight || 1);
-        this.container.appendChild(this.renderer.domElement);
-
-        const aspect = this.container.clientWidth / Math.max(this.container.clientHeight, 1);
-        this.camera = new THREE.PerspectiveCamera(36, aspect, 0.1, 50);
-        this.camera.position.set(0, 0, 3.8);
-
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-        this.controls.enableDamping = true;
-        this.controls.dampingFactor = 0.06;
-        this.controls.rotateSpeed = 0.5;
-        this.controls.enablePan = false;
-        this.controls.enableZoom = false;
-        this.controls.minPolarAngle = Math.PI * 0.16;
-        this.controls.maxPolarAngle = Math.PI - Math.PI * 0.16;
-
-        this.globeGroup = new THREE.Group();
-        this.scene.add(this.globeGroup);
-
-        this.addLights();
-        this.addStars();
-        this.addGlobe();
-        this.pin = this.createPin();
-        this.globeGroup.add(this.pin);
-
-        this.resizeHandler = () => this.onResize();
-        window.addEventListener('resize', this.resizeHandler);
-
-        this.animate = this.animate.bind(this);
-        this.animate();
-    }
-
-    addLights() {
-        const ambient = new THREE.AmbientLight(0xa7bfdc, 0.6);
-        const rim = new THREE.DirectionalLight(0xffffff, 1.2);
-        rim.position.set(4, 2, 3);
-        const bottomFill = new THREE.DirectionalLight(0x1c2f52, 0.35);
-        bottomFill.position.set(-2, -3, -2);
-        this.scene.add(ambient, rim, bottomFill);
-    }
-
-    addStars() {
-        const starCount = 900;
-        const positions = new Float32Array(starCount * 3);
-        for (let i = 0; i < starCount; i++) {
-            const radius = 4 + Math.random() * 2.5;
-            const theta = Math.random() * Math.PI * 2;
-            const phi = Math.acos(2 * Math.random() - 1);
-            const x = radius * Math.sin(phi) * Math.cos(theta);
-            const y = radius * Math.cos(phi);
-            const z = radius * Math.sin(phi) * Math.sin(theta);
-            positions[i * 3] = x;
-            positions[i * 3 + 1] = y;
-            positions[i * 3 + 2] = z;
-        }
-
-        const geometry = new THREE.BufferGeometry();
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-        const material = new THREE.PointsMaterial({
-            color: new THREE.Color('#cde6ff'),
-            size: 0.01,
-            transparent: true,
-            opacity: 0.7,
-            depthWrite: false,
-            sizeAttenuation: true
-        });
-
-        this.starField = new THREE.Points(geometry, material);
-        this.scene.add(this.starField);
-    }
-
-    addGlobe() {
-        const earthTexture = new THREE.TextureLoader().load('assets/textures/earth-day.jpg', (texture) => {
-            texture.anisotropy = this.renderer.capabilities.getMaxAnisotropy?.() || 1;
-        });
-        earthTexture.colorSpace = THREE.SRGBColorSpace;
-
-        const surface = new THREE.Mesh(
-            new THREE.SphereGeometry(0.9, 48, 48),
-            new THREE.MeshStandardMaterial({
-                map: earthTexture,
-                roughness: 0.85,
-                metalness: 0.05,
-                emissive: new THREE.Color('#0b1a30'),
-                emissiveIntensity: 0.18
-            })
-        );
-
-        this.globeGroup.add(surface);
-    }
-
-    createPin() {
-        const pinGeo = new THREE.SphereGeometry(0.035, 32, 32);
-        const pinMat = new THREE.MeshStandardMaterial({
-            color: new THREE.Color('#f0b9ff'),
-            emissive: new THREE.Color('#f0b9ff'),
-            emissiveIntensity: 0.8,
-            roughness: 0.4,
-            metalness: 0.2
-        });
-        return new THREE.Mesh(pinGeo, pinMat);
-    }
-
-    focusLocation(location) {
-        if (!location) return;
-        const { x, y, z } = this.latLonToVector(location.lat, location.lon, 0.9);
-        this.pin.position.set(x, y, z);
-        this.controls.target.set(0, 0, 0);
-    }
-
-    latLonToVector(lat, lon, radius) {
-        const phi = THREE.MathUtils.degToRad(90 - lat);
-        const theta = THREE.MathUtils.degToRad(lon + 180);
-        return {
-            x: -radius * Math.sin(phi) * Math.cos(theta),
-            y: radius * Math.cos(phi),
-            z: radius * Math.sin(phi) * Math.sin(theta)
-        };
-    }
-
-    onResize() {
-        if (!this.container) return;
-        const width = this.container.clientWidth || this.container.offsetWidth || 600;
-        const height = this.container.clientHeight || this.container.offsetHeight || 400;
-        this.camera.aspect = width / height;
-        this.camera.updateProjectionMatrix();
-        this.renderer.setSize(width, height);
-    }
-
-    animate() {
-        requestAnimationFrame(this.animate);
-        this.controls?.update();
-        if (this.globeGroup) {
-            this.globeGroup.rotation.y += 0.0008;
-        }
-        if (this.starField) {
-            this.starField.rotation.y += 0.0002;
-        }
-        this.renderer.render(this.scene, this.camera);
-    }
+export function disposeLocationSelector() {
+    locationGlobe?.dispose();
+    locationGlobe = null;
 }

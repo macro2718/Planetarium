@@ -1,4 +1,9 @@
 import * as THREE from '../three.module.js';
+import {
+    getCurrentRoute,
+    SCREEN_ROUTES,
+    subscribeToRouteChanges
+} from './screenRouter.js';
 
 let renderer = null;
 let scene = null;
@@ -7,8 +12,15 @@ let container = null;
 let homeScreen = null;
 let modeScreen = null;
 let currentHost = null;
+let animationFrameId = null;
+let animationCallback = null;
+let resizeHandler = null;
+let routeUnsubscribe = null;
+let clock = null;
+let running = false;
 
 export function initHomeScene() {
+    if (renderer) return;
     container = document.getElementById('home-three-container');
     homeScreen = document.getElementById('home-screen');
     modeScreen = document.getElementById('mode-screen');
@@ -115,10 +127,11 @@ export function initHomeScene() {
 
     currentHost = container.parentElement?.closest('#home-screen, #mode-screen') || homeScreen;
 
-    const clock = new THREE.Clock();
+    clock = new THREE.Clock(false);
 
-    const animate = () => {
-        requestAnimationFrame(animate);
+    animationCallback = () => {
+        if (!running) return;
+        animationFrameId = requestAnimationFrame(animationCallback);
         syncSceneHost();
         const elapsed = clock.getElapsedTime();
         const visible = isHostVisible();
@@ -161,11 +174,69 @@ export function initHomeScene() {
 
         renderer.render(scene, camera);
     };
-    animate();
+    resizeHandler = () => updateRendererSize();
+    routeUnsubscribe = subscribeToRouteChanges((route) => {
+        if (route === SCREEN_ROUTES.HOME || route === SCREEN_ROUTES.MODE) {
+            startHomeScene();
+        } else {
+            stopHomeScene();
+        }
+    });
+    updateRendererSize();
+    const initialRoute = getCurrentRoute();
+    if (initialRoute === SCREEN_ROUTES.HOME || initialRoute === SCREEN_ROUTES.MODE) {
+        startHomeScene();
+    }
+}
 
-    const resize = () => updateRendererSize();
-    window.addEventListener('resize', resize);
-    resize();
+export function startHomeScene() {
+    if (!renderer || running) return;
+    running = true;
+    clock?.start();
+    window.addEventListener('resize', resizeHandler);
+    updateRendererSize();
+    animationCallback?.();
+}
+
+export function stopHomeScene() {
+    if (!running) return;
+    running = false;
+    clock?.stop();
+    if (animationFrameId !== null) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
+    window.removeEventListener('resize', resizeHandler);
+    if (renderer?.domElement) renderer.domElement.style.opacity = '0';
+}
+
+export function disposeHomeScene() {
+    if (!renderer) return;
+    stopHomeScene();
+    routeUnsubscribe?.();
+    routeUnsubscribe = null;
+    scene?.traverse((object) => {
+        object.geometry?.dispose?.();
+        const materials = Array.isArray(object.material) ? object.material : [object.material];
+        materials.filter(Boolean).forEach((material) => {
+            material.map?.dispose?.();
+            material.dispose?.();
+        });
+    });
+    scene?.clear();
+    renderer.dispose();
+    renderer.forceContextLoss?.();
+    renderer.domElement.remove();
+    renderer = null;
+    scene = null;
+    camera = null;
+    container = null;
+    homeScreen = null;
+    modeScreen = null;
+    currentHost = null;
+    animationCallback = null;
+    resizeHandler = null;
+    clock = null;
 }
 
 function syncSceneHost() {

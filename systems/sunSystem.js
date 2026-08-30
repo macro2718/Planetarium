@@ -1,5 +1,9 @@
 import * as THREE from '../three.module.js';
-import { equatorialToHorizontalVector, normalizeDegrees } from '../utils/astronomy.js';
+import {
+    eclipticToEquatorial,
+    equatorialToHorizontalVector,
+    normalizeDegrees
+} from '../utils/astronomy.js';
 
 // Place the Sun within the sky dome and size it to its actual angular diameter (~0.53°).
 const SUN_DISTANCE = 6150;
@@ -118,7 +122,7 @@ function calculateSunState(ctx, date = new Date()) {
     const eclipticLongitude = normalizeDegrees(meanLongitude + equationOfCenter);
     const obliquity = 23.439291 - 0.0000137 * daysSinceJ2000;
 
-    const { raDeg, decDeg } = convertEclipticToEquatorial(eclipticLongitude, 0, obliquity);
+    const { raDeg, decDeg } = eclipticToEquatorial(eclipticLongitude, 0, obliquity);
     const { position, altDeg, azDeg } = convertEquatorialToHorizontal(ctx, raDeg, decDeg, SUN_DISTANCE);
 
     return {
@@ -128,23 +132,6 @@ function calculateSunState(ctx, date = new Date()) {
         raDeg,
         decDeg
     };
-}
-
-function convertEclipticToEquatorial(lonDeg, latDeg, obliquityDeg) {
-    const lonRad = THREE.MathUtils.degToRad(lonDeg);
-    const latRad = THREE.MathUtils.degToRad(latDeg);
-    const obRad = THREE.MathUtils.degToRad(obliquityDeg);
-
-    const sinDec = Math.sin(latRad) * Math.cos(obRad) + Math.cos(latRad) * Math.sin(obRad) * Math.sin(lonRad);
-    const dec = Math.asin(Math.min(1, Math.max(-1, sinDec)));
-
-    const y = Math.sin(lonRad) * Math.cos(obRad) - Math.tan(latRad) * Math.sin(obRad);
-    const x = Math.cos(lonRad);
-    const ra = Math.atan2(y, x);
-
-    const raDeg = normalizeDegrees(THREE.MathUtils.radToDeg(ra));
-    const decDeg = THREE.MathUtils.radToDeg(dec);
-    return { raDeg, decDeg };
 }
 
 function convertEquatorialToHorizontal(ctx, raDeg, decDeg, radius) {

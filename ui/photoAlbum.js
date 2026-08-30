@@ -4,6 +4,7 @@
 
 import { formatCoordinate } from '../data/locations.js';
 import { playModeSelectionBgm, playTitleBgm } from './bgmController.js';
+import { navigateTo, SCREEN_ROUTES } from './screenRouter.js';
 
 const ALBUM_STORAGE_KEY = 'planetarium_album';
 
@@ -510,50 +511,21 @@ export class PhotoAlbumSystem {
     }
 
     openAlbum() {
-        const homeScreen = document.getElementById('home-screen');
-        const albumScreen = document.getElementById('album-screen');
-
-        if (homeScreen) {
-            homeScreen.classList.add('hidden');
-        }
-        if (albumScreen) {
-            albumScreen.classList.remove('hidden');
-            this.renderAlbumGrid();
-        }
-
+        navigateTo(SCREEN_ROUTES.ALBUM);
+        this.renderAlbumGrid();
         this.onHomeScreen = false;
-        document.body.classList.remove('home-visible');
         playModeSelectionBgm();
     }
 
     backToModeSelector() {
-        const homeScreen = document.getElementById('home-screen');
-        const modeScreen = document.getElementById('mode-screen');
-        const albumScreen = document.getElementById('album-screen');
-
-        if (homeScreen) {
-            homeScreen.classList.remove('hidden');
-        }
-        if (modeScreen) {
-            modeScreen.classList.remove('hidden');
-        }
-        if (albumScreen) {
-            albumScreen.classList.add('hidden');
-        }
-
+        navigateTo(SCREEN_ROUTES.MODE);
         this.onHomeScreen = true;
-        document.body.classList.add('mode-screen-visible');
-        document.body.classList.remove('home-visible');
         playModeSelectionBgm();
     }
 
     showHomeFromPlanetarium() {
-        const homeScreen = document.getElementById('home-screen');
-        if (homeScreen) {
-            homeScreen.classList.remove('hidden');
-        }
+        navigateTo(SCREEN_ROUTES.HOME);
         this.onHomeScreen = true;
-        document.body.classList.add('home-visible');
         playTitleBgm();
     }
 

@@ -1,5 +1,16 @@
 import * as THREE from '../three.module.js';
-import { degToRad, normalizeDegrees, radToDeg, equatorialToHorizontalVector } from './astronomy.js';
+import {
+    clamp,
+    degToRad,
+    eclipticVectorToEquatorial,
+    equatorialToHorizontalVector,
+    evalPolynomial,
+    julianDay,
+    meanObliquityRad,
+    normalizeDegrees,
+    radToDeg,
+    solveKeplerElliptic
+} from './astronomy.js';
 
 /**
  * Long-term heliocentric orbital elements derived from VSOP87/IMCCE tables
@@ -87,82 +98,19 @@ export const PLANET_DEFINITIONS = [
 const PLANET_DISTANCE_SCALE = 2400;
 const LOG10 = Math.log(10);
 
-function clamp(value, min, max) {
-    return Math.min(Math.max(value, min), max);
-}
-
-function evalPoly(coeffs, t) {
-    let sum = 0;
-    let pow = 1;
-    for (let i = 0; i < coeffs.length; i++) {
-        sum += coeffs[i] * pow;
-        pow *= t;
-    }
-    return sum;
-}
-
-function julianDay(date) {
-    const t = Date.UTC(
-        date.getUTCFullYear(),
-        date.getUTCMonth(),
-        date.getUTCDate(),
-        date.getUTCHours(),
-        date.getUTCMinutes(),
-        date.getUTCSeconds(),
-        date.getUTCMilliseconds()
-    );
-    return t / 86400000 + 2440587.5;
-}
-
-function meanObliquityRad(T) {
-    // Laskar series, valid for +/- 10,000 years (Meeus 2nd ed., Chap. 22)
-    const u = T / 100;
-    const u2 = u * u;
-    const u3 = u2 * u;
-    const u4 = u3 * u;
-    const u5 = u4 * u;
-    const u6 = u5 * u;
-    const u7 = u6 * u;
-    const u8 = u7 * u;
-    const u9 = u8 * u;
-    const u10 = u9 * u;
-    const arcsec = 84381.448
-        - 4680.93 * u
-        - 1.55 * u2
-        + 1999.25 * u3
-        - 51.38 * u4
-        - 249.67 * u5
-        - 39.05 * u6
-        + 7.12 * u7
-        + 27.87 * u8
-        + 5.79 * u9
-        + 2.45 * u10;
-    return degToRad(arcsec / 3600);
-}
-
-function solveKepler(meanAnomalyRad, eccentricity) {
-    let E = meanAnomalyRad;
-    for (let i = 0; i < 8; i++) {
-        const delta = (E - eccentricity * Math.sin(E) - meanAnomalyRad) / (1 - eccentricity * Math.cos(E));
-        E -= delta;
-        if (Math.abs(delta) < 1e-12) break;
-    }
-    return E;
-}
-
 function heliocentricEcliptic(bodyId, T) {
     const elements = PLANET_ELEMENTS[bodyId];
     if (!elements) return null;
-    const a = evalPoly(elements.a, T);
-    const e = evalPoly(elements.e, T);
-    const i = degToRad(evalPoly(elements.i, T));
-    const L = degToRad(normalizeDegrees(evalPoly(elements.L, T)));
-    const longPeri = degToRad(normalizeDegrees(evalPoly(elements.longPeri, T)));
-    const longNode = degToRad(normalizeDegrees(evalPoly(elements.longNode, T)));
+    const a = evalPolynomial(elements.a, T);
+    const e = evalPolynomial(elements.e, T);
+    const i = degToRad(evalPolynomial(elements.i, T));
+    const L = degToRad(normalizeDegrees(evalPolynomial(elements.L, T)));
+    const longPeri = degToRad(normalizeDegrees(evalPolynomial(elements.longPeri, T)));
+    const longNode = degToRad(normalizeDegrees(evalPolynomial(elements.longNode, T)));
 
     const M = normalizeDegrees(radToDeg(L - longPeri));
     const MRad = degToRad(M);
-    const E = solveKepler(MRad, e);
+    const E = solveKeplerElliptic(MRad, e, 8);
     const nu = 2 * Math.atan2(Math.sqrt(1 + e) * Math.sin(E / 2), Math.sqrt(1 - e) * Math.cos(E / 2));
     const r = a * (1 - e * Math.cos(E));
     const omega = longPeri - longNode; // argument of perihelion
@@ -180,19 +128,10 @@ function heliocentricEcliptic(bodyId, T) {
     return { x, y, z, r };
 }
 
-function eclipticToEquatorial(vec, obliquityRad) {
-    const cosOb = Math.cos(obliquityRad);
-    const sinOb = Math.sin(obliquityRad);
-    const x = vec.x;
-    const y = vec.y * cosOb - vec.z * sinOb;
-    const z = vec.y * sinOb + vec.z * cosOb;
-    return new THREE.Vector3(x, y, z);
-}
-
 function computeSunDirection(obliquityRad, earthHelio, lstDeg, observer) {
     // Direction from observer to Sun (opposite of Earth's heliocentric vector)
     const sunEcl = new THREE.Vector3(-earthHelio.x, -earthHelio.y, -earthHelio.z);
-    const sunEq = eclipticToEquatorial(sunEcl, obliquityRad);
+    const sunEq = eclipticVectorToEquatorial(sunEcl, obliquityRad);
     const ra = Math.atan2(sunEq.y, sunEq.x);
     const dec = Math.asin(clamp(sunEq.z / sunEq.length(), -1, 1));
     return equatorialToHorizontalVector(
@@ -256,7 +195,7 @@ export function calculatePlanetaryStates(date = new Date(), observer = { lat: 0,
             helio.z - earthHelio.z
         );
         const distanceAu = geoEcl.length();
-        const geoEq = eclipticToEquatorial(geoEcl, obliquityRad);
+        const geoEq = eclipticVectorToEquatorial(geoEcl, obliquityRad);
         const rEq = geoEq.length();
         const ra = Math.atan2(geoEq.y, geoEq.x);
         const dec = Math.asin(clamp(geoEq.z / rEq, -1, 1));

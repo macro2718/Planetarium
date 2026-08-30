@@ -1,5 +1,9 @@
 import * as THREE from '../three.module.js';
-import { equatorialToHorizontalVector, normalizeDegrees } from '../utils/astronomy.js';
+import {
+    eclipticToEquatorial,
+    equatorialToHorizontalVector,
+    normalizeDegrees
+} from '../utils/astronomy.js';
 
 // Place the Moon inside the sky dome and size it to its actual angular diameter (~0.52°).
 const MOON_DISTANCE = 6000;
@@ -283,8 +287,8 @@ function calculateMoonState(ctx, date = new Date()) {
     const raDeg = THREE.MathUtils.radToDeg(raRad);
     const decDeg = THREE.MathUtils.radToDeg(decRad);
 
-    const sunRaDec = convertEclipticToEquatorial(sunLon, 0, obliquity);
-    const sunHorizontal = convertEquatorialToHorizontal(ctx, sunRaDec.ra, sunRaDec.dec, 1);
+    const sunRaDec = eclipticToEquatorial(sunLon, 0, obliquity);
+    const sunHorizontal = convertEquatorialToHorizontal(ctx, sunRaDec.raDeg, sunRaDec.decDeg, 1);
     const sunVector = sunHorizontal?.position ?? new THREE.Vector3(1, 0, 0);
 
     // Place the Moon slightly in front of the Sun so it stays visible during overlaps
@@ -312,23 +316,6 @@ function calculateMoonState(ctx, date = new Date()) {
         raDeg,
         decDeg
     };
-}
-
-function convertEclipticToEquatorial(lonDeg, latDeg, obliquityDeg) {
-    const lonRad = THREE.MathUtils.degToRad(lonDeg);
-    const latRad = THREE.MathUtils.degToRad(latDeg);
-    const obRad = THREE.MathUtils.degToRad(obliquityDeg);
-
-    const sinDec = Math.sin(latRad) * Math.cos(obRad) + Math.cos(latRad) * Math.sin(obRad) * Math.sin(lonRad);
-    const dec = Math.asin(Math.min(1, Math.max(-1, sinDec)));
-
-    const y = Math.sin(lonRad) * Math.cos(obRad) - Math.tan(latRad) * Math.sin(obRad);
-    const x = Math.cos(lonRad);
-    const ra = Math.atan2(y, x);
-
-    const raDeg = normalizeDegrees(THREE.MathUtils.radToDeg(ra));
-    const decDeg = THREE.MathUtils.radToDeg(dec);
-    return { ra: raDeg, dec: decDeg };
 }
 
 function convertEquatorialToHorizontal(ctx, raDeg, decDeg, radius) {

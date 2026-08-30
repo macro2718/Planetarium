@@ -4,6 +4,10 @@ import { showLocationScreen } from './locationSelector.js';
 import { destroyAllPlanetaria, getArchivePlanetarium, resetPlanetariumBgm } from './planetariumContext.js';
 import { showEventArchiveScreen } from './eventArchive.js';
 import { unlockConstellation } from './celestialLibrary.js';
+import {
+    getButtonSettingDescriptors,
+    toggleRegisteredSetting
+} from '../core/settingRegistry.js';
 
 export function attachUIInteractions(getPlanetarium) {
     setupResizeHandler(getPlanetarium);
@@ -77,56 +81,15 @@ function pickObject(ctx, event) {
 
 function setupControlButtons(getPlanetarium) {
     setupSurfaceButtons(getPlanetarium);
-    const toggleButton = (id, flag, apply) => {
-        const btn = document.getElementById(id);
+    getButtonSettingDescriptors().forEach(({ buttonId, key }) => {
+        const btn = document.getElementById(buttonId);
         if (!btn) return;
-        btn.addEventListener('click', (e) => {
+        btn.addEventListener('click', () => {
             const ctx = getPlanetarium();
             if (!ctx) return;
-            const next = !ctx.settings[flag];
-            ctx.settings[flag] = next;
-            e.target.classList.toggle('active');
-            apply(ctx, next);
+            const next = toggleRegisteredSetting(ctx, key);
+            btn.classList.toggle('active', next);
         });
-    };
-    toggleButton('btn-background-stars', 'showBackgroundStars', (ctx, visible) => {
-        if (ctx.starsGroup) ctx.starsGroup.visible = visible;
-    });
-    toggleButton('btn-milkyway', 'showMilkyWay', (ctx, visible) => {
-        if (ctx.milkyWayGroup) ctx.milkyWayGroup.visible = visible;
-    });
-    toggleButton('btn-constellations', 'showConstellations', (ctx, visible) => {
-        if (ctx.constellationSystem) {
-            ctx.constellationSystem.updateVisibility(visible);
-        }
-    });
-    toggleButton('btn-shooting', 'showShootingStars', (ctx, visible) => {
-        if (ctx.shootingStarsGroup) {
-            ctx.shootingStarsGroup.visible = visible;
-        }
-    });
-    toggleButton('btn-sun', 'showSun', (ctx, visible) => {
-        if (ctx.sunSystem?.setEnabled) {
-            ctx.sunSystem.setEnabled(visible);
-        } else if (ctx.sunGroup) {
-            ctx.sunGroup.visible = visible;
-        }
-    });
-    toggleButton('btn-moon', 'showMoon', (ctx, visible) => {
-        if (ctx.moonGroup) ctx.moonGroup.visible = visible;
-    });
-    toggleButton('btn-aurora', 'showAurora', (ctx, visible) => {
-        if (ctx.auroraGroup) ctx.auroraGroup.visible = visible;
-    });
-    toggleButton('btn-lensflare', 'showLensFlare', (ctx, visible) => {
-        if (ctx.lensFlareSystem?.setEnabled) {
-            ctx.lensFlareSystem.setEnabled(visible);
-        }
-    });
-    toggleButton('btn-star-trails', 'showStarTrails', (ctx, visible) => {
-        if (ctx.starTrailSystem) {
-            ctx.starTrailSystem.setEnabled(visible);
-        }
     });
     
     // ホームに戻るボタン
@@ -154,94 +117,6 @@ function setupControlButtons(getPlanetarium) {
             showLocationScreen();
         });
     }
-
-    const autoBtn = document.getElementById('btn-auto');
-    if (autoBtn) {
-        autoBtn.addEventListener('click', (e) => {
-            const ctx = getPlanetarium();
-            if (!ctx) return;
-            ctx.settings.autoRotate = !ctx.settings.autoRotate;
-            e.target.classList.toggle('active');
-            ctx.controls.autoRotate = ctx.settings.autoRotate;
-        });
-    }
-    const musicBtn = document.getElementById('btn-music');
-    if (musicBtn) {
-        musicBtn.addEventListener('click', (e) => {
-            const ctx = getPlanetarium();
-            if (!ctx) return;
-            ctx.settings.playMusic = !ctx.settings.playMusic;
-            e.target.classList.toggle('active');
-            if (ctx.settings.playMusic) {
-                ctx.startAmbientSound();
-            } else {
-                ctx.stopAmbientSound();
-            }
-        });
-    }
-    const envSoundBtn = document.getElementById('btn-env-sound');
-    if (envSoundBtn) {
-        envSoundBtn.addEventListener('click', (e) => {
-            const ctx = getPlanetarium();
-            if (!ctx) return;
-            ctx.settings.playEnvSound = !ctx.settings.playEnvSound;
-            e.target.classList.toggle('active');
-            if (ctx.settings.playEnvSound) {
-                ctx.startEnvironmentSound(ctx.settings.surfaceType);
-            } else {
-                ctx.stopEnvironmentSound();
-            }
-        });
-    }
-    
-    // 時圏表示ボタン
-    toggleButton('btn-hour-circles', 'showHourCircles', (ctx, visible) => {
-        if (ctx.hourCircleSystem) {
-            ctx.hourCircleSystem.setVisible(visible);
-        }
-    });
-    
-    // 赤緯圏表示ボタン
-    toggleButton('btn-declination-circles', 'showDeclinationCircles', (ctx, visible) => {
-        if (ctx.declinationCircleSystem) {
-            ctx.declinationCircleSystem.setVisible(visible);
-        }
-    });
-    
-    // 天の赤道表示ボタン
-    toggleButton('btn-celestial-equator', 'showCelestialEquator', (ctx, visible) => {
-        if (ctx.celestialEquatorSystem) {
-            ctx.celestialEquatorSystem.setVisible(visible);
-        }
-    });
-    
-    // 黄道表示ボタン
-    toggleButton('btn-ecliptic', 'showEcliptic', (ctx, visible) => {
-        if (ctx.eclipticSystem) {
-            ctx.eclipticSystem.setVisible(visible);
-        }
-    });
-
-    // 銀河赤道表示ボタン
-    toggleButton('btn-galactic-equator', 'showGalacticEquator', (ctx, visible) => {
-        if (ctx.galacticEquatorSystem) {
-            ctx.galacticEquatorSystem.setVisible(visible);
-        }
-    });
-
-    // 白道（月軌道面）表示ボタン
-    toggleButton('btn-lunar-orbit', 'showLunarOrbit', (ctx, visible) => {
-        if (ctx.lunarOrbitPlaneSystem) {
-            ctx.lunarOrbitPlaneSystem.setVisible(visible);
-        }
-    });
-
-    // 方位表示ボタン
-    toggleButton('btn-cardinal-directions', 'showCardinalDirections', (ctx, visible) => {
-        if (ctx.cardinalDirectionSystem) {
-            ctx.cardinalDirectionSystem.setVisible(visible);
-        }
-    });
 
     const setImmersiveMode = (active) => {
         document.body.classList.toggle('immersive-mode', active);

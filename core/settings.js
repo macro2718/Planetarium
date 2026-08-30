@@ -1,3 +1,5 @@
+import { createRegisteredDefaultSettings } from './settingRegistry.js';
+
 export const DEFAULT_OBSERVER_LOCATION = {
     name: '東京',
     nameEn: 'Tokyo',
@@ -14,30 +16,11 @@ export const normalizeSurfaceType = (type) => {
 
 export function createDefaultSettings() {
     return {
-        showBackgroundStars: true,
-        showMilkyWay: true,
-        showConstellations: true,
-        showShootingStars: true,
-        showSun: false,
-        showMoon: true,
-        showPlanets: true,
-        showAurora: true,
-        showHourCircles: false,
-        showDeclinationCircles: false,
-        showCelestialEquator: false,
-        showEcliptic: false,
-        showGalacticEquator: false,
-        showLunarOrbit: false,
-        showCardinalDirections: false,
-        showStarTrails: false,
-        autoRotate: false,
-        playMusic: true,
-        showLensFlare: true,
+        ...createRegisteredDefaultSettings(),
         surfaceType: normalizeSurfaceType(DEFAULT_OBSERVER_LOCATION.surfaceType) ?? 'water',
         showCometTail: false,
         cometTailTint: '#b7f0ff',
         cometTailIntensity: 1,
-        meteorShowerIntensity: 0,
-        playEnvSound: true
+        meteorShowerIntensity: 0
     };
 }

@@ -1,0 +1,445 @@
+        /* アルバム画面 */
+        #album-screen {
+            position: fixed;
+            inset: 0;
+            background: url('images/album.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 1500;
+            display: flex;
+            flex-direction: column;
+            transition: opacity var(--screen-fade-duration) var(--screen-fade-ease), visibility var(--screen-fade-duration) var(--screen-fade-ease);
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        #album-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #album-screen.fading-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* ホーム画面のフェードイン用スタイル */
+        #home-screen.fading-in {
+            opacity: 0;
+        }
+
+        .album-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            border-bottom: 1px solid rgba(136, 173, 255, 0.2);
+        }
+
+        .album-title {
+            font-size: 24px;
+            letter-spacing: 8px;
+            color: rgba(255, 255, 255, 0.9);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .album-back-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            border: 1px solid rgba(136, 173, 255, 0.4);
+            background: rgba(12, 18, 42, 0.6);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 14px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .album-back-btn:hover {
+            background: rgba(30, 50, 100, 0.6);
+            border-color: rgba(136, 173, 255, 0.7);
+        }
+
+        .album-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            padding: 30px 40px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(136, 173, 255, 0.4) transparent;
+        }
+
+        .album-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .album-grid::-webkit-scrollbar-thumb {
+            background: rgba(136, 173, 255, 0.4);
+            border-radius: 4px;
+        }
+
+        .album-item {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid rgba(136, 173, 255, 0.3);
+            transition: all 0.3s ease;
+            background: rgba(10, 15, 30, 0.5);
+        }
+
+        .album-item:hover {
+            transform: scale(1.03);
+            border-color: rgba(136, 173, 255, 0.7);
+            box-shadow: 0 10px 30px rgba(100, 150, 255, 0.3);
+        }
+
+        .album-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .album-item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .album-item:hover .album-item-overlay {
+            opacity: 1;
+        }
+
+        .album-item-date {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 1px;
+        }
+
+        .album-item-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-width: calc(100% - 50px);
+        }
+
+        .album-item-location {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.5px;
+            display: block;
+            line-height: 1.4;
+        }
+
+        .album-item-filter {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.65);
+            letter-spacing: 0.4px;
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(136, 173, 255, 0.16);
+            border: 1px solid rgba(136, 173, 255, 0.3);
+            width: fit-content;
+        }
+
+        .album-item-delete {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 100, 100, 0.5);
+            background: rgba(255, 50, 50, 0.3);
+            color: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .album-item-delete:hover {
+            background: rgba(255, 50, 50, 0.6);
+            transform: scale(1.1);
+        }
+
+        .album-empty {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 60vh;
+            padding: 20px;
+        }
+
+        .album-empty-panel {
+            width: min(520px, 100%);
+            padding: 32px 36px;
+            border-radius: 16px;
+            border: 1px solid rgba(136, 173, 255, 0.4);
+            background: linear-gradient(135deg, rgba(18, 28, 58, 0.7), rgba(12, 18, 42, 0.9));
+            box-shadow: 0 20px 60px rgba(20, 30, 70, 0.45);
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            text-align: center;
+        }
+
+        .album-empty-icon {
+            font-size: 64px;
+            margin-bottom: 10px;
+            opacity: 0.55;
+        }
+
+        .album-empty-text {
+            font-size: 16px;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* 写真プレビュー */
+        #photo-preview {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2500;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity var(--screen-fade-duration) var(--screen-fade-ease), visibility var(--screen-fade-duration) var(--screen-fade-ease);
+        }
+
+        #photo-preview.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #photo-preview img {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .preview-meta {
+            margin-top: 12px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.75);
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .preview-close {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(20, 20, 20, 0.8);
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .preview-close:hover {
+            background: rgba(60, 60, 60, 0.8);
+            transform: scale(1.1);
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .preview-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            border: 1px solid rgba(136, 173, 255, 0.5);
+            background: rgba(12, 18, 42, 0.8);
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 1px;
+        }
+
+        .preview-btn:hover {
+            background: rgba(30, 50, 100, 0.8);
+            border-color: rgba(136, 173, 255, 0.8);
+        }
+
+        /* フォトモード用撮影ボタン */
+        #capture-photo-btn {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #capture-photo-btn::before {
+            content: '';
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.2s ease;
+        }
+
+        #capture-photo-btn:hover::before {
+            transform: scale(0.9);
+        }
+
+        #capture-photo-btn:active::before {
+            transform: scale(0.75);
+        }
+
+        body.immersive-mode #capture-photo-btn {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* フォトフィルター選択 */
+        #photo-filter-panel {
+            position: fixed;
+            bottom: 165px;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 2050;
+        }
+
+        body.immersive-mode #photo-filter-panel {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .filter-panel-title {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .filter-chip-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-chip {
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(136, 173, 255, 0.4);
+            background: rgba(12, 18, 42, 0.6);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 11px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        .filter-chip:hover {
+            border-color: rgba(136, 173, 255, 0.8);
+            transform: translateY(-1px);
+        }
+
+        .filter-chip.active {
+            background: linear-gradient(135deg, rgba(120, 180, 255, 0.4), rgba(220, 170, 255, 0.35));
+            color: #ffffff;
+            border-color: rgba(136, 173, 255, 0.9);
+            box-shadow: 0 10px 28px rgba(120, 180, 255, 0.35);
+        }
+
+        /* 撮影フラッシュエフェクト */
+        #capture-flash {
+            position: fixed;
+            inset: 0;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 3000;
+            transition: opacity 0.1s ease;
+        }
+
+        #capture-flash.flash {
+            opacity: 0.8;
+        }
+
+        /* 撮影成功通知 */
+        #capture-notification {
+            position: fixed;
+            bottom: 170px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            padding: 12px 24px;
+            border-radius: 999px;
+            background: linear-gradient(120deg, rgba(100, 200, 150, 0.9), rgba(80, 180, 130, 0.9));
+            color: white;
+            font-size: 14px;
+            letter-spacing: 1px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        #capture-notification.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ホームに戻るボタン */
+        .home-return-btn {
+            width: 100%;
+            text-align: center !important;
+            background: linear-gradient(135deg, rgba(80, 60, 120, 0.4), rgba(60, 80, 140, 0.3)) !important;
+            border-color: rgba(180, 160, 220, 0.4) !important;
+        }
+
+        .home-return-btn:hover {
+            background: linear-gradient(135deg, rgba(100, 80, 150, 0.5), rgba(80, 100, 160, 0.4)) !important;
+            border-color: rgba(180, 160, 220, 0.7) !important;
+        }

@@ -62,6 +62,96 @@ export function normalizeDegrees(value) {
     return ((value % 360) + 360) % 360;
 }
 
+export function normalizeRadians(value) {
+    const fullTurn = Math.PI * 2;
+    return ((value % fullTurn) + fullTurn) % fullTurn;
+}
+
+export function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+}
+
+export function julianDay(date) {
+    const value = date instanceof Date ? date : new Date(date);
+    if (Number.isNaN(value.getTime())) return Number.NaN;
+    return value.getTime() / 86400000 + 2440587.5;
+}
+
+export function evalPolynomial(coefficients, value) {
+    let result = 0;
+    let power = 1;
+    for (const coefficient of coefficients) {
+        result += coefficient * power;
+        power *= value;
+    }
+    return result;
+}
+
+export function meanObliquityRad(julianCenturies) {
+    // Laskar series, valid for +/- 10,000 years (Meeus 2nd ed., Chap. 22)
+    const u = julianCenturies / 100;
+    const powers = [1];
+    for (let exponent = 1; exponent <= 10; exponent += 1) {
+        powers[exponent] = powers[exponent - 1] * u;
+    }
+    const arcsec = 84381.448
+        - 4680.93 * powers[1]
+        - 1.55 * powers[2]
+        + 1999.25 * powers[3]
+        - 51.38 * powers[4]
+        - 249.67 * powers[5]
+        - 39.05 * powers[6]
+        + 7.12 * powers[7]
+        + 27.87 * powers[8]
+        + 5.79 * powers[9]
+        + 2.45 * powers[10];
+    return degToRad(arcsec / 3600);
+}
+
+export function solveKeplerElliptic(meanAnomalyRad, eccentricity, maxIterations = 20) {
+    let eccentricAnomaly = meanAnomalyRad;
+    for (let iteration = 0; iteration < maxIterations; iteration += 1) {
+        const residual = eccentricAnomaly
+            - eccentricity * Math.sin(eccentricAnomaly)
+            - meanAnomalyRad;
+        const derivative = 1 - eccentricity * Math.cos(eccentricAnomaly);
+        const delta = residual / derivative;
+        eccentricAnomaly -= delta;
+        if (Math.abs(delta) < 1e-12) break;
+    }
+    return eccentricAnomaly;
+}
+
+export function eclipticVectorToEquatorial(vector, obliquityRad, target = null) {
+    const result = target ?? new THREE.Vector3();
+    const cosObliquity = Math.cos(obliquityRad);
+    const sinObliquity = Math.sin(obliquityRad);
+    result.set(
+        vector.x,
+        vector.y * cosObliquity - vector.z * sinObliquity,
+        vector.y * sinObliquity + vector.z * cosObliquity
+    );
+    return result;
+}
+
+export function eclipticToEquatorial(lonDeg, latDeg = 0, obliquityDeg = 23.439291) {
+    const longitude = degToRad(lonDeg);
+    const latitude = degToRad(latDeg);
+    const equatorial = eclipticVectorToEquatorial(
+        new THREE.Vector3(
+            Math.cos(longitude) * Math.cos(latitude),
+            Math.sin(longitude) * Math.cos(latitude),
+            Math.sin(latitude)
+        ),
+        degToRad(obliquityDeg)
+    );
+    const length = equatorial.length() || 1;
+    return {
+        raDeg: normalizeDegrees(radToDeg(Math.atan2(equatorial.y, equatorial.x))),
+        decDeg: radToDeg(Math.asin(clamp(equatorial.z / length, -1, 1)))
+    };
+}
+
 export function precessEquatorialJ2000ToDate(raDeg, decDeg, date) {
     if (![raDeg, decDeg].every(v => typeof v === 'number')) return null;
     const epochDate = date instanceof Date && !Number.isNaN(date.getTime()) ? date : new Date();
@@ -94,8 +184,4 @@ export function precessEquatorialJ2000ToDate(raDeg, decDeg, date) {
     const newDec = radToDeg(Math.asin(clamp(C, -1, 1)));
 
     return { ra: newRa, dec: newDec };
-}
-
-function clamp(value, min, max) {
-    return Math.min(Math.max(value, min), max);
 }
