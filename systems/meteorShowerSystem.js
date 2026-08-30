@@ -10,6 +10,7 @@ export function createMeteorShowerSystem(ctx) {
     ctx.scene.add(group);
 
     const meteors = [];
+    const normalizedDirection = new THREE.Vector3();
     let cooldown = BASE_COOLDOWN;
     let intensity = 0;
 
@@ -84,7 +85,8 @@ export function createMeteorShowerSystem(ctx) {
                 data.elapsed += delta;
                 data.life -= delta;
                 data.position.addScaledVector(data.velocity, delta);
-                updateGeometry(meteor, data.position, data.velocity.clone().normalize());
+                normalizedDirection.copy(data.velocity).normalize();
+                updateGeometry(meteor, data.position, normalizedDirection);
                 meteor.material.opacity = Math.max(0, Math.min(1, data.life / 0.5));
                 if (data.life <= 0 || data.position.y < -300) {
                     removeMeteor(meteor);
@@ -103,12 +105,12 @@ function createColorArray() {
 
 function updateGeometry(line, position, direction) {
     const positions = line.geometry.attributes.position.array;
-    const trail = direction.clone().multiplyScalar(-160 - Math.random() * 140);
+    const trailScale = -160 - Math.random() * 140;
     positions[0] = position.x;
     positions[1] = position.y;
     positions[2] = position.z;
-    positions[3] = position.x + trail.x;
-    positions[4] = position.y + trail.y;
-    positions[5] = position.z + trail.z;
+    positions[3] = position.x + direction.x * trailScale;
+    positions[4] = position.y + direction.y * trailScale;
+    positions[5] = position.z + direction.z * trailScale;
     line.geometry.attributes.position.needsUpdate = true;
 }

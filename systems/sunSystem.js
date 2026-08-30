@@ -9,6 +9,8 @@ import {
 const STATE_LST_THRESHOLD = 0.02;
 const STATE_LAT_THRESHOLD = 0.0005;
 const ORBITAL_TIME_THRESHOLD_MS = 60000;
+const J2000_MS = Date.parse('2000-01-01T12:00:00Z');
+const MS_PER_DAY = 86400000;
 
 // Place the Sun within the sky dome and size it to its actual angular diameter (~0.53°).
 const SUN_DISTANCE = 6150;
@@ -106,6 +108,7 @@ export function createSunSystem(ctx) {
     return {
         group: ctx.sunGroup,
         getCurrentState: () => ensureState(),
+        getCachedState: () => sunState.current,
         setEnabled: (enabled) => {
             ctx.settings.showSun = enabled;
             const state = ensureState();
@@ -127,7 +130,7 @@ function shouldRefreshState(current, ctx, timestamp) {
 }
 
 function calculateSunState(ctx, date = new Date()) {
-    const daysSinceJ2000 = (date - new Date('2000-01-01T12:00:00Z')) / (1000 * 60 * 60 * 24);
+    const daysSinceJ2000 = (date.getTime() - J2000_MS) / MS_PER_DAY;
     const meanLongitude = normalizeDegrees(280.46646 + 0.98564736 * daysSinceJ2000);
     const meanAnomaly = normalizeDegrees(357.5291092 + 0.98560028 * daysSinceJ2000);
     const equationOfCenter = 1.914602 * Math.sin(THREE.MathUtils.degToRad(meanAnomaly))

@@ -42,8 +42,16 @@ export class TimeController {
         this.simulatedDate = new Date(baseDate);
         this.realtimeOffsetMs = 0;
         this.fixedTimeOfDayMs = getFixedTimeOfDayMs(baseDate);
+        this.fixedDayIndex = null;
+        this.fixedTimestamp = null;
         this.isTimePaused = false;
         this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, 0);
+        this.lastSiderealTimestamp = this.simulatedDate.getTime();
+        this.lastSiderealLongitude = 0;
+        this.updateResult = {
+            simulatedDate: this.simulatedDate,
+            localSiderealTime: this.localSiderealTime
+        };
         this.initialRealtimeDate = new Date(baseDate);
         return this.getSnapshot();
     }
@@ -99,36 +107,48 @@ export class TimeController {
             console.warn('Unknown time mode:', mode);
         }
 
+        this.fixedDayIndex = null;
+        this.fixedTimestamp = null;
+        this.lastSiderealTimestamp = null;
         return this.getSnapshot();
     }
 
     update(nowSeconds = this.getCurrentSeconds(), observerLon = 0) {
+        let simulatedTimestamp;
         if (this.timeMode === 'realtime') {
             const offset = Number.isFinite(this.realtimeOffsetMs) ? this.realtimeOffsetMs : 0;
-            this.simulatedDate = new Date(Date.now() + offset);
+            simulatedTimestamp = Date.now() + offset;
         } else {
             const elapsed = nowSeconds - this.simulationStartPerf;
             if (this.timeMode === 'custom') {
                 const scale = this.isTimePaused ? 0 : this.timeScale;
-                const simulatedMs = this.simulationStartDate.getTime() + elapsed * 1000 * scale;
-                this.simulatedDate = new Date(simulatedMs);
+                simulatedTimestamp = this.simulationStartDate.getTime() + elapsed * 1000 * scale;
             } else if (this.timeMode === 'fixed-time') {
                 const scale = this.isTimePaused ? 0 : this.dayScale;
                 const daysPassed = Math.floor(elapsed * scale);
-                const baseDate = new Date(this.simulationStartDate);
-                baseDate.setDate(baseDate.getDate() + daysPassed);
-                const startOfDay = new Date(baseDate);
-                startOfDay.setHours(0, 0, 0, 0);
-                const timeOfDayMs = this.fixedTimeOfDayMs ?? 0;
-                this.simulatedDate = new Date(startOfDay.getTime() + timeOfDayMs);
+                if (daysPassed !== this.fixedDayIndex || this.fixedTimestamp === null) {
+                    const baseDate = new Date(this.simulationStartDate);
+                    baseDate.setDate(baseDate.getDate() + daysPassed);
+                    baseDate.setHours(0, 0, 0, 0);
+                    this.fixedTimestamp = baseDate.getTime() + (this.fixedTimeOfDayMs ?? 0);
+                    this.fixedDayIndex = daysPassed;
+                }
+                simulatedTimestamp = this.fixedTimestamp;
             }
         }
 
-        this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, observerLon);
-        return {
-            simulatedDate: this.simulatedDate,
-            localSiderealTime: this.localSiderealTime
-        };
+        if (!this.simulatedDate || this.simulatedDate.getTime() !== simulatedTimestamp) {
+            this.simulatedDate = new Date(simulatedTimestamp);
+        }
+        if (simulatedTimestamp !== this.lastSiderealTimestamp
+            || observerLon !== this.lastSiderealLongitude) {
+            this.localSiderealTime = calculateLocalSiderealTime(this.simulatedDate, observerLon);
+            this.lastSiderealTimestamp = simulatedTimestamp;
+            this.lastSiderealLongitude = observerLon;
+        }
+        this.updateResult.simulatedDate = this.simulatedDate;
+        this.updateResult.localSiderealTime = this.localSiderealTime;
+        return this.updateResult;
     }
 
     togglePause(forceState, observerLon = 0) {
@@ -142,6 +162,8 @@ export class TimeController {
         this.isTimePaused = next;
         this.simulationStartDate = new Date(this.simulatedDate);
         this.simulationStartPerf = nowSeconds;
+        this.fixedDayIndex = null;
+        this.fixedTimestamp = null;
         return this.isTimePaused;
     }
 

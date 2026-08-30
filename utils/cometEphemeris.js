@@ -15,6 +15,14 @@ import {
 
 const GAUSSIAN_GRAVITATIONAL_CONSTANT = 0.01720209895; // rad/day
 const DISTANCE_SCALE = 2400;
+const EPHEMERIS_SCRATCH = {
+    geocentricEcliptic: new THREE.Vector3(),
+    geocentricEquatorial: new THREE.Vector3(),
+    sunEcliptic: new THREE.Vector3(),
+    sunEquatorial: new THREE.Vector3(),
+    horizontal: {},
+    sunHorizontal: {}
+};
 
 const HALLEY_ELEMENTS = {
     perihelionJD: 2446470.9592, // 1986-02-09 11:01 UTC
@@ -43,13 +51,17 @@ export function calculateHalleyState(date = new Date(), observer = { lat: 0, lon
     const halleyHelio = halleyHeliocentricEcliptic(jd);
     if (!earthHelio || !halleyHelio) return null;
 
-    const geoEcl = new THREE.Vector3(
+    const geoEcl = EPHEMERIS_SCRATCH.geocentricEcliptic.set(
         halleyHelio.x - earthHelio.x,
         halleyHelio.y - earthHelio.y,
         halleyHelio.z - earthHelio.z
     );
     const distanceAu = geoEcl.length();
-    const geoEq = eclipticVectorToEquatorial(geoEcl, obliquityRad);
+    const geoEq = eclipticVectorToEquatorial(
+        geoEcl,
+        obliquityRad,
+        EPHEMERIS_SCRATCH.geocentricEquatorial
+    );
     const rEq = geoEq.length();
     const ra = Math.atan2(geoEq.y, geoEq.x);
     const dec = Math.asin(clamp(rEq ? geoEq.z / rEq : 0, -1, 1));
@@ -60,21 +72,28 @@ export function calculateHalleyState(date = new Date(), observer = { lat: 0, lon
         decDeg,
         lstDeg,
         observer?.lat ?? 0,
-        DISTANCE_SCALE
+        DISTANCE_SCALE,
+        null,
+        EPHEMERIS_SCRATCH.horizontal
     );
 
+    EPHEMERIS_SCRATCH.sunEcliptic.set(-earthHelio.x, -earthHelio.y, -earthHelio.z);
     const sunEq = eclipticVectorToEquatorial(
-        new THREE.Vector3(-earthHelio.x, -earthHelio.y, -earthHelio.z),
-        obliquityRad
+        EPHEMERIS_SCRATCH.sunEcliptic,
+        obliquityRad,
+        EPHEMERIS_SCRATCH.sunEquatorial
     );
     const sunRa = Math.atan2(sunEq.y, sunEq.x);
-    const sunDec = Math.asin(clamp(sunEq.length() ? sunEq.z / sunEq.length() : 0, -1, 1));
+    const sunLength = sunEq.length();
+    const sunDec = Math.asin(clamp(sunLength ? sunEq.z / sunLength : 0, -1, 1));
     const sunHoriz = equatorialToHorizontalVector(
         normalizeDegrees(radToDeg(sunRa)),
         radToDeg(sunDec),
         lstDeg,
         observer?.lat ?? 0,
-        DISTANCE_SCALE
+        DISTANCE_SCALE,
+        null,
+        EPHEMERIS_SCRATCH.sunHorizontal
     );
 
     return {

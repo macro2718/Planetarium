@@ -54,6 +54,7 @@ export function createStarFieldSystem(ctx) {
     return {
         group: ctx.starsGroup,
         update(time) {
+            if (!ctx.starsGroup.visible) return;
             syncRotation();
             ctx.starMaterials.forEach(material => {
                 material.uniforms.time.value = time;
@@ -69,10 +70,10 @@ function angularDifferenceDeg(a, b) {
 }
 
 function createStarLayer(ctx, count, radius, minSize, maxSize) {
-    const positions = [];
-    const colors = [];
-    const sizes = [];
-    const twinklePhases = [];
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    const sizes = new Float32Array(count);
+    const twinklePhases = new Float32Array(count);
     const starColors = [
         new THREE.Color(0xffffff),
         new THREE.Color(0xffeedd),
@@ -92,20 +93,24 @@ function createStarLayer(ctx, count, radius, minSize, maxSize) {
         const x = radius * Math.cos(dec) * Math.cos(ra);
         const z = radius * Math.cos(dec) * Math.sin(ra);
         const y = radius * Math.sin(dec);
-        
-        positions.push(x, y, z);
+        const offset = i * 3;
+        positions[offset] = x;
+        positions[offset + 1] = y;
+        positions[offset + 2] = z;
         const color = starColors[Math.floor(Math.random() * starColors.length)];
-        colors.push(color.r, color.g, color.b);
+        colors[offset] = color.r;
+        colors[offset + 1] = color.g;
+        colors[offset + 2] = color.b;
         const sizeFactor = Math.pow(Math.random(), 2);
         const starSize = minSize + sizeFactor * (maxSize - minSize);
-        sizes.push(starSize);
-        twinklePhases.push(Math.random() * Math.PI * 2);
+        sizes[i] = starSize;
+        twinklePhases[i] = Math.random() * Math.PI * 2;
     }
     const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-    geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
-    geometry.setAttribute('twinklePhase', new THREE.Float32BufferAttribute(twinklePhases, 1));
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    geometry.setAttribute('twinklePhase', new THREE.BufferAttribute(twinklePhases, 1));
     const vertexShader = `
         precision highp float;
         attribute float size;

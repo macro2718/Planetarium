@@ -241,6 +241,7 @@ export function setupShelfScene(options = {}) {
         shadowLight,
         shadowCameraBase: { ...SHADOW_CAMERA_BASE },
         shadowShelfSpan: 0,
+        shelfPosition: new THREE.Vector3(),
         raycaster,
         pointer,
         hover: null,
@@ -452,7 +453,7 @@ function getShelfHalfViewWidth() {
             ? container.clientWidth / Math.max(1, container.clientHeight)
             : camera.aspect;
 
-    const shelfPosition = new THREE.Vector3();
+    const shelfPosition = shelfScene.shelfPosition;
     shelfGroup?.getWorldPosition?.(shelfPosition);
     const distance = Math.max(0.1, camera.position.distanceTo(shelfPosition));
     const halfHeight = Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * distance;

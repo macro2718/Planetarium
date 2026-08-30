@@ -97,6 +97,13 @@ export const PLANET_DEFINITIONS = [
 
 const PLANET_DISTANCE_SCALE = 2400;
 const LOG10 = Math.log(10);
+const EPHEMERIS_SCRATCH = {
+    sunEcliptic: new THREE.Vector3(),
+    sunEquatorial: new THREE.Vector3(),
+    geocentricEcliptic: new THREE.Vector3(),
+    geocentricEquatorial: new THREE.Vector3(),
+    horizontal: {}
+};
 
 function heliocentricEcliptic(bodyId, T) {
     const elements = PLANET_ELEMENTS[bodyId];
@@ -130,8 +137,12 @@ function heliocentricEcliptic(bodyId, T) {
 
 function computeSunDirection(obliquityRad, earthHelio, lstDeg, observer) {
     // Direction from observer to Sun (opposite of Earth's heliocentric vector)
-    const sunEcl = new THREE.Vector3(-earthHelio.x, -earthHelio.y, -earthHelio.z);
-    const sunEq = eclipticVectorToEquatorial(sunEcl, obliquityRad);
+    const sunEcl = EPHEMERIS_SCRATCH.sunEcliptic.set(-earthHelio.x, -earthHelio.y, -earthHelio.z);
+    const sunEq = eclipticVectorToEquatorial(
+        sunEcl,
+        obliquityRad,
+        EPHEMERIS_SCRATCH.sunEquatorial
+    );
     const ra = Math.atan2(sunEq.y, sunEq.x);
     const dec = Math.asin(clamp(sunEq.z / sunEq.length(), -1, 1));
     return equatorialToHorizontalVector(
@@ -139,7 +150,9 @@ function computeSunDirection(obliquityRad, earthHelio, lstDeg, observer) {
         radToDeg(dec),
         lstDeg,
         observer?.lat ?? 0,
-        1
+        1,
+        null,
+        EPHEMERIS_SCRATCH.horizontal
     )?.vector.normalize();
 }
 
@@ -186,16 +199,18 @@ export function calculatePlanetaryStates(date = new Date(), observer = { lat: 0,
     const sunDirection = computeSunDirection(obliquityRad, earthHelio, lstDeg, observer) ?? new THREE.Vector3(1, 0, 0);
 
     const states = {};
+    const geoEcl = EPHEMERIS_SCRATCH.geocentricEcliptic;
+    const geoEq = EPHEMERIS_SCRATCH.geocentricEquatorial;
     for (const planet of PLANET_DEFINITIONS) {
         const helio = heliocentricEcliptic(planet.id, T);
         if (!helio) continue;
-        const geoEcl = new THREE.Vector3(
+        geoEcl.set(
             helio.x - earthHelio.x,
             helio.y - earthHelio.y,
             helio.z - earthHelio.z
         );
         const distanceAu = geoEcl.length();
-        const geoEq = eclipticVectorToEquatorial(geoEcl, obliquityRad);
+        eclipticVectorToEquatorial(geoEcl, obliquityRad, geoEq);
         const rEq = geoEq.length();
         const ra = Math.atan2(geoEq.y, geoEq.x);
         const dec = Math.asin(clamp(geoEq.z / rEq, -1, 1));
@@ -206,7 +221,9 @@ export function calculatePlanetaryStates(date = new Date(), observer = { lat: 0,
             decDeg,
             lstDeg,
             observer.lat ?? 0,
-            PLANET_DISTANCE_SCALE
+            PLANET_DISTANCE_SCALE,
+            null,
+            EPHEMERIS_SCRATCH.horizontal
         );
         const phase = calculatePhase(helio, earthHelio, distanceAu);
         const apparentMagnitude = calculateApparentMagnitude(

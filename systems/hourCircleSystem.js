@@ -2,15 +2,19 @@ import * as THREE from '../three.module.js';
 import {
     clamp,
     equatorialToHorizontalVector,
+    equatorialToSceneVector,
     degToRad,
     eclipticToEquatorial,
     radToDeg,
-    normalizeDegrees
+    normalizeDegrees,
+    setEquatorialToHorizontalMatrix
 } from '../utils/astronomy.js';
 import { calculateGalacticBasis } from './milkyWaySystem.js';
 
 const LST_UPDATE_THRESHOLD = 0.02;
 const LAT_UPDATE_THRESHOLD = 0.0005;
+const J2000_MS = Date.parse('2000-01-01T12:00:00Z');
+const MS_PER_DAY = 86400000;
 
 /**
  * 時圏（天球上の経線）システム
@@ -157,29 +161,30 @@ export function createCelestialEquatorSystem(ctx) {
     const label = createTextSprite('天の赤道', 0x66ddff);
     group.add(label);
     const state = { lastLst: null, lastLat: null, extraKey: null, needsUpdate: true };
+    const equatorialPoints = Array.from(
+        { length: segments + 1 },
+        (_, i) => equatorialToSceneVector((i / segments) * 360, 0)
+    );
+    const horizontalMatrix = new THREE.Matrix3();
+    const projected = new THREE.Vector3();
 
     const updateGeometry = () => {
         const snapshot = shouldRefreshGeometry(group, ctx, state);
         if (!snapshot) return;
         const { lst, lat: latitude } = snapshot;
+        setEquatorialToHorizontalMatrix(horizontalMatrix, lst, latitude);
         for (let i = 0; i <= segments; i++) {
-            const ra = (i / segments) * 360;
-            const result = equatorialToHorizontalVector(ra, 0, lst, latitude, radius);
+            projected.copy(equatorialPoints[i]).applyMatrix3(horizontalMatrix).multiplyScalar(radius);
             const offset = i * 3;
-            if (result?.vector) {
-                positions[offset] = result.vector.x;
-                positions[offset + 1] = result.vector.y;
-                positions[offset + 2] = result.vector.z;
-            } else {
-                positions[offset] = positions[offset + 1] = positions[offset + 2] = 0;
-            }
+            positions[offset] = projected.x;
+            positions[offset + 1] = projected.y;
+            positions[offset + 2] = projected.z;
         }
         geometry.attributes.position.needsUpdate = true;
         geometry.computeBoundingSphere();
-        const anchor = equatorialToHorizontalVector(0, 0, lst, latitude, radius);
-        if (anchor?.vector) {
-            label.position.copy(anchor.vector.clone().multiplyScalar(1.02));
-        }
+        label.position.copy(equatorialPoints[0])
+            .applyMatrix3(horizontalMatrix)
+            .multiplyScalar(radius * 1.02);
     };
 
     updateGeometry();
@@ -240,44 +245,46 @@ export function createEclipticSystem(ctx) {
         group.add(marker);
         const spLabel = createTextSprite(sp.name, sp.color);
         group.add(spLabel);
-        return { lon: sp.lon, marker, label: spLabel };
+        const { raDeg, decDeg } = eclipticToEquatorial(sp.lon);
+        return {
+            marker,
+            label: spLabel,
+            equatorialPosition: equatorialToSceneVector(raDeg, decDeg)
+        };
     });
+    const equatorialPoints = Array.from({ length: segments + 1 }, (_, i) => {
+        const { raDeg, decDeg } = eclipticToEquatorial((i / segments) * 360);
+        return equatorialToSceneVector(raDeg, decDeg);
+    });
+    const labelEquatorialPosition = equatorialPoints[Math.round(segments / 4)];
+    const horizontalMatrix = new THREE.Matrix3();
+    const projected = new THREE.Vector3();
 
     const updateGeometry = () => {
         const snapshot = shouldRefreshGeometry(group, ctx, state);
         if (!snapshot) return;
         const { lst, lat: latitude } = snapshot;
+        setEquatorialToHorizontalMatrix(horizontalMatrix, lst, latitude);
         for (let i = 0; i <= segments; i++) {
-            const lon = (i / segments) * 360;
-            const { raDeg, decDeg } = eclipticToEquatorial(lon);
-            const result = equatorialToHorizontalVector(raDeg, decDeg, lst, latitude, radius);
+            projected.copy(equatorialPoints[i]).applyMatrix3(horizontalMatrix).multiplyScalar(radius);
             const offset = i * 3;
-            if (result?.vector) {
-                positions[offset] = result.vector.x;
-                positions[offset + 1] = result.vector.y;
-                positions[offset + 2] = result.vector.z;
-            } else {
-                positions[offset] = positions[offset + 1] = positions[offset + 2] = 0;
-            }
+            positions[offset] = projected.x;
+            positions[offset + 1] = projected.y;
+            positions[offset + 2] = projected.z;
         }
         geometry.attributes.position.needsUpdate = true;
         geometry.computeBoundingSphere();
 
-        const labelAnchor = eclipticToEquatorial(90);
-        const labelVector = equatorialToHorizontalVector(labelAnchor.raDeg, labelAnchor.decDeg, lst, latitude, radius);
-        if (labelVector?.vector) {
-            label.position.copy(labelVector.vector.clone().multiplyScalar(1.02));
-        }
+        label.position.copy(labelEquatorialPosition)
+            .applyMatrix3(horizontalMatrix)
+            .multiplyScalar(radius * 1.02);
 
-        seasonalMarkers.forEach(({ lon, marker, label: spLabel }) => {
-            const eq = eclipticToEquatorial(lon);
-            const markerVec = equatorialToHorizontalVector(eq.raDeg, eq.decDeg, lst, latitude, radius);
-            if (markerVec?.vector) {
-                marker.position.copy(markerVec.vector);
-                spLabel.position.copy(markerVec.vector.clone().multiplyScalar(1.02));
-                spLabel.position.y += 60;
-            }
-        });
+        for (const { marker, label: spLabel, equatorialPosition } of seasonalMarkers) {
+            projected.copy(equatorialPosition).applyMatrix3(horizontalMatrix).multiplyScalar(radius);
+            marker.position.copy(projected);
+            spLabel.position.copy(projected).multiplyScalar(1.02);
+            spLabel.position.y += 60;
+        }
     };
 
     updateGeometry();
@@ -319,6 +326,7 @@ export function createGalacticEquatorSystem(ctx) {
     const label = createTextSprite('銀河赤道', 0x88ccff);
     group.add(label);
     const state = { lastLst: null, lastLat: null, extraKey: null, needsUpdate: true };
+    const projected = new THREE.Vector3();
 
     const updateGeometry = () => {
         const simulatedDate = ctx.getSimulatedDate?.() ?? new Date();
@@ -330,20 +338,20 @@ export function createGalacticEquatorSystem(ctx) {
 
         for (let i = 0; i <= segments; i++) {
             const angle = (i / segments) * Math.PI * 2;
-            const dir = basis.axis.clone().multiplyScalar(Math.cos(angle))
-                .add(basis.tangent.clone().multiplyScalar(Math.sin(angle)))
+            projected.copy(basis.axis).multiplyScalar(Math.cos(angle))
+                .addScaledVector(basis.tangent, Math.sin(angle))
                 .normalize()
                 .multiplyScalar(radius);
             const offset = i * 3;
-            positions[offset] = dir.x;
-            positions[offset + 1] = dir.y;
-            positions[offset + 2] = dir.z;
+            positions[offset] = projected.x;
+            positions[offset + 1] = projected.y;
+            positions[offset + 2] = projected.z;
         }
         geometry.attributes.position.needsUpdate = true;
         geometry.computeBoundingSphere();
 
         if (basis.centerDir) {
-            label.position.copy(basis.centerDir.clone().multiplyScalar(radius * 1.02));
+            label.position.copy(basis.centerDir).multiplyScalar(radius * 1.02);
         }
     };
 
@@ -386,6 +394,7 @@ export function createLunarOrbitPlaneSystem(ctx) {
     const label = createTextSprite('白道', 0xffffff);
     group.add(label);
     const state = { lastLst: null, lastLat: null, extraKey: null, needsUpdate: true };
+    const projected = new THREE.Vector3();
 
     const updateGeometry = () => {
         const simulatedDate = ctx.getSimulatedDate?.() ?? new Date();
@@ -397,19 +406,19 @@ export function createLunarOrbitPlaneSystem(ctx) {
 
         for (let i = 0; i <= segments; i++) {
             const angle = (i / segments) * Math.PI * 2;
-            const dir = basis.axis.clone().multiplyScalar(Math.cos(angle))
-                .add(basis.tangent.clone().multiplyScalar(Math.sin(angle)))
+            projected.copy(basis.axis).multiplyScalar(Math.cos(angle))
+                .addScaledVector(basis.tangent, Math.sin(angle))
                 .normalize()
                 .multiplyScalar(radius);
             const offset = i * 3;
-            positions[offset] = dir.x;
-            positions[offset + 1] = dir.y;
-            positions[offset + 2] = dir.z;
+            positions[offset] = projected.x;
+            positions[offset + 1] = projected.y;
+            positions[offset + 2] = projected.z;
         }
         geometry.attributes.position.needsUpdate = true;
         geometry.computeBoundingSphere();
 
-        label.position.copy(basis.axis.clone().multiplyScalar(radius * 1.05));
+        label.position.copy(basis.axis).multiplyScalar(radius * 1.05);
     };
 
     updateGeometry();
@@ -461,7 +470,7 @@ function calculateLunarOrbitBasis(ctx) {
     const inclinationRad = degToRad(5.145);
     const ascendingNode = degToRad(normalizeDegrees(125.04452 - 1934.136261 * T + 0.0020708 * T * T + (T * T * T) / 450000));
 
-    const daysSinceJ2000 = (date - new Date('2000-01-01T12:00:00Z')) / (1000 * 60 * 60 * 24);
+    const daysSinceJ2000 = (date.getTime() - J2000_MS) / MS_PER_DAY;
     const obliquityRad = degToRad(23.439291 - 0.0000137 * daysSinceJ2000);
 
     const sinI = Math.sin(inclinationRad);

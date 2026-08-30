@@ -56,7 +56,7 @@ export function createPlanetariumSystems(ctx) {
     register(updaters, createAuroraSystem(ctx));
     register(updaters, createCosmicDustSystem(ctx));
 
-    systems.surfaceSystem = createSurfaceSystem(ctx, () => systems.moonSystem.getCurrentState());
+    systems.surfaceSystem = createSurfaceSystem(ctx, () => systems.moonSystem.getCachedState());
     register(updaters, systems.surfaceSystem);
 
     register(updaters, createShootingStarSystem(ctx));

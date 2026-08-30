@@ -62,6 +62,7 @@ export class Planetarium {
         this.isInitialized = false;
         this.isRunning = false;
         this.animationFrameId = null;
+        this.cameraConstraintState = null;
 
         this.updateSimulationTime(this.timeController.getCurrentSeconds());
     }
@@ -214,6 +215,7 @@ export class Planetarium {
         this.isInitialized = false;
         this.isRunning = false;
         this.animationFrameId = null;
+        this.cameraConstraintState = null;
     }
 
     disposeScene() {

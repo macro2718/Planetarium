@@ -5,6 +5,8 @@ import {
     calculateLocalSiderealTime,
     eclipticToEquatorial,
     eclipticVectorToEquatorial,
+    equatorialToHorizontalVector,
+    equatorialToSceneVector,
     equatorialToHorizontal,
     evalPolynomial,
     julianDay,
@@ -13,8 +15,10 @@ import {
     normalizeRadians,
     precessEquatorialJ2000ToDate,
     radToDeg,
+    setEquatorialToHorizontalMatrix,
     solveKeplerElliptic
 } from '../utils/astronomy.js';
+import * as THREE from '../three.module.js';
 import { calculateHalleyState } from '../utils/cometEphemeris.js';
 import { calculatePlanetaryStates } from '../utils/planetEphemeris.js';
 
@@ -42,6 +46,35 @@ test('equatorial coordinates on the meridian reach the expected altitude', () =>
     const horizontal = equatorialToHorizontal(120, 35, 120, 35);
     assert.ok(horizontal);
     closeTo(horizontal.altDeg, 90, 1e-6);
+});
+
+test('matrix projection preserves rendered horizontal coordinates', () => {
+    const matrix = new THREE.Matrix3();
+    const projected = new THREE.Vector3();
+    const samples = [
+        { ra: 0, dec: 0, lst: 0, lat: 0 },
+        { ra: 78.634467, dec: -8.201638, lst: 120, lat: 35 },
+        { ra: 266.4051, dec: -28.936175, lst: 359.9, lat: -66.4 },
+        { ra: 359.999, dec: 89.5, lst: 0.001, lat: 89.2 }
+    ];
+
+    for (const sample of samples) {
+        const expected = equatorialToHorizontalVector(
+            sample.ra,
+            sample.dec,
+            sample.lst,
+            sample.lat,
+            5000
+        ).vector;
+        setEquatorialToHorizontalMatrix(matrix, sample.lst, sample.lat);
+        projected.copy(equatorialToSceneVector(sample.ra, sample.dec))
+            .applyMatrix3(matrix)
+            .multiplyScalar(5000);
+
+        closeTo(projected.x, expected.x, 1e-9);
+        closeTo(projected.y, expected.y, 1e-9);
+        closeTo(projected.z, expected.z, 1e-9);
+    }
 });
 
 test('ecliptic conversion uses the supplied obliquity consistently', () => {
@@ -98,4 +131,14 @@ test('planet and comet ephemerides return finite observable states', () => {
     assert.ok(Number.isFinite(halley.raDeg));
     assert.ok(Number.isFinite(halley.decDeg));
     assert.ok(Number.isFinite(halley.distanceAu));
+    const expectedHalleyHorizontal = equatorialToHorizontalVector(
+        halley.raDeg,
+        halley.decDeg,
+        lst,
+        observer.lat,
+        2400
+    );
+    closeTo(halley.position.x, expectedHalleyHorizontal.vector.x, 1e-9);
+    closeTo(halley.position.y, expectedHalleyHorizontal.vector.y, 1e-9);
+    closeTo(halley.position.z, expectedHalleyHorizontal.vector.z, 1e-9);
 });

@@ -206,31 +206,37 @@ function createMilkyWayClusters(ctx, bandNormal, bandAxis) {
         { count: 22000, spread: 880, size: [0.9, 2.6], tint: new THREE.Color(1.0, 0.86, 0.76) },
         { count: 12000, spread: 1200, size: [1.6, 3.6], tint: new THREE.Color(1.05, 0.94, 0.88) }
     ];
+    const radialDir = new THREE.Vector3();
+    const position = new THREE.Vector3();
+    const color = new THREE.Color();
+    const warmTint = new THREE.Color(1.0, 0.88, 0.76);
     layers.forEach(layer => {
-        const positions = [];
-        const colors = [];
-        const sizes = [];
-        const phases = [];
+        const positions = new Float32Array(layer.count * 3);
+        const colors = new Float32Array(layer.count * 3);
+        const sizes = new Float32Array(layer.count);
+        const phases = new Float32Array(layer.count);
         let attempts = 0;
-        while (positions.length / 3 < layer.count && attempts < layer.count * 4) {
+        let created = 0;
+        while (created < layer.count && attempts < layer.count * 4) {
             attempts++;
             const t = Math.random() * Math.PI * 2;
             const longitudeBias = Math.pow(0.5 + 0.5 * Math.cos(t), 1.35);
             if (Math.random() > 0.25 + 0.75 * longitudeBias) continue;
-            const radialDir = new THREE.Vector3()
-                .copy(bandAxis).multiplyScalar(Math.cos(t))
-                .add(bandBinormal.clone().multiplyScalar(Math.sin(t)))
+            radialDir.copy(bandAxis).multiplyScalar(Math.cos(t))
+                .addScaledVector(bandBinormal, Math.sin(t))
                 .normalize();
             const spineWave = Math.sin(t * 3.1) * 0.35 + Math.sin(t * 6.3) * 0.15;
             const offset = (gaussRandom() * 0.55 + spineWave * 0.6) * layer.spread;
             const radialJitter = gaussRandom() * 0.06 * radius;
-            const position = radialDir.clone().multiplyScalar(radius + radialJitter).add(bandNormal.clone().multiplyScalar(offset));
+            position.copy(radialDir).multiplyScalar(radius + radialJitter).addScaledVector(bandNormal, offset);
             if (position.y < 0) continue;
-            positions.push(position.x, position.y, position.z);
+            const vectorOffset = created * 3;
+            positions[vectorOffset] = position.x;
+            positions[vectorOffset + 1] = position.y;
+            positions[vectorOffset + 2] = position.z;
             const proximity = Math.exp(-Math.abs(offset) / (layer.spread * 0.82));
             const randomWarm = 0.2 + Math.random() * 0.6;
-            const color = layer.tint.clone();
-            color.lerp(new THREE.Color(1.0, 0.88, 0.76), proximity * randomWarm * 0.6);
+            color.copy(layer.tint).lerp(warmTint, proximity * randomWarm * 0.6);
             color.offsetHSL(0, 0, (Math.random() - 0.5) * 0.08);
             color.multiplyScalar(0.9 + longitudeBias * 0.4);
             color.setRGB(
@@ -238,16 +244,23 @@ function createMilkyWayClusters(ctx, bandNormal, bandAxis) {
                 THREE.MathUtils.clamp(color.g, 0, 1.4),
                 THREE.MathUtils.clamp(color.b, 0, 1.4)
             );
-            colors.push(color.r, color.g, color.b);
+            colors[vectorOffset] = color.r;
+            colors[vectorOffset + 1] = color.g;
+            colors[vectorOffset + 2] = color.b;
             const baseSize = layer.size[0] + Math.pow(Math.random(), 2) * (layer.size[1] - layer.size[0]);
-            sizes.push((baseSize + proximity * 0.8) * (0.75 + longitudeBias * 0.65));
-            phases.push(Math.random() * Math.PI * 2);
+            sizes[created] = (baseSize + proximity * 0.8) * (0.75 + longitudeBias * 0.65);
+            phases[created] = Math.random() * Math.PI * 2;
+            created++;
         }
+        const positionValues = created === layer.count ? positions : positions.subarray(0, created * 3);
+        const colorValues = created === layer.count ? colors : colors.subarray(0, created * 3);
+        const sizeValues = created === layer.count ? sizes : sizes.subarray(0, created);
+        const phaseValues = created === layer.count ? phases : phases.subarray(0, created);
         const geometry = new THREE.BufferGeometry();
-        geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-        geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
-        geometry.setAttribute('twinklePhase', new THREE.Float32BufferAttribute(phases, 1));
+        geometry.setAttribute('position', new THREE.BufferAttribute(positionValues, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colorValues, 3));
+        geometry.setAttribute('size', new THREE.BufferAttribute(sizeValues, 1));
+        geometry.setAttribute('twinklePhase', new THREE.BufferAttribute(phaseValues, 1));
         const material = new THREE.ShaderMaterial({
             uniforms: {
                 time: { value: 0 },
@@ -309,19 +322,20 @@ function createMilkyWayMist(ctx, bandNormal, bandAxis) {
     const baseGeometry = new THREE.PlaneGeometry(1600, 1000, 1, 1);
     let created = 0;
     let attempts = 0;
+    const radialDir = new THREE.Vector3();
+    const position = new THREE.Vector3();
     while (created < patches && attempts < patches * 6) {
         attempts++;
         const t = (created / patches) * Math.PI * 2 + Math.random() * 0.35;
         const longitudeBias = Math.pow(0.5 + 0.5 * Math.cos(t), 1.35);
         if (Math.random() > 0.35 + 0.65 * longitudeBias) continue;
-        const radialDir = new THREE.Vector3()
-            .copy(bandAxis).multiplyScalar(Math.cos(t))
-            .add(bandBinormal.clone().multiplyScalar(Math.sin(t)))
+        radialDir.copy(bandAxis).multiplyScalar(Math.cos(t))
+            .addScaledVector(bandBinormal, Math.sin(t))
             .normalize();
         const heightWave = Math.sin(t * 2.5) * 0.5 + Math.sin(t * 5.7) * 0.25;
         const offset = (Math.random() - 0.5 + heightWave * 0.4) * 700;
         const distance = radius + (Math.random() - 0.5) * 350;
-        const position = radialDir.clone().multiplyScalar(distance).add(bandNormal.clone().multiplyScalar(offset));
+        position.copy(radialDir).multiplyScalar(distance).addScaledVector(bandNormal, offset);
         if (position.y < 0) continue;
         const material = new THREE.ShaderMaterial({
             uniforms: {

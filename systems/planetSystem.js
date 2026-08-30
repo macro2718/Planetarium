@@ -77,14 +77,14 @@ export function createPlanetSystem(ctx) {
             || angularDifferenceDegrees(lst, cache.lst) >= STATE_LST_THRESHOLD
             || Math.abs(lat - cache.lat) >= STATE_LAT_THRESHOLD;
         if (!shouldRefresh) {
-            return { states: cache.states, changed: false };
+            return false;
         }
         const states = calculatePlanetaryStates(date, ctx.observer, ctx.localSiderealTime);
         cache.timestamp = ts;
         cache.lst = lst;
         cache.lat = lat;
         cache.states = states;
-        return { states, changed: true };
+        return true;
     };
 
     const updateVisuals = (states) => {
@@ -125,18 +125,17 @@ export function createPlanetSystem(ctx) {
         }
     };
 
-    updateVisuals(computeStates().states);
+    computeStates();
+    updateVisuals(cache.states);
 
     return {
         group: ctx.planetGroup,
         getState(id) {
-            const { states, changed } = computeStates();
-            if (changed) updateVisuals(states);
-            return states[id];
+            if (computeStates()) updateVisuals(cache.states);
+            return cache.states[id];
         },
         update() {
-            const { states, changed } = computeStates();
-            if (changed) updateVisuals(states);
+            if (computeStates()) updateVisuals(cache.states);
         }
     };
 }

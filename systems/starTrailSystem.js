@@ -1,5 +1,8 @@
 import * as THREE from '../three.module.js';
-import { equatorialToHorizontalVector } from '../utils/astronomy.js';
+import {
+    equatorialToSceneVector,
+    setEquatorialToHorizontalMatrix
+} from '../utils/astronomy.js';
 
 // 星の軌跡を描画するシステム
 export function createStarTrailSystem(ctx) {
@@ -14,14 +17,18 @@ export function createStarTrailSystem(ctx) {
 
     const entries = ctx.catalog.getStars().map(star => ({
         data: star,
+        equatorialPosition: equatorialToSceneVector(star.ra, star.dec),
+        position: new THREE.Vector3(),
         segments: [],
         active: null,
-        lastPos: null,
+        lastPos: new THREE.Vector3(),
+        hasLastPos: false,
         lastVisible: false
     }));
 
     let enabled = false;
     let accumulator = 0;
+    const horizontalMatrix = new THREE.Matrix3();
 
     function disposeEntry(entry) {
         entry.segments.forEach(line => {
@@ -31,7 +38,7 @@ export function createStarTrailSystem(ctx) {
         });
         entry.segments = [];
         entry.active = null;
-        entry.lastPos = null;
+        entry.hasLastPos = false;
         entry.lastVisible = false;
     }
 
@@ -87,31 +94,33 @@ export function createStarTrailSystem(ctx) {
         accumulator += delta;
         if (accumulator < sampleInterval) return;
         accumulator = 0;
-        entries.forEach(entry => {
-            const result = equatorialToHorizontalVector(
-                entry.data.ra,
-                entry.data.dec,
-                ctx.localSiderealTime,
-                ctx.observer.lat,
-                radius
-            );
-            const position = result?.vector;
-            if (!position || (result.altDeg ?? 0) <= 0) {
+        if (!setEquatorialToHorizontalMatrix(
+            horizontalMatrix,
+            ctx.localSiderealTime ?? 0,
+            ctx.observer?.lat ?? 0
+        )) return;
+        for (const entry of entries) {
+            const position = entry.position
+                .copy(entry.equatorialPosition)
+                .applyMatrix3(horizontalMatrix)
+                .multiplyScalar(radius);
+            if (position.y <= 0) {
                 entry.active = null;
-                entry.lastPos = null;
+                entry.hasLastPos = false;
                 entry.lastVisible = false;
-                return;
+                continue;
             }
             if (!entry.active) {
                 startSegment(entry);
             }
-            if (entry.lastPos && entry.lastPos.distanceToSquared(position) < minMoveSq) {
-                return;
+            if (entry.hasLastPos && entry.lastPos.distanceToSquared(position) < minMoveSq) {
+                continue;
             }
             addTrailPoint(entry, position);
-            entry.lastPos = position;
+            entry.lastPos.copy(position);
+            entry.hasLastPos = true;
             entry.lastVisible = true;
-        });
+        }
     }
 
     function setEnabled(next) {

@@ -57,7 +57,7 @@ function createShootingStar(ctx) {
     const headColor = new THREE.Color().setHSL(0.08 + Math.random() * 0.08, 0.7, 0.8);
     const tailColor = headColor.clone().offsetHSL(0.05, -0.25, -0.3);
     const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array((TRAIL_SEGMENTS + 1) * 3);
+    const positions = createInitialTrailPositions(startPos, direction, trailLength);
     const colors = new Float32Array((TRAIL_SEGMENTS + 1) * 3);
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
@@ -70,8 +70,6 @@ function createShootingStar(ctx) {
         depthWrite: false
     });
     const trail = new THREE.Line(geometry, trailMaterial);
-    const trailPoints = createInitialTrailPoints(startPos, direction, trailLength);
-    updateTrailAttribute(geometry.getAttribute('position'), trailPoints);
     
     const starGroup = new THREE.Group();
     starGroup.add(trail);
@@ -84,7 +82,6 @@ function createShootingStar(ctx) {
             THREE.MathUtils.randFloatSpread(4)
         ),
         trail,
-        trailPoints,
         life: 1,
         lifespan,
         elapsed: 0,
@@ -107,12 +104,13 @@ function updateShootingStar(star, delta) {
     const driftFactor = Math.min(data.elapsed / data.lifespan, 1);
     data.position.addScaledVector(data.velocity, delta);
     data.position.addScaledVector(data.curveDrift, delta * driftFactor * 0.5);
-    const trailPoints = data.trailPoints;
-    for (let i = trailPoints.length - 1; i > 0; i--) {
-        trailPoints[i].copy(trailPoints[i - 1]);
-    }
-    trailPoints[0].copy(data.position);
-    updateTrailAttribute(data.trail.geometry.attributes.position, trailPoints);
+    const positionAttribute = data.trail.geometry.attributes.position;
+    const trailPositions = positionAttribute.array;
+    trailPositions.copyWithin(3, 0, trailPositions.length - 3);
+    trailPositions[0] = data.position.x;
+    trailPositions[1] = data.position.y;
+    trailPositions[2] = data.position.z;
+    positionAttribute.needsUpdate = true;
     
     const intensity = Math.sin(data.life * Math.PI) * data.colorIntensity;
     data.trail.material.opacity = intensity;
@@ -128,16 +126,25 @@ function disposeShootingStar(star) {
     }
 }
 
-function createInitialTrailPoints(startPos, direction, trailLength) {
-    const points = [];
-    const backwards = direction.clone().multiplyScalar(-trailLength / TRAIL_SEGMENTS);
-    let current = startPos.clone();
-    points.push(current.clone());
-    for (let i = 1; i <= TRAIL_SEGMENTS; i++) {
-        current = current.clone().add(backwards);
-        points.push(current.clone());
+function createInitialTrailPositions(startPos, direction, trailLength) {
+    const positions = new Float32Array((TRAIL_SEGMENTS + 1) * 3);
+    const step = -trailLength / TRAIL_SEGMENTS;
+    const stepX = direction.x * step;
+    const stepY = direction.y * step;
+    const stepZ = direction.z * step;
+    let x = startPos.x;
+    let y = startPos.y;
+    let z = startPos.z;
+    for (let i = 0; i <= TRAIL_SEGMENTS; i++) {
+        const offset = i * 3;
+        positions[offset] = x;
+        positions[offset + 1] = y;
+        positions[offset + 2] = z;
+        x += stepX;
+        y += stepY;
+        z += stepZ;
     }
-    return points;
+    return positions;
 }
 
 function populateTrailColors(buffer, headColor, tailColor) {
@@ -151,13 +158,3 @@ function populateTrailColors(buffer, headColor, tailColor) {
         buffer[i * 3 + 2] = temp.b * falloff;
     }
 }
-
-function updateTrailAttribute(attribute, points) {
-    for (let i = 0; i < points.length; i++) {
-        const point = points[i];
-        attribute.setXYZ(i, point.x, point.y, point.z);
-    }
-    attribute.needsUpdate = true;
-}
-
-

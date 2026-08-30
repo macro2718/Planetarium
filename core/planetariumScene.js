@@ -103,9 +103,30 @@ function collectMaterialResources(material, materials, textures) {
 export function enforceCameraAboveWater(ctx) {
     if (!ctx.controls || !ctx.camera) return;
     const minHeight = ctx.minCameraHeight ?? -4;
-    const epsilon = 0.001;
+    const position = ctx.camera.position;
     const target = ctx.controls.target;
-    const distance = ctx.camera.position.distanceTo(target);
+    const previous = ctx.cameraConstraintState;
+    if (previous
+        && previous.minHeight === minHeight
+        && previous.px === position.x
+        && previous.py === position.y
+        && previous.pz === position.z
+        && previous.tx === target.x
+        && previous.ty === target.y
+        && previous.tz === target.z) {
+        return;
+    }
+    const current = previous ?? {};
+    current.minHeight = minHeight;
+    current.px = position.x;
+    current.py = position.y;
+    current.pz = position.z;
+    current.tx = target.x;
+    current.ty = target.y;
+    current.tz = target.z;
+    ctx.cameraConstraintState = current;
+    const epsilon = 0.001;
+    const distance = position.distanceTo(target);
     if (distance === 0 || distance <= Math.abs(minHeight)) {
         ctx.controls.maxPolarAngle = Math.PI - epsilon;
         return;

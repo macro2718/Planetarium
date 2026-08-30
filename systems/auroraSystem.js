@@ -135,6 +135,7 @@ export function createAuroraSystem(ctx) {
     return {
         group: ctx.auroraGroup,
         update(time) {
+            if (!ctx.auroraGroup.visible) return;
             ctx.auroraMaterials.forEach(material => {
                 material.uniforms.time.value = time;
             });

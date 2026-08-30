@@ -78,30 +78,27 @@ function createHorizonRing(ctx) {
 
 function createHorizonLights(ctx) {
     const count = 200;
-    const positions = [];
-    const colors = [];
-    const sizes = [];
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    const sizes = new Float32Array(count);
     for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
         const radius = 8000 + Math.random() * 500;
         const height = (Math.random() - 0.5) * 100;
-        positions.push(
-            Math.cos(angle) * radius,
-            height,
-            Math.sin(angle) * radius
-        );
+        const offset = i * 3;
+        positions[offset] = Math.cos(angle) * radius;
+        positions[offset + 1] = height;
+        positions[offset + 2] = Math.sin(angle) * radius;
         const warmth = Math.random();
-        colors.push(
-            0.8 + warmth * 0.2,
-            0.5 + warmth * 0.3,
-            0.3 + (1 - warmth) * 0.4
-        );
-        sizes.push(5 + Math.random() * 15);
+        colors[offset] = 0.8 + warmth * 0.2;
+        colors[offset + 1] = 0.5 + warmth * 0.3;
+        colors[offset + 2] = 0.3 + (1 - warmth) * 0.4;
+        sizes[i] = 5 + Math.random() * 15;
     }
     const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-    geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
     const vertexShader = `
         attribute float size;
         varying vec3 vColor;

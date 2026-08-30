@@ -56,3 +56,22 @@ test('fixed-time mode advances whole days while preserving local time of day', (
     assert.equal(result.getSeconds(), 12);
     assert.equal(result.getMilliseconds(), 345);
 });
+
+test('unchanged simulation instants reuse their date and sidereal result', () => {
+    let nowSeconds = 10;
+    const controller = new TimeController({ nowProvider: () => nowSeconds });
+    controller.setMode('custom', {
+        date: new Date('2026-01-01T00:00:00.000Z'),
+        timeScale: 10
+    });
+    controller.togglePause(true, 139);
+
+    const firstResult = controller.update(nowSeconds, 139);
+    const firstDate = controller.getSimulatedDate();
+    nowSeconds += 60;
+    const secondResult = controller.update(nowSeconds, 139);
+
+    assert.equal(secondResult, firstResult);
+    assert.equal(controller.getSimulatedDate(), firstDate);
+    assert.equal(secondResult.localSiderealTime, firstResult.localSiderealTime);
+});

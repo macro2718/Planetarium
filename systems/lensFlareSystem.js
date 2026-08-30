@@ -77,6 +77,14 @@ export function createLensFlareSystem(ctx) {
     const sunTint = new THREE.Color(1.0, 0.92, 0.75);
     const moonTint = new THREE.Color(0.78, 0.88, 1.0);
     const milkyWayTint = new THREE.Color(0.92, 0.95, 1.05);
+    const defaultTint = new THREE.Color(1, 1, 1);
+    const sources = [
+        { position: null, strength: 0, tint: sunTint },
+        { position: null, strength: 0, tint: moonTint },
+        { position: null, strength: 0, tint: milkyWayTint }
+    ];
+    let flareViewHeight = 1;
+    let flareViewportHeight = 1;
 
     const placeSprite = (sprite, ndc, sizePx, opacity, stretch = 1) => {
         if (opacity <= 0.001) {
@@ -85,7 +93,7 @@ export function createLensFlareSystem(ctx) {
         }
         tempVec.set(ndc.x, ndc.y, -1).unproject(ctx.camera);
         tempVec.sub(ctx.camera.position).normalize().multiplyScalar(FLARE_DISTANCE).add(ctx.camera.position);
-        const scale = pixelsToWorldUnits(sizePx, FLARE_DISTANCE, ctx.camera);
+        const scale = flareViewHeight * (sizePx / flareViewportHeight);
         sprite.position.copy(tempVec);
         sprite.scale.set(scale * stretch, scale, 1);
         sprite.material.opacity = opacity;
@@ -97,38 +105,35 @@ export function createLensFlareSystem(ctx) {
         ndcVec.copy(worldPosition).project(ctx.camera);
         if (ndcVec.z < -1 || ndcVec.z > 1) return null;
         tempVec.copy(worldPosition).sub(ctx.camera.position);
-        ctx.camera.getWorldDirection(cameraDir);
         if (tempVec.dot(cameraDir) < 0) return null;
         return ndcVec;
     };
 
     const collectSources = () => {
-        const sources = [];
+        let count = 0;
         if (ctx.settings?.showSun && ctx.sunGroup?.visible && ctx.sunSystem?.getCurrentState) {
-            const state = ctx.sunSystem.getCurrentState();
+            const state = ctx.sunSystem.getCachedState?.() ?? ctx.sunSystem.getCurrentState();
             if (state?.position) {
                 const altitudeBoost = THREE.MathUtils.smoothstep(-2, 10, state.altDeg ?? -90);
                 const strength = 1.0 * altitudeBoost;
-                sources.push({
-                    position: state.position,
-                    strength,
-                    tint: sunTint
-                });
+                const source = sources[count++];
+                source.position = state.position;
+                source.strength = strength;
+                source.tint = sunTint;
             }
         }
 
         if (ctx.settings?.showMoon && ctx.moonGroup?.visible && ctx.moonSystem?.getCurrentState) {
-            const state = ctx.moonSystem.getCurrentState();
+            const state = ctx.moonSystem.getCachedState?.() ?? ctx.moonSystem.getCurrentState();
             if (state?.position) {
                 const altitudeBoost = THREE.MathUtils.smoothstep(0, 12, state.altDeg ?? -90);
                 const illumination = Math.max(0, Math.min(1, state.illumination ?? 0));
                 const strength = 0.55 * illumination * altitudeBoost;
                 if (strength > 0.02) {
-                    sources.push({
-                        position: state.position,
-                        strength,
-                        tint: moonTint
-                    });
+                    const source = sources[count++];
+                    source.position = state.position;
+                    source.strength = strength;
+                    source.tint = moonTint;
                 }
             }
         }
@@ -139,15 +144,14 @@ export function createLensFlareSystem(ctx) {
             const altitudeBoost = THREE.MathUtils.clamp((altDeg + 6) / 26, 0, 1);
             const strength = 0.35 * altitudeBoost;
             if (strength > 0.05) {
-                sources.push({
-                    position,
-                    strength,
-                    tint: milkyWayTint
-                });
+                const source = sources[count++];
+                source.position = position;
+                source.strength = strength;
+                source.tint = milkyWayTint;
             }
         }
 
-        return sources;
+        return count;
     };
 
     const applyFlare = (source, ndc) => {
@@ -159,14 +163,14 @@ export function createLensFlareSystem(ctx) {
             return;
         }
 
-        const tint = source.tint ?? new THREE.Color(1, 1, 1);
-        ghosts.forEach(({ sprite, config }) => {
+        const tint = source.tint ?? defaultTint;
+        for (const { sprite, config } of ghosts) {
             ghostNdc.copy(ndc).multiplyScalar(config.offset);
             const edgeFade = 1 - THREE.MathUtils.smoothstep(0.9, 1.35, ghostNdc.length());
             const opacity = intensity * config.opacity * edgeFade;
             sprite.material.color.copy(tint);
             placeSprite(sprite, ghostNdc, config.size, opacity);
-        });
+        }
 
         const haloOpacity = intensity * 0.5;
         haloSprite.material.color.copy(tint);
@@ -182,7 +186,9 @@ export function createLensFlareSystem(ctx) {
     };
 
     const hideAll = () => {
-        ghosts.forEach(({ sprite }) => { sprite.visible = false; });
+        for (const { sprite } of ghosts) {
+            sprite.visible = false;
+        }
         haloSprite.visible = false;
         streakSprite.visible = false;
     };
@@ -199,16 +205,20 @@ export function createLensFlareSystem(ctx) {
                 return;
             }
             group.visible = true;
-            const sources = collectSources();
-            if (!sources.length) {
+            const sourceCount = collectSources();
+            if (!sourceCount) {
                 hideAll();
                 return;
             }
+            ctx.camera.getWorldDirection(cameraDir);
+            flareViewHeight = 2 * Math.tan(THREE.MathUtils.degToRad(ctx.camera.fov) / 2) * FLARE_DISTANCE;
+            flareViewportHeight = Math.max(window.innerHeight, 1);
             let strongest = null;
             let strongestPower = 0;
-            sources.forEach(src => {
+            for (let i = 0; i < sourceCount; i++) {
+                const src = sources[i];
                 const ndc = projectToScreen(src.position);
-                if (!ndc) return;
+                if (!ndc) continue;
                 const radial = Math.sqrt(ndc.x * ndc.x + ndc.y * ndc.y);
                 const centerFade = 1 - THREE.MathUtils.smoothstep(0.45, 1.2, radial);
                 const power = src.strength * centerFade;
@@ -217,7 +227,7 @@ export function createLensFlareSystem(ctx) {
                     strongest = src;
                     strongestNdc.copy(ndc);
                 }
-            });
+            }
             if (!strongest) {
                 hideAll();
                 return;
@@ -225,13 +235,6 @@ export function createLensFlareSystem(ctx) {
             applyFlare(strongest, strongestNdc);
         }
     };
-}
-
-function pixelsToWorldUnits(pixels, distance, camera) {
-    const vFov = THREE.MathUtils.degToRad(camera.fov);
-    const height = 2 * Math.tan(vFov / 2) * distance;
-    const pxRatio = pixels / Math.max(window.innerHeight, 1);
-    return height * pxRatio;
 }
 
 function createGalacticCorePositionGetter(ctx) {

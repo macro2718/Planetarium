@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import * as THREE from '../three.module.js';
 import { AstroCatalog } from '../astroCatalog.js';
 import { createConstellationSystem } from '../systems/constellationSystem.js';
+import { equatorialToHorizontalVector } from '../utils/astronomy.js';
 
 const createCanvas = () => {
     const gradient = { addColorStop() {} };
@@ -57,6 +58,23 @@ test('constellation visuals are batched without dropping interactive stars', () 
         assert.ok(lineLayer.geometry.drawRange.count > 0);
         assert.equal(lineLayer.geometry.drawRange.count % 2, 0);
         assert.ok(ctx.catalogPickables.every((anchor) => anchor.userData.fromCatalog));
+
+        ctx.localSiderealTime = 250;
+        system.update(1);
+        const positions = pointLayers[0].geometry.getAttribute('position').array;
+        ctx.catalogPickables.forEach((anchor, index) => {
+            const expected = equatorialToHorizontalVector(
+                anchor.userData.ra,
+                anchor.userData.dec,
+                ctx.localSiderealTime,
+                ctx.observer.lat,
+                5000
+            ).vector;
+            const offset = index * 3;
+            assert.equal(positions[offset], Math.fround(expected.x));
+            assert.equal(positions[offset + 1], Math.fround(expected.y));
+            assert.equal(positions[offset + 2], Math.fround(expected.z));
+        });
     } finally {
         globalThis.document = previousDocument;
     }

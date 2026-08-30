@@ -1,5 +1,8 @@
 import * as THREE from '../three.module.js';
-import { equatorialToHorizontalVector } from '../utils/astronomy.js';
+import {
+    equatorialToSceneVector,
+    setEquatorialToHorizontalMatrix
+} from '../utils/astronomy.js';
 
 const SKY_RADIUS = 5000;
 const LST_UPDATE_THRESHOLD = 0.02;
@@ -16,6 +19,12 @@ export function createConstellationSystem(ctx) {
     let lastLat = null;
     let lastUpdateTime = -Infinity;
     let positionsDirty = true;
+    const horizontalMatrix = new THREE.Matrix3();
+    setEquatorialToHorizontalMatrix(
+        horizontalMatrix,
+        ctx.localSiderealTime ?? 0,
+        ctx.observer?.lat ?? 0
+    );
 
     const ensureStar = (starId) => {
         if (starEntries.has(starId)) {
@@ -40,6 +49,7 @@ export function createConstellationSystem(ctx) {
             index: starEntries.size,
             anchor,
             data,
+            equatorialPosition: equatorialToSceneVector(data.ra, data.dec),
             position: new THREE.Vector3(),
             aboveHorizon: false,
             hasPosition: false,
@@ -54,7 +64,7 @@ export function createConstellationSystem(ctx) {
             hazeStrength: 0.015 + Math.random() * 0.02
         };
         starEntries.set(data.id, entry);
-        updateStarEntry(ctx, entry, SKY_RADIUS);
+        updateStarEntry(entry, horizontalMatrix, SKY_RADIUS);
         return entry;
     };
 
@@ -66,22 +76,23 @@ export function createConstellationSystem(ctx) {
             const endEntry = ensureStar(endId);
             if (!startEntry || !endEntry) return;
             lineEntries.push({
-                startId,
-                endId,
+                start: startEntry,
+                end: endEntry,
                 color: new THREE.Color(constellation.color || 0x4488ff),
                 horizonVisible: true
             });
         });
     });
 
-    const stars = createBatchedStars(ctx, Array.from(starEntries.values()));
+    const starEntryList = Array.from(starEntries.values());
+    const stars = createBatchedStars(ctx, starEntryList);
     const lines = createBatchedLines(lineEntries);
     ctx.constellationLines.push(lines.object);
     ctx.constellationsGroup.add(stars.core, stars.coreGlow, stars.hazeGlow, lines.object);
     ctx.scene.add(ctx.constellationsGroup);
 
-    updateStarBuffers(stars.geometry, starEntries);
-    updateLineBuffers(lines.geometry, lineEntries, starEntries);
+    updateStarBuffers(stars.geometry, starEntryList);
+    updateLineBuffers(lines.geometry, lineEntries);
     updateConstellationLinesVisibility(ctx, ctx.settings.showConstellations);
     lastLst = ctx.localSiderealTime;
     lastLat = ctx.observer?.lat ?? null;
@@ -112,9 +123,12 @@ export function createConstellationSystem(ctx) {
             lastLat = lat;
             lastUpdateTime = time;
             positionsDirty = false;
-            starEntries.forEach((entry) => updateStarEntry(ctx, entry, SKY_RADIUS));
-            updateStarBuffers(stars.geometry, starEntries);
-            updateLineBuffers(lines.geometry, lineEntries, starEntries);
+            setEquatorialToHorizontalMatrix(horizontalMatrix, lst, lat);
+            for (const entry of starEntryList) {
+                updateStarEntry(entry, horizontalMatrix, SKY_RADIUS);
+            }
+            updateStarBuffers(stars.geometry, starEntryList);
+            updateLineBuffers(lines.geometry, lineEntries);
             updateConstellationLinesVisibility(ctx, ctx.settings.showConstellations);
         }
     };
@@ -233,36 +247,47 @@ function createBatchedLines(entries) {
 function updateStarBuffers(geometry, entries) {
     const positions = geometry.getAttribute('position');
     const visibility = geometry.getAttribute('visibility');
-    entries.forEach((entry) => {
+    const positionValues = positions.array;
+    const visibilityValues = visibility.array;
+    for (const entry of entries) {
         const position = entry.hasPosition ? entry.position : ZERO_VECTOR;
-        positions.setXYZ(entry.index, position.x, position.y, position.z);
-        visibility.setX(entry.index, entry.aboveHorizon ? 1 : 0);
-    });
+        const offset = entry.index * 3;
+        positionValues[offset] = position.x;
+        positionValues[offset + 1] = position.y;
+        positionValues[offset + 2] = position.z;
+        visibilityValues[entry.index] = entry.aboveHorizon ? 1 : 0;
+    }
     positions.needsUpdate = true;
     visibility.needsUpdate = true;
 }
 
-function updateLineBuffers(geometry, entries, stars) {
+function updateLineBuffers(geometry, entries) {
     const positions = geometry.getAttribute('position');
     const colors = geometry.getAttribute('color');
+    const positionValues = positions.array;
+    const colorValues = colors.array;
     let visibleSegmentCount = 0;
-    entries.forEach((entry) => {
-        const start = stars.get(entry.startId);
-        const end = stars.get(entry.endId);
+    for (const entry of entries) {
+        const { start, end } = entry;
         entry.horizonVisible = Boolean(
             start?.hasPosition
             && end?.hasPosition
             && (start.aboveHorizon || end.aboveHorizon)
         );
-        if (!entry.horizonVisible) return;
+        if (!entry.horizonVisible) continue;
 
-        const vertexIndex = visibleSegmentCount * 2;
-        positions.setXYZ(vertexIndex, start.position.x, start.position.y, start.position.z);
-        positions.setXYZ(vertexIndex + 1, end.position.x, end.position.y, end.position.z);
-        colors.setXYZ(vertexIndex, entry.color.r, entry.color.g, entry.color.b);
-        colors.setXYZ(vertexIndex + 1, entry.color.r, entry.color.g, entry.color.b);
+        const offset = visibleSegmentCount * 6;
+        positionValues[offset] = start.position.x;
+        positionValues[offset + 1] = start.position.y;
+        positionValues[offset + 2] = start.position.z;
+        positionValues[offset + 3] = end.position.x;
+        positionValues[offset + 4] = end.position.y;
+        positionValues[offset + 5] = end.position.z;
+        colorValues[offset] = colorValues[offset + 3] = entry.color.r;
+        colorValues[offset + 1] = colorValues[offset + 4] = entry.color.g;
+        colorValues[offset + 2] = colorValues[offset + 5] = entry.color.b;
         visibleSegmentCount += 1;
-    });
+    }
     geometry.setDrawRange(0, visibleSegmentCount * 2);
     positions.needsUpdate = true;
     colors.needsUpdate = true;
@@ -274,16 +299,8 @@ function updateConstellationLinesVisibility(ctx, visible) {
     });
 }
 
-function updateStarEntry(ctx, entry, radius) {
-    const result = equatorialToHorizontalVector(
-        entry.data.ra,
-        entry.data.dec,
-        ctx.localSiderealTime,
-        ctx.observer.lat,
-        radius,
-        entry.position
-    );
-    if (!result) {
+function updateStarEntry(entry, horizontalMatrix, radius) {
+    if (!entry.equatorialPosition || !horizontalMatrix) {
         entry.aboveHorizon = false;
         entry.hasPosition = false;
         entry.anchor.visible = false;
@@ -291,9 +308,9 @@ function updateStarEntry(ctx, entry, radius) {
         return;
     }
     entry.hasPosition = true;
-    entry.position.copy(result.vector);
+    entry.position.copy(entry.equatorialPosition).applyMatrix3(horizontalMatrix).multiplyScalar(radius);
     entry.anchor.position.copy(entry.position);
-    entry.aboveHorizon = result.altDeg > 0;
+    entry.aboveHorizon = entry.position.y > 0;
     entry.anchor.visible = entry.aboveHorizon;
 }
 

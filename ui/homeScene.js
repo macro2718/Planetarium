@@ -369,10 +369,11 @@ function createCrystalCore() {
 function createAuroraCurtain() {
     const radius = 120;
     const geometry = new THREE.CircleGeometry(radius, 120);
-    const colors = [];
+    const colors = new Float32Array(geometry.getAttribute('position').count * 3);
     const top = new THREE.Color(0x9fe0ff);
     const mid = new THREE.Color(0xf0b9ff);
     const bottom = new THREE.Color(0x0d1022);
+    const mix = new THREE.Color();
 
     const position = geometry.getAttribute('position');
     for (let i = 0; i < position.count; i++) {
@@ -380,13 +381,15 @@ function createAuroraCurtain() {
         const y = position.getY(i);
         const verticalMix = y / radius * 0.5 + 0.5;
         const radialFade = 1 - Math.min(1, Math.sqrt(x * x + y * y) / radius);
-        const mix = bottom
-            .clone()
+        mix.copy(bottom)
             .lerp(mid, verticalMix * 0.6 + 0.1)
             .lerp(top, radialFade * 0.6);
-        colors.push(mix.r, mix.g, mix.b);
+        const offset = i * 3;
+        colors[offset] = mix.r;
+        colors[offset + 1] = mix.g;
+        colors[offset + 2] = mix.b;
     }
-    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const material = new THREE.MeshBasicMaterial({
         vertexColors: true,
@@ -439,6 +442,7 @@ function createStarField(count, radius) {
 
     const colorA = new THREE.Color(0x9fe0ff);
     const colorB = new THREE.Color(0xf0b9ff);
+    const mixed = new THREE.Color();
 
     for (let i = 0; i < count; i++) {
         const r = Math.random() * radius;
@@ -450,7 +454,7 @@ function createStarField(count, radius) {
         positions[idx + 1] = r * Math.sin(phi) * Math.sin(theta) * 0.45;
         positions[idx + 2] = r * Math.cos(phi);
 
-        const mixed = colorA.clone().lerp(colorB, Math.random());
+        mixed.copy(colorA).lerp(colorB, Math.random());
         colors[idx] = mixed.r;
         colors[idx + 1] = mixed.g;
         colors[idx + 2] = mixed.b;

@@ -9,6 +9,20 @@ import {
 const STATE_LST_THRESHOLD = 0.02;
 const STATE_LAT_THRESHOLD = 0.0005;
 const ORBITAL_TIME_THRESHOLD_MS = 60000;
+const LUNAR_CYCLE_DAYS = 29.530588;
+const LUNAR_REFERENCE_MS = Date.parse('2024-01-11T11:57:00Z');
+const J2000_MS = Date.parse('2000-01-01T12:00:00Z');
+const MS_PER_DAY = 86400000;
+const MOON_PHASES = [
+    { max: 0.0625, name: '新月', emoji: '🌑' },
+    { max: 0.1875, name: '三日月', emoji: '🌒' },
+    { max: 0.3125, name: '上弦', emoji: '🌓' },
+    { max: 0.4375, name: '十三夜', emoji: '🌔' },
+    { max: 0.5625, name: '満月', emoji: '🌕' },
+    { max: 0.6875, name: '十八夜', emoji: '🌖' },
+    { max: 0.8125, name: '下弦', emoji: '🌗' },
+    { max: 0.9375, name: '晦日月', emoji: '🌘' }
+];
 
 // Place the Moon inside the sky dome and size it to its actual angular diameter (~0.52°).
 const MOON_DISTANCE = 6000;
@@ -205,6 +219,9 @@ export function createMoonSystem(ctx) {
         getCurrentState() {
             return ensureStateUpToDate();
         },
+        getCachedState() {
+            return moonState.current;
+        },
         syncWithContextTime() {
             return ensureStateUpToDate();
         },
@@ -229,28 +246,17 @@ function shouldRefreshState(current, ctx, timestamp) {
 
 function getMoonPhaseLabel(phase) {
     const normalized = (phase % 1 + 1) % 1;
-    const phases = [
-        { max: 0.0625, name: '新月', emoji: '🌑' },
-        { max: 0.1875, name: '三日月', emoji: '🌒' },
-        { max: 0.3125, name: '上弦', emoji: '🌓' },
-        { max: 0.4375, name: '十三夜', emoji: '🌔' },
-        { max: 0.5625, name: '満月', emoji: '🌕' },
-        { max: 0.6875, name: '十八夜', emoji: '🌖' },
-        { max: 0.8125, name: '下弦', emoji: '🌗' },
-        { max: 0.9375, name: '晦日月', emoji: '🌘' }
-    ];
-    for (const p of phases) {
+    for (const p of MOON_PHASES) {
         if (normalized < p.max) return p;
     }
     return { name: '新月', emoji: '🌑' };
 }
 
 function calculateMoonState(ctx, date = new Date()) {
-    const lunarCycle = 29.530588;
-    const reference = new Date('2024-01-11T11:57:00Z');
-    const diffDays = (date - reference) / (1000 * 60 * 60 * 24);
-    const moonAge = ((diffDays % lunarCycle) + lunarCycle) % lunarCycle;
-    const daysSinceJ2000 = (date - new Date('2000-01-01T12:00:00Z')) / (1000 * 60 * 60 * 24);
+    const timestamp = date.getTime();
+    const diffDays = (timestamp - LUNAR_REFERENCE_MS) / MS_PER_DAY;
+    const moonAge = ((diffDays % LUNAR_CYCLE_DAYS) + LUNAR_CYCLE_DAYS) % LUNAR_CYCLE_DAYS;
+    const daysSinceJ2000 = (timestamp - J2000_MS) / MS_PER_DAY;
     const L0 = normalizeDegrees(280.46646 + 0.98564736 * daysSinceJ2000);
     const M_sun = normalizeDegrees(357.5291092 + 0.98560028 * daysSinceJ2000); // Sun mean anomaly
     const sunEquation = 1.914602 * Math.sin(THREE.MathUtils.degToRad(M_sun))

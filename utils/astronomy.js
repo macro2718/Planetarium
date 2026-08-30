@@ -12,7 +12,7 @@ export function calculateLocalSiderealTime(date, longitudeDeg) {
     return normalizeDegrees(lst);
 }
 
-export function equatorialToHorizontal(raDeg, decDeg, lstDeg, latitudeDeg) {
+export function equatorialToHorizontal(raDeg, decDeg, lstDeg, latitudeDeg, target = null) {
     if (![raDeg, decDeg, lstDeg, latitudeDeg].every(v => typeof v === 'number')) {
         return null;
     }
@@ -29,16 +29,24 @@ export function equatorialToHorizontal(raDeg, decDeg, lstDeg, latitudeDeg) {
     let azRad = Math.atan2(sinAz, cosAz);
     if (azRad < 0) azRad += Math.PI * 2;
 
-    return {
-        altRad,
-        azRad,
-        altDeg: radToDeg(altRad),
-        azDeg: radToDeg(azRad)
-    };
+    const result = target ?? {};
+    result.altRad = altRad;
+    result.azRad = azRad;
+    result.altDeg = radToDeg(altRad);
+    result.azDeg = radToDeg(azRad);
+    return result;
 }
 
-export function equatorialToHorizontalVector(raDeg, decDeg, lstDeg, latitudeDeg, radius = 1, target = null) {
-    const result = equatorialToHorizontal(raDeg, decDeg, lstDeg, latitudeDeg);
+export function equatorialToHorizontalVector(
+    raDeg,
+    decDeg,
+    lstDeg,
+    latitudeDeg,
+    radius = 1,
+    target = null,
+    resultTarget = null
+) {
+    const result = equatorialToHorizontal(raDeg, decDeg, lstDeg, latitudeDeg, resultTarget);
     if (!result) return null;
     const { altRad, azRad } = result;
     const y = Math.sin(altRad) * radius;
@@ -47,7 +55,45 @@ export function equatorialToHorizontalVector(raDeg, decDeg, lstDeg, latitudeDeg,
     const z = projected * Math.cos(azRad);
     const vector = target ?? new THREE.Vector3();
     vector.set(x, y, z);
-    return { ...result, vector };
+    result.vector = vector;
+    return result;
+}
+
+/**
+ * Precomputes a fixed equatorial direction in the scene's axis convention:
+ * X = RA 0h, Y = north celestial pole, Z = RA 6h.
+ */
+export function equatorialToSceneVector(raDeg, decDeg, target = null) {
+    if (![raDeg, decDeg].every(Number.isFinite)) return null;
+    const ra = degToRad(raDeg);
+    const dec = degToRad(decDeg);
+    const cosDec = Math.cos(dec);
+    const vector = target ?? new THREE.Vector3();
+    return vector.set(
+        cosDec * Math.cos(ra),
+        Math.sin(dec),
+        cosDec * Math.sin(ra)
+    );
+}
+
+/**
+ * Updates a reusable matrix that maps scene equatorial directions to the
+ * horizontal coordinate system. Applying it avoids recalculating altitude and
+ * azimuth only to convert them back into a Cartesian render position.
+ */
+export function setEquatorialToHorizontalMatrix(target, lstDeg, latitudeDeg) {
+    if (!target?.set || ![lstDeg, latitudeDeg].every(Number.isFinite)) return null;
+    const lst = degToRad(lstDeg);
+    const latitude = degToRad(latitudeDeg);
+    const sinLst = Math.sin(lst);
+    const cosLst = Math.cos(lst);
+    const sinLat = Math.sin(latitude);
+    const cosLat = Math.cos(latitude);
+    return target.set(
+        sinLst, 0, -cosLst,
+        cosLat * cosLst, sinLat, cosLat * sinLst,
+        -sinLat * cosLst, cosLat, -sinLat * sinLst
+    );
 }
 
 export function degToRad(deg) {
@@ -95,21 +141,26 @@ export function evalPolynomial(coefficients, value) {
 export function meanObliquityRad(julianCenturies) {
     // Laskar series, valid for +/- 10,000 years (Meeus 2nd ed., Chap. 22)
     const u = julianCenturies / 100;
-    const powers = [1];
-    for (let exponent = 1; exponent <= 10; exponent += 1) {
-        powers[exponent] = powers[exponent - 1] * u;
-    }
+    const u2 = u * u;
+    const u3 = u2 * u;
+    const u4 = u3 * u;
+    const u5 = u4 * u;
+    const u6 = u5 * u;
+    const u7 = u6 * u;
+    const u8 = u7 * u;
+    const u9 = u8 * u;
+    const u10 = u9 * u;
     const arcsec = 84381.448
-        - 4680.93 * powers[1]
-        - 1.55 * powers[2]
-        + 1999.25 * powers[3]
-        - 51.38 * powers[4]
-        - 249.67 * powers[5]
-        - 39.05 * powers[6]
-        + 7.12 * powers[7]
-        + 27.87 * powers[8]
-        + 5.79 * powers[9]
-        + 2.45 * powers[10];
+        - 4680.93 * u
+        - 1.55 * u2
+        + 1999.25 * u3
+        - 51.38 * u4
+        - 249.67 * u5
+        - 39.05 * u6
+        + 7.12 * u7
+        + 27.87 * u8
+        + 5.79 * u9
+        + 2.45 * u10;
     return degToRad(arcsec / 3600);
 }
 
