@@ -43,6 +43,9 @@ test('constellation visuals are batched without dropping interactive stars', () 
         const lineLayer = renderables.find((object) => object.isLineSegments);
         assert.equal(pointLayers.length, 3);
         assert.ok(pointLayers.every((object) => object.geometry === pointLayers[0].geometry));
+        assert.ok(pointLayers.every((object) => object.material.fog));
+        assert.ok(pointLayers.every((object) => object.material.uniforms.fogColor));
+        assert.ok(pointLayers.every((object) => object.material.uniforms.fogDensity));
         assert.equal(renderables.filter((object) => object.isLineSegments).length, 1);
         assert.equal(renderables.length, 4);
         const expectedStarIds = new Set([

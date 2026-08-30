@@ -187,12 +187,15 @@ function createBatchedStars(ctx, entries) {
 function createStarPointMaterial({ layer, pointScale, texture = null }) {
     const isGlow = layer > 0;
     return new THREE.ShaderMaterial({
-        uniforms: {
-            time: { value: 0 },
-            layer: { value: layer },
-            pointScale: { value: pointScale },
-            glowMap: { value: texture }
-        },
+        uniforms: THREE.UniformsUtils.merge([
+            THREE.UniformsLib.fog,
+            {
+                time: { value: 0 },
+                layer: { value: layer },
+                pointScale: { value: pointScale },
+                glowMap: { value: texture }
+            }
+        ]),
         vertexShader: STAR_VERTEX_SHADER,
         fragmentShader: isGlow ? STAR_GLOW_FRAGMENT_SHADER : STAR_CORE_FRAGMENT_SHADER,
         transparent: true,
